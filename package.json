@@ -1,0 +1,23 @@
+{
+  "name": "sui-loop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm --filter suiloop-web dev",
+    "build": "pnpm --filter suiloop-web build",
+    "agent:build": "pnpm --filter @suiloop/agent build",
+    "contracts:build": "cd packages/contracts && sui move build",
+    "contracts:test": "cd packages/contracts && sui move test",
+    "test": "pnpm contracts:test"
+  },
+  "keywords": [
+    "sui",
+    "defi",
+    "flash-loans",
+    "atomic",
+    "ai-agent"
+  ],
+  "author": "SuiLoop Team",
+  "license": "MIT",
+  "description": "Atomic Intelligence Protocol for Sui - Flash Loans + AI Agents"
+}

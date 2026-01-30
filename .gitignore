@@ -1,0 +1,44 @@
+# Netlify / Vercel
+node_modules
+.next
+.out
+build
+dist
+
+# Environment
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# System
+.DS_Store
+
+# Move
+Move.lock
+
+# Sui Binaries (DO NOT COMMIT)
+sui
+sui-testnet-v1.64.0-ubuntu-x86_64.tgz
+sui-node
+sui-bridge
+sui-faucet
+sui-tool
+sui-debug
+sui-test-validator
+sui-data-ingestion
+sui-bridge-cli
+move-analyzer
