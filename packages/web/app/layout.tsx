@@ -1,0 +1,37 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
+import "./globals.css";
+import "@mysten/dapp-kit/dist/index.css";
+import { Providers } from "./providers";
+import Footer from "@/components/layout/Footer";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+    title: "SuiLoop | Atomic Leverage",
+    description: "State of Art DeFi on Sui",
+};
+
+export default function RootLayout({
+    children,
+}: Readonly<{
+    children: React.ReactNode;
+}>) {
+    return (
+        <html lang="en">
+            <body className={`${inter.className} bg-[#030014] text-white min-h-screen selection:bg-neon-cyan/30`}>
+                <Providers>
+                    {/* Neural Grid Background Overlay */}
+                    <div className="fixed inset-0 z-[-1] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+                    <div className="fixed inset-0 z-[-2] bg-gradient-radial from-indigo-900/20 to-black"></div>
+                    <div className="bg-noise" />
+
+                    {children}
+                    <Footer />
+                    <Toaster position="bottom-right" theme="dark" />
+                </Providers>
+            </body>
+        </html>
+    );
+}
