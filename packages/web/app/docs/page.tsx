@@ -6,9 +6,10 @@ import {
     ArrowLeft, Book, Code, Shield, Layers, Cpu, Database, Zap,
     GitBranch, FileCode, Rocket, CheckCircle, AlertTriangle,
     Terminal, Globe, Lock, TrendingUp, ChevronRight, ExternalLink,
-    Play, Settings, Users, Workflow
+    Play, Settings, Users, Workflow, Key
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
+import ApiKeyManager from "@/components/docs/ApiKeyManager";
 
 type TabId = 'overview' | 'architecture' | 'contracts' | 'agent' | 'frontend' | 'api' | 'security';
 
@@ -91,8 +92,8 @@ export default function DocsPage() {
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${activeTab === tab.id
-                                            ? 'bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30'
-                                            : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                        ? 'bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30'
+                                        : 'text-gray-400 hover:text-white hover:bg-white/5'
                                         }`}
                                 >
                                     <tab.icon className="w-4 h-4" />
@@ -709,6 +710,53 @@ function FrontendSection() {
 function ApiSection() {
     return (
         <div className="space-y-12">
+            {/* API Key Generation Tool */}
+            <section className="bg-gradient-to-br from-neon-purple/5 to-transparent border border-neon-purple/20 rounded-2xl p-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-neon-purple/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 relative z-10">
+                    <Key className="text-neon-purple" />
+                    Authentication & Keys
+                </h2>
+
+                <div className="grid md:grid-cols-2 gap-12 relative z-10">
+                    <div className="space-y-6">
+                        <p className="text-gray-300 leading-relaxed">
+                            To use the autonomous agent API (`http://localhost:3001`), you must authenticate using an
+                            <strong> API Key</strong> or a short-lived <strong>JWT Token</strong>.
+                        </p>
+
+                        <div className="space-y-4">
+                            <h3 className="font-bold text-white">Authentication Methods</h3>
+                            <ul className="space-y-3">
+                                <li className="flex items-start gap-3">
+                                    <div className="mt-1 bg-neon-cyan/20 p-1 rounded">
+                                        <Code className="w-3 h-3 text-neon-cyan" />
+                                    </div>
+                                    <div>
+                                        <div className="text-white font-medium">x-api-key Header</div>
+                                        <div className="text-sm text-gray-500">Best for backend scripts and long-running bots.</div>
+                                    </div>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <div className="mt-1 bg-neon-purple/20 p-1 rounded">
+                                        <Shield className="w-3 h-3 text-neon-purple" />
+                                    </div>
+                                    <div>
+                                        <div className="text-white font-medium">Bearer Token (JWT)</div>
+                                        <div className="text-sm text-gray-500">Best for frontend applications (expires in 24h).</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="relative">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-neon-purple to-neon-cyan opacity-20 blur-lg rounded-xl" />
+                        <ApiKeyManager />
+                    </div>
+                </div>
+            </section>
             {/* Environment Variables */}
             <section>
                 <h2 className="text-2xl font-bold mb-6">Environment Variables</h2>
