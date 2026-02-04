@@ -149,7 +149,7 @@ export default function Navbar() {
 
                         {/* CTA Button - Hidden on mobile, shown on md+ */}
                         <Link
-                            href="/dashboard?autostart=true"
+                            href="/strategies"
                             className="hidden md:flex lg:hidden xl:flex items-center gap-1.5 bg-neon-cyan text-black px-3 xl:px-5 py-2 rounded-full font-mono text-[10px] xl:text-xs font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
                         >
                             <Rocket size={12} className="xl:w-3.5 xl:h-3.5" />
@@ -268,7 +268,7 @@ export default function Navbar() {
                                 transition={{ delay: 0.3 }}
                             >
                                 <Link
-                                    href="/dashboard?autostart=true"
+                                    href="/strategies"
                                     onClick={closeMobileMenu}
                                     className="min-h-[52px] p-4 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-bold border border-white/20 flex items-center justify-center gap-3 hover:opacity-90 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(0,243,255,0.3)]"
                                 >
