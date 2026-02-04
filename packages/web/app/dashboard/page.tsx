@@ -193,8 +193,16 @@ function DashboardContent() {
                         // Clean state
                         setActiveStrategies([]);
                     } else {
-                        // Sort by most recent (assuming custom IDs have timestamp)
-                        setActiveStrategies(merged);
+                        // FINAL AGGRESSIVE DEDUP: Ensure no duplicate IDs in final array
+                        const finalMap = new Map();
+                        merged.forEach(item => {
+                            const key = item.id || item.strategy_id || item.name;
+                            if (key && !finalMap.has(key)) {
+                                finalMap.set(key, item);
+                            }
+                        });
+                        const finalDeduped = Array.from(finalMap.values());
+                        setActiveStrategies(finalDeduped);
                     }
                 } catch (e) {
                     console.error("Supabase sync failed, using local", e);
