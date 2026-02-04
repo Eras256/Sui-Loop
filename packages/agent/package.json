@@ -10,11 +10,13 @@
         "test": "tsx src/run.ts"
     },
     "dependencies": {
+        "@cetusprotocol/cetus-sui-clmm-sdk": "^5.4.0",
         "@elizaos/core": "latest",
         "@mysten/sui": "^1.45.2",
         "@supabase/supabase-js": "^2.94.0",
         "body-parser": "^2.2.2",
         "cors": "^2.8.6",
+        "decimal.js": "^10.6.0",
         "dotenv": "^16.4.0",
         "express": "^5.2.1",
         "zod": "^3.0.0"

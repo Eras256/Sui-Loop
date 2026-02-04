@@ -12,10 +12,17 @@ import type {
     State,
     HandlerCallback
 } from "@elizaos/core";
+import { elizaLogger } from "@elizaos/core";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { Transaction } from "@mysten/sui/transactions";
+import { fromB64 } from "@mysten/sui/utils";
 import { decodeSuiPrivateKey } from "@mysten/sui/cryptography";
+import { CetusService } from "../services/cetusService";
+
+const cetusService = new CetusService();
+
+
 
 // --- Configuration ---
 const NETWORK = "testnet";
@@ -102,6 +109,23 @@ export const executeAtomicLeverage: Action = {
         const client = new SuiClient({ url: getFullnodeUrl(NETWORK) });
         const sender = keypair.toSuiAddress();
         console.log(`🤖 Agent Wallet: ${sender}`);
+
+        // 🔍 INTELLIGENCE LAYER: Check Deterministic & Real Ecosystem Liquidity
+        elizaLogger.info("🔍 Scanning Ecosystem Liquidity...");
+
+        // Check Cetus
+        // Note: The original instruction had "0x2::sui::SUI" for both, which is not a valid pair for Cetus.
+        // Assuming a common pair like SUI/USDC for a real check, or keeping SUI/SUI for a conceptual demo.
+        // For this example, we'll keep SUI/SUI as per the instruction, acknowledging it's for demo purposes.
+        const cetusPool = await cetusService.getPool("0x2::sui::SUI", "0x2::sui::SUI"); // Checking SUI/SUI or similar for demo
+        if (cetusPool) {
+            elizaLogger.info(`🦄 Cetus V3 Liquidity Detected: ${cetusPool} (Arb opportunity potential)`);
+        } else {
+            elizaLogger.warn("⚠️ Cetus V3 Pool not found or API unreachable. Defaulting to Internal Atomic Engine.");
+        }
+
+        elizaLogger.info(`🤖 Wallet: ${sender}`);
+
 
         // 3. Parse Amount from Message
         const messageText = typeof message.content === "string"

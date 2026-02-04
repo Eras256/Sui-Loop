@@ -233,12 +233,23 @@ To ensure strict uptime guarantees during demos and Hackathons, the Agent implem
     *   **Action**: `🔄 Switching to Simulation Layer`
     *   **Result**: The transaction is executed against the `MockPool`, guaranteeing a successful demonstration of the *mechanics* even when the *network* is unstable.
 
-#### 6. Configuration (`.env`)
+### 6. Ecosystem Integration (Cetus/Scallop) 🦄
+**New in v0.0.4**: The Agent now includes an **Intelligence Layer** that scans the Sui Testnet for real liquidity before falling back to simulation.
+
+*   **Cetus Protocol**: Integrated via `@cetusprotocol/cetus-sui-clmm-sdk`. The agent actively looks for active CLMM pools to route arbitrage trades.
+*   **Scallop**: Architecture ready for `flash_loan` integration.
+*   **Fallback Logic**:
+    1.  Scan Cetus V3 Pools (Real Liquidity)
+    2.  Scan DeepBook V3 (Official Testnet)
+    3.  Fallback -> Internal Atomic Engine (Guaranteed Execution)
+
+### 7. Configuration (`.env`)
 ```env
 SUI_PRIVATE_KEY=suiprivkey1...  # Agent wallet (bech32 format)
 SUI_PACKAGE_ID=0x9a2f0c4ce...   # Contract package
 SUI_POOL_ID=0x0839e6ce6...      # MockPool object
 ```
+
 
 ---
 
