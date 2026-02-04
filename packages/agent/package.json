@@ -13,6 +13,7 @@
         "@cetusprotocol/cetus-sui-clmm-sdk": "^5.4.0",
         "@elizaos/core": "latest",
         "@mysten/sui": "^1.45.2",
+        "@scallop-io/sui-scallop-sdk": "^2.3.14",
         "@supabase/supabase-js": "^2.94.0",
         "body-parser": "^2.2.2",
         "cors": "^2.8.6",

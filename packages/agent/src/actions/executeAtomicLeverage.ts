@@ -19,10 +19,11 @@ import { Transaction } from "@mysten/sui/transactions";
 import { fromB64 } from "@mysten/sui/utils";
 import { decodeSuiPrivateKey } from "@mysten/sui/cryptography";
 import { CetusService } from "../services/cetusService";
+import { ScallopService } from "../services/scallopService";
 
+// --- Services ---
 const cetusService = new CetusService();
-
-
+const scallopService = new ScallopService();
 
 // --- Configuration ---
 const NETWORK = "testnet";
@@ -108,24 +109,28 @@ export const executeAtomicLeverage: Action = {
 
         const client = new SuiClient({ url: getFullnodeUrl(NETWORK) });
         const sender = keypair.toSuiAddress();
-        console.log(`🤖 Agent Wallet: ${sender}`);
 
         // 🔍 INTELLIGENCE LAYER: Check Deterministic & Real Ecosystem Liquidity
         elizaLogger.info("🔍 Scanning Ecosystem Liquidity...");
 
-        // Check Cetus
-        // Note: The original instruction had "0x2::sui::SUI" for both, which is not a valid pair for Cetus.
-        // Assuming a common pair like SUI/USDC for a real check, or keeping SUI/SUI for a conceptual demo.
-        // For this example, we'll keep SUI/SUI as per the instruction, acknowledging it's for demo purposes.
-        const cetusPool = await cetusService.getPool("0x2::sui::SUI", "0x2::sui::SUI"); // Checking SUI/SUI or similar for demo
-        if (cetusPool) {
-            elizaLogger.info(`🦄 Cetus V3 Liquidity Detected: ${cetusPool} (Arb opportunity potential)`);
+        // 1. Check Scallop (Lending Rates)
+        const scallopData = await scallopService.getMarketData('sui');
+        if (scallopData) {
+            elizaLogger.info(`🐚 Scallop Protocol Active | SUI Supply APY: ${scallopData.supplyApy}% | Borrow APY: ${scallopData.borrowApy}%`);
         } else {
-            elizaLogger.warn("⚠️ Cetus V3 Pool not found or API unreachable. Defaulting to Internal Atomic Engine.");
+            elizaLogger.warn("⚠️ Scallop Protocol Data Unavailable");
         }
 
-        elizaLogger.info(`🤖 Wallet: ${sender}`);
+        // 2. Check Cetus (DEX Liquidity) - Demo Logic
+        const cetusPool = await cetusService.getPool("0x2::sui::SUI", "0x2::sui::SUI");
+        if (cetusPool) {
+            elizaLogger.info(`🦄 Cetus V3 Liquidity Detected: ${cetusPool}`);
+        } else {
+            elizaLogger.info("ℹ️ Cetus V3 Liquidity Check: No active SUI/SUI arb pool found (Expected in Testnet).");
+        }
 
+        elizaLogger.success("✅ Market Analysis Complete. Executing Atomic Strategy...");
+        elizaLogger.info(`🤖 Wallet: ${sender}`);
 
         // 3. Parse Amount from Message
         const messageText = typeof message.content === "string"
@@ -136,6 +141,7 @@ export const executeAtomicLeverage: Action = {
         const userFundsAmountMIST = Math.floor(borrowAmountMIST * 0.01); // 1% of borrow for fees
 
         // 4. Notify User
+
         await callback?.({
             text: `🏗️ Constructing Atomic PTB for ${amountSui} SUI Flash Loan...`,
             content: { status: "building" }
