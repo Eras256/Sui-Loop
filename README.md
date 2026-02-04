@@ -9,7 +9,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)]()
 [![CI/CD](https://img.shields.io/badge/Build-Passing-brightgreen?logo=github)]()
 
-**Status**: 🟢 **Production Ready (Testnet v0.0.4)** | 🛡️ **Audited (Internal)** | 🐳 **Dockerized**
+**Status**: 🟢 **Production Ready (Testnet v0.0.5)** | 🛡️ **Audited (Internal)** | 🐳 **Dockerized**
 
 ---
 
@@ -20,7 +20,7 @@ SuiLoop creates a safe "sandbox" for AI Agents using **Move's Linear Types (Hot 
 This is only possible on Sui, where we can enforce that the `LoopReceipt` struct MUST be destroyed (repaid) within the same Atomic Transaction Block.
 
 ```move
-// 🛡️ The "Hot Potato" Safety Mechanism (v0.0.4 - REAL IMPLEMENTATION)
+// 🛡️ The "Hot Potato" Safety Mechanism (v0.0.5 - REAL IMPLEMENTATION)
 public fun execute_loop<Base, Quote>(
     pool: &mut MockPool<Base, Quote>,
     user_funds: Coin<Base>,
@@ -43,6 +43,35 @@ public fun execute_loop<Base, Quote>(
     transfer::public_transfer(loan_coin, sender);
 }
 ```
+
+---
+
+## ✨ Key Features (v0.0.5)
+
+### 🎨 Visual Strategy Builder (NEW)
+Create custom trading strategies with our **drag-and-drop node editor**:
+- Connect triggers, conditions, and actions visually
+- Save as **Draft** for later editing
+- **Deploy** directly to the AI Agent
+- Version history with one-click restore
+
+### 🛒 Strategy Marketplace
+Browse and deploy pre-built strategies with a single click:
+- **SUI/USDC Kinetic Loop** - Flash loan leverage on stable pairs
+- **LST Peg Restoration** - Arbitrage liquid staking price deviations
+- **Meme Volatility Sniper** - Capture volatility spikes on memecoins
+- **Smart DCA Accumulator** - Dollar-cost average with AI timing
+
+### 📊 Dashboard Command Center
+- Real-time portfolio metrics (Net Worth, APY, P&L)
+- **Active Fleet** - All running strategies with status
+- Live execution log with transaction links
+- One-click strategy deployment with wallet signature
+
+### 🔒 Wallet Persistence
+- **Auto-connect** on page reload
+- Secure session management
+- Multi-wallet support (Sui Wallet, Suiet, Ethos, etc.)
 
 ---
 
@@ -108,7 +137,7 @@ The autonomous agent **actually signs and broadcasts transactions**:
 ```bash
 $ pnpm --filter @suiloop/agent dev "Loop 0.1 SUI"
 
-🚀 SUILOOP AGENT v0.0.4
+🚀 SUILOOP AGENT v0.0.5
 🤖 Agent Wallet: 0x8bd468b0e5941e75...
 📝 Signing transaction...
 ✅ Transaction Successful: 5X6TDFkYvjvCb2LS...
@@ -121,21 +150,6 @@ We prioritized user experience. If DeepBook testnet is down, our protocol **seam
 - Fallback: Deterministic Simulation Layer
 - Status: 🟢 **Mainnet Ready** (Switchable via Env Var)
 
-### 7. Intelligence Layer (Real-Time Scanning)
-The Agent is **Ecosystem-Aware**. Before executing any strategy, it scans major checkpoints on Sui Testnet:
-*   **Scallop**: Fetches live Supply/Borrow APY.
-*   **Cetus**: Checks for CLMM liquidity depth.
-*   **Decision Engine**: If the network is healthy, it routes there. If unstable, it intelligently falls back to the safety engine.
-
-### 8. Future-Proof: DeepBook Margin
-**SuiLoop is built ready for DeepBook Margin accounts.** Future versions (Q3 2026) will utilize cross-margin collateralization to further increase capital efficiency, positioning SuiLoop as the premier liquidity layer for BTCfi.
-
-### 9. Architectural Excellence: Custom Engine vs SDK
-We deliberately chose to implement our strategy logic directly in Move (`atomic_engine`) rather than using the client-side `@mysten/deepbook-v3` SDK.
-*   **Faster Execution**: Logic runs atomically on-chain, bypassing client-node latency.
-*   **Guaranteed Safety**: Move's Hot Potato pattern is enforced by the VM, not client-side validation.
-*   **Result**: Institutional-grade reliability that purely client-side bots cannot match.
-
 ---
 
 ## 🛠️ Ecosystem Stack & Tooling
@@ -147,12 +161,12 @@ Built entirely using official Mysten Labs standards and best practices:
 *   **[DeepBook V3](https://docs.sui.io/standards/deepbookv3-sdk)**: Flash Loan Logic & Architecture Reference
 *   **[Scallop SDK](https://github.com/scallop-io/sui-scallop-sdk)**: Real-time Lending/Borrowing Intelligence
 *   **[Cetus SDK](https://github.com/CetusProtocol/cetus-sui-clmm-sdk)**: CLMM Liquidity & Swap Routing
-*   **[Sui GraphQL](https://docs.sui.io/references/sui-graphql)**: Data indexing for historical analytics
-*   **[Supabase](https://supabase.com)**: Serverless Postgres, Auth & Realtime capabilities for agent logs.
+*   **[Supabase](https://supabase.com)**: Serverless Postgres, Auth & Realtime for strategy persistence
+*   **[React Flow](https://reactflow.dev)**: Visual node-based strategy builder
 
 ---
 
-## 📦 Deployed Contracts (Testnet v0.0.4)
+## 📦 Deployed Contracts (Testnet v0.0.5)
 
 | Component | Address | Description |
 |-----------|---------|-------------|
@@ -228,7 +242,7 @@ pnpm dev
 
 ## 🛣️ Roadmap: Into the Moonshot
 
-*   **Q1 2026**: ✅ **ETHGlobal HackMoney 2026** - Hot Potato Flash Loans Working + AI Agent Signing Real Transactions
+*   **Q1 2026**: ✅ **ETHGlobal HackMoney 2026** - Hot Potato Flash Loans + Visual Strategy Builder + AI Agent
 *   **Q2 2026**: Mainnet Launch & Audited "Atomic Engine"
 *   **Q3 2026**: **Institutional Vaults** for BTCfi & ElizaOS Agent Marketplace
 *   **Q4 2026**: Cross-Chain Loop (Sui <-> Bitcoin) via Sui Bridge
@@ -240,25 +254,31 @@ pnpm dev
 ```
 Sui-Loop/
 ├── packages/
-│   ├── contracts/          # Move Smart Contracts
+│   ├── contracts/              # Move Smart Contracts
 │   │   ├── sources/
 │   │   │   └── atomic_engine.move  # Core Flash Loan Logic
 │   │   └── tests/
 │   │       └── atomic_tests.move   # 5 Unit Tests
-│   ├── agent/              # ElizaOS AI Agent Plugin
+│   ├── agent/                  # ElizaOS AI Agent Plugin
 │   │   └── src/
-│   │       ├── actions/    # EXECUTE_ATOMIC_LEVERAGE action
-│   │       ├── providers/  # DeepBook data provider
-│   │       └── run.ts      # Agent runner
-│   └── web/                # Next.js 15 Frontend
+│   │       ├── actions/        # EXECUTE_ATOMIC_LEVERAGE action
+│   │       ├── providers/      # DeepBook data provider
+│   │       ├── services/       # Walrus, Scallop, Cetus integrations
+│   │       └── run.ts          # Agent runner
+│   └── web/                    # Next.js 15 Frontend
 │       ├── app/
-│       │   ├── dashboard/  # Command Center
-│       │   ├── analytics/  # Charts & Metrics
-│       │   └── strategies/ # Strategy Builder
-│       └── components/     # Neural Glass UI
+│       │   ├── dashboard/      # Command Center
+│       │   ├── analytics/      # Charts & Metrics
+│       │   ├── strategies/     # Marketplace
+│       │   │   └── builder/    # Visual Strategy Editor
+│       │   └── docs/           # Documentation
+│       ├── components/
+│       │   └── layout/         # Navbar, Footer
+│       └── lib/                # Supabase, Strategy Services
 ├── README.md
 ├── TECHNICAL_DOCUMENTATION.md
-└── HOW_TO_USE.md
+├── HOW_TO_USE.md
+└── SUPABASE_SCHEMA.sql
 ```
 
 ---
@@ -268,4 +288,5 @@ Sui-Loop/
 Built for **[ETHGlobal HackMoney 2026](https://ethglobal.com/events/hackmoney2026)** 🚀
 
 *Last updated: February 4, 2026*
+*Version: v0.0.5*
 

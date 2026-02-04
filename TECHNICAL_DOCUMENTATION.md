@@ -3,7 +3,7 @@
 ## 1. Executive Summary
 SuiLoop is a high-frequency DeFi protocol on the Sui blockchain that integrates atomic leverage execution with autonomous AI agents. The project leverages **Move 2024** for secure, risk-free flash loan interactions, while using **ElizaOS** to power an intelligent off-chain agent that analyzes market conditions and orchestrates on-chain transactions via Programmable Transaction Blocks (PTB).
 
-The platform is fully deployed on **Sui Testnet (v0.0.4)**, featuring a "State of Art" Next.js dashboard that allows users to seamlessly trigger AI trading strategies with real-time wallet signature verification. **v0.0.4 introduces a real Hot Potato pattern** where the `LoopReceipt` struct has no `drop` ability, guaranteeing that flash loans MUST be repaid or the transaction reverts.
+The platform is fully deployed on **Sui Testnet (v0.0.5)**, featuring a "State of Art" Next.js dashboard with a **Visual Strategy Builder**, **Strategy Marketplace**, and real-time wallet signature verification. **v0.0.5 introduces complete strategy management** including draft/deploy workflows, wallet auto-reconnect, and Supabase persistence.
 
 ### 🎯 Progressive Automation
 SuiLoop solves the biggest AI-Crypto dilemma: **Security vs. Autonomy**
@@ -31,8 +31,6 @@ We prioritized user experience. If DeepBook testnet is down, our protocol **seam
 
 **AI Agent Wallet**: `0x8bd468b0e5941e75484e95191d99ff6234b2ab24e3b91650715b6df8cf8e4eba`
 
-
-
 ---
 
 ## 2. System Architecture
@@ -43,7 +41,7 @@ The system follows a **Hybrid Compute** architecture designed for trustlessness 
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         USER INTERFACE                               │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
-│  │  Dashboard  │  │  Strategy   │  │  Analytics  │  │   Builder   │ │
+│  │  Dashboard  │  │ Marketplace │  │  Analytics  │  │   Builder   │ │
 │  │  (Deploy)   │  │  (Select)   │  │  (Charts)   │  │  (Drag/Drop)│ │
 │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘ │
 └─────────┼────────────────┼────────────────┼────────────────┼────────┘
@@ -51,31 +49,18 @@ The system follows a **Hybrid Compute** architecture designed for trustlessness 
           ▼                ▼                ▼                ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                      @mysten/dapp-kit                               │
-│         (Wallet Connection, Transaction Signing, RPC)               │
+│     (Wallet Connection, Auto-Reconnect, Transaction Signing)        │
 └────────────────────────────┬────────────────────────────────────────┘
                              │
-                             ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                    SUI TESTNET BLOCKCHAIN                            │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  Package: 0x9a2f0c4ce838201bcc0d85f313621d47551511b887043   │    │
-│  │  ┌─────────────────────────────────────────────────────┐    │    │
-│  │  │              atomic_engine Module                    │    │    │
-│  │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │    │    │
-│  │  │  │ borrow_     │  │ repay_      │  │ execute_    │  │    │    │
-│  │  │  │ flash_loan  │→ │ flash_loan  │→ │ loop        │  │    │    │
-│  │  │  │ (Hot Potato)│  │ (Destroys)  │  │ (Entry)     │  │    │    │
-│  │  │  └─────────────┘  └─────────────┘  └─────────────┘  │    │    │
-│  │  └─────────────────────────────────────────────────────┘    │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                     │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  MockPool: 0x0839e6ce61e303da44f3d999648536f573ee22937d...  │    │
-│  │  Type: MockPool<SUI, SUI>                                   │    │
-│  │  Liquidity: 1 SUI (Active)                                  │    │
-│  │  Flash Loan Fee: 0.3%                                       │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────────┘
+          ┌──────────────────┼──────────────────┐
+          ▼                  ▼                  ▼
+┌─────────────────┐  ┌──────────────┐  ┌──────────────────┐
+│    SUPABASE     │  │  LOCALSTORAGE │  │   SUI TESTNET    │
+│  (Persistence)  │  │   (Cache)     │  │  (Blockchain)    │
+│  - strategies   │  │  - drafts     │  │  - atomic_engine │
+│  - profiles     │  │  - fleet      │  │  - MockPool      │
+│  - agent_logs   │  │               │  │                  │
+└─────────────────┘  └──────────────┘  └──────────────────┘
 ```
 
 ### Architecture Layers:
@@ -83,20 +68,28 @@ The system follows a **Hybrid Compute** architecture designed for trustlessness 
 1.  **On-Chain (Sui Network)**: 
     *   Holds the assets and liquidity pools.
     *   Executes the atomic logic (borrow -> execute strategy -> repay) in a single transaction.
-    *   Enforces "Hot Potato" safety: If the trade is not profitable, the transaction reverts, ensuring zero principal loss.
+    *   Enforces "Hot Potato" safety: If the trade is not profitable, the transaction reverts.
+    
 2.  **Off-Chain (Agent Runtime)**: 
     *   Runs the ElizaOS agent logic (`packages/agent`).
     *   Constructs optimistic PTBs based on market opportunities.
-3.  **User Interface (Web)**: 
+    
+3.  **Persistence Layer (Supabase + LocalStorage)**:
+    *   **Supabase**: Cloud database for strategy configurations, user profiles, and agent logs.
+    *   **LocalStorage**: Client-side cache for draft strategies and fleet data.
+    *   **Hybrid Sync**: Merges both sources with intelligent deduplication.
+    
+4.  **User Interface (Web)**: 
     *   Visual layer for users to activate strategies.
     *   Handles the signing and broadcasting of transactions via `@mysten/dapp-kit`.
+    *   Auto-connect wallet persistence across sessions.
 
 ---
 
 ## 3. Detailed Component Analysis (File by File)
 
 ### A. Smart Contracts (`packages/contracts`)
-**Status**: ✅ Deployed on Testnet (v0.0.4)  
+**Status**: ✅ Deployed on Testnet (v0.0.5)  
 **Language**: Move (2024 Edition)  
 **Package ID**: `0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043`  
 **Simulation Layer ID**: `0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0`  
@@ -125,7 +118,7 @@ public struct MockPool<phantom Base, phantom Quote> has key, store {
 }
 ```
 
-*   **Key Functions (v0.0.4 - Real Hot Potato)**:
+*   **Key Functions (v0.0.5)**:
 
 | Function | Signature | Description |
 |----------|-----------|-------------|
@@ -163,14 +156,24 @@ public struct MockPool<phantom Base, phantom Quote> has key, store {
 **Framework**: ElizaOS (v1.x) with custom Sui Plugin  
 **Status**: ✅ **REAL SIGNING - Transactions Verified On-Chain**
 
-#### Verified Agent Transactions
-
-| Transaction Digest | Amount | Fee | Suiscan |
-|--------------------|--------|-----|---------|
-| `5X6TDFkYvjvCb2LSE37DC7qNFs7UDgNy9izTs7amNanG` | 0.1 SUI | 0.0003 SUI | [View](https://suiscan.xyz/testnet/tx/5X6TDFkYvjvCb2LSE37DC7qNFs7UDgNy9izTs7amNanG) |
-| `ExYe8kirfrUVkehcz63NvDzSzZPz2gAoLoVyCpUcVESP` | 0.05 SUI | 0.0001 SUI | [View](https://suiscan.xyz/testnet/tx/ExYe8kirfrUVkehcz63NvDzSzZPz2gAoLoVyCpUcVESP) |
-
-**Agent Wallet**: `0x8bd468b0e5941e75484e95191d99ff6234b2ab24e3b91650715b6df8cf8e4eba`
+#### File Structure
+```
+packages/agent/src/
+├── actions/
+│   ├── executeAtomicLeverage.ts    # Main transaction action
+│   └── index.ts
+├── providers/
+│   └── deepBookProvider.ts         # Market data provider
+├── services/
+│   ├── walrusService.ts            # Decentralized storage
+│   ├── scallopService.ts           # Lending protocol integration
+│   └── cetusService.ts             # DEX integration
+├── plugins/
+│   └── suiloop-plugin/             # ElizaOS plugin wrapper
+├── run.ts                          # Standalone runner
+├── server.ts                       # HTTP API server
+└── index.ts                        # Main exports
+```
 
 #### 1. `src/actions/executeAtomicLeverage.ts`
 *   **Action**: `EXECUTE_ATOMIC_LEVERAGE`
@@ -188,106 +191,174 @@ public struct MockPool<phantom Base, phantom Quote> has key, store {
     4. Sign and execute via `SuiClient`
     5. Return transaction digest and Suiscan link
 
-*   **Usage**:
-```bash
-# Run agent with default 0.1 SUI
-pnpm --filter @suiloop/agent dev
-
-# Run with custom amount
-pnpm --filter @suiloop/agent dev "Loop 0.5 SUI please"
-```
-
-#### 2. `src/providers/deepBookProvider.ts`
-*   **Purpose**: Provides real-time market data to the agent
-*   **Features**:
-    *   Connects to Sui Testnet RPC
-    *   Fetches gas price for fee estimation
-    *   Derives bid/ask prices (currently simulated from on-chain data)
-
-#### 3. `src/run.ts`
-*   **Purpose**: Standalone runner for testing the agent
-*   **Features**:
-    *   Loads `.env` configuration
-    *   Validates action before execution
-    *   Displays formatted results
-
-#### 4. Architectural Decision: Custom Contract vs DeepBook SDK
-While the `@mysten/deepbook-v3` SDK allows for client-side PTB construction, we deliberately chose to implement our strategy logic directly in Move (`atomic_engine`).
-
-| Feature | Client-Side SDK | Custom SuiLoop Contract |
-|---------|-----------------|-------------------------|
-| **Latency** | Slower (Client -> Node -> Chain) | **Fastest** (Atomic on-chain execution) |
-| **Safety** | Relies on client validation | **Guaranteed** by Move Hot Potato |
-| **Atomicity** | Multi-step PTB | **Single Atomic Move Call** |
-| **Resilience** | Breaks if node fails | **Robust** (contracts are immutable) |
-
-**Verdict**: For high-frequency arbitrage, the custom `atomic_engine` approach provides superior execution speed and safety guarantees compared to purely client-side orchestration.
-
-#### 5. Resilience: The Deterministic Simulation Layer
-To ensure strict uptime guarantees during demos and Hackathons, the Agent implements a **Real-Time Health Check**:
-
-1.  **Scanning**: The agent queries the official DeepBook V3 Testnet Package (`0x2c8d...`).
-2.  **Verification**: If the protocol is unreachable or liquidity is fragmented (common on Testnet), the agent receives a `null` or error response.
-3.  **Fallback**: The system automatically switches to the **Deterministic Simulation Layer**.
-    *   **Status**: `⚠️ DeepBook V3 Unreachable`
-    *   **Action**: `🔄 Switching to Simulation Layer`
-    *   **Result**: The transaction is executed against the `MockPool`, guaranteeing a successful demonstration of the *mechanics* even when the *network* is unstable.
-
-### 6. Ecosystem Integration (Cetus/Scallop) 🦄
-**New in v0.0.4**: The Agent now includes an **Intelligence Layer** that scans the Sui Testnet for real liquidity before execution.
-
-*   **Scallop (LIVE) 🐚**: Integrated via `@scallop-io/sui-scallop-sdk`. The agent actively fetches **Real-Time Supply & Borrow APY** from Scallop's Testnet markets.
-    *   *Status*: ✅ Active & Data Flowing
-*   **Cetus Protocol**: Integrated via `@cetusprotocol/cetus-sui-clmm-sdk`. Scans for CLMM pools to route arbitrage trades.
-    *   *Status*: ⚠️ Integrated (Monitoring Testnet Availability)
-*   **Fallback Logic (Resilience)**:
-    1.  Scan Scallop (Rates) & Cetus (Liquidity)
-    2.  If external infrastructure is unstable -> Fallback to **Internal Atomic Engine** (Guaranteed Consistency)
-
-
-### 7. Configuration (`.env`)
-```env
-SUI_PRIVATE_KEY=suiprivkey1...  # Agent wallet (bech32 format)
-SUI_PACKAGE_ID=0x9a2f0c4ce...   # Contract package
-SUI_POOL_ID=0x0839e6ce6...      # MockPool object
-```
-
+#### 2. `src/services/` (Ecosystem Integrations)
+*   **walrusService.ts**: Decentralized storage for strategy configurations
+*   **scallopService.ts**: Fetches real-time lending rates from Scallop
+*   **cetusService.ts**: CLMM pool data and swap routing
 
 ---
 
 ### C. Frontend (`packages/web`)
 **Framework**: Next.js 15, React 19  
 **Styling**: Tailwind CSS + Custom "Neon/Glass" Theme  
-**Wallet**: `@mysten/dapp-kit`
+**Wallet**: `@mysten/dapp-kit` with `autoConnect`
+
+#### File Structure
+```
+packages/web/
+├── app/
+│   ├── page.tsx                    # Landing page
+│   ├── layout.tsx                  # Root layout with providers
+│   ├── providers.tsx               # Wallet + Query providers
+│   ├── globals.css                 # Tailwind + custom styles
+│   ├── dashboard/
+│   │   └── page.tsx                # Command center (823 lines)
+│   ├── strategies/
+│   │   ├── page.tsx                # Marketplace (297 lines)
+│   │   └── builder/
+│   │       └── page.tsx            # Visual editor (572 lines)
+│   ├── analytics/
+│   │   └── page.tsx                # Performance charts
+│   └── docs/
+│       └── page.tsx                # Documentation
+├── components/
+│   └── layout/
+│       ├── Navbar.tsx              # Navigation (287 lines)
+│       └── Footer.tsx              # Footer component
+└── lib/
+    ├── supabase.ts                 # Supabase client
+    ├── strategyService.ts          # Strategy CRUD operations
+    ├── suiClient.ts                # Sui RPC client
+    └── storage.ts                  # LocalStorage helpers
+```
 
 #### 1. `app/dashboard/page.tsx` (Command Center)
-*   **Functionality**:
-    *   **Secure Access**: Implements a "Lock Screen" guard that requires Wallet Connection.
-    *   **`handleDeploy`**: The critical function that triggers the on-chain strategy:
-    *   **Suspense Boundary**: Optimized for Next.js 15 Static/Dynamic rendering.
-        ```typescript
-        // Get contract IDs from environment variables
-        const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID;
-        const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID;
-        
-        // Split user funds for the strategy
-        const [userFundsCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(USER_FUNDS_AMOUNT)]);
-        
-        // Execute atomic loop
-        tx.moveCall({
-            target: `${PACKAGE_ID}::atomic_engine::execute_loop`,
-            typeArguments: ["0x2::sui::SUI", "0x2::sui::SUI"],
-            arguments: [tx.object(POOL_ID), userFundsCoin, tx.pure.u64(BORROW_AMOUNT), tx.pure.u64(MIN_PROFIT)]
-        });
-        ```
-    *   **Error Handling**: Specific messages for insufficient balance, pool empty, profit failure.
-    *   **Visualization**: Displays Net Worth, APY, and a Live Execution Log console.
+**Lines**: 823 | **Complexity**: High
 
-#### 2. `.env.local` (Environment Configuration)
-```env
-NEXT_PUBLIC_PACKAGE_ID=0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043
-NEXT_PUBLIC_POOL_ID=0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0
-NEXT_PUBLIC_SUI_NETWORK=testnet
+*   **Key Features**:
+    *   **Lock Screen**: Requires wallet connection to access
+    *   **Active Fleet**: Displays running strategies with status
+    *   **Execution Log**: Real-time feed of agent actions
+    *   **Auto-Start Modal**: Triggered by URL params from Marketplace/Builder
+    
+*   **Key State**:
+```typescript
+const [activeStrategies, setActiveStrategies] = useState<Array<any>>([]);
+const [showAutoStartModal, setShowAutoStartModal] = useState(false);
+const [isLoadingFleet, setIsLoadingFleet] = useState(true);
+```
+
+*   **Strategy Resolution Logic**:
+```typescript
+const currentStrategy = useMemo(() => {
+    // 1. Check hardcoded strategies (STRATEGIES object)
+    // 2. Check active fleet (from Supabase/LocalStorage)
+    // 3. Check URL name param (immediate display)
+    // 4. Fallback to "Custom Agent Strategy"
+}, [strategyId, activeStrategies, account, strategyNameParam]);
+```
+
+*   **Data Flow**:
+    1. Load fleet from Supabase + LocalStorage
+    2. Merge and deduplicate (by name for custom, by id for marketplace)
+    3. Filter out DRAFT status (only show RUNNING)
+    4. Update UI state
+
+#### 2. `app/strategies/builder/page.tsx` (Visual Editor)
+**Lines**: 572 | **Framework**: Custom canvas-based node editor
+
+*   **Key Features**:
+    *   **Drag & Drop**: Nodes from sidebar to canvas
+    *   **Visual Connections**: SVG curves between nodes
+    *   **Undo/Redo**: History stack with keyboard shortcuts
+    *   **Draft Mode**: Save without deploying
+    *   **Deploy Mode**: Save + redirect to Dashboard with transaction
+    
+*   **Node Types**:
+```typescript
+const triggerOptions = [
+    { id: "price", label: "Price > $2.50", icon: TrendingUp },
+    { id: "time", label: "Every 1 Hour", icon: Clock },
+    { id: "gas", label: "High Gas Fee", icon: Cpu },
+    { id: "balance", label: "SUI Balance > 100", icon: Cpu },
+    { id: "slippage", label: "Slippage < 0.5%", icon: Cpu },
+];
+```
+
+*   **Persistence Logic**:
+```typescript
+const handleSave = async (deploy = false) => {
+    const newStrategy = {
+        id: `custom-${Date.now()}`,
+        name: strategyName,
+        status: deploy ? 'RUNNING' : 'DRAFT',
+        // ...
+    };
+    
+    // 1. Save to LocalStorage
+    localStorage.setItem(key, JSON.stringify(updated));
+    
+    // 2. Sync to Supabase
+    await StrategyService.deployStrategy(account.address, {...});
+    
+    // 3. Redirect if deploying
+    if (deploy) {
+        router.push(`/dashboard?autostart=true&strategy=${id}&name=${name}`);
+    }
+};
+```
+
+#### 3. `app/strategies/page.tsx` (Marketplace)
+**Lines**: 297 | **Pre-built Strategies**: 6
+
+*   **Available Strategies**:
+    - SUI/USDC Kinetic Loop
+    - LST Peg Restoration
+    - Meme Volatility Sniper
+    - Smart DCA Accumulator
+    - Stablecoin Delta Arbitrage
+    - NFT Floor Sweep Bot
+
+*   **Deploy Flow**:
+```typescript
+const handleDeploy = async (strategy) => {
+    // 1. Save to LocalStorage as DRAFT
+    // 2. Redirect to Dashboard with autostart
+    router.push(`/dashboard?autostart=true&strategy=${strategy.id}&name=${encodeURIComponent(strategy.name)}`);
+};
+```
+
+#### 4. `app/providers.tsx` (Wallet Configuration)
+```typescript
+export function Providers({ children }: { children: ReactNode }) {
+    return (
+        <QueryClientProvider client={queryClient}>
+            <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+                <WalletProvider autoConnect>  {/* Auto-reconnect on reload */}
+                    {children}
+                </WalletProvider>
+            </SuiClientProvider>
+        </QueryClientProvider>
+    );
+}
+```
+
+#### 5. `lib/strategyService.ts` (Supabase Operations)
+*   **CRUD Operations**:
+```typescript
+const StrategyService = {
+    // Fetch user's strategies
+    async getUserStrategies(walletAddress: string) {...},
+    
+    // Save/Update strategy (upsert pattern)
+    async deployStrategy(walletAddress: string, strategy: ActiveStrategy) {
+        // Check if exists -> Update, else Insert
+        // Prevents duplicates by name
+    },
+    
+    // Update strategy status
+    async updateStrategy(strategyId: string, updates: Partial<ActiveStrategy>) {...}
+};
 ```
 
 ---
@@ -295,106 +366,82 @@ NEXT_PUBLIC_SUI_NETWORK=testnet
 ### D. Data & Persistence (Supabase)
 **Status**: ✅ Integrated & Secured with RLS
 
-The project uses **Supabase** as a serverless backend to persist user profiles, strategy configurations, and agent execution logs. This ensures that while the core execution is on-chain, the rich metadata and history are stored efficiently off-chain.
-
 #### 1. Database Schema (`SUPABASE_SCHEMA.sql`)
 
 | Table | Purpose | Key Columns | RLS Policy |
 |-------|---------|-------------|------------|
-| `profiles` | Links Wallet Addresses to User Identites | `id`, `wallet_address`, `username` | Users can only update their own profile. Public read. |
-| `strategies` | Stores defined strategy parameters | `id`, `user_id`, `config`, `status` | Private. Only the creator can view/edit. |
-| `agent_logs` | Audit trail of Agent actions | `id`, `strategy_id`, `message`, `level` | Insert-only for Agent. Read-only for Owner. |
+| `profiles` | Links Wallet Addresses to Users | `id`, `wallet_address`, `username` | Users can update their own profile |
+| `strategies` | Stores strategy configurations | `id`, `user_id`, `name`, `status`, `config` | Private - creator only |
+| `agent_logs` | Audit trail of Agent actions | `id`, `strategy_id`, `message`, `level` | Insert for Agent, Read for Owner |
 
-#### 2. Integration Points
-*   **Web Client (`packages/web`)**: Uses the **Anon Key** to fetch user strategies and display logs in the dashboard.
-*   **Agent Server (`packages/agent`)**: Uses the **Service Role Key** to strictly separate privileges. The Agent has elevated rights to write logs (`insert`) but cannot modify user strategies safely.
-*   **Type Safety**: Both packages share strict TypeScript definitions generated from the SQL schema to ensure Runtime safety (`types/database.types.ts`).
+#### 2. Strategy Status Flow
+```
+┌─────────┐    Save Draft    ┌─────────┐    Deploy    ┌─────────┐
+│  NEW    │ ───────────────> │  DRAFT  │ ──────────> │ RUNNING │
+└─────────┘                   └─────────┘              └─────────┘
+                                   │                       │
+                                   │       Stop            │
+                                   └───────────────────────┤
+                                                           ▼
+                                                    ┌─────────┐
+                                                    │ STOPPED │
+                                                    └─────────┘
+```
 
 ---
 
-## 4. Operational Workflow (Live Demo)
+## 4. Operational Workflows
 
+### A. Marketplace Deploy Flow
 ```mermaid
 sequenceDiagram
     participant User
+    participant Marketplace
     participant Dashboard
     participant Wallet
     participant SuiTestnet
-    participant MockPool
 
-    User->>Dashboard: Click "DEPLOY STRATEGY"
+    User->>Marketplace: Click "Deploy" on strategy
+    Marketplace->>Marketplace: Save to LocalStorage (DRAFT)
+    Marketplace->>Dashboard: Redirect with ?autostart=true&name=...
+    Dashboard->>Dashboard: Show confirmation modal
+    User->>Dashboard: Click "Confirm Deploy"
     Dashboard->>Dashboard: Build Transaction (PTB)
     Dashboard->>Wallet: Request Signature
     Wallet->>User: Approve Transaction?
     User->>Wallet: Confirm
     Wallet->>SuiTestnet: Submit Transaction
-    
-    Note over SuiTestnet: ATOMIC EXECUTION
-    SuiTestnet->>MockPool: 1. borrow_flash_loan(0.1 SUI)
-    MockPool->>SuiTestnet: Returns (Coin, LoopReceipt)
-    SuiTestnet->>SuiTestnet: 2. Merge user_funds (0.01 SUI)
-    SuiTestnet->>SuiTestnet: 3. Calculate repayment + 0.3% fee
-    SuiTestnet->>SuiTestnet: 4. Verify solvency
-    SuiTestnet->>MockPool: 5. repay_flash_loan (destroys receipt)
-    SuiTestnet->>User: 6. Transfer profit
-    
     SuiTestnet->>Dashboard: Transaction Success
-    Dashboard->>User: Show "⚡ Atomic Loop Executed!"
+    Dashboard->>Dashboard: Update status to RUNNING
+    Dashboard->>User: Show in Active Fleet
+```
+
+### B. Builder Deploy Flow
+```mermaid
+sequenceDiagram
+    participant User
+    participant Builder
+    participant Wallet
+    participant Dashboard
+    participant SuiTestnet
+
+    User->>Builder: Create strategy flow
+    User->>Builder: Click "Deploy Agent"
+    Builder->>Wallet: Request Message Signature
+    Wallet->>User: Approve Authorization?
+    User->>Wallet: Confirm
+    Builder->>Builder: Save to LocalStorage (RUNNING)
+    Builder->>Dashboard: Redirect with ?autostart=true&name=...
+    Dashboard->>Dashboard: Build Transaction (PTB)
+    Dashboard->>Wallet: Request Transaction Signature
+    Wallet->>SuiTestnet: Submit Transaction
+    SuiTestnet->>Dashboard: Success
+    Dashboard->>User: Strategy Active!
 ```
 
 ---
 
-## 5. Deployed Artifacts (Testnet v0.0.4)
-
-### 📦 1. Smart Contract Package
-*   **Name**: `suiloop` (v0.0.4)
-*   **Address (Package ID)**: `0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043`
-*   **Suiscan**: [View on Explorer](https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043)
-*   **Description**: Contains the immutable Move bytecode for `atomic_engine`.
-    *   **Module**: `atomic_engine`
-    *   **Key Functions**: `execute_loop`, `create_pool`, `add_liquidity`, `borrow_flash_loan`, `repay_flash_loan`
-
-### 💧 2. Shared Objects (State)
-*   **Name**: `MockPool<SUI, SUI>`
-*   **Object ID**: `0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0`
-*   **Suiscan**: [View on Explorer](https://suiscan.xyz/testnet/object/0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0)
-*   **Current Liquidity**: 1 SUI
-*   **Flash Loan Fee**: 0.3% (30 bps)
-*   **Description**: A publicly shared object created via `create_pool`. Acts as the liquidity source for Flash Loans.
-
-### 🔑 3. Administrative Capabilities
-*   **UpgradeCap**: `0xd1656b27c68378a5b7de29e20eadbf870ab31f12539a818fb3fb3e0b24a41f39`
-*   **Owner**: `0x8ce5e3a1cc5b8be074c9820659b6dcae18210f350f46fcb10e32bc6327ad5884`
-*   **Description**: Keys held by the deployer to authorize future contract upgrades.
-
----
-
-## 6. Infrastructure & DevOps (Production Ready)
-
-To ensure institutional-grade reliability, we have implemented a robust DevOps pipeline:
-
-### 🐳 Docker & Containerization
-The AI Agent is fully containerized for deployment on any cloud provider (AWS/GCP/Railroad):
-
-*   **Dockerfile**: `packages/agent/Dockerfile`
-*   **Base Image**: `node:18-alpine` (Lightweight & Secure)
-*   **Build**: Multi-stage build to minimize image size (~150MB)
-
-### 🔄 CI/CD Pipeline (GitHub Actions)
-Every code change is validated automatically via `.github/workflows/ci.yml`:
-
-*   **Linting**: Ensures code quality (ESLint)
-*   **Build Validation**: Verifies Next.js and Agent builds successfully
-*   **Unit Tests**: Runs contract tests (mocked) to prevent regression
-
-### 🛡️ Security Middleware
-
-*   **Next.js Middleware**: `middleware.ts` adds critical security headers (HSTS, X-Frame-Options, X-Content-Type-Options).
-*   **Secret Management**: Clean separation of secrets via `.env.example` templates. `git` history is scrubbed of credentials.
-
----
-
-## 7. Security Analysis
+## 5. Security Analysis
 
 ### Hot Potato Pattern Enforcement
 
@@ -424,24 +471,26 @@ public struct LoopReceipt {
 | Flash Loan Default | Hot Potato = must repay |
 | Oracle Manipulation | On-chain solvency check |
 | Sandwich Attack | User sets `min_profit` |
+| Duplicate Strategies | Upsert pattern in Supabase |
+| Session Hijacking | Wallet signature required |
 
 ---
 
-## 8. Technical Roadmap (Moonshot Vision)
+## 6. Technical Roadmap (Moonshot Vision)
 
 ### Phase 1: ETHGlobal HackMoney 2026 (✅ Q1 2026 - Current)
 *   **Move Hot Potato**: ✅ Secure flash loans deployed
 *   **5 Unit Tests**: ✅ All passing
-*   **On-Chain Execution**: ✅ Flash loan cycles verified (2 transactions)
-*   **Pool Liquidity**: ✅ 1 SUI active
+*   **Visual Strategy Builder**: ✅ Drag-and-drop editor
+*   **Strategy Marketplace**: ✅ 6 pre-built strategies
+*   **Wallet Persistence**: ✅ Auto-connect enabled
+*   **Supabase Integration**: ✅ Cloud persistence
 *   **AI Agent Signing**: ✅ Real transactions on Testnet
-*   **Infrastructure**: ✅ Docker & CI/CD Implemented
-*   **Agent Wallet**: `0x8bd468b0e5941e75484e95191d99ff6234b2ab24e3b91650715b6df8cf8e4eba`
 
 ### Phase 2: Mainnet Launch (Q2 2026)
 *   **Security Audit**: Professional audit of Atomic Engine
 *   **DeepBook V3 Integration**: Replace MockPool with real DeepBook pools
-*   **Pyth Oracle Integration**: Real-time price feeds for arbitrage detection
+*   **Pyth Oracle Integration**: Real-time price feeds for arbitrage
 
 ### Phase 3: Institutional Grade (Q3 2026)
 *   **BTCfi Vaults**: Native Bitcoin liquidity pools on Sui
@@ -453,41 +502,45 @@ public struct LoopReceipt {
 
 ---
 
-## 9. Quick Reference
+## 7. Quick Reference
 
-### Contract Interaction (CLI)
-```bash
-# Add liquidity to pool
-sui client call \
-  --package 0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043 \
-  --module atomic_engine \
-  --function add_liquidity \
-  --type-args 0x2::sui::SUI 0x2::sui::SUI \
-  --args 0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0 <COIN_ID> \
-  --gas-budget 50000000
+### Environment Variables
 
-# Execute flash loan loop
-sui client ptb --gas-budget 50000000 \
-  --split-coins gas "[10000000]" \
-  --assign user_funds \
-  --move-call 0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043::atomic_engine::execute_loop \
-    "<0x2::sui::SUI, 0x2::sui::SUI>" \
-    @0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0 \
-    user_funds \
-    100000000 \
-    0
+**Web (`packages/web/.env.local`)**:
+```env
+NEXT_PUBLIC_PACKAGE_ID=0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043
+NEXT_PUBLIC_POOL_ID=0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0
+NEXT_PUBLIC_SUI_NETWORK=testnet
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### Run Agent
+**Agent (`packages/agent/.env`)**:
+```env
+SUI_PRIVATE_KEY=suiprivkey1...
+SUI_PACKAGE_ID=0x9a2f0c4ce...
+SUI_POOL_ID=0x0839e6ce6...
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_KEY=your_service_role_key
+```
+
+### CLI Commands
+
 ```bash
-# Execute flash loan via AI Agent
+# Install dependencies
+pnpm install
+
+# Run development server
+pnpm dev
+
+# Run tests
+pnpm test
+
+# Run agent
 pnpm --filter @suiloop/agent dev "Loop 0.1 SUI"
-```
 
-### Run Tests
-```bash
-cd packages/contracts
-sui move test
+# Build for production
+pnpm build
 ```
 
 ---
@@ -499,5 +552,6 @@ Built for **[ETHGlobal HackMoney 2026](https://ethglobal.com/events/hackmoney202
 ---
 
 *Document last updated: February 4, 2026*  
-*Version: v0.0.4*  
+*Version: v0.0.5*  
 *Status: Production Ready (Testnet)*
+
