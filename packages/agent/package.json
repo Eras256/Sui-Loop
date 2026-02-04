@@ -15,17 +15,28 @@
         "@mysten/sui": "^1.45.2",
         "@scallop-io/sui-scallop-sdk": "^2.3.14",
         "@supabase/supabase-js": "^2.94.0",
+        "axios": "^1.13.4",
+        "bcrypt": "^6.0.0",
         "body-parser": "^2.2.2",
         "cors": "^2.8.6",
         "decimal.js": "^10.6.0",
         "dotenv": "^16.4.0",
         "express": "^5.2.1",
+        "express-rate-limit": "^8.2.1",
+        "jsonwebtoken": "^9.0.3",
+        "node-cron": "^4.2.1",
+        "uuid": "^13.0.0",
+        "ws": "^8.19.0",
         "zod": "^3.0.0"
     },
     "devDependencies": {
+        "@types/bcrypt": "^6.0.0",
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
+        "@types/jsonwebtoken": "^9.0.10",
         "@types/node": "^20.0.0",
+        "@types/uuid": "^11.0.0",
+        "@types/ws": "^8.18.1",
         "tsx": "^4.7.0",
         "typescript": "^5.0.0"
     }
