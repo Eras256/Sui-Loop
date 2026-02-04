@@ -234,7 +234,9 @@ export default function StrategyBuilderPro() {
                 color: "from-purple-500 to-indigo-600",
                 apy: "Calculating...",
                 tvl: "0",
-                nodes: nodes // Save the graph configuration local
+                nodes: nodes, // Save the graph configuration local
+                status: deploy ? 'RUNNING' : 'DRAFT', // Only RUNNING if deploying
+                emoji: '🛠️'
             };
 
             // 2. Read Existing Fleet (Local Sync)
