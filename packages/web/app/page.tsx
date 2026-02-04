@@ -220,17 +220,107 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* --- BUILDER HIGHLIGHT --- */}
+            <section className="py-24 px-4 relative overflow-hidden border-t border-white/5">
+                <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-neon-purple/10 rounded-full blur-[150px] pointer-events-none"></div>
+
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    {/* Left: Description */}
+                    <div className="space-y-6 z-10">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-neon-purple/10 border border-neon-purple/30 rounded-full text-neon-purple text-sm font-mono">
+                            <span className="w-2 h-2 bg-neon-purple rounded-full animate-pulse"></span>
+                            NEW IN v0.0.5
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter">
+                            VISUAL <span className="text-gradient">STRATEGY BUILDER</span>
+                        </h2>
+                        <p className="text-gray-400 text-lg leading-relaxed">
+                            Create custom trading strategies with our intuitive drag-and-drop editor.
+                            Connect triggers, conditions, and actions visually - no coding required.
+                        </p>
+                        <ul className="space-y-3 text-gray-300">
+                            {[
+                                "Drag & drop node-based editor",
+                                "Save drafts for later editing",
+                                "Deploy with one-click wallet signature",
+                                "Version history with restore"
+                            ].map((item, i) => (
+                                <li key={i} className="flex items-center gap-3">
+                                    <div className="w-5 h-5 rounded-full bg-neon-cyan/20 flex items-center justify-center">
+                                        <div className="w-2 h-2 bg-neon-cyan rounded-full"></div>
+                                    </div>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                        <Link
+                            href="/strategies/builder"
+                            className="inline-flex items-center gap-2 bg-gradient-to-r from-neon-purple to-neon-cyan text-black font-bold px-8 py-3 rounded-full hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all"
+                        >
+                            <Layers size={18} />
+                            Open Builder
+                        </Link>
+                    </div>
+
+                    {/* Right: Visual Preview */}
+                    <div className="relative z-10 hidden lg:block">
+                        <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-4 shadow-2xl">
+                            {/* Mock Builder UI */}
+                            <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                                <span className="text-xs text-gray-500 font-mono">Strategy Builder</span>
+                            </div>
+                            <div className="grid grid-cols-4 gap-4 min-h-[250px]">
+                                {/* Sidebar Mock */}
+                                <div className="col-span-1 space-y-2">
+                                    <div className="text-xs text-gray-500 uppercase mb-2">Triggers</div>
+                                    {["Price > $2.50", "Every 1 Hour", "High Gas"].map((t, i) => (
+                                        <div key={i} className="px-2 py-1.5 bg-white/5 rounded text-xs text-gray-400 border border-white/5">
+                                            {t}
+                                        </div>
+                                    ))}
+                                </div>
+                                {/* Canvas Mock */}
+                                <div className="col-span-3 bg-[#0F0F0F] rounded-lg border border-white/5 relative overflow-hidden">
+                                    {/* Mock Nodes */}
+                                    <div className="absolute top-8 left-8 bg-gradient-to-r from-yellow-500/80 to-orange-500/80 px-3 py-2 rounded-lg border border-white/20 text-xs font-bold shadow-lg">
+                                        🕐 Every 1 Hour
+                                    </div>
+                                    <div className="absolute top-8 right-8 bg-gradient-to-r from-green-500/80 to-emerald-500/80 px-3 py-2 rounded-lg border border-white/20 text-xs font-bold shadow-lg">
+                                        ⚡ Execute Swap
+                                    </div>
+                                    {/* Connection Line */}
+                                    <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                                        <path d="M 130 40 Q 180 70 210 40" stroke="rgba(0,243,255,0.5)" strokeWidth="2" fill="none" strokeDasharray="4 2" />
+                                    </svg>
+                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 font-mono">
+                                        Drag nodes to connect
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* --- CTA --- */}
             <section className="py-32 px-4 text-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-neon-purple/10 pointer-events-none"></div>
                 <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">READY TO DEPLOY?</h2>
-                <div className="flex justify-center gap-4">
-                    <button onClick={handleDeploy} className="bg-neon-cyan text-black font-bold px-10 py-4 rounded-full hover:shadow-[0_0_40px_rgba(0,243,255,0.4)] transition-all text-lg scale-100 hover:scale-105 active:scale-95 duration-200 cursor-pointer">
-                        Launch Agent V1
-                    </button>
-                    <button className="border border-white/10 text-white font-bold px-10 py-4 rounded-full hover:bg-white/5 transition-all text-lg cursor-pointer">
-                        Read Whitepaper
-                    </button>
+                <div className="flex flex-wrap justify-center gap-4">
+                    <Link href="/strategies" className="bg-neon-cyan text-black font-bold px-10 py-4 rounded-full hover:shadow-[0_0_40px_rgba(0,243,255,0.4)] transition-all text-lg scale-100 hover:scale-105 active:scale-95 duration-200 cursor-pointer">
+                        Browse Strategies
+                    </Link>
+                    <Link href="/strategies/builder" className="border border-neon-purple text-neon-purple font-bold px-10 py-4 rounded-full hover:bg-neon-purple/10 transition-all text-lg cursor-pointer">
+                        Open Builder
+                    </Link>
+                    <Link href="/docs" className="border border-white/10 text-white font-bold px-10 py-4 rounded-full hover:bg-white/5 transition-all text-lg cursor-pointer">
+                        Read Docs
+                    </Link>
                 </div>
             </section>
 
