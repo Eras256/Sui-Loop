@@ -43,10 +43,43 @@ export const StrategyService = {
         }));
     },
 
-    // Save a new deployed strategy
+    // Save a new deployed strategy (or update existing with same name)
     async deployStrategy(walletAddress: string, strategy: ActiveStrategy) {
         if (!supabase) return null;
 
+        // First check if strategy with same name exists for this user
+        const { data: existing } = await supabase
+            .from('strategies')
+            .select('id')
+            .eq('user_id', walletAddress)
+            .eq('name', strategy.strategy_id)
+            .single();
+
+        if (existing) {
+            // Update existing
+            const { data, error } = await (supabase
+                .from('strategies') as any)
+                .update({
+                    status: strategy.status || 'RUNNING',
+                    config: {
+                        displayName: strategy.name,
+                        emoji: strategy.emoji,
+                        yield: strategy.yield,
+                        txDigest: strategy.tx_digest
+                    }
+                } as any)
+                .eq('id', (existing as any).id)
+                .select()
+                .single();
+
+            if (error) {
+                console.warn('Supabase update failed:', error.message || error);
+                return null;
+            }
+            return data;
+        }
+
+        // Insert new
         const { data, error } = await supabase
             .from('strategies')
             .insert({
@@ -65,7 +98,6 @@ export const StrategyService = {
 
         if (error) {
             console.warn('Supabase deploy skipped (using local fallback caused by):', error.message || error);
-            // Don't throw, return null so frontend adds it to local state anyway
             return null;
         }
 
