@@ -234,14 +234,16 @@ To ensure strict uptime guarantees during demos and Hackathons, the Agent implem
     *   **Result**: The transaction is executed against the `MockPool`, guaranteeing a successful demonstration of the *mechanics* even when the *network* is unstable.
 
 ### 6. Ecosystem Integration (Cetus/Scallop) 🦄
-**New in v0.0.4**: The Agent now includes an **Intelligence Layer** that scans the Sui Testnet for real liquidity before falling back to simulation.
+**New in v0.0.4**: The Agent now includes an **Intelligence Layer** that scans the Sui Testnet for real liquidity before execution.
 
-*   **Cetus Protocol**: Integrated via `@cetusprotocol/cetus-sui-clmm-sdk`. The agent actively looks for active CLMM pools to route arbitrage trades.
-*   **Scallop**: Architecture ready for `flash_loan` integration.
-*   **Fallback Logic**:
-    1.  Scan Cetus V3 Pools (Real Liquidity)
-    2.  Scan DeepBook V3 (Official Testnet)
-    3.  Fallback -> Internal Atomic Engine (Guaranteed Execution)
+*   **Scallop (LIVE) 🐚**: Integrated via `@scallop-io/sui-scallop-sdk`. The agent actively fetches **Real-Time Supply & Borrow APY** from Scallop's Testnet markets.
+    *   *Status*: ✅ Active & Data Flowing
+*   **Cetus Protocol**: Integrated via `@cetusprotocol/cetus-sui-clmm-sdk`. Scans for CLMM pools to route arbitrage trades.
+    *   *Status*: ⚠️ Integrated (Monitoring Testnet Availability)
+*   **Fallback Logic (Resilience)**:
+    1.  Scan Scallop (Rates) & Cetus (Liquidity)
+    2.  If external infrastructure is unstable -> Fallback to **Internal Atomic Engine** (Guaranteed Consistency)
+
 
 ### 7. Configuration (`.env`)
 ```env

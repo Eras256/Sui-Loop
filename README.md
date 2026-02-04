@@ -121,10 +121,16 @@ We prioritized user experience. If DeepBook testnet is down, our protocol **seam
 - Fallback: Deterministic Simulation Layer
 - Badge: `⚠️ Using Sandbox Liquidity`
 
-### 7. Future-Proof: DeepBook Margin
+### 7. Intelligence Layer (Real-Time Scanning)
+The Agent is **Ecosystem-Aware**. Before executing any strategy, it scans major checkpoints on Sui Testnet:
+*   **Scallop**: Fetches live Supply/Borrow APY.
+*   **Cetus**: Checks for CLMM liquidity depth.
+*   **Decision Engine**: If the network is healthy, it routes there. If unstable, it intelligently falls back to the safety engine.
+
+### 8. Future-Proof: DeepBook Margin
 **SuiLoop is built ready for DeepBook Margin accounts.** Future versions (Q3 2026) will utilize cross-margin collateralization to further increase capital efficiency, positioning SuiLoop as the premier liquidity layer for BTCfi.
 
-### 8. Architectural Excellence: Custom Engine vs SDK
+### 9. Architectural Excellence: Custom Engine vs SDK
 We deliberately chose to implement our strategy logic directly in Move (`atomic_engine`) rather than using the client-side `@mysten/deepbook-v3` SDK.
 *   **Faster Execution**: Logic runs atomically on-chain, bypassing client-node latency.
 *   **Guaranteed Safety**: Move's Hot Potato pattern is enforced by the VM, not client-side validation.
