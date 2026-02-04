@@ -193,15 +193,27 @@ function DashboardContent() {
                         // Clean state
                         setActiveStrategies([]);
                     } else {
-                        // FINAL AGGRESSIVE DEDUP: Ensure no duplicate IDs in final array
+                        // FINAL AGGRESSIVE DEDUP: Prioritize NAME to avoid same-name duplicates
                         const finalMap = new Map();
                         merged.forEach(item => {
-                            const key = item.id || item.strategy_id || item.name;
+                            // For custom strategies, use name as key (prevents "SuiL" appearing 3 times)
+                            // For DB strategies, use id
+                            const isCustom = item.id?.startsWith('custom-') || item.strategy_id?.startsWith('custom-');
+                            const key = isCustom ? (item.name || item.id) : (item.id || item.name);
+
                             if (key && !finalMap.has(key)) {
                                 finalMap.set(key, item);
                             }
                         });
                         const finalDeduped = Array.from(finalMap.values());
+
+                        // Also clean up LocalStorage to prevent future issues
+                        if (finalDeduped.length < merged.length) {
+                            const localKey = `sui-loop-fleet-${account.address}`;
+                            localStorage.setItem(localKey, JSON.stringify(finalDeduped));
+                            console.log('[Dashboard] Cleaned duplicate strategies from LocalStorage');
+                        }
+
                         setActiveStrategies(finalDeduped);
                     }
                 } catch (e) {
