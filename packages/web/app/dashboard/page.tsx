@@ -213,6 +213,9 @@ function DashboardContent() {
                         });
                         const finalDeduped = Array.from(finalMap.values());
 
+                        // Filter out DRAFT strategies - only show RUNNING in Active Fleet
+                        const activeOnly = finalDeduped.filter(s => s.status !== 'DRAFT');
+
                         // Also clean up LocalStorage to prevent future issues
                         if (finalDeduped.length < merged.length) {
                             const localKey = `sui-loop-fleet-${account.address}`;
@@ -220,7 +223,7 @@ function DashboardContent() {
                             console.log('[Dashboard] Cleaned duplicate strategies from LocalStorage');
                         }
 
-                        setActiveStrategies(finalDeduped);
+                        setActiveStrategies(activeOnly);
                     }
                 } catch (e) {
                     console.error("Supabase sync failed, using local", e);
