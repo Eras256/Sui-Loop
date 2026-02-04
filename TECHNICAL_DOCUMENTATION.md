@@ -3,17 +3,22 @@
 ## 1. Executive Summary
 SuiLoop is a high-frequency DeFi protocol on the Sui blockchain that integrates atomic leverage execution with autonomous AI agents. The project leverages **Move 2024** for secure, risk-free flash loan interactions, while using **ElizaOS** to power an intelligent off-chain agent that analyzes market conditions and orchestrates on-chain transactions via Programmable Transaction Blocks (PTB).
 
-The platform is fully deployed on **Sui Testnet (v0.0.5)**, featuring a "State of Art" Next.js dashboard with a **Visual Strategy Builder**, **Strategy Marketplace**, and real-time wallet signature verification. **v0.0.5 introduces complete strategy management** including draft/deploy workflows, wallet auto-reconnect, and Supabase persistence.
+The platform is fully deployed on **Sui Testnet (v0.0.6)**, featuring a "State of Art" Next.js dashboard with a **Visual Strategy Builder**, **Strategy Marketplace**, and real-time wallet signature verification. **v0.0.6 introduces the Autonomous Agent API** with API key authentication, webhooks, WebSocket signals, and a 24/7 market scanner.
 
-### 🎯 Progressive Automation
-SuiLoop solves the biggest AI-Crypto dilemma: **Security vs. Autonomy**
+### 🎯 Dual-Path Architecture
+SuiLoop serves **two distinct user types** with tailored interfaces:
+
+| User Type | Interface | Description |
+|-----------|-----------|-------------|
+| **🧑 Human Users** | Web Dashboard | Visual strategy builder, marketplace, wallet signing |
+| **🤖 External Agents** | REST API + WebSocket | Programmatic access, real-time signals, autonomous execution |
+
+### 🎯 Progressive Automation (Human Path)
 
 | Mode | Control | Speed | Target User |
 |------|---------|-------|-------------|
 | **🛡️ Copilot Mode** | User signs every tx | Human speed | Security-focused, DeFi enthusiasts |
 | **🤖 Autonomous Mode** | Agent signs with PK | Superhuman (ms) | High-frequency traders, MEV searchers |
-
-> *"Start safely with Copilot Mode to learn the strategy, then graduate to Autonomous Mode for high-frequency execution."*
 
 ### 🔄 Deterministic Simulation Layer
 We prioritized user experience. If DeepBook testnet is down, our protocol **seamlessly degrades** to a simulation layer:
@@ -161,19 +166,54 @@ public struct MockPool<phantom Base, phantom Quote> has key, store {
 packages/agent/src/
 ├── actions/
 │   ├── executeAtomicLeverage.ts    # Main transaction action
+│   ├── executeBuilderStrategy.ts   # Custom strategy execution
 │   └── index.ts
 ├── providers/
 │   └── deepBookProvider.ts         # Market data provider
+├── middleware/                      # v2.0 - Security layer
+│   ├── auth.ts                     # API Key & JWT authentication
+│   ├── rateLimit.ts                # Request throttling
+│   └── index.ts
 ├── services/
+│   ├── webhookService.ts           # Push notifications
+│   ├── subscriptionService.ts      # WebSocket signals
+│   ├── autonomousLoop.ts           # Market scanner
 │   ├── walrusService.ts            # Decentralized storage
 │   ├── scallopService.ts           # Lending protocol integration
 │   └── cetusService.ts             # DEX integration
 ├── plugins/
 │   └── suiloop-plugin/             # ElizaOS plugin wrapper
 ├── run.ts                          # Standalone runner
-├── server.ts                       # HTTP API server
+├── server.ts                       # HTTP/WebSocket API server (v2.0)
 └── index.ts                        # Main exports
 ```
+
+#### v2.0 - Autonomous Agent API
+
+**Authentication (`middleware/auth.ts`)**:
+- API Key format: `sk_live_xxx` (32-byte hex)
+- JWT tokens with 24h expiry
+- Permission levels: `execute`, `subscribe`, `admin`
+
+**Rate Limiting (`middleware/rateLimit.ts`)**:
+- 60 req/min standard API
+- 10 req/min sensitive endpoints
+- Auto-block after abuse (5 min)
+
+**Webhook System (`services/webhookService.ts`)**:
+- HMAC-SHA256 signature verification
+- 8 event types
+- Retry with exponential backoff
+
+**Subscription System (`services/subscriptionService.ts`)**:
+- WebSocket server on `/ws/signals`
+- 6 signal types
+- Configurable filters (confidence, profit, pairs)
+
+**Autonomous Loop (`services/autonomousLoop.ts`)**:
+- Market scan every 10 seconds
+- Deep analysis every minute
+- Detects: arbitrage, flash loans, liquidity changes, gas spikes
 
 #### 1. `src/actions/executeAtomicLeverage.ts`
 *   **Action**: `EXECUTE_ATOMIC_LEVERAGE`
@@ -473,6 +513,10 @@ public struct LoopReceipt {
 | Sandwich Attack | User sets `min_profit` |
 | Duplicate Strategies | Upsert pattern in Supabase |
 | Session Hijacking | Wallet signature required |
+| **API Abuse** | Rate limiting (60 req/min) |
+| **Unauthorized Access** | API Key + JWT authentication |
+| **Webhook Spoofing** | HMAC-SHA256 signature verification |
+| **DDoS on Agent** | Auto-block after abuse |
 
 ---
 
@@ -486,6 +530,7 @@ public struct LoopReceipt {
 *   **Wallet Persistence**: ✅ Auto-connect enabled
 *   **Supabase Integration**: ✅ Cloud persistence
 *   **AI Agent Signing**: ✅ Real transactions on Testnet
+*   **Autonomous Agent API v2.0**: ✅ Authentication, Webhooks, WebSocket, Market Scanner
 
 ### Phase 2: Mainnet Launch (Q2 2026)
 *   **Security Audit**: Professional audit of Atomic Engine
@@ -517,11 +562,22 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 **Agent (`packages/agent/.env`)**:
 ```env
+# Wallet
 SUI_PRIVATE_KEY=suiprivkey1...
+
+# Contracts
 SUI_PACKAGE_ID=0x9a2f0c4ce...
 SUI_POOL_ID=0x0839e6ce6...
+
+# Database
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_KEY=your_service_role_key
+
+# API Server v2.0 (Autonomous Features)
+PORT=3001
+JWT_SECRET=your-super-secret-jwt-key
+ADMIN_API_KEY=sk_live_admin_your_key_here
+ALLOWED_ORIGINS=http://localhost:3000
 ```
 
 ### CLI Commands
@@ -539,9 +595,26 @@ pnpm test
 # Run agent
 pnpm --filter @suiloop/agent dev "Loop 0.1 SUI"
 
+# Start API server (for external agents)
+pnpm --filter @suiloop/agent server
+
 # Build for production
 pnpm build
 ```
+
+### API Endpoints Reference
+
+| Endpoint | Method | Auth | Description |
+|----------|--------|------|-------------|
+| `/health` | GET | ❌ | Health check |
+| `/api/auth/keys` | POST | ✅ | Generate API key |
+| `/api/auth/token` | POST | ❌ | Generate JWT |
+| `/api/execute` | POST | ✅ | Execute strategy |
+| `/api/webhooks` | * | ✅ | Manage webhooks |
+| `/api/subscriptions` | * | ✅ | Manage subscriptions |
+| `/api/loop/start` | POST | ✅ | Start autonomous loop |
+| `/api/loop/stop` | POST | ✅ | Stop autonomous loop |
+| `/api/market` | GET | ✅ | Current market state |
 
 ---
 
@@ -552,6 +625,6 @@ Built for **[ETHGlobal HackMoney 2026](https://ethglobal.com/events/hackmoney202
 ---
 
 *Document last updated: February 4, 2026*  
-*Version: v0.0.5*  
+*Version: v0.0.6 - Autonomous Agent API*  
 *Status: Production Ready (Testnet)*
 

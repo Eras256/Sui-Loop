@@ -6,10 +6,10 @@
 [![Move](https://img.shields.io/badge/Move-2024-green)](https://move-language.github.io/move/)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 [![Tests](https://img.shields.io/badge/Tests-5%2F5%20Passing-brightgreen)]()
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)]()
-[![CI/CD](https://img.shields.io/badge/Build-Passing-brightgreen?logo=github)]()
+[![API](https://img.shields.io/badge/API-v2.0-purple)]()
+[![WebSocket](https://img.shields.io/badge/WebSocket-Signals-orange)]()
 
-**Status**: 🟢 **Production Ready (Testnet v0.0.5)** | 🛡️ **Audited (Internal)** | 🐳 **Dockerized**
+**Status**: 🟢 **Production Ready (Testnet v0.0.6)** | 🛡️ **Audited (Internal)** | 🤖 **Autonomous API v2.0**
 
 ---
 
@@ -137,14 +137,33 @@ The autonomous agent **actually signs and broadcasts transactions**:
 ```bash
 $ pnpm --filter @suiloop/agent dev "Loop 0.1 SUI"
 
-🚀 SUILOOP AGENT v0.0.5
+🚀 SUILOOP AGENT v0.0.6
 🤖 Agent Wallet: 0x8bd468b0e5941e75...
 📝 Signing transaction...
 ✅ Transaction Successful: 5X6TDFkYvjvCb2LS...
 🔗 View on Suiscan: https://suiscan.xyz/testnet/tx/...
 ```
 
-### 6. Deterministic Simulation Layer (Fallback)
+### 6. Autonomous Agent API v2.0 (NEW) 🚀
+External agents can now connect to SuiLoop via our **institutional-grade API**:
+
+| Feature | Description |
+|---------|-------------|
+| 🔐 **API Key Auth** | Secure `sk_live_xxx` keys with permissions |
+| 🛡️ **Rate Limiting** | 60 req/min standard, auto-blocking for abuse |
+| 📡 **Webhooks** | Push notifications with HMAC-SHA256 signatures |
+| 🔔 **WebSocket Signals** | Real-time trading signals via `/ws/signals` |
+| 🤖 **Autonomous Loop** | 24/7 market scanner with configurable thresholds |
+
+```bash
+# Start the Autonomous Agent API
+pnpm --filter @suiloop/agent server
+
+# 🌐 HTTP API:    http://localhost:3001
+# 🔌 WebSocket:   ws://localhost:3001/ws/signals
+```
+
+### 7. Deterministic Simulation Layer (Fallback)
 We prioritized user experience. If DeepBook testnet is down, our protocol **seamlessly degrades** to a simulation layer so users can still test the mechanics:
 - Primary: DeepBook V3 Pools
 - Fallback: Deterministic Simulation Layer
@@ -212,11 +231,89 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 ### Agent (`packages/agent/.env`)
 ```env
+# Wallet
 SUI_PRIVATE_KEY=suiprivkey1...
+
+# Contracts
 SUI_PACKAGE_ID=0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043
 SUI_POOL_ID=0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0
+
+# Database
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_KEY=your_supabase_service_role_key
+
+# API Server v2.0 (Autonomous Features)
+PORT=3001
+JWT_SECRET=your-super-secret-jwt-key
+ADMIN_API_KEY=sk_live_admin_your_key_here
+ALLOWED_ORIGINS=http://localhost:3000
+```
+
+---
+
+## 🤖 Autonomous Agent API v2.0
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/api/auth/keys` | POST | Generate API key |
+| `/api/auth/token` | POST | Generate JWT token |
+| `/api/execute` | POST | Execute strategy |
+| `/api/webhooks` | POST/GET/DELETE | Manage webhooks |
+| `/api/subscriptions` | POST/GET/DELETE | Manage signal subscriptions |
+| `/api/loop/start` | POST | Start autonomous market scanner |
+| `/api/loop/stop` | POST | Stop autonomous loop |
+| `/api/loop/scan` | POST | Trigger manual market scan |
+| `/api/market` | GET | Get current market state |
+| `/api/signals/recent` | GET | Get recent trading signals |
+
+### Webhook Events
+
+```
+opportunity.detected   - Arbitrage/flash loan opportunity found
+execution.started      - Strategy execution began
+execution.completed    - Strategy completed successfully
+execution.failed       - Execution failed
+strategy.activated     - Autonomous loop started
+strategy.deactivated   - Autonomous loop stopped
+market.alert           - Market condition alert
+health.warning         - System health warning
+```
+
+### Signal Types (WebSocket)
+
+```
+arbitrage_opportunity  - Price discrepancy detected
+flash_loan_opportunity - Profitable flash loan available
+price_deviation        - Significant price movement
+liquidity_change       - Pool liquidity changed
+gas_spike              - Gas price spike detected
+strategy_trigger       - Custom strategy trigger
+```
+
+### Quick Start with API
+
+```bash
+# 1. Start the agent server
+pnpm --filter @suiloop/agent server
+
+# 2. Generate an API key
+curl -X POST http://localhost:3001/api/auth/keys \
+  -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "My Bot", "permissions": ["execute", "subscribe"]}'
+
+# 3. Subscribe to signals
+curl -X POST http://localhost:3001/api/subscriptions \
+  -H "Authorization: Bearer sk_live_xxx" \
+  -H "Content-Type: application/json" \
+  -d '{"signalTypes": ["arbitrage_opportunity"], "minConfidence": 70}'
+
+# 4. Connect via WebSocket
+wscat -c ws://localhost:3001/ws/signals
+> {"type": "subscribe", "subscriptionId": "sub_xxx"}
 ```
 
 ---
@@ -263,15 +360,25 @@ Sui-Loop/
 │   │   └── src/
 │   │       ├── actions/        # EXECUTE_ATOMIC_LEVERAGE action
 │   │       ├── providers/      # DeepBook data provider
-│   │       ├── services/       # Walrus, Scallop, Cetus integrations
-│   │       └── run.ts          # Agent runner
+│   │       ├── middleware/     # Auth & Rate Limiting (v2.0)
+│   │       │   ├── auth.ts     # API Key & JWT authentication
+│   │       │   └── rateLimit.ts # Request throttling
+│   │       ├── services/
+│   │       │   ├── webhookService.ts      # Webhook notifications
+│   │       │   ├── subscriptionService.ts # WebSocket signals
+│   │       │   ├── autonomousLoop.ts      # Market scanner
+│   │       │   ├── walrusService.ts       # Decentralized storage
+│   │       │   ├── scallopService.ts      # Lending protocol
+│   │       │   └── cetusService.ts        # DEX integration
+│   │       ├── run.ts          # Standalone agent runner
+│   │       └── server.ts       # HTTP API Server (v2.0)
 │   └── web/                    # Next.js 15 Frontend
 │       ├── app/
 │       │   ├── dashboard/      # Command Center
 │       │   ├── analytics/      # Charts & Metrics
 │       │   ├── strategies/     # Marketplace
 │       │   │   └── builder/    # Visual Strategy Editor
-│       │   └── docs/           # Documentation
+│       │   └── docs/           # Technical Documentation
 │       ├── components/
 │       │   └── layout/         # Navbar, Footer
 │       └── lib/                # Supabase, Strategy Services
@@ -288,5 +395,5 @@ Sui-Loop/
 Built for **[ETHGlobal HackMoney 2026](https://ethglobal.com/events/hackmoney2026)** 🚀
 
 *Last updated: February 4, 2026*
-*Version: v0.0.5*
+*Version: v0.0.6 - Autonomous Agent API*
 
