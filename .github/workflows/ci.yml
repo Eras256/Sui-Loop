@@ -1,0 +1,48 @@
+name: SuiLoop CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install -g pnpm && pnpm install
+
+    # Web Package Checks
+    - name: Web Lint
+      working-directory: ./packages/web
+      run: pnpm lint
+
+    - name: Web Build
+      working-directory: ./packages/web
+      run: pnpm build
+
+    # Agent Package Checks
+    - name: Agent Build
+      working-directory: ./packages/agent
+      run: pnpm build
+
+    # Move Smart Contracts Checks (Requires Sui Binaries - Mocked for speed in standard runners unless using custom image)
+    # - name: Install Sui
+    #   uses: mysten-labs/sui-action@v1
+    # - name: Move Test
+    #   working-directory: ./packages/contracts
+    #   run: sui move test
