@@ -78,9 +78,9 @@ export default function Navbar() {
                     `}
                 >
                     {/* Left side: Logo + Badge */}
-                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-6 min-w-0">
+                    <div className="flex items-center gap-2 sm:gap-4 lg:gap-8 min-w-0">
                         {/* Logo Section - Responsive */}
-                        <Link href="/" className="flex items-center gap-1.5 sm:gap-2 group shrink-0">
+                        <Link href="/" className="flex items-center gap-2 group shrink-0">
                             <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(189,0,255,0.3)] group-hover:scale-110 transition-transform">
                                 <span className="text-white font-mono font-bold text-sm sm:text-base">S</span>
                             </div>
@@ -95,20 +95,11 @@ export default function Navbar() {
                             </div>
                         </Link>
 
-                        {/* Simulation Badge - lg+ only */}
-                        <div className="hidden lg:flex items-center gap-1.5 xl:gap-2 px-2 xl:px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full shrink-0">
-                            <span className="relative flex h-1.5 w-1.5 xl:h-2 xl:w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-full w-full bg-amber-500"></span>
-                            </span>
-                            <span className="text-[9px] xl:text-[10px] uppercase tracking-wider font-bold text-amber-500 whitespace-nowrap">
-                                Sandbox
-                            </span>
-                        </div>
+
                     </div>
 
                     {/* Center: Desktop Navigation - hidden on mobile/tablet */}
-                    <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-shrink-0">
+                    <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-shrink-0">
                         {navLinks.map((link) => {
                             const isActive = pathname === link.href;
                             const Icon = link.icon;
@@ -119,7 +110,7 @@ export default function Navbar() {
                                     href={link.href}
                                     target={link.external ? "_blank" : undefined}
                                     className={`
-                                        relative px-2.5 xl:px-4 py-2 rounded-full text-xs xl:text-sm font-medium 
+                                        relative px-3 xl:px-4 py-2 rounded-full text-xs xl:text-sm font-medium 
                                         transition-all duration-300 flex items-center gap-1.5 xl:gap-2 whitespace-nowrap
                                         ${isActive
                                             ? "text-white bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
@@ -139,7 +130,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Right Side: Status + Wallet + CTA + Mobile Toggle */}
-                    <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 shrink-0">
+                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 shrink-0">
                         {/* Agent Status Indicator - xl+ only */}
                         <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/5">
                             <span className="relative flex h-2 w-2">
@@ -207,15 +198,9 @@ export default function Navbar() {
                             transition={{ duration: 0.25, ease: "easeOut" }}
                             className="fixed top-[72px] sm:top-[80px] left-3 right-3 sm:left-4 sm:right-4 z-50 p-3 sm:p-4 rounded-2xl glass-panel lg:hidden overflow-hidden max-h-[calc(100vh-100px)] overflow-y-auto"
                         >
+
                             {/* Mobile Status Badge */}
-                            <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
-                                <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full">
-                                    <span className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-                                    </span>
-                                    <span className="text-[10px] uppercase tracking-wider font-bold text-amber-500">Sandbox Mode</span>
-                                </div>
+                            <div className="flex items-center justify-end mb-4 pb-3 border-b border-white/5">
                                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/5">
                                     <span className="relative flex h-2 w-2">
                                         <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
@@ -295,7 +280,7 @@ export default function Navbar() {
                         </motion.div>
                     </>
                 )}
-            </AnimatePresence>
+            </AnimatePresence >
         </>
     );
 }

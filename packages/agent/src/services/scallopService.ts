@@ -5,8 +5,9 @@ export class ScallopService {
     private isConnected: boolean = false;
 
     constructor() {
+        const network = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || 'testnet';
         this.scallop = new Scallop({
-            networkType: 'testnet',
+            networkType: network,
         });
     }
 

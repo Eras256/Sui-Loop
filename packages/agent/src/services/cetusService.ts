@@ -6,7 +6,8 @@ export class CetusService {
     private isConnected: boolean = false;
 
     constructor() {
-        this.sdk = initCetusSDK({ network: 'testnet' });
+        const network = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || 'testnet';
+        this.sdk = initCetusSDK({ network: network });
         this.sdk.senderAddress = '0x0000000000000000000000000000000000000000000000000000000000000000'; // Read-only
     }
 

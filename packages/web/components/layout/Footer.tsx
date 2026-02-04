@@ -48,9 +48,10 @@ export default function Footer() {
                     </p>
                     {/* Tech Stack Badges */}
                     <div className="flex flex-wrap gap-2">
-                        <span className="px-2 py-1 text-[10px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full">Sui Network</span>
+                        <span className="px-2 py-1 text-[10px] font-mono bg-teal-500/10 text-teal-400 border border-teal-500/20 rounded-full">Scallop</span>
+                        <span className="px-2 py-1 text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-full">Cetus</span>
                         <span className="px-2 py-1 text-[10px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full">ElizaOS</span>
-                        <span className="px-2 py-1 text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-full">DeepBook V3</span>
+                        <span className="px-2 py-1 text-[10px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full">DeepBook V3</span>
                     </div>
                 </div>
 
@@ -60,9 +61,18 @@ export default function Footer() {
                     <ul className="space-y-2 sm:space-y-3 text-sm text-gray-400">
                         <li><Link href="/dashboard" className="hover:text-neon-cyan transition-colors">Dashboard</Link></li>
                         <li><Link href="/strategies" className="hover:text-neon-cyan transition-colors">Strategy Marketplace</Link></li>
-                        <li><Link href="/strategies/builder" className="hover:text-neon-cyan transition-colors">Strategy Builder</Link></li>
                         <li><Link href="/analytics" className="hover:text-neon-cyan transition-colors">Analytics</Link></li>
-                        <li><Link href="/docs" className="hover:text-neon-cyan transition-colors">Documentation</Link></li>
+                        <li>
+                            <a
+                                href="https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-neon-cyan transition-colors flex items-center gap-1.5"
+                            >
+                                Atomic Engine
+                                <ExternalLink size={10} className="opacity-50" />
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -70,14 +80,11 @@ export default function Footer() {
                 <div>
                     <h4 className="text-white font-bold mb-4 text-sm sm:text-base">Community</h4>
                     <div className="flex flex-wrap gap-3">
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#1DA1F2] hover:text-white transition-all hover:shadow-[0_0_15px_rgba(29,161,242,0.4)]">
-                            <Twitter size={18} />
-                        </a>
-                        <a href="https://github.com/Eras256/Sui-Loop" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black transition-all">
-                            <Github size={18} />
-                        </a>
-                        <a href="https://sui.io" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#4DA2FF] hover:text-white transition-all hover:shadow-[0_0_15px_rgba(77,162,255,0.4)]">
-                            <Globe size={18} />
+                        <a href="https://x.com/Vaiosx" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-black hover:text-white transition-all hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-transparent hover:border-white/20">
+                            {/* X Logo SVG */}
+                            <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5 fill-current">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                            </svg>
                         </a>
                     </div>
                     {/* ETHGlobal Link */}
@@ -100,12 +107,12 @@ export default function Footer() {
                     <span>&copy; 2026 SuiLoop Protocol.</span>
                     <span className="hidden sm:inline">•</span>
                     <a
-                        href="https://ethglobal.com/events/hackmoney2026"
+                        href="https://t.me/Vaiosx"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-yellow-500/80 hover:text-yellow-400 transition-colors font-medium"
+                        className="text-neon-cyan hover:text-white transition-colors font-medium"
                     >
-                        Built for ETHGlobal HackMoney 2026 🏆
+                        Made by Vaiosx
                     </a>
                 </div>
                 <div className="flex flex-wrap justify-center gap-4 sm:gap-6 font-mono">
@@ -116,7 +123,7 @@ export default function Footer() {
                         </span>
                         Operational
                     </span>
-                    <span className="text-gray-600">Testnet v0.0.4</span>
+                    <span className="text-gray-600">v0.0.4 Mainnet Ready</span>
                 </div>
             </div>
         </footer>

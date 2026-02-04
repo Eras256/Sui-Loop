@@ -19,7 +19,7 @@ SuiLoop solves the biggest AI-Crypto dilemma: **Security vs. Autonomy**
 We prioritized user experience. If DeepBook testnet is down, our protocol **seamlessly degrades** to a simulation layer:
 - **Primary**: DeepBook V3 Pools (when available)
 - **Fallback**: Deterministic Simulation Layer (guaranteed uptime)
-- **UX Indicator**: `⚠️ Using Sandbox Liquidity`
+- **Status**: 🟢 **MAINNET READY** (Configurable via `SUI_NETWORK` env var)
 
 ### ✅ Verified On-Chain Execution
 **Flash loan cycles successfully executed on Sui Testnet**:

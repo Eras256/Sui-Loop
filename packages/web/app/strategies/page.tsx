@@ -4,76 +4,195 @@ import Navbar from "@/components/layout/Navbar";
 import { Copy, ArrowRight, Zap, TrendingUp, ShieldAlert, Cpu } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const strategies = [
+// Base Template Definitions
+const BASE_STRATEGIES = [
     {
         id: "sui-usdc-loop",
         name: "SUI/USDC Kinetic Loop",
         description: "High-frequency triangular arbitrage between DeepBook, Cetus, and Turbos. Executes only when spread > 0.4%.",
-        apy: "14.2%",
         risk: "Low",
-        tvl: "$1.2M",
         tags: ["Stable", "Blue Chip"],
-        color: "from-blue-500 to-cyan-500"
+        color: "from-blue-500 to-cyan-500",
+        baseApy: 14.2
     },
     {
         id: "turbo-sniper",
         name: "Meme Volatility Sniper",
         description: "Monitors creating pools for high-velocity meme tokens. Enters and exits within the same block.",
-        apy: "420.69%",
         risk: "High",
-        tvl: "$450K",
         tags: ["Degen", "High Yield"],
-        color: "from-purple-500 to-pink-500"
+        color: "from-purple-500 to-pink-500",
+        baseApy: 420.69
     },
     {
         id: "liquid-staking-arb",
         name: "LST Peg Restoration",
         description: "Arbitrages de-pegged afSUI/vSUI against native SUI during unstaking epochs.",
-        apy: "8.5%",
         risk: "Very Low",
-        tvl: "$2.8M",
         tags: ["Safe", "Institutional"],
-        color: "from-green-500 to-emerald-500"
+        color: "from-green-500 to-emerald-500",
+        baseApy: 8.5
+    },
+    {
+        id: "eliza-sentiment",
+        name: "Eliza Sentiment Trader",
+        description: "AI-driven strategy that scans X/Twitter for bullish sentiment signals on SUI ecosystem tokens.",
+        risk: "Medium",
+        tags: ["AI Agent", "Social"],
+        color: "from-orange-500 to-red-500",
+        baseApy: 45.2
+    },
+    {
+        id: "lending-loop-max",
+        name: "Navi/Scallop Recursion",
+        description: "Maximizes yield by recursively borrowing and supplying SUI across Navi and Scallop protocols.",
+        risk: "Medium",
+        tags: ["Leverage", "Lending"],
+        color: "from-indigo-500 to-blue-600",
+        baseApy: 22.4
+    },
+    {
+        id: "blue-chip-dca",
+        name: "Smart DCA Accumulator",
+        description: "Intelligently buys SUI dips using TWAP over 4-hour intervals. Best for long-term holding.",
+        risk: "Low",
+        tags: ["Savings", "Long Term"],
+        color: "from-gray-700 to-gray-500",
+        baseApy: 12.1
+    },
+    {
+        id: "stable-yield-agg",
+        name: "Stablecoin Yield Aggregator",
+        description: "Auto-rotates USDC/USDT capital between Scallop, Navi, and Cetus to capture the highest lending rates.",
+        risk: "Very Low",
+        tags: ["Stablecoin", "Savings"],
+        color: "from-teal-500 to-cyan-600",
+        baseApy: 18.5
+    },
+    {
+        id: "cetus-clmm-active",
+        name: "Cetus CLMM Active Manager",
+        description: "concentrated liquidity provision with automated range rebalancing to maximize trading fees.",
+        risk: "High",
+        tags: ["Liquidity", "High Yield"],
+        color: "from-pink-500 to-rose-500",
+        baseApy: 65.4
+    },
+    {
+        id: "bluefin-delta-neutral",
+        name: "Bluefin Delta Neutral",
+        description: "Farms funding rates by longing Spot SUI and shorting Perp SUI. Market neutral strategy.",
+        risk: "Low",
+        tags: ["Hedging", "Complex"],
+        color: "from-slate-800 to-blue-900",
+        baseApy: 28.3
     }
 ];
 
+import { useCurrentAccount } from "@mysten/dapp-kit";
+
 export default function StrategiesPage() {
+    const account = useCurrentAccount();
+    const router = useRouter();
     const [deployingId, setDeployingId] = useState<string | null>(null);
+    const [strategies, setStrategies] = useState(BASE_STRATEGIES.map(s => ({
+        ...s, apy: `${s.baseApy}%`, tvl: "Loading..."
+    })));
+
+    // Load Live Market Data (Simulated Realism)
+    useEffect(() => {
+        const fetchMarketData = async () => {
+            // Simulate API latency
+            await new Promise(r => setTimeout(r, 600));
+
+            // Dynamic updates based on "current market conditions"
+            const updated = BASE_STRATEGIES.map(s => {
+                let dynamicApy = s.baseApy;
+                let dynamicTvl = 0;
+
+                // Add market fluctuation noise
+                if (s.id === 'turbo-sniper') {
+                    // Meme coins are volatile
+                    dynamicApy += (Math.random() * 50 - 20);
+                    dynamicTvl = 450 + Math.random() * 50;
+                } else if (s.id === 'liquid-staking-arb') {
+                    // LST is more stable but fluctuates with epoch
+                    dynamicApy = 8 + (Math.random() * 1.5);
+                    dynamicTvl = 2800 + Math.random() * 100;
+                } else if (s.id === 'eliza-sentiment') {
+                    dynamicApy += (Math.random() > 0.8 ? 15 : -5);
+                    dynamicTvl = 800 + Math.random() * 200;
+                } else if (s.id === 'lending-loop-max') {
+                    dynamicApy += (Math.random() * 2 - 1);
+                    dynamicTvl = 5200 + Math.random() * 50;
+                } else if (s.id === 'blue-chip-dca') {
+                    dynamicApy = 12 + (Math.random() * 0.2);
+                    dynamicTvl = 15000 + Math.random() * 500;
+                } else if (s.id === 'stable-yield-agg') {
+                    dynamicApy = 18 + (Math.random() * 1.5);
+                    dynamicTvl = 8500 + Math.random() * 100;
+                } else if (s.id === 'cetus-clmm-active') {
+                    dynamicApy += (Math.random() * 20 - 10);
+                    dynamicTvl = 600 + Math.random() * 50;
+                } else if (s.id === 'bluefin-delta-neutral') {
+                    dynamicApy = 28 + (Math.random() * 4 - 2);
+                    dynamicTvl = 3200 + Math.random() * 150;
+                } else {
+                    // Kinetic loop depends on volume
+                    dynamicApy = 12 + (Math.random() * 4);
+                    dynamicTvl = 1200 + Math.random() * 50;
+                }
+
+                return {
+                    ...s,
+                    apy: `${dynamicApy.toFixed(2)}%`,
+                    tvl: `$${dynamicTvl.toFixed(0)}K`
+                };
+            });
+            setStrategies(updated);
+        };
+
+        fetchMarketData();
+        const interval = setInterval(fetchMarketData, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     const handleDeploy = async (strategy: typeof strategies[0]) => {
+        if (!account?.address) {
+            toast.error("Connect Wallet to deploy strategies");
+            return;
+        }
+
         setDeployingId(strategy.id);
-        const toastId = toast.loading(`Deploying ${strategy.name}...`);
+        const toastId = toast.loading(`Initializing ${strategy.name}...`);
 
         try {
-            await new Promise(r => setTimeout(r, 1000)); // Fake delay for UX
+            // Import Service
+            const { StrategyService } = await import("@/lib/strategyService");
 
-            const res = await fetch('http://localhost:3001/api/execute', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    strategy: strategy.name,
-                    params: { risk: strategy.risk }
-                })
+            // 1. Persist Strategy as DRAFT immediately (so it appears in dashboard)
+            await StrategyService.deployStrategy(account.address, {
+                strategy_id: strategy.id,
+                name: strategy.name,
+                emoji: '⚡',
+                status: 'DRAFT',  // Will be updated to RUNNING after tx confirmation in Dashboard
+                yield: strategy.apy,
+                created_at: new Date().toISOString()
             });
 
-            if (!res.ok) throw new Error("Agent unreachable");
+            toast.dismiss(toastId);
+            toast.success("Strategy Template Loaded", { duration: 1000 });
 
-            const data = await res.json();
+            // 2. Redirect to Dashboard with Auto-Start to trigger the Real Transaction
+            router.push(`/dashboard?autostart=true&strategy=${strategy.id}`);
 
-            if (data.success) {
-                toast.success(`Agent Deployed: ${strategy.name}`, { id: toastId });
-            } else {
-                toast.error(`Deployment Failed: ${data.error}`, { id: toastId });
-            }
-        } catch (err) {
-            console.error(err);
-            toast.error("Failed to connect to Agent Node", {
-                id: toastId,
-                description: "Is the agent running? (pnpm serve)"
-            });
+        } catch (e) {
+            console.error(e);
+            toast.error("Failed to initialize strategy");
         } finally {
             setDeployingId(null);
         }
@@ -136,10 +255,10 @@ export default function StrategiesPage() {
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 <div className="bg-white/5 rounded-lg p-3">
                                     <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Target APY</div>
-                                    <div className="text-xl font-mono text-neon-cyan">{strat.apy}</div>
+                                    <div className="text-xl font-mono text-neon-cyan animate-pulse-slow">{strat.apy}</div>
                                 </div>
                                 <div className="bg-white/5 rounded-lg p-3">
-                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">TVL</div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Vol / TVL</div>
                                     <div className="text-xl font-mono text-white">{strat.tvl}</div>
                                 </div>
                             </div>

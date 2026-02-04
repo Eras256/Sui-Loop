@@ -26,7 +26,7 @@ const cetusService = new CetusService();
 const scallopService = new ScallopService();
 
 // --- Configuration ---
-const NETWORK = "testnet";
+const NETWORK = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || "testnet";
 const SUI_DECIMALS = 1_000_000_000;
 
 // Default Contract IDs (v0.0.4)

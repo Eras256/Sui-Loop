@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import { executeAtomicLeverage } from './actions/executeAtomicLeverage.js';
+import { executeBuilderStrategy } from './actions/executeBuilderStrategy.js';
 import { createClient } from '@supabase/supabase-js';
 import { Database } from './types/database.types';
 
@@ -87,6 +88,17 @@ app.post('/api/execute', async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, error: 'Validation failed for strategy' });
         }
 
+        // Determine Handler
+        const isCustomBuilder = params && params.config && params.config.nodes && params.config.nodes.length > 0;
+        const handlerToUse = isCustomBuilder ? executeBuilderStrategy : executeAtomicLeverage;
+
+        // Custom Prep
+        if (isCustomBuilder) {
+            // Inject nodes into mockMessage for the handler
+            (mockMessage.content as any).nodes = params.config.nodes;
+            (mockMessage.content as any).strategyName = params.config.displayName || strategy;
+        }
+
         // Execution
         // We capture logs specifically for this request
         const logs: string[] = [];
@@ -96,7 +108,7 @@ app.post('/api/execute', async (req: Request, res: Response) => {
             return [];
         };
 
-        const result = await executeAtomicLeverage.handler(
+        const result = await handlerToUse.handler(
             mockRuntime as any,
             mockMessage as any,
             undefined,

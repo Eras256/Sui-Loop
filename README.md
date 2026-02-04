@@ -1,6 +1,6 @@
 # SuiLoop: The First Atomic Intelligence Protocol on Sui
 
-**SuiLoop unlocks institutional-grade BTCfi strategies for everyone.** Powered by DeepBook V3 Flash Loans and ElizaOS Agents, it compresses complex financial loops into single Programmable Transaction Blocks (PTBs). We turn passive liquidity into active yield, creating the deep markets Sui needs for global adoption.
+**SuiLoop unlocks institutional-grade BTCfi strategies for everyone.** Powered by **DeepBook V3, Scallop, and Cetus**, combined with intelligent ElizaOS Agents, it compresses complex financial loops into single Programmable Transaction Blocks (PTBs). We turn passive liquidity into active yield, creating the deep markets Sui needs for global adoption.
 
 [![Sui Testnet](https://img.shields.io/badge/Sui-Testnet-blue?logo=sui)](https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043)
 [![Move](https://img.shields.io/badge/Move-2024-green)](https://move-language.github.io/move/)
@@ -119,7 +119,7 @@ $ pnpm --filter @suiloop/agent dev "Loop 0.1 SUI"
 We prioritized user experience. If DeepBook testnet is down, our protocol **seamlessly degrades** to a simulation layer so users can still test the mechanics:
 - Primary: DeepBook V3 Pools
 - Fallback: Deterministic Simulation Layer
-- Badge: `⚠️ Using Sandbox Liquidity`
+- Status: 🟢 **Mainnet Ready** (Switchable via Env Var)
 
 ### 7. Intelligence Layer (Real-Time Scanning)
 The Agent is **Ecosystem-Aware**. Before executing any strategy, it scans major checkpoints on Sui Testnet:
@@ -145,6 +145,8 @@ Built entirely using official Mysten Labs standards and best practices:
 *   **[Sui dApp Kit](https://sdk.mystenlabs.com/dapp-kit)**: React Hooks (`useCurrentAccount`, `ConnectButton`) & Wallet Management
 *   **[Sui TypeScript SDK](https://sdk.mystenlabs.com/typescript)**: Agent PTB Construction & JSON-RPC Interaction
 *   **[DeepBook V3](https://docs.sui.io/standards/deepbookv3-sdk)**: Flash Loan Logic & Architecture Reference
+*   **[Scallop SDK](https://github.com/scallop-io/sui-scallop-sdk)**: Real-time Lending/Borrowing Intelligence
+*   **[Cetus SDK](https://github.com/CetusProtocol/cetus-sui-clmm-sdk)**: CLMM Liquidity & Swap Routing
 *   **[Sui GraphQL](https://docs.sui.io/references/sui-graphql)**: Data indexing for historical analytics
 *   **[Supabase](https://supabase.com)**: Serverless Postgres, Auth & Realtime capabilities for agent logs.
 

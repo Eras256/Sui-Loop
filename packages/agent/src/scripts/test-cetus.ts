@@ -1,51 +1,44 @@
-import { initCetusSDK, CetusClmmSDK } from '@cetusprotocol/cetus-sui-clmm-sdk';
-import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
-
-const SUI_TESTNET_CONFIG = {
-    fullRpcUrl: getFullnodeUrl('testnet'),
-    simulationAccount: '',
-};
+import { initCetusSDK } from '@cetusprotocol/cetus-sui-clmm-sdk';
+import { getFullnodeUrl } from '@mysten/sui/client';
 
 async function main() {
-    console.log("🌊 Connecting to Cetus Testnet...");
+    console.log("🌊 Connecting to Cetus Testnet (Broad Search)...");
 
     const sdk = initCetusSDK({ network: 'testnet' });
-    sdk.senderAddress = '0x123...'; // Dummy address for read-only
-
-    console.log("🔍 Fetching Pools (SUI/USDC equivalents)...");
-
-    // SUI Coin Type (Testnet)
-    const SUI_COIN = "0x2::sui::SUI";
-    // USDC Coin Type (Testnet - standard mock often used)
-    // We will search for pools containing SUI and see what's paired
+    sdk.senderAddress = '0x1234567890123456789012345678901234567890123456789012345678901234';
 
     try {
-        // Fetch explicit pools usually requires knowing addresses or fetching a list.
-        // Cetus SDK usually has a config with defaults, let's inspect what it loaded.
-        const poolList = await sdk.Pool.getPoolsWithPage([]);
+        console.log("🔍 Fetching ALL available pools via Cetus SDK...");
 
-        console.log(`✅ Found ${poolList.length} pools on Cetus Testnet.`);
+        // Fetch first page of pools (no filter)
+        const result = await sdk.Pool.getPoolsWithPage([]);
 
-        // Filter for SUI pools
-        const suiPools = poolList.filter(p => p.coinTypeA === SUI_COIN || p.coinTypeB === SUI_COIN);
+        if (result.length === 0) {
+            console.log("⚠️ SDK returned 0 pools. The Indexer might be syncing or Empty.");
+        } else {
+            console.log(`✅ Found ${result.length} active pools!`);
+            console.log("---------------------------------------------------");
 
-        console.log(`🔹 Found ${suiPools.length} SUI-paired pools.`);
+            // Sort by liquidity string length (rough proxy for magnitude) or just take first few
+            const topPools = result.slice(0, 10);
 
-        // Sort by liquidity (rough approximation)
-        suiPools.sort((a, b) => Number(b.liquidity) - Number(a.liquidity));
+            topPools.forEach((pool, i) => {
+                const coinA = pool.coinTypeA.split('::').pop(); // Short name
+                const coinB = pool.coinTypeB.split('::').pop(); // Short name
+                console.log(`🏊 Pool #${i + 1}: ${coinA} / ${coinB}`);
+                console.log(`   ID: ${pool.poolAddress}`);
+                console.log(`   Liquidity: ${pool.liquidity}`);
+                console.log(`   Fee: ${pool.fee_rate * 100}%`);
+                console.log("---------------------------------------------------");
+            });
+        }
 
-        // Show top 3
-        suiPools.slice(0, 3).forEach((pool, index) => {
-            console.log(`\n🏆 Pool #${index + 1}:`);
-            console.log(`   Address: ${pool.poolAddress}`);
-            console.log(`   Pair: ${pool.coinTypeA.split('::').pop()} / ${pool.coinTypeB.split('::').pop()}`);
-            console.log(`   Liquidity: ${pool.liquidity}`);
-            console.log(`   Fee Rate: ${pool.feeRate}`);
-        });
-
-    } catch (e) {
-        console.error("❌ Error exploring Cetus:", e);
+    } catch (e: any) {
+        console.error("❌ Error fetching pools:", e.message || e);
+        if (e.message?.includes("events")) {
+            console.log("\n💡 TIP: 'Transaction events' error usually means the RPC node is lagging behind the Indexer.");
+        }
     }
 }
 
-main().catch(console.error);
+main();

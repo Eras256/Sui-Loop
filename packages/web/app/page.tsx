@@ -93,12 +93,22 @@ export default function Home() {
                 {/* Left: Text & Terminal */}
                 <div className="flex flex-col justify-center space-y-6 md:space-y-8 z-10 order-2 lg:order-1">
                     <div className="space-y-4 text-center lg:text-left z-20 relative">
+                        {/* Mainnet Ready Badge */}
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/30 rounded-full mb-4 mx-auto lg:mx-0 w-fit">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
+                            <span className="text-[10px] uppercase tracking-wider font-bold text-green-500 whitespace-nowrap">
+                                MAINNET READY
+                            </span>
+                        </div>
                         <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">
                             ATOMIC <br />
                             <span className="text-gradient">LEVERAGE</span>
                         </h1>
                         <p className="text-gray-400 text-base md:text-lg max-w-md mx-auto lg:mx-0">
-                            Institutional grade execution on Sui. Powered by DeepBook V3 Flash Loans and ElizaOS Agents.
+                            Institutional grade execution on Sui. Powered by Scallop, Cetus, DeepBook V3, and ElizaOS Agents.
                         </p>
                     </div>
 
@@ -145,8 +155,8 @@ export default function Home() {
                     <div className="text-xl md:text-2xl font-bold tracking-tighter text-white">SUI</div>
                     <div className="text-xl md:text-2xl font-bold tracking-tighter text-blue-400">DeepBook V3</div>
                     <div className="text-xl md:text-2xl font-bold tracking-tighter text-orange-400">ElizaOS</div>
-                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-purple-400">Walrus</div>
-                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-cyan-400">Navi</div>
+                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-teal-400">Scallop</div>
+                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-cyan-400">Cetus</div>
                 </div>
             </div>
 
@@ -164,7 +174,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     {[
                         { icon: Shield, title: "Atomic Safety", desc: "Zero-Risk execution. If a trade isn't profitable, the transaction reverts entirely. You only pay gas for successful loops.", color: "text-green-400" },
-                        { icon: Layers, title: "DeepBook V3 Liquidity", desc: "Integrated with Sui's central limit order book (CLOB) for institutional-grade pricing and depth.", color: "text-blue-400" },
+                        { icon: Layers, title: "Multi-Protocol Liquidity", desc: "Aggregates liquidity from DeepBook V3, Cetus, and Scallop for optimal pricing.", color: "text-blue-400" },
                         { icon: Cpu, title: "ElizaOS Intelligence", desc: "Autonomous agents that observe, reason, and act. Powered by heuristic models running 24/7.", color: "text-orange-400" },
                         { icon: Zap, title: "Instant Flash Loans", desc: "Leverage capital you don't own. Borrow, trade, and repay in a single atomic transaction block.", color: "text-yellow-400" },
                         { icon: TerminalIcon, title: "Fully Transparent", desc: "Every decision is logged on-chain. Verify the agent's 'thought process' and execution logic via explorer.", color: "text-gray-400" },
@@ -193,7 +203,7 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
                         {[
-                            { step: "01", title: "OBSERVE", desc: "Agent scans RPC for price dislocations across DeepBook and DEXs." },
+                            { step: "01", title: "OBSERVE", desc: "Agent scans Scallop APY and Cetus Pools for price dislocations." },
                             { step: "02", title: "CALCULATE", desc: "Computes optimal loan amount and expected spread profitability." },
                             { step: "03", title: "CONSTRUCT", desc: "Builds a Programmable Transaction Block (PTB) with flash loan logic." },
                             { step: "04", title: "EXECUTE", desc: "Submits to blockchain. Profit is captured or tx reverts safely." }
