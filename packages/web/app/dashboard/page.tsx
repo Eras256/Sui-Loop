@@ -155,7 +155,9 @@ function DashboardContent() {
     // Auto-deploy logic for Navbar CTA
     useEffect(() => {
         if (searchParams.get('autostart') === 'true' && account) {
-            router.replace(`/dashboard?strategy=${strategyId}`); // Keep strategy param but remove autostart to prevent loops
+            // Preserve name param if it exists
+            const nameParam = strategyNameParam ? `&name=${encodeURIComponent(strategyNameParam)}` : '';
+            router.replace(`/dashboard?strategy=${strategyId}${nameParam}`);
             setShowAutoStartModal(true);
         }
     }, [searchParams, account, router, strategyId]);
