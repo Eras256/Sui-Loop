@@ -118,8 +118,9 @@ function DashboardContent() {
     };
 
     const strategyId = searchParams.get('strategy') || "sui-usdc-loop";
+    const strategyNameParam = searchParams.get('name'); // From Builder redirect
 
-    // Dynamically resolve strategy metadata (Default -> Active Fleet -> Custom Fallback)
+    // Dynamically resolve strategy metadata (Default -> Active Fleet -> URL Param -> Custom Fallback)
     const currentStrategy = useMemo(() => {
         // 1. Known Hardcoded Strategy
         if (STRATEGIES[strategyId]) return STRATEGIES[strategyId];
@@ -138,13 +139,18 @@ function DashboardContent() {
             } catch { }
         }
 
-        // 4. Smart Fallback
+        // 4. Use URL name param if provided (for immediate display before data loads)
+        if (strategyNameParam) {
+            return { name: strategyNameParam, logPrefix: "CUSTOM", emoji: "🛠️" };
+        }
+
+        // 5. Smart Fallback
         if (strategyId.startsWith('custom-')) {
             return { name: "Custom Agent Strategy", logPrefix: "BUILDER", emoji: "🛠️" };
         }
 
         return STRATEGIES["sui-usdc-loop"];
-    }, [strategyId, activeStrategies, account]);
+    }, [strategyId, activeStrategies, account, strategyNameParam]);
 
     // Auto-deploy logic for Navbar CTA
     useEffect(() => {

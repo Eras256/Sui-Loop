@@ -281,8 +281,8 @@ export default function StrategyBuilderPro() {
             toast.success(deploy ? "Strategy Ready for Activation" : "Draft Saved to Cloud");
 
             if (deploy) {
-                // Redirect to Dashboard with Auto-Start to trigger the Real Transaction (Deposit/Init)
-                router.push(`/dashboard?autostart=true&strategy=${newStrategy.id}`);
+                // Redirect to Dashboard with Auto-Start and name for immediate display
+                router.push(`/dashboard?autostart=true&strategy=${newStrategy.id}&name=${encodeURIComponent(strategyName)}`);
             }
         } catch (e) {
             console.error(e);
