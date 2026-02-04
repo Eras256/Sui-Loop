@@ -187,8 +187,8 @@ export default function StrategiesPage() {
             toast.dismiss(toastId);
             toast.success("Strategy Template Loaded", { duration: 1000 });
 
-            // 2. Redirect to Dashboard with Auto-Start to trigger the Real Transaction
-            router.push(`/dashboard?autostart=true&strategy=${strategy.id}`);
+            // 2. Redirect to Dashboard with Auto-Start and name for immediate display
+            router.push(`/dashboard?autostart=true&strategy=${strategy.id}&name=${encodeURIComponent(strategy.name)}`);
 
         } catch (e) {
             console.error(e);
