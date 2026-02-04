@@ -572,7 +572,7 @@ function DashboardContent() {
                                     const dynamicYield = (baseApy + boost).toFixed(2) + '%';
 
                                     return (
-                                        <div key={strat.id} className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col relative overflow-hidden group hover:border-neon-cyan/30 transition-all">
+                                        <div key={`strategy-grid-${i}`} className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col relative overflow-hidden group hover:border-neon-cyan/30 transition-all">
                                             <div className="flex justify-between items-start mb-2 relative z-10">
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-2xl">{strat.emoji}</span>
@@ -718,8 +718,8 @@ function DashboardContent() {
                             </div>
                         ) : (
                             <div className="space-y-4 relative z-10 max-h-[300px] overflow-y-auto pr-1">
-                                {activeStrategies.map((strat) => (
-                                    <div key={strat.id} className="bg-white/5 rounded-xl p-3 border border-white/10 hover:border-white/20 transition-colors">
+                                {activeStrategies.map((strat, idx) => (
+                                    <div key={`strategy-list-${idx}`} className="bg-white/5 rounded-xl p-3 border border-white/10 hover:border-white/20 transition-colors">
                                         <div className="flex justify-between items-start mb-2">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-lg">{strat.emoji}</span>
