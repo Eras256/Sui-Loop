@@ -241,13 +241,9 @@ function DashboardContent() {
         }
     }, [account]);
 
-    // Save to LocalStorage (Account Specific)
-    useEffect(() => {
-        if (typeof window !== 'undefined' && account?.address && isInitialized) {
-            const localKey = `sui-loop-fleet-${account.address}`;
-            localStorage.setItem(localKey, JSON.stringify(activeStrategies));
-        }
-    }, [activeStrategies, account, isInitialized]);
+    // NOTE: We no longer auto-save activeStrategies to LocalStorage here
+    // because it would overwrite DRAFT strategies saved by the Builder.
+    // The Builder handles its own persistence, and we only read from LocalStorage.
 
     const handleDeploy = () => {
         if (!account) {
