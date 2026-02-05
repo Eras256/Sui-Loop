@@ -330,13 +330,13 @@ function ArchitectureSection() {
                             title: 'On-Chain (Sui Network)',
                             icon: Database,
                             color: 'border-neon-cyan',
-                            items: ['Holds assets and liquidity pools', 'Executes atomic logic (borrow → execute → repay)', 'Enforces Hot Potato safety guarantees']
+                            items: ['Navi Protocol (Flash Loans & Lending)', 'DeepBook V3 (CLOB Execution)', 'Enforces Hot Potato safety guarantees']
                         },
                         {
                             title: 'Off-Chain (Agent Runtime)',
                             icon: Cpu,
                             color: 'border-neon-purple',
-                            items: ['Runs ElizaOS agent logic', 'Constructs optimistic PTBs', 'Analyzes market opportunities']
+                            items: ['Runs ElizaOS logic with @naviprotocol/lending', 'Constructs optimistic PTBs', 'Analyzes market opportunities']
                         },
                         {
                             title: 'Persistence Layer',

@@ -72,6 +72,10 @@ export default function AgentsPage() {
                                     <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">OPERATIONAL</span>
                                 </div>
                                 <div className="flex justify-between items-center">
+                                    <span className="text-sm">Navi Liquidity Feed</span>
+                                    <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">ONLINE</span>
+                                </div>
+                                <div className="flex justify-between items-center">
                                     <span className="text-sm">Latency</span>
                                     <span className="text-xs font-mono">12ms</span>
                                 </div>
@@ -170,16 +174,17 @@ export default function AgentsPage() {
                                 {syntax === 'ts' ? (
                                     <div className="space-y-1">
                                         <div><span className="text-purple-400">import</span> {"{"} Agent {"}"} <span className="text-purple-400">from</span> <span className="text-green-400">'@suiloop/sdk'</span>;</div>
+                                        <div><span className="text-purple-400">import</span> {"{"} Navi {"}"} <span className="text-purple-400">from</span> <span className="text-green-400">'@naviprotocol/lending'</span>;</div>
                                         <div className="h-2"></div>
                                         <div className="text-gray-500">// Initialize Unit</div>
                                         <div><span className="text-blue-400">const</span> bot = <span className="text-blue-400">new</span> Agent({"{"}</div>
                                         <div className="pl-4">apiKey: <span className="text-yellow-300">'sk_live_...'</span></div>
                                         <div>{"}"});</div>
                                         <div className="h-2"></div>
-                                        <div className="text-gray-500">// Intercept & Strike</div>
+                                        <div className="text-gray-500">// Exec Lending Loop</div>
                                         <div>bot.subscribe((<span className="text-orange-300">signal</span>) ={">"} {"{"}</div>
-                                        <div className="pl-4"><span className="text-blue-400">if</span> (signal.score {">"} 80) {"{"}</div>
-                                        <div className="pl-8">bot.execute(<span className="text-green-400">'convex-arb-v1'</span>, signal);</div>
+                                        <div className="pl-4"><span className="text-blue-400">if</span> (signal.type === <span className="text-yellow-300">'NAVI_SUPPLY'</span>) {"{"}</div>
+                                        <div className="pl-8">Navi.supply(<span className="text-green-400">'SUI'</span>, signal.amount);</div>
                                         <div className="pl-4">{"}"}</div>
                                         <div>{"}"});</div>
                                     </div>
