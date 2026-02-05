@@ -7,15 +7,16 @@ import {
     ArrowLeft, Book, Code, Shield, Layers, Cpu, Database, Zap,
     GitBranch, FileCode, Rocket, CheckCircle, AlertTriangle,
     Terminal, Globe, Lock, TrendingUp, ChevronRight, ExternalLink,
-    Play, Settings, Users, Workflow, Key
+    Play, Settings, Users, Workflow, Key, Lightbulb
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import ApiKeyManager from "@/components/docs/ApiKeyManager";
 
-type TabId = 'overview' | 'architecture' | 'contracts' | 'agent' | 'frontend' | 'api' | 'security';
+type TabId = 'overview' | 'architecture' | 'contracts' | 'agent' | 'frontend' | 'api' | 'security' | 'ideas';
 
 const tabs = [
     { id: 'overview' as TabId, label: 'Overview', icon: Book },
+    { id: 'ideas' as TabId, label: 'Build Ideas 💡', icon: Lightbulb },
     { id: 'architecture' as TabId, label: 'Architecture', icon: Layers },
     { id: 'contracts' as TabId, label: 'Smart Contracts', icon: Code },
     { id: 'agent' as TabId, label: 'AI Agent', icon: Cpu },
@@ -122,6 +123,7 @@ export default function DocsPage() {
                 {/* Content */}
                 <div className="max-w-7xl mx-auto px-6 py-12">
                     {activeTab === 'overview' && <OverviewSection />}
+                    {activeTab === 'ideas' && <IdeasSection />}
                     {activeTab === 'architecture' && <ArchitectureSection />}
                     {activeTab === 'contracts' && <ContractsSection />}
                     {activeTab === 'agent' && <AgentSection />}
@@ -983,6 +985,101 @@ function SecuritySection() {
                     <span className="text-gray-400">Professional audit scheduled for Q2 2026 (Mainnet launch)</span>
                 </div>
             </section>
+        </div>
+    );
+}
+
+function IdeasSection() {
+    return (
+        <div className="space-y-12">
+            <section className="text-center max-w-3xl mx-auto mb-16">
+                <h2 className="text-4xl font-black mb-6">What to Build? 🏗️</h2>
+                <p className="text-xl text-gray-400">
+                    SuiLoop provides the financial rails. You build the vehicles. <br />
+                    Here are some "Request for Startups" using our SDK.
+                </p>
+            </section>
+
+            <div className="grid md:grid-cols-2 gap-8">
+                {/* Idea 1 */}
+                <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-yellow-500/50 transition-colors group">
+                    <div className="flex items-start justify-between mb-6">
+                        <div className="p-3 bg-yellow-500/10 rounded-xl text-yellow-500">
+                            <Shield size={32} />
+                        </div>
+                        <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Medium</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">PortfolioGuard Bot</h3>
+                    <p className="text-gray-400 mb-6 min-h-[60px]">
+                        A Telegram bot that monitors user portfolios 24/7. If collateral health drops below 1.1, it automatically borrows stablecoins via SuiLoop to repay debt and prevent liquidation.
+                    </p>
+                    <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-yellow-500/80">
+                        <span className="text-gray-500"># Use Python SDK</span><br />
+                        agent.listen(portfolio_health, (health) =&gt; {'{'}<br />
+                        &nbsp;&nbsp;if health &lt; 1.1: agent.execute("Repay")<br />
+                        {'}'})
+                    </div>
+                </div>
+
+                {/* Idea 2 */}
+                <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-neon-cyan/50 transition-colors group">
+                    <div className="flex items-start justify-between mb-6">
+                        <div className="p-3 bg-neon-cyan/10 rounded-xl text-neon-cyan">
+                            <Zap size={32} />
+                        </div>
+                        <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Hard</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">ArbSwarm DAO</h3>
+                    <p className="text-gray-400 mb-6 min-h-[60px]">
+                        A DAO where users pool SUI. Thousands of micro-agents scan DEXs for 0.5% discrepancies and execute atomic flash loans. Profits are split 80/20 between Agent and DAO.
+                    </p>
+                    <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-neon-cyan/80">
+                        <span className="text-gray-500"># Use TypeScript SDK</span><br />
+                        const profit = await calculateArb(poolA, poolB);<br />
+                        if (profit &gt; gas) await loop.execute(flashLoan);
+                    </div>
+                </div>
+
+                {/* Idea 3 */}
+                <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-purple-500/50 transition-colors group">
+                    <div className="flex items-start justify-between mb-6">
+                        <div className="p-3 bg-purple-500/10 rounded-xl text-purple-500">
+                            <Globe size={32} />
+                        </div>
+                        <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Easy</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">NewsTrader Oracle</h3>
+                    <p className="text-gray-400 mb-6 min-h-[60px]">
+                        Connect standard Web2 news APIs (Bloomberg, Twitter) to Sui. When "Regulatory Approval" is detected, buy the related token via SuiLoop Swaps instantly.
+                    </p>
+                    <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-purple-500/80">
+                        <span className="text-gray-500"># Use JS SDK + Vercel</span><br />
+                        onNewsReceived(async (headline) =&gt; {'{'}<br />
+                        &nbsp;&nbsp;if (isBullish(headline)) loop.buy("SUI")<br />
+                        {'}'})
+                    </div>
+                </div>
+
+                {/* Idea 4 */}
+                <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-green-500/50 transition-colors group">
+                    <div className="flex items-start justify-between mb-6">
+                        <div className="p-3 bg-green-500/10 rounded-xl text-green-500">
+                            <Users size={32} />
+                        </div>
+                        <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Hard</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">GameFi NPC Economy</h3>
+                    <p className="text-gray-400 mb-6 min-h-[60px]">
+                        Fully autonomous NPCs in a Sui game that manage their own inventory shops. They buy items low from players and sell high, managing their own capital via SuiLoop.
+                    </p>
+                    <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-green-500/80">
+                        <span className="text-gray-500"># Use Unity + C# (API)</span><br />
+                        npc.OnTradeOffer((item) =&gt; {'{'}<br />
+                        &nbsp;&nbsp;if (market.val(item) &gt; offer) npc.pay(offer)<br />
+                        {'}'})
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

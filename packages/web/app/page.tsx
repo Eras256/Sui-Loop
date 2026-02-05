@@ -8,7 +8,7 @@ import { Environment } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight } from "lucide-react";
+import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download } from "lucide-react";
 import { PulsingOrb } from "./components/NeuralOrb";
 
 import Navbar from "@/components/layout/Navbar";
@@ -18,6 +18,7 @@ export default function Home() {
     const account = useCurrentAccount();
     const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
     const [agentLog, setAgentLog] = useState<string[]>([]);
+    const [pkgManager, setPkgManager] = useState("npm");
 
     const handleDeploy = () => {
         if (!account) {
@@ -148,6 +149,136 @@ export default function Home() {
                     </Canvas>
                 </div>
             </div>
+
+            {/* --- AUDIENCE SPLITTER --- */}
+            <div className="w-full max-w-7xl mx-auto px-4 -mt-20 mb-20 relative z-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* For Humans */}
+                    <Link href="/dashboard" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[200px] hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] cursor-pointer">
+                        <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-2 bg-white/5 rounded-lg text-neon-purple">
+                                    <User size={24} />
+                                </div>
+                                <h3 className="text-xl font-bold text-white">For Humans</h3>
+                            </div>
+                            <p className="text-gray-400 text-sm max-w-xs">
+                                Visual Strategy Builder, Dashboard, and Real-time Analytics. No code required.
+                            </p>
+                        </div>
+                        <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
+                            Launch App <ArrowRight size={16} />
+                        </div>
+                    </Link>
+
+                    {/* For Agents */}
+                    <Link href="/agents" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[200px] hover:shadow-[0_0_30px_rgba(0,243,255,0.15)] cursor-pointer">
+                        <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-2 bg-white/5 rounded-lg text-neon-cyan">
+                                    <Bot size={24} />
+                                </div>
+                                <h3 className="text-xl font-bold text-white">For Agents</h3>
+                            </div>
+                            <p className="text-gray-400 text-sm max-w-xs">
+                                TypeScript/Python SDKs, CLI, and Flash Loan API. Pure execution speed.
+                            </p>
+                        </div>
+                        <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
+                            View Developer Hub <ArrowRight size={16} />
+                        </div>
+                    </Link>
+                </div>
+            </div>
+
+            {/* --- QUICK START (TERMINAL) --- */}
+            <div className="w-full max-w-4xl mx-auto px-4 mb-24 relative z-20">
+                <div className="flex items-center gap-3 mb-6">
+                    <ChevronRight className="text-neon-cyan" size={24} />
+                    <h2 className="text-2xl font-bold text-white tracking-tight">Quick Start</h2>
+                </div>
+
+                <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-1 overflow-hidden shadow-2xl relative">
+                    {/* Terminal Header */}
+                    <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
+                        <div className="flex gap-2">
+                            <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                            <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                        </div>
+                        <div className="flex bg-black/50 rounded-lg p-1 text-xs font-mono">
+                            {['npm', 'pnpm', 'yarn'].map((pm) => (
+                                <button
+                                    key={pm}
+                                    onClick={() => setPkgManager(pm)}
+                                    className={`px-3 py-1 rounded transition-colors ${pkgManager === pm
+                                        ? "bg-white/10 text-neon-cyan"
+                                        : "text-gray-500 hover:text-white"
+                                        }`}
+                                >
+                                    {pm}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Terminal Content */}
+                    <div className="p-6 md:p-8 font-mono relative group">
+                        <div className="text-gray-500 select-none mb-4 font-mono text-sm"># Install the CLI and scaffold a new agent</div>
+                        <div className="flex items-center gap-3 text-lg md:text-xl font-mono overflow-x-auto">
+                            <span className="text-neon-purple select-none">$</span>
+                            <span className="text-white">
+                                {pkgManager === 'npm' ? 'npx' : pkgManager === 'pnpm' ? 'pnpm dlx' : 'yarn dlx'}
+                            </span>
+                            <span className="text-neon-cyan">suiloop create</span>
+                            <span className="text-green-400">my-agent</span>
+                        </div>
+
+                        <button
+                            onClick={() => {
+                                const cmd = pkgManager === 'npm'
+                                    ? "npx suiloop create my-agent"
+                                    : pkgManager === 'pnpm'
+                                        ? "pnpm dlx suiloop create my-agent"
+                                        : "yarn dlx suiloop create my-agent";
+                                navigator.clipboard.writeText(cmd);
+                                toast.success(`Copied ${pkgManager} command!`);
+                            }}
+                            className="absolute top-1/2 right-6 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+                        >
+                            <Copy size={20} />
+                        </button>
+                    </div>
+                </div>
+
+                <div className="text-center mt-6 text-gray-500 text-sm">
+                    Works on macOS, Windows & Linux. The one-liner installs dependencies and sets up the TypeScript/Python environment.
+                </div>
+            </div>
+
+            {/* --- COMPANION APP --- */}
+            <div className="w-full max-w-4xl mx-auto px-4 mb-32 relative z-20 text-center">
+                <h3 className="text-xl font-bold text-white mb-4">Companion App (Beta)</h3>
+                <p className="text-gray-400 mb-8 max-w-lg mx-auto">
+                    Menubar access to your agent. Works great alongside the CLI.
+                    Monitor status, view logs, and panic stop in one click.
+                </p>
+                <a
+                    href="https://github.com/Eras256/Sui-Loop/releases"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white font-bold py-4 px-8 rounded-xl shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.5)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 mx-auto min-w-[300px]"
+                >
+                    <Download size={24} />
+                    <span>Download for macOS</span>
+                </a>
+                <div className="mt-4 text-xs text-gray-500 font-mono">
+                    Requires macOS 14+ • Universal Binary
+                </div>
+            </div>
+
 
             {/* --- TECH STACK MARQUEE --- */}
             <div className="w-full border-y border-white/5 bg-black/20 backdrop-blur-sm overflow-hidden py-10">

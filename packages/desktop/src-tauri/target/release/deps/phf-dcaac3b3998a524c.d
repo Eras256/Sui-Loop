@@ -1,0 +1,11 @@
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/phf-dcaac3b3998a524c.d: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/map.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/ordered_map.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/ordered_set.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/set.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libphf-dcaac3b3998a524c.rlib: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/map.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/ordered_map.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/ordered_set.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/set.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libphf-dcaac3b3998a524c.rmeta: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/map.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/ordered_map.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/ordered_set.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/set.rs
+
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/lib.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/map.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/ordered_map.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/ordered_set.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/phf-0.10.1/src/set.rs:

@@ -1,0 +1,14 @@
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/thiserror-d2004f3d2d22b8f3.d: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/thiserror-45df7e79b1791fab/out/private.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libthiserror-d2004f3d2d22b8f3.rlib: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/thiserror-45df7e79b1791fab/out/private.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libthiserror-d2004f3d2d22b8f3.rmeta: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/thiserror-45df7e79b1791fab/out/private.rs
+
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs:
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/thiserror-45df7e79b1791fab/out/private.rs:
+
+# env-dep:OUT_DIR=/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/thiserror-45df7e79b1791fab/out

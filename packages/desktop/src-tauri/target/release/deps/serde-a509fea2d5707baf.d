@@ -1,0 +1,14 @@
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/serde-a509fea2d5707baf.d: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/serde-276f6345a03b41f8/out/private.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libserde-a509fea2d5707baf.rlib: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/serde-276f6345a03b41f8/out/private.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libserde-a509fea2d5707baf.rmeta: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/serde-276f6345a03b41f8/out/private.rs
+
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/serde-276f6345a03b41f8/out/private.rs:
+
+# env-dep:OUT_DIR=/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/build/serde-276f6345a03b41f8/out

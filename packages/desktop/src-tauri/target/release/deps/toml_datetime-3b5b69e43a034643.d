@@ -1,0 +1,10 @@
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/toml_datetime-3b5b69e43a034643.d: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/datetime.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/de.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/ser.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libtoml_datetime-3b5b69e43a034643.rlib: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/datetime.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/de.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/ser.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libtoml_datetime-3b5b69e43a034643.rmeta: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/datetime.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/de.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/ser.rs
+
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/lib.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/datetime.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/de.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/src/ser.rs:

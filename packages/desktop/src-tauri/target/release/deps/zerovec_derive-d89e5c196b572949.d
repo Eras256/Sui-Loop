@@ -1,0 +1,10 @@
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/zerovec_derive-d89e5c196b572949.d: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/make_ule.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/make_varule.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/ule.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/utils.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/varule.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libzerovec_derive-d89e5c196b572949.so: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/make_ule.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/make_varule.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/ule.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/utils.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/varule.rs
+
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/lib.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/make_ule.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/make_varule.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/ule.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/utils.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/src/varule.rs:

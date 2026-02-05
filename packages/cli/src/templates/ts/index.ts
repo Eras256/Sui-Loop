@@ -16,7 +16,7 @@ async function main() {
     }
     console.log('✅ Connected to Neural Matrix');
 
-    agent.subscribe((signal) => {
+    agent.subscribe((signal: any) => {
         console.log('⚡ Signal Received:', signal);
         // Add your logic here
     });

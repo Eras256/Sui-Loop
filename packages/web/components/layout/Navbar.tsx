@@ -29,7 +29,7 @@ export default function Navbar() {
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth >= 1280) {
+            if (window.innerWidth >= 1024) {
                 setMobileMenuOpen(false);
             }
         };
@@ -100,8 +100,8 @@ export default function Navbar() {
 
                     </div>
 
-                    {/* Center: Desktop Navigation - hidden on mobile/tablet/laptop */}
-                    <div className="hidden xl:flex items-center gap-1 flex-shrink-0">
+                    {/* Center: Desktop Navigation - visible on laptop (lg) and up */}
+                    <div className="hidden lg:flex items-center gap-1 flex-shrink-0">
                         {navLinks.map((link) => {
                             const isActive = pathname === link.href;
                             const Icon = link.icon;
@@ -112,19 +112,18 @@ export default function Navbar() {
                                     href={link.href}
                                     target={link.external ? "_blank" : undefined}
                                     className={`
-                                        relative px-3 xl:px-4 py-2 rounded-full text-xs xl:text-sm font-medium 
-                                        transition-all duration-300 flex items-center gap-1.5 xl:gap-2 whitespace-nowrap
+                                        relative px-2 xl:px-3 py-2 rounded-full text-xs font-medium 
+                                        transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap
                                         ${isActive
                                             ? "text-white bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                                             : "text-gray-400 hover:text-white hover:bg-white/5"
                                         }
                                     `}
                                 >
-                                    <Icon size={14} className={`xl:w-4 xl:h-4 ${isActive ? "text-neon-cyan" : "text-gray-500"}`} />
-                                    <span className="hidden xl:inline">{link.name}</span>
-                                    <span className="xl:hidden">{link.name.slice(0, 4)}</span>
+                                    <Icon size={14} className={isActive ? "text-neon-cyan" : "text-gray-500"} />
+                                    <span>{link.name}</span>
                                     {isActive && (
-                                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 xl:w-4 h-0.5 bg-neon-cyan shadow-[0_0_10px_#00f3ff] rounded-full"></span>
+                                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-neon-cyan shadow-[0_0_10px_#00f3ff] rounded-full"></span>
                                     )}
                                 </Link>
                             );
@@ -133,14 +132,14 @@ export default function Navbar() {
 
                     {/* Right Side: Status + Wallet + CTA + Mobile Toggle */}
                     <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 shrink-0">
-                        {/* Agent Status Indicator - xl+ only */}
-                        <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/5">
+                        {/* Agent Status Indicator - lg+ */}
+                        <div className={`hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full border ${account ? "bg-green-500/10 border-green-500/20" : "bg-white/5 border-white/10"}`}>
                             <span className="relative flex h-2 w-2">
                                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
                                 <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
                             </span>
-                            <span className="text-[10px] text-gray-400 font-mono whitespace-nowrap">
-                                AGENT {account ? "ACTIVE" : "IDLE"}
+                            <span className={`text-[10px] font-mono font-bold whitespace-nowrap ${account ? "text-green-400" : "text-gray-500"}`}>
+                                AGENT
                             </span>
                         </div>
 
@@ -149,19 +148,18 @@ export default function Navbar() {
                             <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-3 sm:!px-4 lg:!px-5 !py-2 !rounded-full !text-xs sm:!text-sm !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !whitespace-nowrap" />
                         </div>
 
-                        {/* CTA Button - Hidden on mobile, shown on md+ */}
+                        {/* CTA Button - Hidden on mobile/tablet, shown on lg+ as icon, full on xl */}
                         <Link
                             href="/strategies"
-                            className="hidden md:flex lg:hidden xl:flex items-center gap-1.5 bg-neon-cyan text-black px-3 xl:px-5 py-2 rounded-full font-mono text-[10px] xl:text-xs font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
+                            className="hidden lg:flex items-center gap-1.5 bg-neon-cyan text-black px-3 py-2 rounded-full font-mono text-[10px] font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
                         >
-                            <Rocket size={12} className="xl:w-3.5 xl:h-3.5" />
-                            <span className="hidden xl:inline">DEPLOY AGENT</span>
-                            <span className="xl:hidden">DEPLOY</span>
+                            <Rocket size={14} />
+                            <span className="hidden xl:inline">DEPLOY</span>
                         </Link>
 
-                        {/* Mobile Menu Toggle - minimum 44px touch target */}
+                        {/* Mobile Menu Toggle */}
                         <button
-                            className="xl:hidden min-w-[44px] min-h-[44px] w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors ml-1"
+                            className="lg:hidden min-w-[44px] min-h-[44px] w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors ml-1"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                             aria-expanded={mobileMenuOpen}

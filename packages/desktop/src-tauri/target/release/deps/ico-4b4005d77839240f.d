@@ -1,0 +1,12 @@
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/ico-4b4005d77839240f.d: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/macros.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/bmpdepth.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/icondir.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/image.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/restype.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libico-4b4005d77839240f.rlib: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/macros.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/bmpdepth.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/icondir.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/image.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/restype.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libico-4b4005d77839240f.rmeta: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/macros.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/bmpdepth.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/icondir.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/image.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/restype.rs
+
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/lib.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/macros.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/bmpdepth.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/icondir.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/image.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ico-0.5.0/src/restype.rs:

@@ -1,0 +1,10 @@
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/icu_normalizer-157a68e652a6e64f.d: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/properties.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/provider.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/uts46.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libicu_normalizer-157a68e652a6e64f.rlib: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/properties.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/provider.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/uts46.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libicu_normalizer-157a68e652a6e64f.rmeta: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/properties.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/provider.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/uts46.rs
+
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/lib.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/properties.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/provider.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/src/uts46.rs:

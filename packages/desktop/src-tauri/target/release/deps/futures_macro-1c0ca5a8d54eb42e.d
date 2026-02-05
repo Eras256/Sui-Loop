@@ -1,0 +1,9 @@
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/futures_macro-1c0ca5a8d54eb42e.d: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/executor.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/join.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/select.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/stream_select.rs
+
+/home/vaiosvaios/Sui-Loop/packages/desktop/src-tauri/target/release/deps/libfutures_macro-1c0ca5a8d54eb42e.so: /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/lib.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/executor.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/join.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/select.rs /home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/stream_select.rs
+
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/lib.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/executor.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/join.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/select.rs:
+/home/vaiosvaios/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-macro-0.3.31/src/stream_select.rs:
