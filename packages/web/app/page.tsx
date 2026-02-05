@@ -265,17 +265,36 @@ export default function Home() {
                     Menubar access to your agent. Works great alongside the CLI.
                     Monitor status, view logs, and panic stop in one click.
                 </p>
-                <a
-                    href="https://github.com/Eras256/Sui-Loop/releases"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white font-bold py-4 px-8 rounded-xl shadow-[0_0_30px_rgba(239,68,68,0.3)] hover:shadow-[0_0_50px_rgba(239,68,68,0.5)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 mx-auto min-w-[300px]"
-                >
-                    <Download size={24} />
-                    <span>Download for macOS</span>
-                </a>
-                <div className="mt-4 text-xs text-gray-500 font-mono">
-                    Requires macOS 14+ • Universal Binary
+                <div className="flex flex-col items-center">
+                    <a
+                        href="https://github.com/Eras256/Sui-Loop/releases"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative overflow-hidden bg-black/40 backdrop-blur-xl border border-white/10 hover:border-neon-cyan/50 text-white font-bold py-6 px-10 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(6,182,212,0.3)] transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-4 mx-auto min-w-[320px]"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/20 via-transparent to-neon-purple/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="relative flex items-center gap-4">
+                            <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-neon-cyan/30 transition-colors">
+                                <Download size={24} className="text-gray-300 group-hover:text-neon-cyan transition-colors" />
+                            </div>
+                            <div className="text-left">
+                                <span className="block text-xs uppercase tracking-widest text-gray-500 group-hover:text-neon-cyan/80 transition-colors mb-0.5">latest release</span>
+                                <span className="block text-lg font-bold tracking-tight">Download Companion</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div className="mt-6 flex items-center gap-6 text-sm text-gray-500 font-mono">
+                        <span className="flex items-center gap-2 hover:text-gray-300 transition-colors">
+                            <span className="w-1.5 h-1.5 rounded-full bg-gray-600"></span> macOS
+                        </span>
+                        <span className="flex items-center gap-2 hover:text-gray-300 transition-colors">
+                            <span className="w-1.5 h-1.5 rounded-full bg-gray-600"></span> Windows
+                        </span>
+                        <span className="flex items-center gap-2 hover:text-gray-300 transition-colors">
+                            <span className="w-1.5 h-1.5 rounded-full bg-gray-600"></span> Linux
+                        </span>
+                    </div>
                 </div>
             </div>
 
