@@ -100,12 +100,12 @@ export default function AnalyticsPage() {
             <div className="max-w-7xl mx-auto relative z-10">
                 <header className="mb-10 flex justify-between items-end">
                     <div>
-                        <h1 className="text-4xl font-bold mb-2 text-white">Your Analytics</h1>
-                        <p className="text-gray-400">Real-time performance metrics for {account ? `${account.address.slice(0, 6)}...${account.address.slice(-4)}` : 'Guest'}</p>
+                        <h1 className="text-4xl font-bold mb-2 text-white tracking-tight">INTELLIGENCE OPS</h1>
+                        <p className="text-gray-400 font-mono text-sm">Real-time surveillance of on-chain liquidity vectors {account ? `// TARGET: ${account.address.slice(0, 6)}...${account.address.slice(-4)}` : '// GUEST MODE'}</p>
                     </div>
                     {!account && (
-                        <div className="px-4 py-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 rounded-lg text-xs font-mono">
-                            Connect Wallet to see real data
+                        <div className="px-4 py-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 rounded-lg text-xs font-mono animate-pulse">
+                            [!] ENCRYPTED FEED - CONNECT WALLET
                         </div>
                     )}
                 </header>
@@ -113,28 +113,28 @@ export default function AnalyticsPage() {
                 {/* KPI Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                     <StatCard
-                        title="Net Worth (SUI)"
+                        title="Liquidity Deployed"
                         value={userBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        change="+0.00%" // Real balance change requires historical DB
+                        change="READY"
                         icon={Wallet}
                         color="neon-cyan"
                     />
                     <StatCard
-                        title="Active Strategies"
+                        title="Active Agents"
                         value={activeStrategies.length}
-                        change={activeStrategies.length > 0 ? "Active" : "Idle"}
+                        change={activeStrategies.length > 0 ? "ENGAGED" : "STANDBY"}
                         icon={Server}
                         color="amber-500"
                     />
                     <StatCard
-                        title="Est. Daily Yield"
+                        title="Alpha Capture (24h)"
                         value={`+${dailyYield.toFixed(3)} SUI`}
                         change={`APROX $${(dailyYield * 3.42).toFixed(2)}`}
                         icon={TrendingUp}
                         color="green-500"
                     />
                     <StatCard
-                        title="Live Scallop APY"
+                        title="Benchmark Rate"
                         value={`${scallopData?.supplyApy.toFixed(2) || '0.00'}%`}
                         change="+0.45% (24h)"
                         icon={Activity}
@@ -147,12 +147,12 @@ export default function AnalyticsPage() {
                     {/* Main Chart */}
                     <div className="lg:col-span-2 glass-panel border border-white/10 rounded-2xl p-6">
                         <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-xl font-bold flex items-center gap-2">
-                                Portfolio Growth
-                                <span className="text-xs font-normal text-gray-500 bg-white/5 px-2 py-0.5 rounded">ESTIMATED</span>
+                            <h3 className="text-xl font-bold flex items-center gap-2 tracking-tight">
+                                PERFORMANCE VECTOR
+                                <span className="text-xs font-normal text-gray-500 bg-white/5 px-2 py-0.5 rounded font-mono">[PROJECTION]</span>
                             </h3>
                             <div className="flex gap-2">
-                                <button className="px-3 py-1 text-xs rounded-full bg-white/10 text-white hover:bg-white/20">24H</button>
+                                <button className="px-3 py-1 text-xs rounded-full bg-white/10 text-white hover:bg-white/20 font-mono">24H</button>
                             </div>
                         </div>
                         <div className="h-[300px] w-full">
@@ -180,18 +180,18 @@ export default function AnalyticsPage() {
                     {/* Side Stats */}
                     <div className="space-y-6">
                         <div className="glass-panel border border-white/10 rounded-2xl p-6">
-                            <h3 className="text-lg font-bold mb-4 text-gray-200">Active Pool Opportunities</h3>
+                            <h3 className="text-lg font-bold mb-4 text-gray-200 tracking-tight">TARGET ACQUISITION RADAR</h3>
                             <div className="space-y-4">
                                 {[
-                                    { name: "Scallop SUI Supply", vol: "Safe", apy: `${(scallopData?.supplyApy || 11).toFixed(2)}%` },
-                                    { name: "Cetus SUI/USDC", vol: "Volatile", apy: "45.2%" },
-                                    { name: "DeepBook V3 Limit", vol: "Low Risk", apy: "8.5%" },
+                                    { name: "Scallop SUI Supply", vol: "STABLE", apy: `${(scallopData?.supplyApy || 11).toFixed(2)}%` },
+                                    { name: "Cetus SUI/USDC", vol: "VOLATILE", apy: "45.2%" },
+                                    { name: "DeepBook V3 Limit", vol: "LOW RISK", apy: "8.5%" },
                                 ].map((pool, i) => (
                                     <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5 hover:border-neon-cyan/30 transition-colors cursor-pointer group">
                                         <span className="font-mono text-sm text-gray-300 group-hover:text-white transition-colors">{pool.name}</span>
                                         <div className="text-right">
-                                            <div className="text-xs text-green-400 font-bold">{pool.apy}</div>
-                                            <div className="text-[10px] text-gray-500">{pool.vol}</div>
+                                            <div className="text-xs text-green-400 font-bold font-mono">{pool.apy}</div>
+                                            <div className="text-[10px] text-gray-500 font-mono">{pool.vol}</div>
                                         </div>
                                     </div>
                                 ))}
@@ -200,9 +200,9 @@ export default function AnalyticsPage() {
 
                         <div className="glass-panel border border-neon-purple/30 rounded-2xl p-6 relative overflow-hidden">
                             <div className="relative z-10">
-                                <h3 className="text-lg font-bold mb-2 text-white">Execution Health</h3>
-                                <div className="text-4xl font-bold text-white mb-2">100%</div>
-                                <div className="text-sm text-gray-300 mb-4">Atomic Safety Layer Active</div>
+                                <h3 className="text-lg font-bold mb-2 text-white tracking-tight">ATOMIC INTEGRITY</h3>
+                                <div className="text-4xl font-bold text-white mb-2 font-mono">100%</div>
+                                <div className="text-sm text-gray-300 mb-4 font-mono">ZERO_SLIPPAGE_ACTIVE</div>
                                 <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
                                     <div className="h-full bg-neon-purple w-full rounded-full shadow-[0_0_10px_#bd00ff]" />
                                 </div>
