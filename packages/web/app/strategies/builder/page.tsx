@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     Plus, Play, Save, Box, Activity, Zap, ArrowRight, Trash2,
     Settings, Copy, Search, ZoomIn, ZoomOut, Undo, Redo,
-    Maximize, MoreVertical, X, CheckCircle2, Menu, LayoutGrid, Cpu, History, Clock
+    Maximize, MoreVertical, X, CheckCircle2, Menu, LayoutGrid, Cpu, History, Clock, Landmark, Coins
 } from "lucide-react";
 import Link from 'next/link';
 import { useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
@@ -49,12 +49,13 @@ const NODE_TYPES = [
         ]
     },
     {
-        category: 'PAYLOAD EXECUTION',
+        category: 'INSTITUTIONAL DEFI',
         color: 'from-neon-cyan to-teal-400',
         items: [
+            { type: 'action', label: 'NAVI_SUPPLY [COLLATERAL]', icon: Landmark, inputs: ['Asset'], outputs: ['Receipt'] },
+            { type: 'action', label: 'NAVI_BORROW [LEVERAGE]', icon: Coins, inputs: ['Receipt'], outputs: ['Funds'] },
             { type: 'action', label: 'REQ_FLASH_LIQUIDITY', icon: Zap, inputs: ['Trigger'], outputs: ['Success', 'Fail'] },
-            { type: 'action', label: 'EXEC_SWAP [ATOM]', icon: ArrowRight, inputs: ['Liquidity'], outputs: ['Done'] },
-            { type: 'action', label: 'SUPPLY_LENDING', icon: CheckCircle2, inputs: ['Receipt'], outputs: ['Completed'] },
+            { type: 'action', label: 'DEEPBOOK_LIMIT', icon: ArrowRight, inputs: ['Liquidity'], outputs: ['Filled'] },
         ]
     }
 ];
