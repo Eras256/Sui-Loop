@@ -384,6 +384,19 @@ function DashboardContent() {
             // Optimistic Update
             setActiveStrategies(prev => prev.filter(s => s.id !== dbId));
 
+            // Persist removal to LocalStorage immediately
+            if (account?.address) {
+                const localKey = `sui-loop-fleet-${account.address}`;
+                try {
+                    const existing = JSON.parse(localStorage.getItem(localKey) || "[]");
+                    const filtered = existing.filter((s: any) => s.id !== dbId && s.strategy_id !== dbId);
+                    localStorage.setItem(localKey, JSON.stringify(filtered));
+                    console.log('[Dashboard] Removed strategy from LocalStorage:', dbId);
+                } catch (e) {
+                    console.warn('[Dashboard] Failed to update LocalStorage:', e);
+                }
+            }
+
             // Only call backend if ID looks like a UUID (Supabase ID)
             // Local IDs are usually 'custom-timestamp' or plain timestamps
             const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(dbId);
