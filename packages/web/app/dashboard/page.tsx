@@ -436,6 +436,23 @@ function DashboardContent() {
         }
     };
 
+    const clearAllStrategies = () => {
+        // Clear state
+        setActiveStrategies([]);
+
+        // Clear LocalStorage
+        if (account?.address) {
+            const localKey = `sui-loop-fleet-${account.address}`;
+            localStorage.removeItem(localKey);
+            console.log('[Dashboard] Cleared all strategies from LocalStorage');
+        }
+
+        toast.success("Fleet Purged", {
+            description: "All agents terminated and local cache cleared.",
+            icon: "💀"
+        });
+    };
+
     const confirmAutoStart = () => {
         setShowAutoStartModal(false);
         handleDeploy();
@@ -608,7 +625,7 @@ function DashboardContent() {
                         <div className="flex flex-col h-full">
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="text-sm text-gray-400 uppercase tracking-widest">Fleet Status Monitor ({activeStrategies.length}/4)</h2>
-                                <button onClick={() => setActiveStrategies([])} className="text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-2 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-all">
+                                <button onClick={clearAllStrategies} className="text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-2 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-all">
                                     KILL SWITCH (ALL)
                                 </button>
                             </div>
