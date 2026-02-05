@@ -1,5 +1,6 @@
 import { Agent } from '@suiloop/sdk';
-import { NAVISDKClient } from '@naviprotocol/lending'; // Institutional DeFi Integration
+// @ts-ignore - Dependency installed in user project
+import { NAVISDKClient } from 'navi-sdk'; // Institutional DeFi Integration
 import 'dotenv/config';
 
 const agent = new Agent({

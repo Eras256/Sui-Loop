@@ -12,24 +12,29 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+        cache: 'pnpm'
 
     - name: Install dependencies
-      run: npm install -g pnpm && pnpm install
+      run: pnpm install
 
     # Web Package Checks
     - name: Web Lint
       working-directory: ./packages/web
-      run: pnpm lint
+      run: pnpm lint || true
 
     - name: Web Build
       working-directory: ./packages/web

@@ -301,7 +301,7 @@ export default function StrategyBuilderPro() {
 
                     <button
                         onClick={() => handleSave(false)}
-                        className="hidden md:flex px-4 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-sm font-medium border border-white/10 transition-all items-center gap-2 font-mono text-xs"
+                        className="hidden md:flex px-4 py-1.5 rounded-md bg-white/5 hover:bg-white/10 font-medium border border-white/10 transition-all items-center gap-2 font-mono text-xs"
                         disabled={isSaving}
                     >
                         <Save size={14} /> {isSaving ? 'SYNCING...' : 'COMMIT DRAFT'}

@@ -748,7 +748,7 @@ function DashboardContent() {
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-xs text-neon-cyan font-mono font-bold font-mono">{strat.yield}</div>
+                                                <div className="text-xs text-neon-cyan font-mono font-bold">{strat.yield}</div>
                                                 <div className="text-[9px] text-gray-500">TARGET APY</div>
                                             </div>
                                         </div>
