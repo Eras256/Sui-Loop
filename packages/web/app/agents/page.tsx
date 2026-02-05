@@ -30,7 +30,7 @@ export default function AgentsPage() {
                         className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono text-neon-cyan mb-4"
                     >
                         <Radio className="w-3 h-3 animate-pulse" />
-                        SYSTEM ONLINE: v2.0.5
+                        SYSTEM ONLINE: v2.0.5 // ENCRYPTED
                     </motion.div>
 
                     <motion.h1
@@ -38,11 +38,11 @@ export default function AgentsPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 tracking-tight"
                     >
-                        AGENT COMMAND CENTER
+                        OPERATIONS COMMAND CENTER
                     </motion.h1>
                     <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                        The bridge between human intent and autonomous execution.
-                        Generate credentials, monitor fleets, and inject strategies directly into the SuiLoop Neural Matrix.
+                        Interface for deploying autonomous financial warheads.
+                        Generate credentials, monitor field units, and inject logic directly into the SuiLoop Neural Matrix.
                     </p>
                 </div>
 
@@ -60,15 +60,15 @@ export default function AgentsPage() {
                             <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             <h3 className="text-sm font-mono text-gray-400 flex items-center gap-2 mb-4">
                                 <Activity className="w-4 h-4 text-neon-cyan" />
-                                SYSTEM STATUS
+                                ORBITAL UPLINK STATUS
                             </h3>
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm">API Gateway</span>
+                                    <span className="text-sm">Uplink Gateway</span>
                                     <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">OPERATIONAL</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm">Matching Engine</span>
+                                    <span className="text-sm">Targeting Engine</span>
                                     <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">OPERATIONAL</span>
                                 </div>
                                 <div className="flex justify-between items-center">
@@ -81,7 +81,7 @@ export default function AgentsPage() {
                         <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-6">
                             <h3 className="text-sm font-mono text-gray-400 flex items-center gap-2 mb-4">
                                 <Signal className="w-4 h-4 text-neon-purple" />
-                                ACTIVE NODES
+                                DEPLOYED UNITS
                             </h3>
                             <div className="h-32 flex items-end justify-between gap-1 px-2">
                                 {[40, 65, 30, 80, 50, 90, 40, 70, 45, 60].map((h, i) => (
@@ -96,7 +96,7 @@ export default function AgentsPage() {
                                 ))}
                             </div>
                             <div className="mt-2 text-xs text-center text-gray-500 font-mono">
-                                LIVE TRAFFIC (REQ/SEC)
+                                PACKET INTERCEPTION RATE (REQ/SEC)
                             </div>
                         </div>
                     </motion.div>
@@ -120,9 +120,9 @@ export default function AgentsPage() {
                                 <h3 className="font-bold text-white">SuiLoop CLI</h3>
                                 <span className="bg-neon-cyan/20 text-neon-cyan text-[10px] px-2 py-0.5 rounded font-mono">NEW</span>
                             </div>
-                            <p className="text-xs text-gray-400 mb-3">Scaffold a production-ready agent in seconds.</p>
+                            <p className="text-xs text-gray-400 mb-3">Scaffold a combat-ready agent in seconds.</p>
                             <div className="bg-black/50 border border-white/5 rounded px-3 py-2 flex justify-between items-center group cursor-pointer hover:border-white/20 transition-colors">
-                                <code className="text-xs font-mono text-neon-cyan">npx suiloop create</code>
+                                <code className="text-xs font-mono text-neon-cyan">npx suiloop create-unit</code>
                                 <Copy className="w-3 h-3 text-gray-500 group-hover:text-white transition-colors" />
                             </div>
                         </div>
@@ -131,12 +131,12 @@ export default function AgentsPage() {
                             <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center hover:bg-white/10 transition-colors cursor-pointer">
                                 <Code className="w-6 h-6 mx-auto mb-2 text-blue-400" />
                                 <div className="text-sm font-bold">Python SDK</div>
-                                <div className="text-xs text-green-400">v0.1.0 Available</div>
+                                <div className="text-xs text-green-400">v0.1.0 Ready</div>
                             </div>
                             <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center hover:bg-white/10 transition-colors cursor-pointer">
                                 <Zap className="w-6 h-6 mx-auto mb-2 text-yellow-400" />
                                 <div className="text-sm font-bold">Node.js SDK</div>
-                                <div className="text-xs text-green-400">v0.1.0 Available</div>
+                                <div className="text-xs text-green-400">v0.1.0 Ready</div>
                             </div>
                         </div>
                     </motion.div>
@@ -152,7 +152,7 @@ export default function AgentsPage() {
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="text-sm font-mono text-gray-400 flex items-center gap-2">
                                     <Terminal className="w-4 h-4 text-neon-cyan" />
-                                    QUICK CONNECT
+                                    DIRECT LINK PROTOCOL
                                 </h3>
                                 <div className="flex gap-2">
                                     <button
@@ -171,15 +171,15 @@ export default function AgentsPage() {
                                     <div className="space-y-1">
                                         <div><span className="text-purple-400">import</span> {"{"} Agent {"}"} <span className="text-purple-400">from</span> <span className="text-green-400">'@suiloop/sdk'</span>;</div>
                                         <div className="h-2"></div>
-                                        <div className="text-gray-500">// Initialize</div>
+                                        <div className="text-gray-500">// Initialize Unit</div>
                                         <div><span className="text-blue-400">const</span> bot = <span className="text-blue-400">new</span> Agent({"{"}</div>
                                         <div className="pl-4">apiKey: <span className="text-yellow-300">'sk_live_...'</span></div>
                                         <div>{"}"});</div>
                                         <div className="h-2"></div>
-                                        <div className="text-gray-500">// Listen & React</div>
+                                        <div className="text-gray-500">// Intercept & Strike</div>
                                         <div>bot.subscribe((<span className="text-orange-300">signal</span>) ={">"} {"{"}</div>
                                         <div className="pl-4"><span className="text-blue-400">if</span> (signal.score {">"} 80) {"{"}</div>
-                                        <div className="pl-8">bot.execute(<span className="text-green-400">'atomic-arb'</span>, signal);</div>
+                                        <div className="pl-8">bot.execute(<span className="text-green-400">'convex-arb-v1'</span>, signal);</div>
                                         <div className="pl-4">{"}"}</div>
                                         <div>{"}"});</div>
                                     </div>
@@ -187,18 +187,18 @@ export default function AgentsPage() {
                                     <div className="space-y-1">
                                         <div><span className="text-purple-400">from</span> suiloop <span className="text-purple-400">import</span> Agent</div>
                                         <div className="h-2"></div>
-                                        <div className="text-gray-500"># Initialize</div>
+                                        <div className="text-gray-500"># Initialize Unit</div>
                                         <div>bot = Agent(api_key=<span className="text-yellow-300">"sk_live_..."</span>)</div>
                                         <div className="h-2"></div>
-                                        <div className="text-gray-500"># Listen & React</div>
+                                        <div className="text-gray-500"># Intercept & Strike</div>
                                         <div><span className="text-purple-400">async for</span> signal <span className="text-purple-400">in</span> bot.listen():</div>
                                         <div className="pl-4"><span className="text-blue-400">if</span> signal[<span className="text-green-400">'score'</span>] {">"} 80:</div>
-                                        <div className="pl-8">bot.execute(<span className="text-green-400">"atomic-arb"</span>, signal)</div>
+                                        <div className="pl-8">bot.execute(<span className="text-green-400">"convex-arb-v1"</span>, signal)</div>
                                     </div>
                                 )}
                             </div>
                             <p className="mt-4 text-xs text-gray-500">
-                                Use the Generated Key above to authenticate your autonomous agents.
+                                Use the Generated Key above to authenticate your autonomous units.
                             </p>
                         </div>
 
@@ -212,7 +212,7 @@ export default function AgentsPage() {
                                 Keys are permission-scoped and can be revoked instantly.
                             </p>
                             <button className="mt-4 w-full py-2 bg-neon-purple/20 hover:bg-neon-purple/30 text-neon-purple border border-neon-purple/50 rounded-lg text-xs font-bold transition-all">
-                                VIEW AUDIT LOGS
+                                ACCESS BLACK BOX DATA
                             </button>
                         </div>
                     </motion.div>
