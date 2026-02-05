@@ -49,10 +49,15 @@ export default function AnalyticsPage() {
 
     // Load Data
     useEffect(() => {
-        // 1. Load Fleet
+        // 1. Load Fleet (only RUNNING strategies, same as Dashboard)
         if (account?.address) {
             const saved = localStorage.getItem(`sui-loop-fleet-${account.address}`);
-            if (saved) setActiveStrategies(JSON.parse(saved));
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // Filter out DRAFT strategies to match Dashboard count
+                const running = parsed.filter((s: any) => s.status !== 'DRAFT');
+                setActiveStrategies(running);
+            }
         } else {
             setActiveStrategies([]);
         }
