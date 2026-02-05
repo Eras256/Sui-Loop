@@ -11,7 +11,7 @@ import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Shield } from "lucide-react";
 
 function NeuralOrbSmall() {
     return (
@@ -474,19 +474,19 @@ function DashboardContent() {
                 <div className="absolute bottom-[-20%] left-[-20%] w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-[120px]"></div>
 
                 <div className="text-center space-y-6 z-10 glass-panel p-8 md:p-12 rounded-2xl max-w-md w-full border border-white/10 shadow-2xl relative">
-                    <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 relative">
-                        <div className="absolute inset-0 bg-neon-cyan/20 rounded-full animate-pulse-slow"></div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-neon-cyan relative z-10"><rect width="20" height="14" x="2" y="5" rx="2" /><line x1="2" x2="22" y1="10" y2="10" /></svg>
+                    <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 relative">
+                        <div className="absolute inset-0 bg-red-500/20 rounded-full animate-ping opacity-20"></div>
+                        <Shield className="text-gray-500" size={48} />
                     </div>
 
                     <div className="space-y-2">
-                        <h2 className="text-3xl font-bold tracking-tighter text-white">DASHBOARD LOCKED</h2>
-                        <p className="text-gray-400 text-sm font-light leading-relaxed">
-                            Secure connection required using <strong>zkLogin</strong> or <strong>Sui Wallet</strong> to view active agent strategies.
+                        <h2 className="text-3xl font-bold tracking-tighter text-white">SECURE ENCLAVE LOCKED</h2>
+                        <p className="text-gray-400 text-sm font-light leading-relaxed max-w-sm mx-auto">
+                            Encrypted fleet management. Biometric signature required via <strong>zkLogin</strong> or <strong>Sui Wallet</strong> to decrypt active strategies.
                         </p>
                     </div>
 
-                    <div className="flex justify-center pt-4 pb-2">
+                    <div className="flex justify-center pt-6 pb-2">
                         <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-8 !py-3 !rounded-lg !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !w-full !justify-center" />
                     </div>
 
@@ -540,26 +540,26 @@ function DashboardContent() {
             {/* Real-Time Analytics Bar */}
             <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 relative z-10">
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Net Worth</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Total Liquidity Assigned</h3>
                     <div className="text-xl font-mono text-white font-bold">
                         {userBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">SUI</span>
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Live Market APY</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Market Alpha (APY)</h3>
                     <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
                         {scallopData ? scallopData.supplyApy.toFixed(2) : '0.00'}%
                         <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 rounded animate-pulse">LIVE</span>
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Est. Daily Yield</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Projected Yield (24H)</h3>
                     <div className="text-xl font-mono text-white font-bold">
                         +{(userBalance * ((scallopData?.supplyApy || 0) / 100 / 365)).toFixed(4)} <span className="text-xs text-gray-500">SUI</span>
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Active Protocols</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Active Neural Nets</h3>
                     <div className="text-xl font-mono text-purple-400 font-bold">
                         {activeStrategies.length} <span className="text-xs text-gray-500">AGENTS</span>
                     </div>
@@ -577,9 +577,9 @@ function DashboardContent() {
                     {activeStrategies.length > 0 ? (
                         <div className="flex flex-col h-full">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-sm text-gray-400 uppercase tracking-widest">Live Agents View ({activeStrategies.length}/4)</h2>
-                                <button onClick={() => setActiveStrategies([])} className="text-xs text-red-400 hover:text-red-300">
-                                    EMERGENCY STOP ALL
+                                <h2 className="text-sm text-gray-400 uppercase tracking-widest">Fleet Status Monitor ({activeStrategies.length}/4)</h2>
+                                <button onClick={() => setActiveStrategies([])} className="text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-2 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-all">
+                                    KILL SWITCH (ALL)
                                 </button>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[300px]">
