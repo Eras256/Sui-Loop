@@ -7,7 +7,7 @@
     },
     "dependencies": {
         "@suiloop/sdk": "^0.1.0",
-        "navi-sdk": "^1.0.0",
+        "@naviprotocol/lending": "^1.0.0",
         "dotenv": "^16.3.1"
     },
     "devDependencies": {
