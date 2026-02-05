@@ -8,7 +8,7 @@ import { Environment } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download } from "lucide-react";
+import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database } from "lucide-react";
 import { PulsingOrb } from "./components/NeuralOrb";
 
 import Navbar from "@/components/layout/Navbar";
@@ -69,6 +69,7 @@ export default function Home() {
             "Initializing core agent...",
             "Connecting to Sui Devnet...",
             "DeepBook Liquidity: OPTIMAL",
+            "Navi Protocol: CONNECTED",
             "Scanning for arb opportunities...",
             "Calculated spread: 0.45%"
         ];
@@ -147,6 +148,35 @@ export default function Home() {
                             <Environment preset="city" />
                         </Suspense>
                     </Canvas>
+                </div>
+            </div>
+
+            {/* --- INTEGRATIONS BAR --- */}
+            <div className="w-full border-y border-white/5 bg-black/40 backdrop-blur-sm mb-20">
+                <div className="max-w-7xl mx-auto px-4 py-8">
+                    <p className="text-center text-xs font-mono text-gray-500 mb-6 tracking-[0.2em]">POWERED BY PREMIER PROTOCOLS</p>
+                    <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                        {/* Navi */}
+                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                            <Landmark className="text-neon-cyan" size={24} />
+                            <span className="text-xl font-bold text-white group-hover:text-neon-cyan transition-colors">NAVI Protocol</span>
+                        </div>
+                        {/* DeepBook */}
+                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                            <BookOpen className="text-blue-500" size={24} />
+                            <span className="text-xl font-bold text-white group-hover:text-blue-500 transition-colors">DeepBook V3</span>
+                        </div>
+                        {/* Eliza */}
+                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                            <Bot className="text-orange-500" size={24} />
+                            <span className="text-xl font-bold text-white group-hover:text-orange-500 transition-colors">ElizaOS</span>
+                        </div>
+                        {/* Cetus */}
+                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                            <Database className="text-teal-400" size={24} />
+                            <span className="text-xl font-bold text-white group-hover:text-teal-400 transition-colors">Cetus</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
