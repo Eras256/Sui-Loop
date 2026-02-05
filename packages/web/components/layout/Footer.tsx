@@ -44,7 +44,7 @@ export default function Footer() {
                     </Link>
                     <p className="text-gray-400 text-sm max-w-sm leading-relaxed mb-4">
                         The first Atomic Intelligence Protocol on Sui.
-                        Unlocking institutional-grade BTCfi strategies through autonomous ElizaOS agents and DeepBook V3 flash loans.
+                        Autonomous Financial Warfare via ElizaOS agents and DeepBook V3 flash vectors.
                     </p>
                     {/* Tech Stack Badges */}
                     <div className="flex flex-wrap gap-2">
@@ -59,10 +59,10 @@ export default function Footer() {
                 <div>
                     <h4 className="text-white font-bold mb-4 text-sm sm:text-base">Protocol</h4>
                     <ul className="space-y-2 sm:space-y-3 text-sm text-gray-400">
-                        <li><Link href="/dashboard" className="hover:text-neon-cyan transition-colors">Dashboard</Link></li>
-                        <li><Link href="/strategies" className="hover:text-neon-cyan transition-colors">Strategy Marketplace</Link></li>
-                        <li><Link href="/manifesto" className="hover:text-neon-cyan transition-colors">Manifesto</Link></li>
-                        <li><Link href="/analytics" className="hover:text-neon-cyan transition-colors">Analytics</Link></li>
+                        <li><Link href="/dashboard" className="hover:text-neon-cyan transition-colors">Enclave</Link></li>
+                        <li><Link href="/strategies" className="hover:text-neon-cyan transition-colors">Protocol Arsenal</Link></li>
+                        <li><Link href="/manifesto" className="hover:text-neon-cyan transition-colors">Thesis</Link></li>
+                        <li><Link href="/analytics" className="hover:text-neon-cyan transition-colors">Intel Ops</Link></li>
                         <li>
                             <a
                                 href="https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043"
@@ -70,7 +70,7 @@ export default function Footer() {
                                 rel="noopener noreferrer"
                                 className="hover:text-neon-cyan transition-colors flex items-center gap-1.5"
                             >
-                                Atomic Engine
+                                Kernel Source
                                 <ExternalLink size={10} className="opacity-50" />
                             </a>
                         </li>
@@ -105,7 +105,7 @@ export default function Footer() {
             {/* Bottom Bar */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 text-xs text-gray-500">
                 <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-center sm:text-left">
-                    <span>&copy; 2026 SuiLoop Protocol.</span>
+                    <span>&copy; 2026 SuiLoop Autonomous Systems.</span>
                     <span className="hidden sm:inline">•</span>
                     <a
                         href="https://t.me/Vaiosx"
@@ -113,7 +113,7 @@ export default function Footer() {
                         rel="noopener noreferrer"
                         className="text-neon-cyan hover:text-white transition-colors font-medium"
                     >
-                        Made by Vaiosx
+                        Architect: Vaiosx
                     </a>
                 </div>
                 <div className="flex flex-wrap justify-center gap-4 sm:gap-6 font-mono">
@@ -122,9 +122,9 @@ export default function Footer() {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                         </span>
-                        Operational
+                        UPLINK ESTABLISHED
                     </span>
-                    <span className="text-gray-600">v0.0.4 Mainnet Ready</span>
+                    <span className="text-gray-600">KERNEL v1.0.0 // ENCRYPTED</span>
                 </div>
             </div>
         </footer>
