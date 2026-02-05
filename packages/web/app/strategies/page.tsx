@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 const BASE_STRATEGIES = [
     {
         id: "sui-usdc-loop",
-        name: "SUI/USDC Kinetic Loop",
+        name: "SUI-USDC Kinetic Vector",
         description: "High-frequency triangular arbitrage between DeepBook, Cetus, and Turbos. Executes only when spread > 0.4%.",
         risk: "Low",
         tags: ["Stable", "Blue Chip"],
@@ -21,7 +21,7 @@ const BASE_STRATEGIES = [
     },
     {
         id: "turbo-sniper",
-        name: "Meme Volatility Sniper",
+        name: "Memetic Volatility Hunter",
         description: "Monitors creating pools for high-velocity meme tokens. Enters and exits within the same block.",
         risk: "High",
         tags: ["Degen", "High Yield"],
@@ -39,7 +39,7 @@ const BASE_STRATEGIES = [
     },
     {
         id: "eliza-sentiment",
-        name: "Eliza Sentiment Trader",
+        name: "Eliza Sentiment Engine",
         description: "AI-driven strategy that scans X/Twitter for bullish sentiment signals on SUI ecosystem tokens.",
         risk: "Medium",
         tags: ["AI Agent", "Social"],
@@ -48,7 +48,7 @@ const BASE_STRATEGIES = [
     },
     {
         id: "lending-loop-max",
-        name: "Navi/Scallop Recursion",
+        name: "Navi-Scallop Recursive Yield",
         description: "Maximizes yield by recursively borrowing and supplying SUI across Navi and Scallop protocols.",
         risk: "Medium",
         tags: ["Leverage", "Lending"],
@@ -57,7 +57,7 @@ const BASE_STRATEGIES = [
     },
     {
         id: "blue-chip-dca",
-        name: "Smart DCA Accumulator",
+        name: "Weighted DCA Accumulator",
         description: "Intelligently buys SUI dips using TWAP over 4-hour intervals. Best for long-term holding.",
         risk: "Low",
         tags: ["Savings", "Long Term"],
@@ -66,7 +66,7 @@ const BASE_STRATEGIES = [
     },
     {
         id: "stable-yield-agg",
-        name: "Stablecoin Yield Aggregator",
+        name: "Stablecoin Optimization Loop",
         description: "Auto-rotates USDC/USDT capital between Scallop, Navi, and Cetus to capture the highest lending rates.",
         risk: "Very Low",
         tags: ["Stablecoin", "Savings"],
@@ -75,8 +75,8 @@ const BASE_STRATEGIES = [
     },
     {
         id: "cetus-clmm-active",
-        name: "Cetus CLMM Active Manager",
-        description: "concentrated liquidity provision with automated range rebalancing to maximize trading fees.",
+        name: "CLMM Active Provisioner",
+        description: "Concentrated liquidity provision with automated range rebalancing to maximize trading fees.",
         risk: "High",
         tags: ["Liquidity", "High Yield"],
         color: "from-pink-500 to-rose-500",
@@ -84,7 +84,7 @@ const BASE_STRATEGIES = [
     },
     {
         id: "bluefin-delta-neutral",
-        name: "Bluefin Delta Neutral",
+        name: "Delta Neutral Funding Farmer",
         description: "Farms funding rates by longing Spot SUI and shorting Perp SUI. Market neutral strategy.",
         risk: "Low",
         tags: ["Hedging", "Complex"],
@@ -213,10 +213,10 @@ export default function StrategiesPage() {
                 {/* Header */}
                 <div className="mb-12">
                     <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4">
-                        STRATEGY <span className="text-gradient">MARKETPLACE</span>
+                        PROTOCOL <span className="text-gradient">ARSENAL</span>
                     </h1>
                     <p className="text-gray-400 max-w-2xl text-lg">
-                        Clone institutional-grade agent/kernels. Deploy them with one click to run on your own local ElizaOS runtime.
+                        Deploy autonomous kernels directly to the Sui Network. Clone institutional-grade logic for your own runtime.
                     </p>
                 </div>
 
@@ -237,13 +237,13 @@ export default function StrategiesPage() {
                                     <Cpu size={48} className="text-white opacity-90 drop-shadow-lg" />
                                 </div>
                                 <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-2 py-1 rounded text-xs font-mono border border-white/10">
-                                    v3.0.1
+                                    KERNEL v3.0.1
                                 </div>
                             </div>
 
                             <div className="flex justify-between items-start mb-2">
                                 <h3 className="text-xl font-bold tracking-tight">{strat.name}</h3>
-                                <div className={`text-xs px-2 py-1 rounded font-bold ${strat.risk === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+                                <div className={`text-xs px-2 py-1 rounded font-bold font-mono uppercase ${strat.risk === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
                                     {strat.risk} Risk
                                 </div>
                             </div>
@@ -254,27 +254,27 @@ export default function StrategiesPage() {
 
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 <div className="bg-white/5 rounded-lg p-3">
-                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Target APY</div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Alpha Coefficient</div>
                                     <div className="text-xl font-mono text-neon-cyan animate-pulse-slow">{strat.apy}</div>
                                 </div>
                                 <div className="bg-white/5 rounded-lg p-3">
-                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Vol / TVL</div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Liquidity Depth</div>
                                     <div className="text-xl font-mono text-white">{strat.tvl}</div>
                                 </div>
                             </div>
 
                             <div className="flex gap-2 mt-auto">
-                                <button className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 group-hover:bg-white/10">
-                                    <Copy size={16} /> Simulate
+                                <button className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 group-hover:bg-white/10 font-mono">
+                                    <Copy size={16} /> BACKTEST
                                 </button>
                                 <button
                                     onClick={() => handleDeploy(strat)}
                                     disabled={deployingId === strat.id}
-                                    className="flex-1 bg-neon-cyan text-black py-3 rounded-lg text-sm font-bold hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    className="flex-1 bg-neon-cyan text-black py-3 rounded-lg text-sm font-bold hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed font-mono">
                                     {deployingId === strat.id ? (
                                         <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                                     ) : (
-                                        <>Deploy <ArrowRight size={16} /></>
+                                        <>INITIALIZE <ArrowRight size={16} /></>
                                     )}
                                 </button>
                             </div>
@@ -286,8 +286,8 @@ export default function StrategiesPage() {
                         <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-2">
                             <Zap size={32} />
                         </div>
-                        <h3 className="text-xl font-bold">Build Custom Strategy</h3>
-                        <p className="text-sm max-w-xs">Use our Drag-and-Drop builder to create custom logic for the ElizaOS runtime.</p>
+                        <h3 className="text-xl font-bold font-mono tracking-tight">ARCHITECT NEW PROTOCOL</h3>
+                        <p className="text-sm max-w-xs text-gray-400">Use our Drag-and-Drop builder to create custom logic for the ElizaOS runtime.</p>
                     </Link>
                 </div>
             </div>
