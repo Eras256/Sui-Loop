@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation"; // Added
+import { useState, useEffect } from "react"; // Restored useEffect
 import {
     ArrowLeft, Book, Code, Shield, Layers, Cpu, Database, Zap,
     GitBranch, FileCode, Rocket, CheckCircle, AlertTriangle,
@@ -19,12 +20,26 @@ const tabs = [
     { id: 'contracts' as TabId, label: 'Smart Contracts', icon: Code },
     { id: 'agent' as TabId, label: 'AI Agent', icon: Cpu },
     { id: 'frontend' as TabId, label: 'Frontend', icon: Globe },
-    { id: 'api' as TabId, label: 'API Reference', icon: Terminal },
+    { id: 'api' as TabId, label: 'Agents API', icon: Terminal },
     { id: 'security' as TabId, label: 'Security', icon: Shield },
 ];
 
 export default function DocsPage() {
-    const [activeTab, setActiveTab] = useState<TabId>('overview');
+    const searchParams = useSearchParams();
+    // Default to 'overview' if no param or invalid param
+    const initialTabParam = searchParams.get('tab');
+    const isValidTab = (t: string | null): t is TabId => tabs.some(tab => tab.id === t);
+    const initialTab = isValidTab(initialTabParam) ? initialTabParam : 'overview';
+
+    const [activeTab, setActiveTab] = useState<TabId>(initialTab);
+
+    // Sync state with URL params when they change
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (isValidTab(tab)) {
+            setActiveTab(tab);
+        }
+    }, [searchParams]);
 
     return (
         <main className="min-h-screen bg-black text-white font-sans selection:bg-neon-cyan/30">
@@ -712,7 +727,7 @@ function ApiSection() {
         <div className="space-y-12">
             {/* API Key Generation Tool */}
             <section className="bg-gradient-to-br from-neon-purple/5 to-transparent border border-neon-purple/20 rounded-2xl p-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-neon-purple/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-neon-purple/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 relative z-10">
                     <Key className="text-neon-purple" />
@@ -751,9 +766,18 @@ function ApiSection() {
                         </div>
                     </div>
 
-                    <div className="relative">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-neon-purple to-neon-cyan opacity-20 blur-lg rounded-xl" />
-                        <ApiKeyManager />
+                    <div className="relative group">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-neon-purple to-neon-cyan opacity-20 blur-lg rounded-xl pointer-events-none transition-opacity group-hover:opacity-30" />
+                        <Link href="/agents" className="block relative z-20 bg-[#0A0A0A] border border-white/10 rounded-xl p-8 text-center hover:bg-white/5 transition-colors group">
+                            <div className="w-16 h-16 bg-neon-purple/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                <Terminal className="w-8 h-8 text-neon-purple" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">Launch Agent Console</h3>
+                            <p className="text-gray-400 mb-6">Generate keys, manage bots, and view live telemetry in the dedicated command center.</p>
+                            <span className="inline-flex items-center gap-2 text-neon-cyan font-bold">
+                                Open Console <img src="/icons/arrow-right.svg" className="w-4 h-4 hidden" alt="" /> →
+                            </span>
+                        </Link>
                     </div>
                 </div>
             </section>

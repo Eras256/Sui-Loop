@@ -22,21 +22,31 @@ export default function ApiKeyManager() {
     const [generatedKey, setGeneratedKey] = useState<ApiKeyData | null>(null);
     const [hasCopied, setHasCopied] = useState(false);
 
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
     const handleGenerateKey = async () => {
+        setErrorMsg(null);
+        console.log("Generating key initiated...");
+
         if (!account) {
-            toast.error("Please connect your wallet first");
+            const msg = "Please connect your wallet first using the button in the navbar.";
+            toast.error(msg);
+            setErrorMsg(msg);
             return;
         }
 
         setIsLoading(true);
         try {
+            console.log("1. Requesting signature...");
             // 1. Sign Message to Authenticate
             const message = new TextEncoder().encode(`Login to SuiLoop Agent API\nTimestamp: ${Date.now()}`);
             const { signature } = await signPersonalMessage({
                 message,
             });
+            console.log("Signature obtained:", signature);
 
             // 2. Get JWT Token
+            console.log("2. Fetching JWT token from http://localhost:3001/api/auth/token...");
             const tokenRes = await fetch('http://localhost:3001/api/auth/token', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -44,14 +54,23 @@ export default function ApiKeyManager() {
                     walletAddress: account.address,
                     signature: signature
                 })
+            }).catch(err => {
+                throw new Error(`Connection to Agent API failed: ${err.message}. Is the server running on port 3001?`);
             });
+
+            if (!tokenRes.ok) {
+                const text = await tokenRes.text();
+                throw new Error(`API Error (${tokenRes.status}): ${text}`);
+            }
 
             const tokenData = await tokenRes.json();
             if (!tokenData.success) throw new Error(tokenData.error || 'Failed to authenticate');
 
             const jwt = tokenData.token;
+            console.log("JWT obtained.");
 
             // 3. Generate API Key
+            console.log("3. Requesting API Key...");
             const keyRes = await fetch('http://localhost:3001/api/auth/keys', {
                 method: 'POST',
                 headers: {
@@ -71,12 +90,15 @@ export default function ApiKeyManager() {
             toast.success("API Key Generated Successfully!");
 
         } catch (error: any) {
-            console.error(error);
-            toast.error(error.message || "Failed to generate API Key");
+            console.error("Key Generation Error:", error);
+            const msg = error.message || "Failed to generate API Key";
+            setErrorMsg(msg);
+            toast.error(msg);
         } finally {
             setIsLoading(false);
         }
     };
+
 
     const copyToClipboard = () => {
         if (generatedKey) {
@@ -118,6 +140,15 @@ export default function ApiKeyManager() {
                             This signature is used securely to generate your unique API Key.
                         </div>
                     </div>
+
+                    {errorMsg && (
+                        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+                            <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                            <div className="text-sm text-red-200">
+                                <strong>Error:</strong> {errorMsg}
+                            </div>
+                        </div>
+                    )}
 
                     <button
                         onClick={handleGenerateKey}

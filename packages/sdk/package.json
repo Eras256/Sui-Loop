@@ -1,0 +1,31 @@
+{
+    "name": "@suiloop/sdk",
+    "version": "0.1.0",
+    "description": "Official TypeScript SDK for the SuiLoop Autonomous Agent Protocol",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc -w",
+        "test": "jest"
+    },
+    "keywords": [
+        "sui",
+        "agent",
+        "defi",
+        "sdk",
+        "suiloop"
+    ],
+    "author": "SuiLoop Protocol",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.6.0",
+        "isomorphic-ws": "^5.0.0",
+        "ws": "^8.16.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.0",
+        "@types/node": "^20.10.0",
+        "@types/ws": "^8.5.10"
+    }
+}

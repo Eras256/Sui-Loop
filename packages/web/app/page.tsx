@@ -8,7 +8,7 @@ import { Environment } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare } from "lucide-react";
+import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight } from "lucide-react";
 import { PulsingOrb } from "./components/NeuralOrb";
 
 import Navbar from "@/components/layout/Navbar";
@@ -303,6 +303,63 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- DEVELOPER TOOLS --- */}
+            <section className="py-24 px-4 bg-black/40 border-t border-white/5 relative">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16 space-y-4">
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter">BUILD ON <span className="text-gradient">SUILOOP</span></h2>
+                        <p className="text-gray-400 max-w-2xl mx-auto">
+                            Institutional-grade tooling for quant developers and data scientists.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {/* CLI */}
+                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8 hover:border-neon-cyan/30 transition-colors group">
+                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <TerminalIcon className="text-neon-cyan" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold mb-2 text-white">SuiLoop CLI</h3>
+                            <p className="text-gray-400 text-sm mb-6 h-10">Scaffold production-ready autonomous agents in seconds.</p>
+                            <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-neon-cyan flex justify-between items-center">
+                                <span>npx suiloop create</span>
+                                <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></div>
+                            </div>
+                        </div>
+
+                        {/* TS SDK */}
+                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8 hover:border-blue-500/30 transition-colors group">
+                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <Cpu className="text-blue-500" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold mb-2 text-white">TypeScript SDK</h3>
+                            <p className="text-gray-400 text-sm mb-6 h-10">Type-safe bindings for web integrations and frontend dApps.</p>
+                            <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-blue-400">
+                                npm i @suiloop/sdk
+                            </div>
+                        </div>
+
+                        {/* Python SDK */}
+                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8 hover:border-yellow-500/30 transition-colors group">
+                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <Activity className="text-yellow-500" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold mb-2 text-white">Python SDK</h3>
+                            <p className="text-gray-400 text-sm mb-6 h-10">Async client for algorithmic trading and data science.</p>
+                            <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-yellow-400">
+                                pip install suiloop
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <Link href="/agents" className="inline-flex items-center gap-2 text-neon-cyan hover:text-white transition-colors font-bold uppercase tracking-wider text-sm">
+                            Visit Developer Hub <ArrowRight className="w-4 h-4" />
+                        </Link>
                     </div>
                 </div>
             </section>

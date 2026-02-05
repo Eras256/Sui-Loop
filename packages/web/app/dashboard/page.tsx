@@ -56,7 +56,7 @@ function DashboardContent() {
                 const balance = await suiClient.getBalance({ owner: account.address });
                 setUserBalance(parseInt(balance.totalBalance) / 1_000_000_000);
             } catch (e) {
-                console.error("Failed to fetch balance:", e);
+                console.warn("Soft Error: Could not fetch SUI balance. RPC might be busy.", e);
             }
         };
 

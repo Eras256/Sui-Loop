@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { LayoutDashboard, Compass, BarChart3, FileText, Menu, X, Rocket, Zap } from "lucide-react";
+import { LayoutDashboard, Compass, BarChart3, FileText, Menu, X, Rocket, Zap, Bot } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -29,7 +29,7 @@ export default function Navbar() {
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth >= 1280) {
                 setMobileMenuOpen(false);
             }
         };
@@ -54,7 +54,9 @@ export default function Navbar() {
         { name: "Analytics", href: "/analytics", icon: BarChart3 },
         { name: "Strategies", href: "/strategies", icon: Compass },
         { name: "Builder", href: "/strategies/builder", icon: Compass },
+        { name: "Manifesto", href: "/manifesto", icon: Zap, external: false },
         { name: "Docs", href: "/docs", icon: FileText, external: false },
+        { name: "Agents API", href: "/agents", icon: Bot, external: false },
     ];
 
     const closeMobileMenu = useCallback(() => {
@@ -98,8 +100,8 @@ export default function Navbar() {
 
                     </div>
 
-                    {/* Center: Desktop Navigation - hidden on mobile/tablet */}
-                    <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-shrink-0">
+                    {/* Center: Desktop Navigation - hidden on mobile/tablet/laptop */}
+                    <div className="hidden xl:flex items-center gap-1 flex-shrink-0">
                         {navLinks.map((link) => {
                             const isActive = pathname === link.href;
                             const Icon = link.icon;
@@ -159,7 +161,7 @@ export default function Navbar() {
 
                         {/* Mobile Menu Toggle - minimum 44px touch target */}
                         <button
-                            className="lg:hidden min-w-[44px] min-h-[44px] w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors ml-1"
+                            className="xl:hidden min-w-[44px] min-h-[44px] w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors ml-1"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                             aria-expanded={mobileMenuOpen}
@@ -185,7 +187,7 @@ export default function Navbar() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+                            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 xl:hidden"
                             onClick={closeMobileMenu}
                             aria-hidden="true"
                         />
@@ -196,7 +198,7 @@ export default function Navbar() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -20, scale: 0.95 }}
                             transition={{ duration: 0.25, ease: "easeOut" }}
-                            className="fixed top-[72px] sm:top-[80px] left-3 right-3 sm:left-4 sm:right-4 z-50 p-3 sm:p-4 rounded-2xl glass-panel lg:hidden overflow-hidden max-h-[calc(100vh-100px)] overflow-y-auto"
+                            className="fixed top-[72px] sm:top-[80px] left-3 right-3 sm:left-4 sm:right-4 z-50 p-3 sm:p-4 rounded-2xl glass-panel xl:hidden overflow-hidden max-h-[calc(100vh-100px)] overflow-y-auto"
                         >
 
                             {/* Mobile Status Badge */}
