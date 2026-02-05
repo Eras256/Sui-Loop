@@ -46,15 +46,46 @@ icons = [
     (512, 'icon.png'),
 ]
 
+# Helper to create a proper ICO file
+def create_ico(png_data):
+    """
+    Create a simple ICO file containing a single PNG image.
+    ICO format:
+    - Header (6 bytes): Reserved(2) | Type(2) | Count(2)
+    - Directory (16 bytes per image): Width | Height | Colors | Reserved | Planes | BPP | Size | Offset
+    - Image Data (PNG data)
+    """
+    
+    # Header: Reserved(0), Type(1 for ICO), Count(1 image)
+    header = struct.pack('<HHH', 0, 1, 1)
+    
+    # Image content (we use the 256x256 PNG data)
+    image_data = png_data
+    image_size = len(image_data)
+    
+    # Directory Entry
+    # Width(0=256), Height(0=256), Colors(0), Res(0), Planes(1), BPP(32), Size, Offset(6+16=22)
+    directory = struct.pack('<BBBBHHII', 0, 0, 0, 0, 1, 32, image_size, 22)
+    
+    return header + directory + image_data
+
+# Generate icons
 for size, name in icons:
     data = create_rgba_png(size, size, R, G, B)
     with open(os.path.join(icons_dir, name), 'wb') as f:
         f.write(data)
     print(f'Created {name} ({size}x{size}) - {len(data)} bytes')
 
-# Copy icon.png for .icns and .ico (Tauri accepts PNG format for these)
+    # Save 256x256 version for ICO creation
+    if size == 256:
+        # Create valid ICO
+        ico_data = create_ico(data)
+        with open(os.path.join(icons_dir, 'icon.ico'), 'wb') as f:
+            f.write(ico_data)
+        print(f'Created icon.ico (valid format) - {len(ico_data)} bytes')
+
+# Copy icon.png for .icns (macOS is fine with PNG)
 import shutil
 shutil.copy(os.path.join(icons_dir, 'icon.png'), os.path.join(icons_dir, 'icon.icns'))
-shutil.copy(os.path.join(icons_dir, 'icon.png'), os.path.join(icons_dir, 'icon.ico'))
-print('Copied to icon.icns and icon.ico')
+print('Copied to icon.icns')
 print('Done!')
