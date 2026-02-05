@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation"; // Added
-import { useState, useEffect } from "react"; // Restored useEffect
+import { Suspense, useState, useEffect } from "react"; // Restored useEffect
 import {
     ArrowLeft, Book, Code, Shield, Layers, Cpu, Database, Zap,
     GitBranch, FileCode, Rocket, CheckCircle, AlertTriangle,
@@ -25,7 +25,8 @@ const tabs = [
     { id: 'security' as TabId, label: 'DEFENSE PROTOCOLS', icon: Shield },
 ];
 
-export default function DocsPage() {
+
+function DocsContent() {
     const searchParams = useSearchParams();
     // Default to 'overview' if no param or invalid param
     const initialTabParam = searchParams.get('tab');
@@ -133,6 +134,18 @@ export default function DocsPage() {
                 </div>
             </div>
         </main>
+    );
+}
+
+export default function DocsPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="animate-pulse text-neon-cyan font-mono">LOADING FIELD MANUAL...</div>
+            </div>
+        }>
+            <DocsContent />
+        </Suspense>
     );
 }
 
