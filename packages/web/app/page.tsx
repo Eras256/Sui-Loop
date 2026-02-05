@@ -105,11 +105,11 @@ export default function Home() {
                             </span>
                         </div>
                         <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">
-                            ATOMIC <br />
-                            <span className="text-gradient">LEVERAGE</span>
+                            AUTONOMOUS <br />
+                            <span className="text-gradient">TERMINAL</span>
                         </h1>
                         <p className="text-gray-400 text-base md:text-lg max-w-md mx-auto lg:mx-0">
-                            Institutional grade execution on Sui. Powered by Scallop, Cetus, DeepBook V3, and ElizaOS Agents.
+                            The operating system for DeFi on Sui. Aggregating liquidity from Navi, Scallop & DeepBook. Powered by ElizaOS Agents.
                         </p>
                     </div>
 
@@ -260,10 +260,9 @@ export default function Home() {
 
             {/* --- COMPANION APP --- */}
             <div className="w-full max-w-4xl mx-auto px-4 mb-32 relative z-20 text-center">
-                <h3 className="text-xl font-bold text-white mb-4">Companion App (Beta)</h3>
+                <h3 className="text-xl font-bold text-white mb-4">Native Desktop Terminal</h3>
                 <p className="text-gray-400 mb-8 max-w-lg mx-auto">
-                    Menubar access to your agent. Works great alongside the CLI.
-                    Monitor status, view logs, and panic stop in one click.
+                    Professional desktop environment. Native performance for high-frequency monitoring and direct process control.
                 </p>
                 <div className="flex flex-col items-center">
                     <a
