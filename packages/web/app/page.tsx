@@ -267,7 +267,7 @@ export default function Home() {
                 </p>
                 <div className="flex flex-col items-center">
                     <a
-                        href="https://github.com/Eras256/Sui-Loop/releases"
+                        href="https://github.com/Eras256/Sui-Loop/releases/latest"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group relative overflow-hidden bg-black/40 backdrop-blur-xl border border-white/10 hover:border-neon-cyan/50 text-white font-bold py-6 px-10 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(6,182,212,0.3)] transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-4 mx-auto min-w-[320px]"
@@ -278,21 +278,21 @@ export default function Home() {
                                 <Download size={24} className="text-gray-300 group-hover:text-neon-cyan transition-colors" />
                             </div>
                             <div className="text-left">
-                                <span className="block text-xs uppercase tracking-widest text-gray-500 group-hover:text-neon-cyan/80 transition-colors mb-0.5">latest release</span>
+                                <span className="block text-xs uppercase tracking-widest text-neon-cyan/80 mb-0.5">v0.1.7 Available</span>
                                 <span className="block text-lg font-bold tracking-tight">Download Companion</span>
                             </div>
                         </div>
                     </a>
 
-                    <div className="mt-6 flex items-center gap-6 text-sm text-gray-500 font-mono">
-                        <span className="flex items-center gap-2 hover:text-gray-300 transition-colors">
-                            <span className="w-1.5 h-1.5 rounded-full bg-gray-600"></span> macOS
+                    <div className="mt-6 flex items-center gap-6 text-sm text-gray-400 font-mono">
+                        <span className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span> macOS
                         </span>
-                        <span className="flex items-center gap-2 hover:text-gray-300 transition-colors">
-                            <span className="w-1.5 h-1.5 rounded-full bg-gray-600"></span> Windows
+                        <span className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span> Windows
                         </span>
-                        <span className="flex items-center gap-2 hover:text-gray-300 transition-colors">
-                            <span className="w-1.5 h-1.5 rounded-full bg-gray-600"></span> Linux
+                        <span className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span> Linux
                         </span>
                     </div>
                 </div>
