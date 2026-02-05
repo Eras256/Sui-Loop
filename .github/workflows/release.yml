@@ -51,6 +51,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          projectPath: ./packages/desktop
           tagName: ${{ github.ref_name }}
           releaseName: 'SuiLoop Companion v__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
