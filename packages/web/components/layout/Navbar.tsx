@@ -50,13 +50,13 @@ export default function Navbar() {
     }, [mobileMenuOpen]);
 
     const navLinks = [
-        { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-        { name: "Analytics", href: "/analytics", icon: BarChart3 },
-        { name: "Strategies", href: "/strategies", icon: Compass },
-        { name: "Builder", href: "/strategies/builder", icon: Compass },
-        { name: "Manifesto", href: "/manifesto", icon: Zap, external: false },
-        { name: "Docs", href: "/docs", icon: FileText, external: false },
-        { name: "Agents API", href: "/agents", icon: Bot, external: false },
+        { name: "ENCLAVE", href: "/dashboard", icon: LayoutDashboard },
+        { name: "INTEL", href: "/analytics", icon: BarChart3 },
+        { name: "ARSENAL", href: "/strategies", icon: Compass },
+        { name: "ARCHITECT", href: "/strategies/builder", icon: Compass },
+        { name: "THESIS", href: "/manifesto", icon: Zap, external: false },
+        { name: "MANUAL", href: "/docs", icon: FileText, external: false },
+        { name: "OPS UNIT", href: "/agents", icon: Bot, external: false },
     ];
 
     const closeMobileMenu = useCallback(() => {
@@ -96,8 +96,6 @@ export default function Navbar() {
                                 </span>
                             </div>
                         </Link>
-
-
                     </div>
 
                     {/* Center: Desktop Navigation - visible on laptop (lg) and up */}
@@ -139,7 +137,7 @@ export default function Navbar() {
                                 <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
                             </span>
                             <span className={`text-[10px] font-mono font-bold whitespace-nowrap ${account ? "text-green-400" : "text-gray-500"}`}>
-                                AGENT
+                                UNIT
                             </span>
                         </div>
 
@@ -154,7 +152,7 @@ export default function Navbar() {
                             className="hidden lg:flex items-center gap-1.5 bg-neon-cyan text-black px-3 py-2 rounded-full font-mono text-[10px] font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
                         >
                             <Rocket size={14} />
-                            <span className="hidden xl:inline">DEPLOY</span>
+                            <span className="hidden xl:inline">INIT VECTOR</span>
                         </Link>
 
                         {/* Mobile Menu Toggle */}
@@ -273,7 +271,7 @@ export default function Navbar() {
                                     className="min-h-[52px] p-4 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-bold border border-white/20 flex items-center justify-center gap-3 hover:opacity-90 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(0,243,255,0.3)]"
                                 >
                                     <Zap size={20} className="text-black" />
-                                    <span className="text-sm sm:text-base">DEPLOY AGENT NOW</span>
+                                    <span className="text-sm sm:text-base">INITIALIZE VECTOR</span>
                                     <Rocket size={18} className="text-black" />
                                 </Link>
                             </motion.div>
