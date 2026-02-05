@@ -309,6 +309,55 @@ export default function Home() {
                 </div>
             </div>
 
+            {/* --- DIGITAL TEAM CONCEPT --- */}
+            <section className="py-24 border-b border-white/5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-[120px] pointer-events-none"></div>
+                <div className="max-w-7xl mx-auto px-4 relative z-10">
+                    <div className="text-center mb-16">
+                        <span className="text-neon-cyan text-sm font-bold tracking-widest uppercase mb-2 block">The New Workforce</span>
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white">HIRE A <span className="text-gradient">24/7 QUANT TEAM</span></h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {/* Analyst */}
+                        <div className="glass-panel p-8 rounded-2xl border-t-4 border-neon-purple">
+                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: ANALYST</div>
+                            <h3 className="text-2xl font-bold text-white mb-4">The Observer</h3>
+                            <p className="text-gray-400 mb-6">
+                                Constantly scans Scallop lending rates and DeepBook order books. Identifies dislocations in milliseconds.
+                            </p>
+                            <div className="flex items-center gap-2 text-sm text-neon-purple bg-neon-purple/5 px-3 py-2 rounded-lg w-fit">
+                                <Activity size={16} /> Heartbeat: 400ms
+                            </div>
+                        </div>
+
+                        {/* Trader */}
+                        <div className="glass-panel p-8 rounded-2xl border-t-4 border-neon-cyan">
+                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: TRADER</div>
+                            <h3 className="text-2xl font-bold text-white mb-4">The Executioner</h3>
+                            <p className="text-gray-400 mb-6">
+                                Routes capital through the most efficient path. Borrows from Navi, swaps on Cetus, repays instantly.
+                            </p>
+                            <div className="flex items-center gap-2 text-sm text-neon-cyan bg-neon-cyan/5 px-3 py-2 rounded-lg w-fit">
+                                <Zap size={16} /> Speed: &lt;1 Block
+                            </div>
+                        </div>
+
+                        {/* Risk Manager */}
+                        <div className="glass-panel p-8 rounded-2xl border-t-4 border-green-500">
+                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: RISK MANAGER</div>
+                            <h3 className="text-2xl font-bold text-white mb-4">The Guardian</h3>
+                            <p className="text-gray-400 mb-6">
+                                Simulates every transaction before broadcasting. If profit &le; 0, the transaction never happens.
+                            </p>
+                            <div className="flex items-center gap-2 text-sm text-green-400 bg-green-400/5 px-3 py-2 rounded-lg w-fit">
+                                <Shield size={16} /> Loss: Impossible
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* --- FEATURES GRID --- */}
             <section className="max-w-7xl mx-auto px-4 py-24 relative z-10">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-purple/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
@@ -322,12 +371,12 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     {[
-                        { icon: Shield, title: "Atomic Safety", desc: "Zero-Risk execution. If a trade isn't profitable, the transaction reverts entirely. You only pay gas for successful loops.", color: "text-green-400" },
-                        { icon: Layers, title: "Multi-Protocol Liquidity", desc: "Aggregates liquidity from DeepBook V3, Cetus, and Scallop for optimal pricing.", color: "text-blue-400" },
-                        { icon: Cpu, title: "ElizaOS Intelligence", desc: "Autonomous agents that observe, reason, and act. Powered by heuristic models running 24/7.", color: "text-orange-400" },
-                        { icon: Zap, title: "Instant Flash Loans", desc: "Leverage capital you don't own. Borrow, trade, and repay in a single atomic transaction block.", color: "text-yellow-400" },
-                        { icon: TerminalIcon, title: "Fully Transparent", desc: "Every decision is logged on-chain. Verify the agent's 'thought process' and execution logic via explorer.", color: "text-gray-400" },
-                        { icon: Globe, title: "Permissionless", desc: "Deploy your own agent kernel and participate in the liquidity arbitrage optimization wars.", color: "text-neon-cyan" }
+                        { icon: Shield, title: "Zero-Slippage Execution", desc: "Atomic blocks guarantee logic executes exactly as planned, or not at all. No MEV front-running. No partial fills.", color: "text-green-400" },
+                        { icon: Layers, title: "Liquidity Aggregation", desc: "Unified access to DeepBook V3, Cetus, and Scallop. Find the best price across the entire Sui ecosystem.", color: "text-blue-400" },
+                        { icon: Cpu, title: "Autonomous Alpha", desc: "Don't just run code. Deploy digital employees. Agents analyze market sentiment and on-chain metrics 24/7.", color: "text-orange-400" },
+                        { icon: Zap, title: "Flash Capital", desc: "Access millions in liquidity from Scallop & Navi without collateral. The perfect tool for risk-free arbitrage.", color: "text-yellow-400" },
+                        { icon: TerminalIcon, title: "Full Observability", desc: "Watch your agent think in real-time. Live logs, decision trees, and profit/loss tracking on your dashboard.", color: "text-gray-400" },
+                        { icon: Globe, title: "Permissionless", desc: "Deploy your own strategy kernel. Compete in the global liquidity wars with institutional-grade tooling.", color: "text-neon-cyan" }
                     ].map((feature, i) => (
                         <div key={i} className="glass-panel p-6 rounded-xl hover:bg-white/5 transition-all group border border-white/5">
                             <div className={`w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-4 ${feature.color} group-hover:scale-110 transition-transform`}>
