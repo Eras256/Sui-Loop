@@ -18,6 +18,8 @@ jobs:
         include:
           - platform: 'ubuntu-22.04'
             args: ''
+          - platform: 'macos-latest'
+            args: '--target universal-apple-darwin'
 
     runs-on: ${{ matrix.platform }}
     
@@ -48,6 +50,8 @@ jobs:
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
@@ -73,6 +77,7 @@ jobs:
             
             ### Downloads
             - **Linux**: `.AppImage` or `.deb`
+            - **macOS**: `.dmg` (Universal Binary - Intel + Apple Silicon)
             
             See [documentation](https://github.com/Eras256/Sui-Loop) for setup instructions.
           releaseDraft: false
