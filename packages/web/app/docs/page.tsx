@@ -15,14 +15,14 @@ import ApiKeyManager from "@/components/docs/ApiKeyManager";
 type TabId = 'overview' | 'architecture' | 'contracts' | 'agent' | 'frontend' | 'api' | 'security' | 'ideas';
 
 const tabs = [
-    { id: 'overview' as TabId, label: 'Overview', icon: Book },
-    { id: 'ideas' as TabId, label: 'Build Ideas 💡', icon: Lightbulb },
-    { id: 'architecture' as TabId, label: 'Architecture', icon: Layers },
-    { id: 'contracts' as TabId, label: 'Smart Contracts', icon: Code },
-    { id: 'agent' as TabId, label: 'AI Agent', icon: Cpu },
-    { id: 'frontend' as TabId, label: 'Frontend', icon: Globe },
-    { id: 'api' as TabId, label: 'Agents API', icon: Terminal },
-    { id: 'security' as TabId, label: 'Security', icon: Shield },
+    { id: 'overview' as TabId, label: 'MISSION BRIEF', icon: Book },
+    { id: 'ideas' as TabId, label: 'TACTICAL SCENARIOS', icon: Lightbulb },
+    { id: 'architecture' as TabId, label: 'SYSTEM SCHEMATICS', icon: Layers },
+    { id: 'contracts' as TabId, label: 'ON-CHAIN KERNEL', icon: Code },
+    { id: 'agent' as TabId, label: 'AUTONOMOUS UNITS', icon: Cpu },
+    { id: 'frontend' as TabId, label: 'COMMAND INTERFACE', icon: Globe },
+    { id: 'api' as TabId, label: 'AGENTS API', icon: Terminal },
+    { id: 'security' as TabId, label: 'DEFENSE PROTOCOLS', icon: Shield },
 ];
 
 export default function DocsPage() {
@@ -67,14 +67,14 @@ export default function DocsPage() {
                                     <Book className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <h1 className="text-4xl md:text-5xl font-bold">Documentation</h1>
+                                    <h1 className="text-4xl md:text-5xl font-bold font-mono tracking-tight">DOCUMENTATION</h1>
                                     <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs font-mono rounded-full border border-green-500/30">
-                                        v0.0.5
+                                        v1.0.0
                                     </span>
                                 </div>
                             </div>
                             <p className="text-xl text-gray-400 max-w-2xl">
-                                Institutional-grade technical documentation for the SuiLoop Atomic Intelligence Protocol.
+                                Field Manual for Autonomous Financial Operations on the Sui Network.
                             </p>
                         </div>
 
