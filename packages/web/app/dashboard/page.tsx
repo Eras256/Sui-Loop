@@ -333,12 +333,12 @@ function DashboardContent() {
                                 // Add to Active Fleet State (using DB ID if available, or fallback)
                                 const strategyToAdd = newStrategy ? {
                                     id: newStrategy.id,
-                                    strategy_id: newStrategy.name, // Mapping back from DB
-                                    name: newStrategy.config?.displayName,
-                                    emoji: newStrategy.config?.emoji,
-                                    status: newStrategy.status,
-                                    yield: newStrategy.config?.yield,
-                                    tx_digest: newStrategy.config?.txDigest
+                                    strategy_id: newStrategy.name || strategyId, // Mapping back from DB
+                                    name: newStrategy.config?.displayName || currentStrategy.name,
+                                    emoji: newStrategy.config?.emoji || currentStrategy.emoji,
+                                    status: "RUNNING", // Always force RUNNING for deployed strategies
+                                    yield: newStrategy.config?.yield || "~14.2%",
+                                    tx_digest: newStrategy.config?.txDigest || result.digest
                                 } : {
                                     id: strategyId, // Fallback ID
                                     strategy_id: strategyId,
