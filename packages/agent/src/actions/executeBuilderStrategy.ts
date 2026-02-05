@@ -26,7 +26,7 @@ export const executeBuilderStrategy: Action = {
         const startNode = nodes.find((n: any) => n.id === 'start' || n.type === 'trigger');
         if (!startNode) {
             callback?.({ text: "❌ Error: No Trigger/Start node found in the flow." });
-            return false;
+            return;
         }
 
         callback?.({ text: `⚡ Trigger Activated: ${startNode.label}` });
@@ -61,6 +61,6 @@ export const executeBuilderStrategy: Action = {
         }
 
         callback?.({ text: `✅ Strategy Execution Complete.` });
-        return true;
+        return;
     }
 };
