@@ -238,9 +238,29 @@ function DashboardContent() {
         }
     }, [account]);
 
-    // NOTE: We no longer auto-save activeStrategies to LocalStorage here
-    // because it would overwrite DRAFT strategies saved by the Builder.
-    // The Builder handles its own persistence, and we only read from LocalStorage.
+    // Persist activeStrategies to LocalStorage whenever they change (after initial load)
+    useEffect(() => {
+        if (!isInitialized || !account?.address) return;
+
+        const localKey = `sui-loop-fleet-${account.address}`;
+        try {
+            // Merge with existing to preserve DRAFT strategies from Builder
+            const existing = JSON.parse(localStorage.getItem(localKey) || "[]");
+            const drafts = existing.filter((s: any) => s.status === 'DRAFT');
+
+            // activeStrategies only contains RUNNING strategies
+            // Combine DRAFTs (from builder) + RUNNING (from dashboard)
+            const combined = [...drafts, ...activeStrategies];
+
+            // Deduplicate by ID
+            const deduped = Array.from(new Map(combined.map(s => [s.id, s])).values());
+
+            localStorage.setItem(localKey, JSON.stringify(deduped));
+            console.log('[Dashboard] Synced fleet to LocalStorage:', deduped.length, 'strategies');
+        } catch (e) {
+            console.warn('[Dashboard] Failed to sync LocalStorage:', e);
+        }
+    }, [activeStrategies, isInitialized, account]);
 
     const handleDeploy = () => {
         if (!account) {
