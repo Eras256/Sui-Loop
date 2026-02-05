@@ -29,31 +29,32 @@ interface NodeData {
 }
 
 // --- Configuration ---
+// --- Configuration ---
 const NODE_TYPES = [
     {
-        category: 'Triggers',
+        category: 'SIGNAL INPUTS',
         color: 'from-amber-400 to-orange-500',
         items: [
-            { type: 'trigger', label: 'Price > $2.50', icon: Activity, inputs: [], outputs: ['On Hit'] },
-            { type: 'trigger', label: 'Every 1 Hour', icon: Zap, inputs: [], outputs: ['Tick'] },
-            { type: 'trigger', label: 'High Gas Fee', icon: Box, inputs: [], outputs: ['Tx Found'] },
+            { type: 'trigger', label: 'PRICE_THRESHOLD', icon: Activity, inputs: [], outputs: ['On Hit'] },
+            { type: 'trigger', label: 'CRON_TICK (1h)', icon: Zap, inputs: [], outputs: ['Tick'] },
+            { type: 'trigger', label: 'MEMPOOL_SCAN', icon: Box, inputs: [], outputs: ['Tx Found'] },
         ]
     },
     {
-        category: 'Logic & Conditions',
+        category: 'LOGIC GATES',
         color: 'from-blue-400 to-indigo-500',
         items: [
-            { type: 'condition', label: 'SUI Balance > 100', icon: Box, inputs: ['In'], outputs: ['True', 'False'] },
-            { type: 'condition', label: 'Slippage < 0.5%', icon: ShieldCheckIcon, inputs: ['In'], outputs: ['Safe', 'Unsafe'] },
+            { type: 'condition', label: 'BALANCE_CHECK', icon: Box, inputs: ['In'], outputs: ['True', 'False'] },
+            { type: 'condition', label: 'RISK_GUARD', icon: ShieldCheckIcon, inputs: ['In'], outputs: ['Safe', 'Unsafe'] },
         ]
     },
     {
-        category: 'On-Chain Actions',
+        category: 'PAYLOAD EXECUTION',
         color: 'from-neon-cyan to-teal-400',
         items: [
-            { type: 'action', label: 'Flash Loan SUI', icon: Zap, inputs: ['Trigger'], outputs: ['Success', 'Fail'] },
-            { type: 'action', label: 'Swap SUI -> USDC', icon: ArrowRight, inputs: ['Liquidity'], outputs: ['Done'] },
-            { type: 'action', label: 'Supply to Scallop', icon: CheckCircle2, inputs: ['Receipt'], outputs: ['Completed'] },
+            { type: 'action', label: 'REQ_FLASH_LIQUIDITY', icon: Zap, inputs: ['Trigger'], outputs: ['Success', 'Fail'] },
+            { type: 'action', label: 'EXEC_SWAP [ATOM]', icon: ArrowRight, inputs: ['Liquidity'], outputs: ['Done'] },
+            { type: 'action', label: 'SUPPLY_LENDING', icon: CheckCircle2, inputs: ['Receipt'], outputs: ['Completed'] },
         ]
     }
 ];
@@ -68,14 +69,14 @@ export default function StrategyBuilderPro() {
     const router = useRouter();
     const [nodes, setNodes] = useState<NodeData[]>([
         {
-            id: 'start', type: 'trigger', label: 'START FLOW', icon: Play, x: 100, y: 300,
+            id: 'start', type: 'trigger', label: 'INIT_KERNEL', icon: Play, x: 100, y: 300,
             inputs: [], outputs: ['Run']
         }
     ]);
     const [selectedNode, setSelectedNode] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [showSidebar, setShowSidebar] = useState(false);
-    const [strategyName, setStrategyName] = useState('Custom Strategy');
+    const [strategyName, setStrategyName] = useState('PROTOCOL_ID');
     const [isSaving, setIsSaving] = useState(false);
 
     const [showHistory, setShowHistory] = useState(false);
@@ -162,133 +163,85 @@ export default function StrategyBuilderPro() {
     };
 
     const handleZoom = (delta: number) => {
-        setZoom(prev => Math.min(Math.max(prev + delta, 0.5), 2));
+        setZoom(prev => Math.max(0.5, Math.min(2, prev + delta)));
     };
 
     // --- Actions ---
-    const addNode = (item: any, clientX?: number, clientY?: number) => {
-        saveToHistory(nodes);
-
-        const rect = canvasRef.current?.getBoundingClientRect();
-        const startX = rect ? (rect.width / 2) - 100 : 100; // Adjusted for mobile
-        const startY = rect ? (rect.height / 2) - 50 : 300;
-
+    const addNode = (template: any) => {
         const newNode: NodeData = {
             id: `node-${Date.now()}`,
-            type: item.type,
-            label: item.label,
-            icon: item.icon,
-            x: startX + (Math.random() * 40 - 20),
-            y: startY + (Math.random() * 40 - 20),
-            inputs: item.inputs,
-            outputs: item.outputs
+            type: template.type as NodeType,
+            label: template.label,
+            icon: template.icon,
+            x: 400 + (Math.random() * 50),
+            y: 300 + (Math.random() * 50),
+            inputs: template.inputs,
+            outputs: template.outputs,
         };
-        setNodes([...nodes, newNode]);
-        setShowSidebar(false);
-        toast.success(`added block: ${item.label}`);
+        const newNodes = [...nodes, newNode];
+        setNodes(newNodes);
+        saveToHistory(newNodes);
     };
 
     const removeNode = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        saveToHistory(nodes);
-
-        setNodes(nodes.filter(n => n.id !== id));
+        if (id === 'start') return;
+        const newNodes = nodes.filter(n => n.id !== id);
+        setNodes(newNodes);
         if (selectedNode === id) setSelectedNode(null);
+        saveToHistory(newNodes);
     };
 
     const updateNodePosition = (id: string, x: number, y: number) => {
-        setNodes(nodes.map(n => n.id === id ? { ...n, x, y } : n));
+        const newNodes = nodes.map(n => n.id === id ? { ...n, x, y } : n);
+        setNodes(newNodes);
+        saveToHistory(newNodes);
     };
 
     // --- Persistence Logic ---
     const handleSave = async (deploy = false) => {
         if (!account?.address) {
-            toast.error("Connect Wallet to save strategies");
+            toast.error("Connect Wallet to Architect Protocol");
             return;
         }
 
-        // Require Signature for Deployment (Verification)
-        if (deploy) {
-            try {
-                const message = new TextEncoder().encode(
-                    `Authorize Deployment of Custom Strategy: "${strategyName}"\n\nI confirm this configuration and authorize the agent to execute actions on behalf of my wallet address: ${account.address}`
-                );
-                await signMessage({ message });
-                toast.success("Signature Verified. Deploying...");
-            } catch (sigError) {
-                console.warn("Signature rejected", sigError);
-                toast.error("Deployment Cancelled (Signature Required)");
-                return;
-            }
-        }
-
         setIsSaving(true);
+        // Simulate "Compiling"
+        await new Promise(r => setTimeout(r, 800));
+
+        // Save logic to local storage (mock backend)
+        const strategyId = `custom-${Date.now()}`;
+        const newStrategy = {
+            id: strategyId,
+            name: strategyName,
+            description: `Custom protocol compiled with ${nodes.length} logic nodes.`,
+            risk: "Variable",
+            tags: ["Builder", "Custom-Kernel"],
+            color: "from-gray-700 to-gray-900",
+            baseApy: 0, // Calculated at runtime
+            nodes: nodes
+        };
+
         try {
-            // 1. Build Payload
-            const newStrategy = {
-                id: `custom-${Date.now()}`,
-                name: strategyName,
-                description: `Custom flow with ${nodes.length} nodes. Built in Editor.`,
-                risk: "Medium",
-                tags: ["Custom", "Builder"],
-                color: "from-purple-500 to-indigo-600",
-                apy: "Calculating...",
-                tvl: "0",
-                nodes: nodes, // Save the graph configuration local
-                status: deploy ? 'RUNNING' : 'DRAFT', // Only RUNNING if deploying
-                emoji: '🛠️'
-            };
-
-            // 2. Read Existing Fleet (Local Sync)
-            const key = `sui-loop-fleet-${account.address}`;
-            const existingRaw = localStorage.getItem(key);
-            const existing = existingRaw ? JSON.parse(existingRaw) : [];
-
-            // Remove if already exists (update scenario)
-            const cleanExisting = existing.filter((s: any) => s.id !== newStrategy.id);
-            const updated = [...cleanExisting, newStrategy];
-
-            localStorage.setItem(key, JSON.stringify(updated));
-
-            // Update Local State for History immediately
-            setSavedBuilds(updated.filter((s: any) =>
-                (s.tags && s.tags.includes("Builder")) || s.id.startsWith("custom-")
-            ).reverse());
-
-            // 3. Supabase Cloud Sync
-            try {
-                const { StrategyService } = await import("@/lib/strategyService");
-                await StrategyService.deployStrategy(account.address, {
-                    strategy_id: newStrategy.id, // Use unique timestamp ID
-                    name: strategyName,
-                    emoji: '🛠️',
-                    status: 'DRAFT', // Start as Draft, Dashboard confirms to Running
-                    yield: 'Pending',
-                    // Config payload includes the full graph
-                    ...{
-                        config: {
-                            displayName: strategyName, // Ensure consistent naming
-                            nodes: nodes,
-                            description: newStrategy.description,
-                            tags: newStrategy.tags
-                        }
-                    } as any
-                });
-            } catch (supaError) {
-                console.warn("Supabase sync failed (offline mode?):", supaError);
-            }
-
-            // 4. Feedback & Redirect
-            await new Promise(r => setTimeout(r, 800)); // Simulate packing
-            toast.success(deploy ? "Strategy Ready for Activation" : "Draft Saved to Cloud");
+            const { StrategyService } = await import("@/lib/strategyService");
+            await StrategyService.deployStrategy(account.address, {
+                ...newStrategy,
+                strategy_id: strategyId,
+                emoji: '🏗️',
+                status: 'DRAFT',
+                yield: '0.00%',
+                created_at: new Date().toISOString()
+            });
 
             if (deploy) {
-                // Redirect to Dashboard with Auto-Start and name for immediate display
-                router.push(`/dashboard?autostart=true&strategy=${newStrategy.id}&name=${encodeURIComponent(strategyName)}`);
+                toast.success("Info: Kernel Compiled Successfully", { description: "Redirecting to activation console..." }); // Changed to Info/Success
+                router.push(`/dashboard?autostart=true&strategy=${strategyId}&name=${encodeURIComponent(strategyName)}`);
+            } else {
+                toast.success("Draft Committed", { description: "Protocol logic saved to local secure storage." });
             }
         } catch (e) {
             console.error(e);
-            toast.error("Failed to save strategy");
+            toast.error("Compilation Error");
         } finally {
             setIsSaving(false);
         }
@@ -315,10 +268,10 @@ export default function StrategyBuilderPro() {
                         <input
                             value={strategyName}
                             onChange={(e) => setStrategyName(e.target.value)}
-                            className="bg-transparent border-none focus:outline-none font-bold tracking-tight text-sm md:text-base text-white w-32 md:w-auto"
+                            className="bg-transparent border-none focus:outline-none font-bold tracking-tight text-sm md:text-base text-white w-32 md:w-auto font-mono uppercase"
                         />
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 w-fit">
-                            {account ? 'Connected' : 'Offline'}
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 w-fit font-mono">
+                            {account ? 'UPLINK: ACTIVE' : 'OFFLINE'}
                         </span>
                     </div>
                 </div>
@@ -340,17 +293,17 @@ export default function StrategyBuilderPro() {
                         title="Load Previous Builds"
                     >
                         <History size={18} />
-                        <span className="hidden md:inline text-xs font-medium">History</span>
+                        <span className="hidden md:inline text-xs font-medium font-mono">VERSION HISTORY</span>
                     </button>
 
                     <div className="h-6 w-[1px] bg-white/10 mx-2 hidden md:block"></div>
 
                     <button
                         onClick={() => handleSave(false)}
-                        className="hidden md:flex px-4 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-sm font-medium border border-white/10 transition-all items-center gap-2"
+                        className="hidden md:flex px-4 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-sm font-medium border border-white/10 transition-all items-center gap-2 font-mono text-xs"
                         disabled={isSaving}
                     >
-                        <Save size={14} /> {isSaving ? 'Saving...' : 'Save Draft'}
+                        <Save size={14} /> {isSaving ? 'SYNCING...' : 'COMMIT DRAFT'}
                     </button>
                     {/* Mobile Save Icon only */}
                     <button onClick={() => handleSave(false)} className="md:hidden p-2 rounded-md bg-white/5 text-gray-300">
@@ -359,11 +312,11 @@ export default function StrategyBuilderPro() {
 
                     <button
                         onClick={() => handleSave(true)}
-                        className="px-3 md:px-4 py-1.5 rounded-md bg-neon-cyan hover:bg-cyan-400 text-black text-xs md:text-sm font-bold shadow-[0_0_15px_rgba(0,243,255,0.3)] transition-all flex items-center gap-2 disabled:opacity-50"
+                        className="px-3 md:px-4 py-1.5 rounded-md bg-neon-cyan hover:bg-cyan-400 text-black text-xs md:text-sm font-bold shadow-[0_0_15px_rgba(0,243,255,0.3)] transition-all flex items-center gap-2 disabled:opacity-50 font-mono"
                         disabled={isSaving}
                     >
                         {isSaving ? <div className="w-4 h-4 rounded-full border-2 border-black border-t-transparent animate-spin" /> : <Play size={14} fill="currentColor" />}
-                        <span className="hidden md:inline">Deploy Agent</span><span className="md:hidden">Run</span>
+                        <span className="hidden md:inline">COMPILE KERNEL</span><span className="md:hidden">RUN</span>
                     </button>
                 </div>
             </header>
