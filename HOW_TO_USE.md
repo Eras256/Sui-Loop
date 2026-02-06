@@ -26,6 +26,27 @@ For 24/7 autonomous operations (Cron Jobs).
 2.  **Variables**: Add `SUI_PRIVATE_KEY` and `OPENAI_API_KEY` in the Railway dashboard.
 3.  **Deploy**: The agent will auto-boot and start the Scheduler Service.
 
+## 🛠️ Command Line Interface (CLI)
+
+SuiLoop comes with a powerful CLI for management and diagnostics.
+
+```bash
+# Install Global CLI (Optional)
+npm install -g @suiloop/cli
+
+# Check Agent Health
+suiloop health
+
+# Run System Doctor (Requires API Key)
+suiloop doctor --key sk_...
+
+# View Agent Info
+suiloop info
+
+# Create New Agent
+suiloop create
+```
+
 ### Vector C: Local Execution (Dev Mode)
 ```bash
 ./install.sh
