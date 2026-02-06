@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm --filter suiloop-web dev",
+    "dev": "pnpm --parallel --filter suiloop-web --filter @suiloop/agent dev",
     "build": "pnpm --filter suiloop-web build",
     "agent:build": "pnpm --filter @suiloop/agent build",
     "contracts:build": "cd packages/contracts && sui move build",

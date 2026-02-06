@@ -50,7 +50,9 @@ export interface Subscription {
 // Stores
 const subscriptions: Map<string, Subscription> = new Map();
 const recentSignals: Signal[] = [];
+const systemLogs: any[] = []; // Buffer for system logs
 const MAX_RECENT_SIGNALS = 100;
+const MAX_RECENT_LOGS = 50;
 
 // WebSocket server reference
 let wss: WebSocketServer | null = null;
@@ -70,6 +72,13 @@ export function initializeSubscriptionServer(server: any): WebSocketServer {
             message: 'Connected to SuiLoop Signal Stream',
             timestamp: new Date().toISOString()
         }));
+
+        // Send recent logs history immediately
+        if (systemLogs.length > 0) {
+            systemLogs.forEach(logEntry => {
+                ws.send(JSON.stringify(logEntry));
+            });
+        }
 
         ws.on('message', (data) => {
             try {
@@ -383,4 +392,34 @@ export function getSubscriptionStats(): {
  */
 export function getRecentSignals(limit = 10): Signal[] {
     return recentSignals.slice(-limit);
+}
+
+/**
+ * Broadcast a system log to all connected clients
+ */
+export function broadcastLog(level: 'info' | 'warn' | 'error' | 'success', message: string, details?: any) {
+    if (!wss) return;
+
+    const logMessage = JSON.stringify({
+        type: 'system_log',
+        log: {
+            id: `log_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            timestamp: new Date().toISOString(),
+            level,
+            message,
+            details
+        }
+    });
+
+    // Store in history
+    systemLogs.push(JSON.parse(logMessage));
+    if (systemLogs.length > MAX_RECENT_LOGS) {
+        systemLogs.shift();
+    }
+
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(logMessage);
+        }
+    });
 }

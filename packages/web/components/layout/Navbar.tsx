@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { LayoutDashboard, Compass, BarChart3, FileText, Menu, X, Rocket, Zap, Bot } from "lucide-react";
+import { LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -51,12 +51,13 @@ export default function Navbar() {
 
     const navLinks = [
         { name: "ENCLAVE", href: "/dashboard", icon: LayoutDashboard },
-        { name: "INTEL", href: "/analytics", icon: BarChart3 },
-        { name: "ARSENAL", href: "/strategies", icon: Compass },
-        { name: "ARCHITECT", href: "/strategies/builder", icon: Compass },
-        { name: "THESIS", href: "/manifesto", icon: Zap, external: false },
-        { name: "MANUAL", href: "/docs", icon: FileText, external: false },
-        { name: "OPS UNIT", href: "/agents", icon: Bot, external: false },
+        { name: "INTEL", href: "/analytics", icon: BarChart2 },
+        { name: "ARSENAL", href: "/strategies", icon: Zap },
+        { name: "NEXUS", href: "/marketplace", icon: Package },
+        { name: "ARCHITECT", href: "/builder", icon: Compass },
+        { name: "THESIS", href: "/docs", icon: FileText },
+        { name: "OPS UNIT", href: "/agents", icon: Bot }, // AGREGADO
+        { name: "MANUAL", href: "/how-to-use", icon: FileText },
     ];
 
     const closeMobileMenu = useCallback(() => {
@@ -108,7 +109,6 @@ export default function Navbar() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    target={link.external ? "_blank" : undefined}
                                     className={`
                                         relative px-2 xl:px-3 py-2 rounded-full text-xs font-medium 
                                         transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap

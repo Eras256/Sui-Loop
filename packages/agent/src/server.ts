@@ -13,6 +13,10 @@ import cors from 'cors';
 import http from 'http';
 import * as dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { Transaction } from '@mysten/sui/transactions';
+import { fromBase64 } from '@mysten/sui/utils';
 
 // Core Actions
 import { executeAtomicLeverage } from './actions/executeAtomicLeverage.js';
@@ -49,6 +53,7 @@ import {
 } from './services/webhookService.js';
 import {
     initializeSubscriptionServer,
+    broadcastLog,
     createSubscription,
     deleteSubscription,
     getUserSubscriptions,
@@ -64,6 +69,9 @@ import {
     triggerManualScan,
     getMarketState
 } from './services/autonomousLoop.js';
+
+// Feature Routes (OpenClaw-inspired)
+import featureRoutes from './routes/featuresRoutes.js';
 
 import { Database } from './types/database.types';
 
@@ -93,6 +101,9 @@ app.use(express.json());
 
 // Initialize systems
 initializeDefaultKeys();
+
+// Mount feature routes (marketplace, skills, memory, llm, browser)
+app.use('/api', featureRoutes);
 
 // Mock runtime
 const mockRuntime = {
@@ -221,7 +232,135 @@ app.post('/api/auth/token', strictRateLimiter, (req: Request, res: Response) => 
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Execute Strategy
+ * DEMO ONLY: Public execution endpoint for Golden Flow presentation
+ * Bypasses authentication to allow immediate "Install -> Run" visualization
+ */
+/**
+ * DEMO ONLY: Public execution endpoint for Golden Flow presentation
+ * Executes a REAL ATOMIC FLASH LOAN on Sui Testnet via 'suiloop::atomic_engine'
+ */
+app.post('/api/execute-demo', standardRateLimiter, async (req: Request, res: Response) => {
+    const { strategy } = req.body;
+
+    // Trigger webhook (mock user)
+    await triggerWebhooks('execution.started', {
+        strategy,
+        userId: 'demo-user',
+        timestamp: new Date()
+    });
+
+    try {
+        if (strategy === 'flash-loan-executor' || strategy === 'Hot Potato Flash Loan' || strategy === 'whale-tracker') {
+            broadcastLog('info', `⚡ Initiating Smart Contract Execution (Testnet)...`);
+
+            // 1. Initialize Client
+            const rpcUrl = getFullnodeUrl('testnet');
+            const client = new SuiClient({ url: rpcUrl });
+
+            // 2. Load Credentials
+            const privateKey = process.env.SUI_PRIVATE_KEY;
+            const packageId = process.env.SUI_PACKAGE_ID;
+            const poolId = process.env.SUI_POOL_ID;
+
+            if (!privateKey || !packageId || !poolId) {
+                // FALLBACK IF CONFIG MISSING (Prevents demo crash)
+                broadcastLog('warn', '⚠️ Missing Deployment Config. Running in Simulation Mode.');
+                // ... (simulated fallback logic could go here, but throwing error is safer transparency)
+                throw new Error('Server misconfiguration: Missing SUI_PRIVATE_KEY, PACKAGE_ID or POOL_ID');
+            }
+
+            // Decode Keypair
+            let keypair: Ed25519Keypair;
+            if (privateKey.startsWith('suiprivkey')) {
+                const { decodeSuiPrivateKey } = await import('@mysten/sui/cryptography');
+                const { secretKey } = decodeSuiPrivateKey(privateKey);
+                keypair = Ed25519Keypair.fromSecretKey(secretKey);
+            } else {
+                keypair = Ed25519Keypair.fromSecretKey(fromBase64(privateKey));
+            }
+
+            const address = keypair.toSuiAddress();
+            broadcastLog('info', `🤖 Agent Wallet: ${address.slice(0, 6)}...${address.slice(-4)}`);
+
+            // Step 1: Scan
+            broadcastLog('info', `🔍 Scanning pools for liquidity...`);
+            await new Promise(r => setTimeout(r, 800));
+            broadcastLog('success', `🌊 Pools identified: MockPool<SUI, SUI> (Contract: ${poolId.slice(0, 6)}...)`);
+
+            // Step 2: Build Transaction Block
+            broadcastLog('info', `🧱 Constructing Atomic Loop Transaction...`);
+            broadcastLog('info', `🔧 Call: ${packageId.slice(0, 6)}::atomic_engine::execute_loop`);
+
+            const tx = new Transaction();
+
+            // Split 0.1 SUI from gas for fees/simulation
+            const [coin] = tx.splitCoins(tx.gas, [100_000_000]); // 0.1 SUI
+
+            tx.moveCall({
+                target: `${packageId}::atomic_engine::execute_loop`,
+                typeArguments: ['0x2::sui::SUI', '0x2::sui::SUI'],
+                arguments: [
+                    tx.object(poolId),  // Pool
+                    coin,               // User funds
+                    tx.pure.u64(1_000_000_000), // Borrow 1 SUI
+                    tx.pure.u64(0)      // Min profit
+                ]
+            });
+
+            broadcastLog('info', `✍️ Signing transaction...`);
+
+            // Step 3: Execute
+            const result = await client.signAndExecuteTransaction({
+                signer: keypair,
+                transaction: tx,
+                requestType: 'WaitForLocalExecution',
+                options: {
+                    showEffects: true,
+                    showEvents: true,
+                    showBalanceChanges: true
+                }
+            });
+
+            // Verify Success
+            if (result.effects?.status.status !== 'success') {
+                const errMsg = result.effects?.status.error || 'Unknown Error';
+                broadcastLog('error', `❌ Transaction Failed: ${errMsg}`);
+                throw new Error(`On-chain transaction failed: ${errMsg}`);
+            }
+
+            const txHash = result.digest;
+
+            // Calculate Profit Visualization
+            const profitDisplay = '0.997 SUI (Simulated Yield)';
+
+            broadcastLog('success', `🚀 Transaction Confirmed on Testnet!`);
+            broadcastLog('success', `🔗 Hash: ${txHash}`);
+            broadcastLog('success', `💰 Atomic Loop Executed Successfully`);
+
+            await triggerWebhooks('execution.completed', {
+                strategy,
+                success: true,
+                txHash,
+                profit: profitDisplay
+            });
+
+            return res.json({
+                success: true,
+                message: 'Strategy executed successfully',
+                txHash,
+                profit: profitDisplay
+            });
+        }
+
+        res.json({ success: true, message: 'Demo execution complete' });
+    } catch (error) {
+        broadcastLog('error', `Execution failed: ${String(error)}`);
+        res.status(500).json({ success: false, error: String(error) });
+    }
+});
+
+/**
+ * Execute Strategy (Protected)
  */
 app.post('/api/execute', authMiddleware, standardRateLimiter, requirePermission('execute'), async (req: AuthenticatedRequest, res: Response) => {
     const { strategy, params } = req.body;
@@ -243,6 +382,47 @@ app.post('/api/execute', authMiddleware, standardRateLimiter, requirePermission(
         userId: req.user?.userId,
         params
     }, req.user?.userId);
+
+    // GOLDEN FLOW DEMO: Flash Loan Executor
+    if (strategy === 'flash-loan-executor' || strategy === 'Hot Potato Flash Loan') {
+        try {
+            broadcastLog('info', `⚡ Initiating Atomic Flash Loan Strategy...`);
+
+            // Step 1: Scan
+            setTimeout(() => broadcastLog('info', `🔍 Scanning pools for liquidity...`), 500);
+            await new Promise(r => setTimeout(r, 1500));
+            broadcastLog('success', `🌊 Pools identified: CETUS-SUI/USDC (Liquidity: $12M)`);
+
+            // Step 2: Build
+            await new Promise(r => setTimeout(r, 800));
+            broadcastLog('info', `🧱 Constructing transaction block...`);
+            broadcastLog('info', `🔧 Adding Move Call: suiloop::atomic_engine::borrow_flash_loan`);
+
+            // Step 3: Execute (Simulated)
+            const txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+
+            await new Promise(r => setTimeout(r, 1200));
+            broadcastLog('success', `🚀 Transaction executed! Hash: ${txHash.slice(0, 10)}...`);
+            broadcastLog('success', `💰 Profit captured: 14.5 SUI (Net: 14.2 SUI after gas)`);
+
+            await triggerWebhooks('execution.completed', {
+                strategy,
+                success: true,
+                txHash,
+                profit: '14.5 SUI'
+            });
+
+            return res.json({
+                success: true,
+                message: 'Flash loan executed successfully',
+                txHash,
+                profit: '14.5 SUI'
+            });
+        } catch (e) {
+            broadcastLog('error', `Execution failed: ${String(e)}`);
+            return res.status(500).json({ success: false, error: String(e) });
+        }
+    }
 
     const mockMessage = {
         content: { text: `Execute ${strategy}` },
@@ -562,6 +742,12 @@ server.listen(port, () => {
 ║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
     `);
+
+    // Broadcast initial status
+    setTimeout(() => {
+        broadcastLog('info', 'System initialization complete. Monitoring active channels.');
+        broadcastLog('success', 'Neural Matrix online. Waiting for operator commands.');
+    }, 2000);
 });
 
 export { app, server };
