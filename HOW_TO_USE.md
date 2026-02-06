@@ -9,15 +9,13 @@ Choose your deployment vector matching your operational security level.
 ### Vector A: Docker Containment (Recommended)
 Isolates the agent environment to prevent system interference.
 ```bash
-# 1. Configure Credentials
-# Create .env and add SUI_PRIVATE_KEY and OPENAI_API_KEY
-nano .env
-
-# 2. Launch Containers
+# 1. Launch Containers
 docker-compose up -d --build
 
-# 3. Access Command Center
-# Open http://localhost:3000 in your browser
+# 2. Initialization Wizard
+# Open http://localhost:3001 in your browser.
+# The "Awakening Protocols" screen will appear.
+# Enter your OpenAI Key and Sui Private Key to auto-configure the system.
 ```
 
 ### Vector B: Cloud Deployment (Railway/Fly.io)
@@ -109,15 +107,15 @@ If using the experimental Voice UI:
 2. Speak clearly: *"Agent, check liquidity on Cetus pool and report status."*
 3. Release to send. The agent will respond with both text logs and synthesized audio.
 
-### Phase 4: Forensic Audit & Monitoring
+### Phase 4: Forensic Audit & Monitoring (Decentralized)
 1.  **View Logs**: The dashboard terminal streams real-time logs via WebSocket.
-2.  **Verify On-Chain**:
+2.  **Walrus Archiving (New)**:
+    -   Every 5 minutes, the system packages all logs and uploads them to **Walrus Decentralized Storage**.
+    -   Look for the `Logs archived to Walrus (Blob: ...)` message in the terminal.
+    -   The blob ID is your immutable proof of agent behavior.
+3.  **Verify On-Chain**:
     -   Click the **Transaction Hash** link in the logs to view on `suiscan.xyz`.
     -   Confirm the successful execution of the Programmable Transaction Block (PTB).
-3.  **Export Audit**:
-    -   For compliance, locate the `sui-audit.json` file in the agent's root directory.
-    -   This file contains cryptographic signatures of the agent's decision-making process.t executed.
-    *   This file serves as the **compliance artifact** for the session.
 
 ---
 

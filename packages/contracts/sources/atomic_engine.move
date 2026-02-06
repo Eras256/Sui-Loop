@@ -234,4 +234,38 @@ module suiloop::atomic_engine {
     public fun flash_loan_fee<Base, Quote>(pool: &MockPool<Base, Quote>): u64 {
         pool.flash_loan_fee_bps
     }
+
+    // === Formal Specifications (Move Prover) ===
+    // These specs simulate "mathematical proofs" of the contract's solvency.
+
+    spec module {
+        // verify_only is typically used to enable specs only during proving
+        pragma verify = true;
+        pragma aborts_if_is_strict = true;
+    }
+
+    spec borrow_flash_loan {
+        // Pre-condition: Pool must have enough liquidity
+        aborts_if balance::value(pool.base_balance) < borrow_amount;
+
+        // Post-condition: Pool balance decreases by borrow_amount
+        ensures balance::value(pool.base_balance) == old(balance::value(pool.base_balance)) - borrow_amount;
+        
+        // Post-condition: Receipt returned has correct values
+        ensures result_2.borrowed_amount == borrow_amount;
+        ensures result_2.pool_id == object::uid_to_address(pool.id);
+    }
+
+    spec repay_flash_loan {
+        let payment_val = coin::value(payment);
+        
+        // Pre-condition: Receipt must match pool
+        aborts_if receipt.pool_id != object::uid_to_address(pool.id);
+
+        // Pre-condition: Payment must be sufficient (Principal + Fee)
+        aborts_if payment_val < receipt.min_repay_amount;
+
+        // Post-condition: Pool balance increases by payment amount
+        ensures balance::value(pool.base_balance) == old(balance::value(pool.base_balance)) + payment_val;
+    }
 }

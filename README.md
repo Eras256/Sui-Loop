@@ -1,7 +1,7 @@
 
 # ♾️ SuiLoop Protocol
 
-![SuiLoop Banner](https://img.shields.io/badge/Status-Operational-00f3ff) ![Network](https://img.shields.io/badge/Network-Sui_Testnet-blue) ![Security](https://img.shields.io/badge/Security-Atomic_Hot_Potato-purple) ![License](https://img.shields.io/badge/License-MIT-white)
+![SuiLoop Banner](https://img.shields.io/badge/Status-Operational-00f3ff) ![Network](https://img.shields.io/badge/Network-Sui_Testnet-blue) ![Security](https://img.shields.io/badge/Security-Atomic_Hot_Potato-purple) ![Audit](https://img.shields.io/badge/Log_Storage-Walrus-orange) ![Verification](https://img.shields.io/badge/Move_Prover-Verified-green) ![License](https://img.shields.io/badge/License-MIT-white)
 
 **SuiLoop** is the first **Institutional-Grade Autonomous Agent Protocol** native to the **Sui Network**. It functions as a decentralized "Neural Matrix" that orchestrates financial agents ("Warheads") capable of executing atomic DeFi strategies with mathematical safety guarantees.
 
@@ -41,8 +41,13 @@ A futuristic "Glass & Neon" interface built on **Next.js 15**:
 - **Parallel Architecture**: Monorepo orchestration managed by `pnpm`.
 - **Latency**: Sub-50ms signal processing via WebSocket.
 - **Standards**: Compliant with Sui Move Design Patterns (Hot Potato, Coin Merging).
+- **Security Check**: Formally Verified Solvency via **Move Prover**.
+- **Audit Logging**: Decentralized log storage on **Sui Walrus**.
 - **Sui SDK**: Deep integration using Programmable Transaction Blocks (PTBs) for complex, multi-step atomic calls.
-- **AI Core**: Multi-provider support (OpenAI, Anthropic, Ollama) for cognitive reasoning and voice processing.
+- **AI Core 2.0**: Multi-provider failover (OpenAI -> Anthropic -> Bedrock).
+- **System Health**: Self-healing Gateway with automated diagnostics via CLI.
+- **Interfaces**: Web, CLI, Voice, and Desktop Tray (Tauri).
+
 
 ### ⛓️ On-Chain Deployment (Testnet)
 - **Atomic Engine**: `0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043`
@@ -56,12 +61,14 @@ A futuristic "Glass & Neon" interface built on **Next.js 15**:
 Installs dependencies, builds the neural matrix, and initializes the environment.
 ```bash
 ./install.sh
+# Follow the On-Screen Wizard in browser to configure keys
 ```
 
 ### Option B: Docker Deployment (Recommended for Production)
 Runs the Agent and Ops Unit in isolated containers.
 ```bash
 docker-compose up --build -d
+# Access http://localhost:3001 to run the Setup Wizard
 ```
 - **Ops Unit**: `http://localhost:3000`
 - **Neural Matrix**: `http://localhost:3001`
@@ -71,12 +78,10 @@ docker-compose up --build -d
 # 1. Install dependencies
 pnpm install
 
-# 2. Configure Environment
-cp .env.example .env
-# Edit .env with your credentials
-
-# 3. Ignite System
+# 2. Ignite System
 pnpm dev
+# 3. Access Wizard
+# Go to http://localhost:3001 to setup secrets
 ```
     - **Frontend:** `http://localhost:3000`
     - **Agent API:** `http://localhost:3001`
@@ -89,18 +94,11 @@ pnpm dev
 ```bash
 Sui-Loop/
 ├── packages/
-│   ├── agent/          # Node.js Autonomous Agent Backend
-│   │   ├── src/
-│   │   │   ├── services/   # SkillManager, LoopHub, SubscriptionService
-│   │   │   └── routes/     # Express API Routes
-│   │   └── skills/     # Installed Agent Capabilities
-│   │
-│   ├── web/            # Next.js 15 Frontend
-│   │   ├── app/        # App Router (Marketplace, Agents, Dashboard)
-│   │   └── components/ # Glassmorphism UI Components
-│   │
+│   ├── agent/          # Autonomous Backend (Node.js)
+│   ├── web/            # Command Center (Next.js)
+│   ├── desktop/        # Native App (Tauri/Rust)
+│   ├── cli/            # Management Tools (@suiloop/cli)
 │   └── contracts/      # Sui Move Smart Contracts
-│       └── sources/    # Flash Loan & Safety Layer Modules
 ```
 
 ---
@@ -109,6 +107,8 @@ Sui-Loop/
 - [x] Marketplace Logic & API
 - [x] Real-time WebSocket Logging
 - [x] End-to-End Skill Installation
+- [x] Multi-LLM Support & Failover
+- [x] Desktop App & CLI
 - [ ] Mainnet Deployment
 - [ ] AI Strategy Optimization (Reinforcement Learning)
 

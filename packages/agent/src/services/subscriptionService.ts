@@ -63,6 +63,11 @@ let wss: WebSocketServer | null = null;
 export function initializeSubscriptionServer(server: any): WebSocketServer {
     wss = new WebSocketServer({ server, path: '/ws/signals' });
 
+    // Start Walrus Archiving Loop
+    setInterval(() => {
+        uploadLogsToWalrus().catch(err => console.error('Walrus background task failed:', err));
+    }, LOG_UPLOAD_INTERVAL);
+
     wss.on('connection', (ws, req) => {
         console.log('🔌 New WebSocket connection');
 
@@ -393,6 +398,62 @@ export function getSubscriptionStats(): {
 export function getRecentSignals(limit = 10): Signal[] {
     return recentSignals.slice(-limit);
 }
+
+/**
+ * Broadcast a system log to all connected clients
+ */
+
+
+// ----------------------------------------------------------------------------
+// WALRUS DECENTRALIZED LOGGING
+// ----------------------------------------------------------------------------
+
+import axios from 'axios';
+
+const WALRUS_PUBLISHER = 'https://publisher.walrus-testnet.walrus.space';
+const LOG_UPLOAD_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+/**
+ * Upload collected logs to Walrus (Decentralized Storage)
+ */
+async function uploadLogsToWalrus() {
+    if (systemLogs.length === 0) return;
+
+    // Create a snapshot of logs to upload
+    const logsSnapshot = [...systemLogs];
+    const payload = JSON.stringify({
+        timestamp: new Date().toISOString(),
+        count: logsSnapshot.length,
+        logs: logsSnapshot
+    }, null, 2);
+
+    console.log(`🦭 Archiving ${logsSnapshot.length} logs to Walrus decentralized storage...`);
+
+    try {
+        // Current Walrus Testnet Publisher API (v1/store)
+        // Note: In production, this might require payment/epoch handling
+        const response = await axios.put(`${WALRUS_PUBLISHER}/v1/store?epochs=5`, payload, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.data && (response.data.newlyCreated || response.data.alreadyCertified)) {
+            const blobId = response.data.newlyCreated?.blobObject?.blobId ||
+                response.data.alreadyCertified?.blobId;
+
+            console.log(`✅ Logs successfully archived to Walrus! Blob ID: ${blobId}`);
+
+            // Broadcast this system event so the frontend knows logs are safe
+            broadcastLog('success', `Logs archived to Walrus (Blob: ${blobId?.slice(0, 10)}...)`, {
+                blobId,
+                explorerUrl: `https://walrus-testnet.walrus.site/${blobId}`
+            });
+        }
+    } catch (error: any) {
+        console.warn(`⚠️ Failed to upload logs to Walrus: ${error.message}`);
+        // We do not clear logs on failure, they remain in memory/disk fallback
+    }
+}
+
 
 /**
  * Broadcast a system log to all connected clients

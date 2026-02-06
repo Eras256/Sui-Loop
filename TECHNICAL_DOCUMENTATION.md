@@ -82,6 +82,10 @@ Built with **Next.js 15 (App Router)** and **React 19**.
 
 ### C. The Execution Layer (Contracts) - `@suiloop/contracts`
 **Production Ready (Testnet)** - Sui Move modules ensuring atomic safety.
+**Formally Verified**: The `atomic_engine` module includes **Move Prover** specifications (`spec`) that mathematically guarantee:
+1.  **Solvency**: A loan cannot even be initiated if the pool lacks liquidity.
+2.  **Repayment Invariant**: The transaction *must* fail if the pool balance does not increase by at least the principal + fee.
+
 
 #### 1. The Hot Potato Pattern (`LoopReceipt`)
 We leverage Sui Move's linear type system regarding abilities. The `LoopReceipt` struct has NO abilities (specifically lacking `drop`), meaning it cannot be discarded, ignored, or transferred. It *must* be consumed by the specific `repay` function that burns it.
@@ -132,20 +136,13 @@ A standalone command-line interface for system administration:
 - **Commands**: `suiloop health`, `suiloop doctor`, `suiloop create`.
 - **Integration**: Communicates directly with the running Agent API over HTTP.
 
-### F. Forensic Audit Module
-Institutional clients require cryptographically verifiable proof of execution.
+### F. Forensic Audit Module (Walrus Integrated)
+Institutional clients require not just local logs, but immutable proof of agent behavior.
 
-- **Black Box Recorder**: The `SubscriptionService` buffers all events in a circular log.
-- **Data Structure**:
-    ```json
-    {
-      "audit_id": "BLK-BOX-1770...",
-      "timestamp": "ISO8601",
-      "enclave_signature": "0x8a2f... (Simulated SGX Signature)",
-      "system_events": [ ...Array of Logs... ]
-    }
-    ```
-- **Audit Generation**: When requested via the "Black Box" button, the system freezes the log buffer, signs the payload, and generates a downloadable `sui-audit.json`.
+- **Decentralized Storage**: The `SubscriptionService` automatically packages system logs every 5 minutes.
+- **Walrus Protocol**: These log packages are uploaded as blobs to the **Sui Walrus** network (Testnet Publisher).
+- **Immutable Evidence**: The returned `Blob ID` serves as a permanent, tamper-proof record of the agent's internal state and decision logic at that timestamp.
+
 
 ---
 

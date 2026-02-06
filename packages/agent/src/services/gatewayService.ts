@@ -9,6 +9,8 @@
 import os from 'os';
 import axios from 'axios';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { fromB64 } from '@mysten/sui/utils';
 import { getLLMService } from './llmService';
 
 export interface SystemHealth {
@@ -172,21 +174,22 @@ export class GatewayService {
             return { provider: 'none', status: 'error', latencyMs: 0 };
         }
 
-        const provider = (llmService as any).getActiveProvider?.() || 'unknown';
+        const provider = (llmService as any).activeProvider || 'unknown';
 
         try {
-            // Check connectivity depending on provider type
-            // Simplest check: Access the base URL or perform a dummy version check
-            // For now, we assume if we can reach Google (internet check) we are likely okay,
-            // but ideally we ping the provider API status page.
-            await axios.get('https://www.google.com', { timeout: 2000 }); // Basic internet check proxy
+            // REAL CHECK: Send a minimal token request to the actual provider
+            await llmService.chat({
+                messages: [{ role: 'user', content: 'ping' }],
+                maxTokens: 1
+            });
 
             return {
                 provider,
                 status: 'connected',
                 latencyMs: Date.now() - start
             };
-        } catch {
+        } catch (error: any) {
+            console.error('LLM Check Failed:', error.message);
             return {
                 provider,
                 status: 'error',
@@ -196,14 +199,42 @@ export class GatewayService {
     }
 
     private async checkWallet(): Promise<WalletStatus> {
-        // Mock wallet check for now as we don't want to expose private key ops here unless needed
-        // Ideally reads from a WalletManager
-        const hasKey = !!process.env.SUI_PRIVATE_KEY;
-        return {
-            address: hasKey ? 'configured' : null,
-            balance: 0, // Placeholder, would need to query chain
-            hasGas: hasKey
-        };
+        const privateKey = process.env.SUI_PRIVATE_KEY;
+        if (!privateKey) {
+            return { address: null, balance: 0, hasGas: false };
+        }
+
+        try {
+            // REAL CHECK: Derive address and fetch actual balance from chain
+            // Helper to handle both suiprivkey... and raw base64
+            let keypair: Ed25519Keypair;
+            if (privateKey.startsWith('suiprivkey')) {
+                keypair = Ed25519Keypair.fromSecretKey(privateKey);
+            } else {
+                keypair = Ed25519Keypair.fromSecretKey(fromB64(privateKey));
+            }
+
+            const address = keypair.toSuiAddress();
+            const client = new SuiClient({ url: getFullnodeUrl('testnet') });
+
+            const balanceParams = { owner: address };
+            const balance = await client.getBalance(balanceParams);
+
+            const totalBalance = parseInt(balance.totalBalance);
+
+            return {
+                address,
+                balance: totalBalance,
+                hasGas: totalBalance > 50000000 // Min 0.05 SUI for safety
+            };
+        } catch (error) {
+            console.error('Wallet Check Failed:', error);
+            return {
+                address: 'error-deriving',
+                balance: 0,
+                hasGas: false
+            };
+        }
     }
 }
 
