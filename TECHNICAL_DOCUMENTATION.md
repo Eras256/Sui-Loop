@@ -45,7 +45,24 @@ The updated `LLMService` provides enterprise-grade reliability:
 - **Automatic Failover**: If the primary provider (e.g., OpenAI) times out or errors, the request is instantly routed to a fallback provider (e.g., Anthropic or Bedrock).
 - **Synthetic Mode**: A zero-cost mock provider for unit testing and CI pipelines.
 
-### 5. Deployment & Security
+### 5. Resilience & Initialization (v2.1)
+
+#### A. Gateway Doctor
+The system acts as its own immune system via `GatewayService`.
+- **Vitals**: Monitors CPU/RAM in real-time.
+- **Pulse**: Pings Sui RPC to measure latency and verify block height.
+- **Lock**: Prevents operation if Gas < 0.1 SUI or LLM API is down.
+- **Endpoints**: `/api/health` (Heartbeat) and `/api/doctor` (Deep Diagnostics).
+
+#### B. Awakening Protocol (Onboarding)
+Zero-friction setup logic implemented in `server.ts`:
+1.  **Detection**: Server boots and checks for `.env` credentials.
+2.  **Interception**: If missing, standard routes are blocked.
+3.  **Wizard**: Launches a React/HTML interface on port 3001.
+4.  **Injection**: User credentials are securely written to file system.
+5.  **Reboot**: System auto-restarts into full operational mode.
+
+### 6. Deployment & Security
 The system is designed for secure, institutional environments:
 - **Environment Isolation**: The agent runs in a distinct runtime from the frontend.
 - **Private Key Management**: Keys are stored in `.env` and never exposed to the client or logs.
@@ -104,7 +121,18 @@ The Agent constructs extensive PTBs to chain multiple actions into a single atom
     *   Contract emits `LoopExecuted` event.
 4.  `TransferObjects`: Any profit is sent to the Agent's wallet.
 
-### D. Forensic Audit Module
+### D. Native Desktop Layer - `@suiloop/desktop`
+Built with **Tauri v2** and **Rust**, enabling:
+- **System Tray**: Background persistence for the agent.
+- **Performance**: Native webview rendering with minimal RAM footprint (vs Electron).
+- **Cross-Platform**: Builds for Windows (`.msi`), macOS (`.dmg`), and Linux (`.deb`).
+
+### E. CLI Management Tool - `@suiloop/cli`
+A standalone command-line interface for system administration:
+- **Commands**: `suiloop health`, `suiloop doctor`, `suiloop create`.
+- **Integration**: Communicates directly with the running Agent API over HTTP.
+
+### F. Forensic Audit Module
 Institutional clients require cryptographically verifiable proof of execution.
 
 - **Black Box Recorder**: The `SubscriptionService` buffers all events in a circular log.
