@@ -12,6 +12,7 @@
         "test": "tsx src/run.ts"
     },
     "dependencies": {
+        "@aws-sdk/client-bedrock-runtime": "^3.984.0",
         "@cetusprotocol/cetus-sui-clmm-sdk": "^5.4.0",
         "@elizaos/core": "latest",
         "@mysten/sui": "^1.45.2",

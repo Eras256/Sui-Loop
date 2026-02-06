@@ -39,6 +39,12 @@ To ensure reliability in 24/7 operations, all heavy tasks (scans, executions) ar
 - **STT (Speech-to-Text)**: Processes OGG/WEBM audio via OpenAI Whisper.
 - **TTS (Text-to-Speech)**: Synthesizes agent responses using the `alloy` voice model.
 
+#### E. AI Core 2.0 (Multi-Model Intelligence)
+The updated `LLMService` provides enterprise-grade reliability:
+- **AWS Bedrock Support**: Native integration with Amazon Bedrock for accessing Claude 3 and Titan models securely.
+- **Automatic Failover**: If the primary provider (e.g., OpenAI) times out or errors, the request is instantly routed to a fallback provider (e.g., Anthropic or Bedrock).
+- **Synthetic Mode**: A zero-cost mock provider for unit testing and CI pipelines.
+
 ### 5. Deployment & Security
 The system is designed for secure, institutional environments:
 - **Environment Isolation**: The agent runs in a distinct runtime from the frontend.
