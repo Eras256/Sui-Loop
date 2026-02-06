@@ -18,39 +18,43 @@ Welcome to the **SuiLoop Command Center**. This guide will walk you through oper
 
 ---
 
-## 🛍️ 2. Using the Marketplace
+### 3. Deploying a "Skill" (Agent Capability)
+The **Nexus (Marketplace)** is your arsenal. Here you provision your agent with specific strategies.
 
-Expand your agent's capabilities by installing new "Skills".
+1.  Navigate to `/marketplace`.
+2.  **Select Strategy**: "Flash Loan Executor" (High Risk / High Reward).
+3.  **Install**: Click the button.
+    *   *System Action*: The Neural Matrix hot-swaps the new logic module into the running kernel without downtime.
+4.  **Verification**: The button changes to a green **RUN** indicator.
 
-1.  Navigate to the **Nexus (Marketplace)** tab in the top navigation bar, or go to `/marketplace`.
-2.  Browse available modules (e.g., *Flash Loan Executor*, *Telegram Alerts*).
-3.  Click the **Install** button on any card.
-    - A toast notification will appear: "Installation started...".
-    - Upon success, the button will change to a **Green Run Button**.
-4.  **Execute the Strategy**:
-    - Click the **Run** button directly from the card.
-    - The system will redirect you to the main terminal.
-    - You will see live "Scanning" and "Execution" logs.
-    - ⚠️ **Note**: This executes a REAL transaction on Sui Testnet. Ensure the agent wallet has gas.
+### 4. Executing an Atomic Loop (Live Fire Exercise)
+⚠️ **Warning:** The following action broadcasts a REAL transaction to the Sui Testnet.
+
+1.  Click **RUN** on the strategy card.
+2.  **Observe the Ops Terminal**:
+    *   `Scanning Pools...`: The agent checks DeepBook/Cetus (simulated liquidity in mock).
+    *   `Constructing PTB...`: The agent builds the complex atomic transaction block.
+    *   `Signing...`: The agent uses its enclave wallet to sign via Ed25519.
+3.  **Result**:
+    *   If successful, you will see a green `SUCCESS` log with a **Transaction Hash**.
+    *   **Verify**: Copy this hash and check it on [SuiScan (Testnet)](https://suiscan.xyz).
 
 ---
 
-## 🖥️ 3. Monitoring Operations (Live Terminal)
+## 🖥️ 5. Forensic Audit & Monitoring
 
-Watch your agent "think" and act in real-time.
+Transparency is paramount for institutional DeFi.
 
-1.  Navigate to the **Ops Unit** (Agents) page.
-2.  Look for the **LIVE NEURAL FEED** panel on the right side.
-3.  This terminal displays:
-    - **SYSTEM**: Connection status.
-    - **SUCCESS**: Real Transaction Hashes (e.g., `Hash: 0x3b...`).
-    - **INFO**: "Scanning pools...", "Constructing Transaction...".
+### The Live Neural Feed
+Located on the right side of the **Ops Unit** (`/agents`), this terminal provides a raw stream of the agent's "consciousness". It has memory, so scrolling up reveals past actions.
 
-### 🛡️ Black Box Audit (Forensic Mode)
-1.  In the Ops Unit page, locate the **Institutional Security** panel (bottom left).
+### Black Box Data Extraction
+1.  In **Ops Unit**, find the **Institutional Security** panel (bottom left).
 2.  Click **ACCESS BLACK BOX DATA**.
-3.  The system will decrypt and download a `sui-audit.json` file.
-4.  This file contains the **cryptographically signed proof** of all agent actions during the session.
+3.  **Decrypting Sequence**: The system will simulate an SGX enclave decryption process.
+4.  **Download**: A `sui-audit.json` file will arrive on your device.
+    *   Open this JSON to see the cryptographic proof of the loop you just executed.
+    *   This file serves as the **compliance artifact** for the session.
 
 ---
 

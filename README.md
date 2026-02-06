@@ -1,37 +1,50 @@
 
-# ♾️ SuiLoop Protocol v2.0
+# ♾️ SuiLoop Protocol
 
-![SuiLoop Banner](https://img.shields.io/badge/Status-Operational-neon_cyan) ![Version](https://img.shields.io/badge/Version-2.0.5-purple) ![License](https://img.shields.io/badge/License-MIT-white)
+![SuiLoop Banner](https://img.shields.io/badge/Status-Operational-00f3ff) ![Network](https://img.shields.io/badge/Network-Sui_Testnet-blue) ![Security](https://img.shields.io/badge/Security-Atomic_Hot_Potato-purple) ![License](https://img.shields.io/badge/License-MIT-white)
 
-**SuiLoop** is the first institutional-grade Autonomous Agent Protocol built on the **Sui Network**. It empowers users to deploy "Warhead" units—financial agents capable of executing complex DeFi strategies (like Atomic Flash Loans, Arbitrage, and Liquidity Provisioning) with sub-second latency.
+**SuiLoop** is the first **Institutional-Grade Autonomous Agent Protocol** native to the **Sui Network**. It functions as a decentralized "Neural Matrix" that orchestrates financial agents ("Warheads") capable of executing atomic DeFi strategies with mathematical safety guarantees.
 
-The system features a **Neural Matrix** backend that coordinates agent skills, marketplace installations, and real-time telemetry via WebSockets.
+Unlike traditional bots, SuiLoop utilizes **Sui Move's "Hot Potato" pattern** to enforce atomic arbitrage loops—transactions that borrow millions in flash liquidity and are mathematically incapable of failing with debt; they either profit or revert entirely.
 
 ---
 
-## 🚀 Key Features
+## 🏛️ Architecture & Capabilities
 
-### 🧠 Autonomous Agent Core (`@suiloop/agent`)
-- **Skill System**: Modular architecture allowing dynamic installation of capabilities (Flash Loans, Oracles, Telegram Alerts).
-- **Neural Matrix**: Real-time event bus and memory system utilizing WebSockets for live telemetry.
-- **Safety Layer**: Pre-transaction checks for slippage, liquidity concentration, and volatility guards.
+### 1. The Neural Matrix (Orchestrator)
+The system core (`@suiloop/agent`) is a high-frequency Node.js runtime that manages:
+- **Dynamic Skill Injection**: Load new strategies (arbitrage, liquidations, market making) without restarting the kernel.
+- **Bi-Directional Telemetry**: A real-time WebSocket pipeline broadcasting execution states, signals, and memory dumps to the operator interface.
+- **Institutional Guardrails**: Pre-execution checks for slippage protection and liquidity verification.
 
-### 🌐 Command Center (`suiloop-web`)
-- **Marketplace**: Browse and install agent skills directly from the UI.
-- **Live Ops Terminal**: Monitor agent thought processes, system logs, and execution signals in real-time.
-- **Glass & Neon UI**: A futuristic, high-performance interface built with Next.js 15 and Tailwind CSS.
+### 2. The Atomic Engine (Execution Layer)
+Our smart contracts implement the **Flash Loan pattern** using a `LoopReceipt` struct without the `drop` ability.
+- **Invariant Safety**: The receipt cannot be discarded. It MUST be returned to the `repay_flash_loan` function within the same Programmable Transaction Block (PTB).
+- **Zero-Collateral Execution**: Agents can borrow infinite liquidity (bounded only by pool depth) provided they return the principal + fee in the same atomic execution.
 
-### ⚡ Technical Highlights
-- **Parallel Execution**: Monorepo orchestrating Frontend and Agent Backend simultaneously.
-- **Hot Potato Pattern**: Native Sui Move implementations for flash loans without collateral.
-- **WebSocket Telemetry**: Bi-directional communication for zero-latency monitoring.
-- **Forensic Auditability**: Cryptographically signed execution logs downloadable as JSON "Black Box" reports.
+### 3. Forensic Black Box (Audit Module)
+Designed for compliance and post-mortem analysis:
+- **Cryptographic Logging**: Every decision, signal, and transaction is signed and stored in an immutable log.
+- **Audit Export**: Operators can extract a `sui-audit.json` file containing the full execution trace and on-chain Transaction Hashes (Digests) for independent verification.
 
-### ⛓️ Deployed Contracts (Testnet)
-SuiLoop v2.0 is live on Sui Testnet.
-- **Package ID**: `0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043`
-- **Atomic Engine**: `suiloop::atomic_engine`
-- **Mock Pool**: `0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0`
+### 4. The Ops Unit (Command Center)
+A futuristic "Glass & Neon" interface built on **Next.js 15**:
+- **Live Neural Feed**: Watch the agent "think" in real-time logs.
+- **Marketplace Nexus**: One-click deployment of new agent capabilities.
+- **Tactical Dashboard**: Monitor wallet health, active strategies, and PnL.
+
+---
+
+## ⚡ Technical Specifications
+
+- **Parallel Architecture**: Monorepo orchestration managed by `pnpm`.
+- **Latency**: Sub-50ms signal processing via WebSocket.
+- **Standards**: Compliant with Sui Move Design Patterns (Hot Potato, Coin Merging).
+- **Sui SDK**: Deep integration using Programmable Transaction Blocks (PTBs) for complex, multi-step atomic calls.
+
+### ⛓️ On-Chain Deployment (Testnet)
+- **Atomic Engine**: `0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043`
+- **Mock Liquidity Asset**: `0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0` (MockPool utilized for reliable demo execution)
 
 ---
 

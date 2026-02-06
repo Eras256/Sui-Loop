@@ -31,47 +31,78 @@ Built with **Next.js 15 (App Router)** and **React 19**.
 
 ### C. The Execution Layer (Contracts) - `@suiloop/contracts`
 **Production Ready (Testnet)** - Sui Move modules ensuring atomic safety.
-- **Hot Potato Pattern**: Implements the `LoopReceipt` struct (without `drop` ability) to mathematically guarantee loan repayment within the same transaction block.
-- **Deployed Package (Testnet)**: `0x9a2f...` (Atomic Engine).
-- **Execution Flow**:
-    1. Agent scans pools (Frontend/Backend).
-    2. Builds **Programmable Transaction Block (PTB)**.
-    3. Calls `atomic_engine::execute_loop`.
-    4. Borrows Flash Loan -> Merges Funds -> Repays -> Profit.
-    5. Returns **Hash** to UI via WebSocket.
+
+#### 1. The Hot Potato Pattern (`LoopReceipt`)
+We leverage Sui Move's linear type system regarding abilities. The `LoopReceipt` struct has NO abilities (specifically lacking `drop`), meaning it cannot be discarded, ignored, or transferred. It *must* be consumed by the specific `repay` function that burns it.
+
+```move
+// atomic_engine.move
+public struct LoopReceipt {
+    flash_loan_amount: u64,
+    pool_id: ID
+}
+
+public fun borrow_flash_loan<T>(...): (Coin<T>, LoopReceipt) {
+    // ... logic to lend coin ...
+    let receipt = LoopReceipt { flash_loan_amount: amount, pool_id: object::id(pool) };
+    (loan_coin, receipt) // The user is stuck with this receipt!
+}
+
+public fun repay_flash_loan<T>(..., receipt: LoopReceipt) {
+    let LoopReceipt { flash_loan_amount, pool_id } = receipt; // Receipt is unpacked and destroyed here
+    // ... logic to verify repayment ...
+}
+```
+
+#### 2. Programmable Transaction Blocks (PTBs)
+The Agent constructs extensive PTBs to chain multiple actions into a single atomic transaction.
+
+**Execution Flow (`/api/execute-demo`):**
+1.  `SplitCoins`: Creates a coin object for gas/fees.
+2.  `MoveCall (atomic_engine::execute_loop)`:
+    *   **Input**: `MockPool` Object, `Coin` Object.
+    *   **Arguments**: `borrow_amount` (1 SUI), `min_profit` (0).
+3.  **On-Chain Logic**:
+    *   Contract borrows 1 SUI.
+    *   Contract "executes strategy" (simulated merge).
+    *   Contract calculates repayment (Amount + Fee).
+    *   Contract repays `MockPool`.
+    *   Contract emits `LoopExecuted` event.
+4.  `TransferObjects`: Any profit is sent to the Agent's wallet.
 
 ### D. Forensic Audit Module
-Institutional clients require proof of execution.
+Institutional clients require cryptographically verifiable proof of execution.
+
 - **Black Box Recorder**: The `SubscriptionService` buffers all events in a circular log.
-- **Audit Generation**: `sui-audit.json` can be exported from the Ops Unit.
-- **Content**: Contains `audit_id`, `enclave_signature` (simulated SGX), and the full array of executed logs including Transaction Hashes.
+- **Data Structure**:
+    ```json
+    {
+      "audit_id": "BLK-BOX-1770...",
+      "timestamp": "ISO8601",
+      "enclave_signature": "0x8a2f... (Simulated SGX Signature)",
+      "system_events": [ ...Array of Logs... ]
+    }
+    ```
+- **Audit Generation**: When requested via the "Black Box" button, the system freezes the log buffer, signs the payload, and generates a downloadable `sui-audit.json`.
 
 ---
 
 ## 2. Core Workflows
 
 ### 📦 Marketplace Skill Installation
-This process allows users to extend agent capabilities without restarting the core kernel.
+This process allows users to extend agent capabilities dynamically.
 
-1.  **User Trigger:** User clicks "Install" on `http://localhost:3000/marketplace`.
-2.  **API Call:** Frontend sends `POST /api/marketplace/install/:skillId`.
-3.  **Proxy Forwarding:** Next.js forwards this to `localhost:3001`.
-4.  **Download Phase (`LoopHub`):** Backend fetches the skill source (simulated via `downloadSkill`).
-5.  **Installation Phase (`SkillManager`):**
-    - Creates functionality directory in `.suiloop/skills/`.
-    - Generates a valid `SKILL.md` manifest to prevent hydration errors.
-    - Registers the new capability in memory.
-6.  **Telemetry:**
-    - `broadcastLog` emits "Installing..." and "Success" events via WebSocket.
-    - Frontend Terminal receives and displays these logs in real-time.
+1.  **User Trigger**: "Install" on `http://localhost:3000/marketplace`.
+2.  **LoopHub Download**: Backend fetches the skill package (simulated download).
+3.  **Hot-Swapping**: The `SkillManager` injects the code into the runtime environment without restarting the Node process.
+4.  **Registration**: The new skill (e.g., `Flash Loan Executor`) registers its capabilities in the central `skillRegistry` map.
 
 ### 📡 Real-Time Telemetry System
-To provide observability, we implemented a custom logging pipeline.
+To provide observability, we implemented a custom low-latency logging pipeline via WebSockets.
 
-1.  **Emission:** Any backend service creates a log via `broadcastLog(level, message)`.
-2.  **Buffering:** The log is pushed to a circular buffer (`systemLogs`) in memory (last 50 events).
-3.  **Broadcasting:** The log is JSON-serialized and sent to all connected WebSocket clients on `/ws/signals`.
-4.  **Reconnection:** When a new client connects, they immediately receive the contents of the `systemLogs` buffer to ensure context is not lost.
+1.  **Emission**: `broadcastLog(level, message)`.
+2.  **Broadcasting**: JSON-serialized payloads sent to `/ws/signals`.
+3.  **Frontend Ingestion**: The `ActiveAgents` component maintains a rolling buffer of logs, rendering them with syntax highlighting in the "Live Neural Feed".
 
 ---
 
@@ -79,32 +110,21 @@ To provide observability, we implemented a custom logging pipeline.
 
 ### REST Endpoints
 - `GET /api/marketplace/featured`: Returns list of featured skills.
-- `GET /api/marketplace/installed`: Returns installed skills with active status.
-- `POST /api/marketplace/install/:id`: Triggers installation process.
-- `POST /api/execute-demo`: **(NEW)** Executes real On-Chain Atomic Loop on Testnet.
-- `GET /api/health`: System health check.
-
-### WebSocket Events (`ws://host/ws/signals`)
-- **Incoming (Client -> Server):**
-    - `{ type: "subscribe", ... }`: Subscribe to specific trading signals.
-- **Outgoing (Server -> Client):**
-    - `{ type: "system_log", log: { level, message, timestamp } }`: Operational logs.
-    - `{ type: "signal", signal: { ... } }`: Trading opportunities.
-    - `{ type: "welcome" }`: Connection confirmation.
+- `POST /api/marketplace/install/:id`: Triggers hot-swap installation.
+- `POST /api/execute-demo`: **(Critical)** Executes the real On-Chain Atomic Loop.
+- `GET /api/health`: System heartbeat.
 
 ---
 
 ## 4. Development Environment
 
-The project uses a unified start script to ensure synchronization:
-
-```json
-"scripts": {
-  "dev": "pnpm --parallel --filter suiloop-web --filter @suiloop/agent dev"
-}
+**Start Command:**
+```bash
+pnpm dev
+# Runs: "concurrently \"next dev\" \"tsx src/server.ts\""
 ```
 
-- **Frontend** runs via `next dev`.
-- **Backend** runs via `tsx src/server.ts` (handling TypeScript execution on the fly).
-- **Desktop App** is currently excluded from the main dev loop to prevent port conflicts (Port 1420).
+- **Frontend**: Next.js 15 (Port 3000)
+- **Backend**: Express + TypeScript (Port 3001)
+
 
