@@ -42,18 +42,43 @@ The **Nexus (Marketplace)** is your arsenal. Here you provision your agent with 
 ---
 
 ## 🖥️ 5. Forensic Audit & Monitoring
-
 Transparency is paramount for institutional DeFi.
 
 ### The Live Neural Feed
 Located on the right side of the **Ops Unit** (`/agents`), this terminal provides a raw stream of the agent's "consciousness". It has memory, so scrolling up reveals past actions.
 
-### Black Box Data Extraction
-1.  In **Ops Unit**, find the **Institutional Security** panel (bottom left).
-2.  Click **ACCESS BLACK BOX DATA**.
-3.  **Decrypting Sequence**: The system will simulate an SGX enclave decryption process.
-4.  **Download**: A `sui-audit.json` file will arrive on your device.
-    *   Open this JSON to see the cryptographic proof of the loop you just executed.
+### Phase 3: Autonomous Operations (v2.1)
+
+#### 1. Scheduling Recurring Tasks (Cron)
+Enable 24/7 operation by scheduling a strategy:
+```bash
+# Example: Create a job via API to run Flash Loan every 5 minutes
+curl -X POST http://localhost:3001/api/jobs \
+  -H "Authorization: Bearer <YOUR_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Auto-Flash-Loan",
+    "cronExpression": "0/5 * * * *", 
+    "taskType": "skill_execution",
+    "payload": { "skillId": "flash-loan-executor" }
+  }'
+```
+*Result: The agent will wake up every 5 minutes, scan the mempool, and execute if profitable.*
+
+#### 2. Voice Command Interface
+If using the experimental Voice UI:
+1. Hold the **Mic Button** on the dashboard.
+2. Speak clearly: *"Agent, check liquidity on Cetus pool and report status."*
+3. Release to send. The agent will respond with both text logs and synthesized audio.
+
+### Phase 4: Forensic Audit & Monitoring
+1.  **View Logs**: The dashboard terminal streams real-time logs via WebSocket.
+2.  **Verify On-Chain**:
+    -   Click the **Transaction Hash** link in the logs to view on `suiscan.xyz`.
+    -   Confirm the successful execution of the Programmable Transaction Block (PTB).
+3.  **Export Audit**:
+    -   For compliance, locate the `sui-audit.json` file in the agent's root directory.
+    -   This file contains cryptographic signatures of the agent's decision-making process.t executed.
     *   This file serves as the **compliance artifact** for the session.
 
 ---

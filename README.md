@@ -14,8 +14,9 @@ Unlike traditional bots, SuiLoop utilizes **Sui Move's "Hot Potato" pattern** to
 ### 1. The Neural Matrix (Orchestrator)
 The system core (`@suiloop/agent`) is a high-frequency Node.js runtime that manages:
 - **Dynamic Skill Injection**: Load new strategies (arbitrage, liquidations, market making) without restarting the kernel.
-- **Bi-Directional Telemetry**: A real-time WebSocket pipeline broadcasting execution states, signals, and memory dumps to the operator interface.
-- **Institutional Guardrails**: Pre-execution checks for slippage protection and liquidity verification.
+- **Bi-Directional Telemetry**: A real-time WebSocket pipeline broadcasting execution states to the operator.
+- **24/7 Autonomous Scheduler**: Built-in Cron engine enables the agent to wake up, execute strategies, and sleep based on precise time intervals, removing the need for human triggering.
+- **Multimodal Interface (Voice)**: Integrated STT/TTS modules allow operators to issue verbal commands and receive audio status reports, enabling hands-free mission control.
 
 ### 2. The Atomic Engine (Execution Layer)
 Our smart contracts implement the **Flash Loan pattern** using a `LoopReceipt` struct without the `drop` ability.
@@ -41,6 +42,7 @@ A futuristic "Glass & Neon" interface built on **Next.js 15**:
 - **Latency**: Sub-50ms signal processing via WebSocket.
 - **Standards**: Compliant with Sui Move Design Patterns (Hot Potato, Coin Merging).
 - **Sui SDK**: Deep integration using Programmable Transaction Blocks (PTBs) for complex, multi-step atomic calls.
+- **AI Core**: Multi-provider support (OpenAI, Anthropic, Ollama) for cognitive reasoning and voice processing.
 
 ### ⛓️ On-Chain Deployment (Testnet)
 - **Atomic Engine**: `0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043`

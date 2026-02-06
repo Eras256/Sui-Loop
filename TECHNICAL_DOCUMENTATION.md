@@ -17,6 +17,29 @@ Running on **Express** and **Node.js**, this is the brain of the operation.
     - `SubscriptionService`: Manages WebSocket connections (`/ws/signals`) and broadcasts system logs (`broadcastLog`) and trading signals.
     - `MemoryService`: Short-term and long-term memory for agent context.
 
+### 4. Autonomous & Multimodal Core
+SuiLoop v2.1 introduces full autonomy capabilities, moving beyond simple reactive execution.
+
+#### A. Scheduler Service (Cron Automation)
+- **Persistence**: Jobs are serialized to `.suiloop/data/jobs.json`, surviving agent restarts.
+- **Precision**: Uses `node-cron` for exact timing (e.g., "Run Flash Loan scan every 30 seconds" -> `*/30 * * * * *`).
+- **Integration**: Directly invokes `SkillManager` to execute strategies without HTTP overhead.
+
+#### B. Voice Service (Multimodal Interface)
+- **STT (Speech-to-Text)**: Processes OGG/WEBM audio via OpenAI Whisper model to transcribe voice commands.
+- **TTS (Text-to-Speech)**: Synthesizes agent responses using the `alloy` voice model for audio feedback.
+- **Workflow**:
+  1. Frontend captures Mic audio -> `POST /api/voice/transcribe`
+  2. Agent processes command -> LLM Decision
+  3. Agent Executes -> Generates Text Response
+  4. Agent converts Text -> Audio -> `POST /api/voice/speak`
+
+### 5. Deployment & Security
+The system is designed for secure, institutional environments:
+- **Environment Isolation**: The agent runs in a distinct runtime from the frontend.
+- **Private Key Management**: Keys are stored in `.env` and never exposed to the client or logs.
+- **Simulated Enclave**: All high-consequence actions are signed and logged to an immutable local ledger (`sui-audit.json`).
+
 ### B. The Command Center (Frontend) - `suiloop-web`
 Built with **Next.js 15 (App Router)** and **React 19**.
 - **Port:** 3000

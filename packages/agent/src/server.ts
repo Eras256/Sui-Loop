@@ -102,6 +102,13 @@ app.use(express.json());
 // Initialize systems
 initializeDefaultKeys();
 
+// Initialize Autonomous Services (SuiLoop v2.1)
+import { initializeSchedulerService } from './services/schedulerService.js';
+import { initializeVoiceService } from './services/voiceService.js';
+
+initializeSchedulerService();
+initializeVoiceService();
+
 // Mount feature routes (marketplace, skills, memory, llm, browser)
 app.use('/api', featureRoutes);
 
@@ -673,6 +680,97 @@ app.post('/api/loop/scan', authMiddleware, standardRateLimiter, requirePermissio
  */
 app.get('/api/market', authMiddleware, (req: AuthenticatedRequest, res: Response) => {
     res.json({ success: true, market: getMarketState() });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SCHEDULER ENDPOINTS (CRON JOBS)
+// ═══════════════════════════════════════════════════════════════════════════
+
+import { getSchedulerService } from './services/schedulerService.js';
+import { getVoiceService } from './services/voiceService.js';
+
+/**
+ * List Jobs
+ */
+app.get('/api/jobs', authMiddleware, (req: AuthenticatedRequest, res: Response) => {
+    const scheduler = getSchedulerService();
+    if (!scheduler) return res.status(503).json({ success: false, error: 'Scheduler not initialized' });
+
+    res.json({ success: true, jobs: scheduler.getAllJobs() });
+});
+
+/**
+ * Create Job
+ */
+app.post('/api/jobs', authMiddleware, strictRateLimiter, requirePermission('execute'), async (req: AuthenticatedRequest, res: Response) => {
+    const scheduler = getSchedulerService();
+    if (!scheduler) return res.status(503).json({ success: false, error: 'Scheduler not initialized' });
+
+    const { name, cronExpression, taskType, payload } = req.body;
+
+    try {
+        const job = await scheduler.createJob(name, cronExpression, taskType, payload);
+        res.json({ success: true, job });
+    } catch (error: any) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+/**
+ * Delete Job
+ */
+app.delete('/api/jobs/:id', authMiddleware, requirePermission('execute'), async (req: AuthenticatedRequest, res: Response) => {
+    const scheduler = getSchedulerService();
+    if (!scheduler) return res.status(503).json({ success: false, error: 'Scheduler not initialized' });
+
+    await scheduler.deleteJob(req.params.id as string);
+    res.json({ success: true });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// VOICE / MULTIMODAL ENDPOINTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+import multer from 'multer';
+const upload = multer({ storage: multer.memoryStorage() });
+
+/**
+ * Transcribe Audio (STT)
+ */
+app.post('/api/voice/transcribe', authMiddleware, upload.single('audio'), async (req: AuthenticatedRequest, res: Response) => {
+    const voice = getVoiceService();
+    if (!voice) return res.status(503).json({ success: false, error: 'Voice service not initialized' });
+
+    // Cast req to include Multer file
+    const file = (req as any).file;
+    if (!file) {
+        return res.status(400).json({ success: false, error: 'No audio file provided' });
+    }
+
+    try {
+        const text = await voice.transcribeAudio(file.buffer);
+        res.json({ success: true, text });
+    } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+/**
+ * Synthesize Speech (TTS)
+ */
+app.post('/api/voice/speak', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+    const voice = getVoiceService();
+    if (!voice) return res.status(503).json({ success: false, error: 'Voice service not initialized' });
+
+    const { text } = req.body;
+
+    try {
+        const buffer = await voice.synthesizeSpeech(text);
+        res.set('Content-Type', 'audio/mpeg');
+        res.send(buffer);
+    } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
+    }
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
