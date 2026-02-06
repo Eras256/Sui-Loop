@@ -54,7 +54,7 @@ export default function Navbar() {
         { name: "INTEL", href: "/analytics", icon: BarChart2 },
         { name: "ARSENAL", href: "/strategies", icon: Zap },
         { name: "NEXUS", href: "/marketplace", icon: Package },
-        { name: "ARCHITECT", href: "/builder", icon: Compass },
+        { name: "ARCHITECT", href: "/strategies/builder", icon: Compass },
         { name: "THESIS", href: "/docs", icon: FileText },
         { name: "OPS UNIT", href: "/agents", icon: Bot }, // AGREGADO
         { name: "MANUAL", href: "/how-to-use", icon: FileText },

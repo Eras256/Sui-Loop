@@ -122,6 +122,13 @@ export default function ManifestoPage() {
                                         <span className="text-gray-500 text-sm">Combat-tested safety rails. Pre-built risk guards so your agent operates with institutional certainty.</span>
                                     </div>
                                 </li>
+                                <li className="flex items-start gap-3">
+                                    <Database className="text-pink-500 mt-1" />
+                                    <div>
+                                        <strong className="text-white block">Walrus Memory</strong>
+                                        <span className="text-gray-500 text-sm">Decentralized forensic logging. Every agent decision is immutable and auditable on Walrus.</span>
+                                    </div>
+                                </li>
                             </ul>
 
                             <Link href="/agents" className="inline-flex items-center gap-2 bg-white text-black font-bold px-8 py-4 rounded-full hover:bg-neon-cyan transition-colors font-mono uppercase tracking-tight">

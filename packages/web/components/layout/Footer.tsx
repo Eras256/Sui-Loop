@@ -52,6 +52,8 @@ export default function Footer() {
                         <span className="px-2 py-1 text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-full">Cetus</span>
                         <span className="px-2 py-1 text-[10px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full">ElizaOS</span>
                         <span className="px-2 py-1 text-[10px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full">DeepBook V3</span>
+                        <span className="px-2 py-1 text-[10px] font-mono bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full">Walrus Storage</span>
+                        <span className="px-2 py-1 text-[10px] font-mono bg-green-500/10 text-green-400 border border-green-500/20 rounded-full">Move Verified</span>
                     </div>
                 </div>
 
@@ -62,6 +64,8 @@ export default function Footer() {
                         <li><Link href="/dashboard" className="hover:text-neon-cyan transition-colors">Enclave</Link></li>
                         <li><Link href="/strategies" className="hover:text-neon-cyan transition-colors">Protocol Arsenal</Link></li>
                         <li><Link href="/manifesto" className="hover:text-neon-cyan transition-colors">Thesis</Link></li>
+                        <li><Link href="/how-to-use" className="hover:text-neon-cyan transition-colors">Operations Manual</Link></li>
+                        <li><Link href="/strategies/builder" className="hover:text-neon-cyan transition-colors">Architect (Builder)</Link></li>
                         <li><Link href="/analytics" className="hover:text-neon-cyan transition-colors">Intel Ops</Link></li>
                         <li>
                             <a

@@ -8,7 +8,7 @@ import { Environment } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database } from "lucide-react";
+import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database, HardDrive, FileCheck } from "lucide-react";
 import { PulsingOrb } from "./components/NeuralOrb";
 
 import Navbar from "@/components/layout/Navbar";
@@ -96,21 +96,21 @@ export default function Home() {
                 <div className="flex flex-col justify-center space-y-6 md:space-y-8 z-10 order-2 lg:order-1">
                     <div className="space-y-4 text-center lg:text-left z-20 relative">
                         {/* Mainnet Ready Badge */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/30 rounded-full mb-4 mx-auto lg:mx-0 w-fit">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-neon-cyan/10 border border-neon-cyan/30 rounded-full mb-4 mx-auto lg:mx-0 w-fit">
                             <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan"></span>
                             </span>
-                            <span className="text-[10px] uppercase tracking-wider font-bold text-green-500 whitespace-nowrap">
-                                MAINNET READY
+                            <span className="text-[10px] uppercase tracking-wider font-bold text-neon-cyan whitespace-nowrap">
+                                MAINNET READY: NEURAL MATRIX
                             </span>
                         </div>
                         <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">
-                            AUTONOMOUS <br />
-                            <span className="text-gradient">TERMINAL</span>
+                            INSTITUTIONAL <br />
+                            <span className="text-gradient">AI PROTOCOL</span>
                         </h1>
                         <p className="text-gray-400 text-base md:text-lg max-w-md mx-auto lg:mx-0">
-                            The operating system for DeFi on Sui. Aggregating liquidity from Navi, Scallop & DeepBook. Powered by ElizaOS Agents.
+                            SuiLoop is a decentralized <strong>Neural Matrix</strong>. It orchestrates financial agents capable of executing atomic DeFi strategies with mathematical safety guarantees.
                         </p>
                     </div>
 
@@ -152,7 +152,7 @@ export default function Home() {
             </div>
 
             {/* --- INTEGRATIONS BAR --- */}
-            <div className="w-full border-y border-white/5 bg-black/40 backdrop-blur-sm mb-20">
+            <div className="w-full border-y border-white/5 bg-black/40 backdrop-blur-sm mb-32 section-lift">
                 <div className="max-w-7xl mx-auto px-4 py-8">
                     <p className="text-center text-xs font-mono text-gray-500 mb-6 tracking-[0.2em]">POWERED BY PREMIER PROTOCOLS</p>
                     <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
@@ -176,12 +176,17 @@ export default function Home() {
                             <Database className="text-teal-400" size={24} />
                             <span className="text-xl font-bold text-white group-hover:text-teal-400 transition-colors">Cetus</span>
                         </div>
+                        {/* Walrus */}
+                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                            <HardDrive className="text-pink-500" size={24} />
+                            <span className="text-xl font-bold text-white group-hover:text-pink-500 transition-colors">Walrus</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* --- AUDIENCE SPLITTER --- */}
-            <div className="w-full max-w-7xl mx-auto px-4 -mt-20 mb-20 relative z-20">
+            <div className="w-full max-w-7xl mx-auto px-4 mb-32 relative z-20 section-lift">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* For Humans */}
                     <Link href="/dashboard" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[200px] hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] cursor-pointer">
@@ -224,10 +229,10 @@ export default function Home() {
             </div>
 
             {/* --- QUICK START (TERMINAL) --- */}
-            <div className="w-full max-w-4xl mx-auto px-4 mb-24 relative z-20">
+            <div className="w-full max-w-4xl mx-auto px-4 mb-32 relative z-20 section-lift">
                 <div className="flex items-center gap-3 mb-6">
                     <ChevronRight className="text-neon-cyan" size={24} />
-                    <h2 className="text-2xl font-bold text-white tracking-tight">Quick Start</h2>
+                    <h2 className="text-2xl font-bold text-white tracking-tight">Quick Start (One-Liner)</h2>
                 </div>
 
                 <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-1 overflow-hidden shadow-2xl relative">
@@ -238,45 +243,32 @@ export default function Home() {
                             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                             <div className="w-3 h-3 rounded-full bg-green-500/80" />
                         </div>
-                        <div className="flex bg-black/50 rounded-lg p-1 text-xs font-mono">
-                            {['npm', 'pnpm', 'yarn'].map((pm) => (
-                                <button
-                                    key={pm}
-                                    onClick={() => setPkgManager(pm)}
-                                    className={`px-3 py-1 rounded transition-colors ${pkgManager === pm
-                                        ? "bg-white/10 text-neon-cyan"
-                                        : "text-gray-500 hover:text-white"
-                                        }`}
-                                >
-                                    {pm}
-                                </button>
-                            ))}
+                        <div className="flex bg-black/50 rounded-lg p-1 text-xs font-mono text-gray-400 px-3">
+                            bash — 80x24
                         </div>
                     </div>
 
                     {/* Terminal Content */}
                     <div className="p-6 md:p-8 font-mono relative group">
-                        <div className="text-gray-500 select-none mb-4 font-mono text-sm"># Install the CLI and scaffold a new agent</div>
-                        <div className="flex items-center gap-3 text-lg md:text-xl font-mono overflow-x-auto">
-                            <span className="text-neon-purple select-none">$</span>
-                            <span className="text-white">
-                                {pkgManager === 'npm' ? 'npx' : pkgManager === 'pnpm' ? 'pnpm dlx' : 'yarn dlx'}
-                            </span>
-                            <span className="text-neon-cyan">suiloop create</span>
-                            <span className="text-green-400">my-agent</span>
+                        <div className="text-gray-500 select-none mb-4 font-mono text-sm"># Initialize the Neural Matrix (Linux/Mac)</div>
+                        <div className="flex flex-col gap-2 text-lg md:text-xl font-mono overflow-x-auto">
+                            <div className="flex items-center gap-3">
+                                <span className="text-neon-purple select-none">$</span>
+                                <span className="text-white">./install.sh</span>
+                            </div>
+                            <div className="text-base text-gray-500 mt-2">
+                                [SYSTEM] <span className="text-green-400">Verifying Dependencies... OK</span><br />
+                                [SYSTEM] <span className="text-green-400">Igniting Neural Core... OK</span><br />
+                                <span className="text-neon-cyan blink">? Select Personality: {">"} [Arbitrage_V1]</span>
+                            </div>
                         </div>
 
                         <button
                             onClick={() => {
-                                const cmd = pkgManager === 'npm'
-                                    ? "npx suiloop create my-agent"
-                                    : pkgManager === 'pnpm'
-                                        ? "pnpm dlx suiloop create my-agent"
-                                        : "yarn dlx suiloop create my-agent";
-                                navigator.clipboard.writeText(cmd);
-                                toast.success(`Copied ${pkgManager} command!`);
+                                navigator.clipboard.writeText("./install.sh");
+                                toast.success("Command copied to clipboard");
                             }}
-                            className="absolute top-1/2 right-6 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+                            className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
                         >
                             <Copy size={20} />
                         </button>
@@ -284,12 +276,12 @@ export default function Home() {
                 </div>
 
                 <div className="text-center mt-6 text-gray-500 text-sm">
-                    Works on macOS, Windows & Linux. The one-liner installs dependencies and sets up the TypeScript/Python environment.
+                    Works on macOS, Windows {"&"} Linux. The one-liner installs dependencies and sets up the TypeScript/Python environment.
                 </div>
             </div>
 
             {/* --- COMPANION APP --- */}
-            <div className="w-full max-w-4xl mx-auto px-4 mb-32 relative z-20 text-center">
+            <div className="w-full max-w-4xl mx-auto px-4 mb-40 relative z-20 text-center section-lift">
                 <h3 className="text-xl font-bold text-white mb-4">Native Desktop Terminal</h3>
                 <p className="text-gray-400 mb-8 max-w-lg mx-auto">
                     Professional desktop environment. Native performance for high-frequency monitoring and direct process control.
@@ -340,12 +332,12 @@ export default function Home() {
             </div>
 
             {/* --- DIGITAL TEAM CONCEPT --- */}
-            <section className="py-24 border-b border-white/5 relative overflow-hidden">
+            <section className="py-24 border-b border-white/5 relative overflow-hidden section-lift">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-[120px] pointer-events-none"></div>
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <div className="text-center mb-16">
                         <span className="text-neon-cyan text-sm font-bold tracking-widest uppercase mb-2 block">The New Workforce</span>
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white">HIRE A <span className="text-gradient">24/7 QUANT TEAM</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white">HIRE A <span className="text-gradient">24/7 WARHEAD TEAM</span></h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -393,20 +385,20 @@ export default function Home() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-purple/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
                 <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter">BUILT FOR <span className="text-gradient">SPEED & SAFETY</span></h2>
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter">THE <span className="text-gradient">NEURAL MATRIX</span> ARCHITECTURE</h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">
-                        SuiLoop combines the speed of Sui with the intelligence of ElizaOS to create a self-sustaining DeFi organism.
+                        Built on 4 pillars: Orchestrator, Atomic Engine, Forensic Black Box, and Ops Unit.
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     {[
-                        { icon: Shield, title: "Zero-Slippage Execution", desc: "Atomic blocks guarantee logic executes exactly as planned, or not at all. No MEV front-running. No partial fills.", color: "text-green-400" },
-                        { icon: Layers, title: "Liquidity Aggregation", desc: "Unified access to DeepBook V3, Cetus, and Scallop. Find the best price across the entire Sui ecosystem.", color: "text-blue-400" },
-                        { icon: Cpu, title: "Autonomous Alpha", desc: "Don't just run code. Deploy digital employees. Agents analyze market sentiment and on-chain metrics 24/7.", color: "text-orange-400" },
-                        { icon: Zap, title: "Flash Capital", desc: "Access millions in liquidity from Scallop & Navi without collateral. The perfect tool for risk-free arbitrage.", color: "text-yellow-400" },
-                        { icon: TerminalIcon, title: "Full Observability", desc: "Watch your agent think in real-time. Live logs, decision trees, and profit/loss tracking on your dashboard.", color: "text-gray-400" },
-                        { icon: Globe, title: "Permissionless", desc: "Deploy your own strategy kernel. Compete in the global liquidity wars with institutional-grade tooling.", color: "text-neon-cyan" }
+                        { icon: Shield, title: "Atomic Engine (Execution)", desc: "Implements the 'Hot Potato' pattern. Transactions borrow millions in flash liquidity and are mathematically incapable of failing with debt.", color: "text-purple-400" },
+                        { icon: Cpu, title: "Neural Matrix (Orchestrator)", desc: "Dynamic Skill Injection. Load new strategies (arbitrage, liquidations) into the runtime without restarting the kernel.", color: "text-blue-400" },
+                        { icon: HardDrive, title: "Forensic Black Box", desc: "Cryptographic Logging. Every decision and transaction is signed and stored in an immutable log on Walrus.", color: "text-pink-500" },
+                        { icon: MessageSquare, title: "Multimodal Voice Core", desc: "Integrated STT/TTS modules allow operators to issue verbal commands and receive audio status reports.", color: "text-yellow-400" },
+                        { icon: TerminalIcon, title: "Self-Healing Gateway", desc: "Automated diagnostics via CLI. Monitoring network health and gas levels with auto-pause functionality.", color: "text-gray-400" },
+                        { icon: Zap, title: "AI Core 2.0 Failover", desc: "Multi-provider architecture (OpenAI -> Anthropic -> Bedrock) ensures 99.99% uptime for decision logic.", color: "text-green-500" }
                     ].map((feature, i) => (
                         <div key={i} className="glass-panel p-6 rounded-xl hover:bg-white/5 transition-all group border border-white/5">
                             <div className={`w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-4 ${feature.color} group-hover:scale-110 transition-transform`}>
@@ -419,7 +411,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* --- WORKFLOW STEPS --- */}
             <section className="border-t border-white/5 bg-black/40 py-24 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-cyan/5 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -506,7 +497,7 @@ export default function Home() {
                                 {/* Sidebar Mock */}
                                 <div className="col-span-1 space-y-2">
                                     <div className="text-xs text-gray-500 uppercase mb-2">Triggers</div>
-                                    {["Price > $2.50", "Every 1 Hour", "High Gas"].map((t, i) => (
+                                    {["Price> $2.50", "Every 1 Hour", "High Gas"].map((t, i) => (
                                         <div key={i} className="px-2 py-1.5 bg-white/5 rounded text-xs text-gray-400 border border-white/5">
                                             {t}
                                         </div>
@@ -541,7 +532,7 @@ export default function Home() {
                     <div className="text-center mb-16 space-y-4">
                         <h2 className="text-3xl md:text-5xl font-black tracking-tighter">BUILD ON <span className="text-gradient">SUILOOP</span></h2>
                         <p className="text-gray-400 max-w-2xl mx-auto">
-                            Institutional-grade tooling for quant developers and data scientists.
+                            Institutional-grade tooling for Neural Matrix operators and quant developers.
                         </p>
                     </div>
 
@@ -554,7 +545,7 @@ export default function Home() {
                             <h3 className="text-xl font-bold mb-2 text-white">SuiLoop CLI</h3>
                             <p className="text-gray-400 text-sm mb-6 h-10">Scaffold production-ready autonomous agents in seconds.</p>
                             <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-neon-cyan flex justify-between items-center">
-                                <span>npx suiloop create</span>
+                                <span>./install.sh</span>
                                 <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></div>
                             </div>
                         </div>
@@ -611,7 +602,7 @@ export default function Home() {
 
 
 
-        </main>
+        </main >
     );
 }
 

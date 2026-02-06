@@ -7,12 +7,12 @@ import {
     ArrowLeft, Book, Code, Shield, Layers, Cpu, Database, Zap,
     GitBranch, FileCode, Rocket, CheckCircle, AlertTriangle,
     Terminal, Globe, Lock, TrendingUp, ChevronRight, ExternalLink,
-    Play, Settings, Users, Workflow, Key, Lightbulb
+    Play, Settings, Users, Workflow, Key, Lightbulb, HardDrive, FileCheck, BookOpen
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import ApiKeyManager from "@/components/docs/ApiKeyManager";
 
-type TabId = 'overview' | 'architecture' | 'contracts' | 'agent' | 'frontend' | 'api' | 'security' | 'ideas';
+type TabId = 'overview' | 'architecture' | 'contracts' | 'agent' | 'frontend' | 'api' | 'security' | 'ideas' | 'builder';
 
 const tabs = [
     { id: 'overview' as TabId, label: 'MISSION BRIEF', icon: Book },
@@ -20,22 +20,20 @@ const tabs = [
     { id: 'architecture' as TabId, label: 'SYSTEM SCHEMATICS', icon: Layers },
     { id: 'contracts' as TabId, label: 'ON-CHAIN KERNEL', icon: Code },
     { id: 'agent' as TabId, label: 'AUTONOMOUS UNITS', icon: Cpu },
+    { id: 'builder' as TabId, label: 'STRATEGY ARCHITECT', icon: Workflow },
     { id: 'frontend' as TabId, label: 'COMMAND INTERFACE', icon: Globe },
     { id: 'api' as TabId, label: 'AGENTS API', icon: Terminal },
     { id: 'security' as TabId, label: 'DEFENSE PROTOCOLS', icon: Shield },
 ];
 
-
 function DocsContent() {
     const searchParams = useSearchParams();
-    // Default to 'overview' if no param or invalid param
     const initialTabParam = searchParams.get('tab');
     const isValidTab = (t: string | null): t is TabId => tabs.some(tab => tab.id === t);
     const initialTab = isValidTab(initialTabParam) ? initialTabParam : 'overview';
 
     const [activeTab, setActiveTab] = useState<TabId>(initialTab);
 
-    // Sync state with URL params when they change
     useEffect(() => {
         const tab = searchParams.get('tab');
         if (isValidTab(tab)) {
@@ -47,14 +45,12 @@ function DocsContent() {
         <main className="min-h-screen bg-black text-white font-sans selection:bg-neon-cyan/30">
             <Navbar />
 
-            {/* Background Effects */}
             <div className="fixed inset-0 z-0">
                 <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-neon-purple/20 to-transparent opacity-50" />
                 <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-neon-cyan/10 blur-[120px] rounded-full" />
             </div>
 
             <div className="relative z-10 pt-24">
-                {/* Header */}
                 <div className="max-w-7xl mx-auto px-6 pb-8 border-b border-white/10">
                     <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors">
                         <ArrowLeft className="w-4 h-4" />
@@ -80,19 +76,11 @@ function DocsContent() {
                         </div>
 
                         <div className="flex gap-3">
-                            <a
-                                href="https://github.com/Eras256/Sui-Loop"
-                                target="_blank"
-                                className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2"
-                            >
+                            <a href="https://github.com/Eras256/Sui-Loop" target="_blank" className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2">
                                 <GitBranch className="w-4 h-4" />
                                 GitHub
                             </a>
-                            <a
-                                href="https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043"
-                                target="_blank"
-                                className="px-4 py-2 bg-neon-cyan/10 border border-neon-cyan/30 rounded-lg text-sm font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-colors flex items-center gap-2"
-                            >
+                            <a href="https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043" target="_blank" className="px-4 py-2 bg-neon-cyan/10 border border-neon-cyan/30 rounded-lg text-sm font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-colors flex items-center gap-2">
                                 <ExternalLink className="w-4 h-4" />
                                 Suiscan
                             </a>
@@ -100,7 +88,6 @@ function DocsContent() {
                     </div>
                 </div>
 
-                {/* Navigation Tabs */}
                 <div className="sticky top-16 z-20 bg-black/80 backdrop-blur-xl border-b border-white/10">
                     <div className="max-w-7xl mx-auto px-6">
                         <div className="flex overflow-x-auto scrollbar-hide gap-1 py-2">
@@ -121,13 +108,13 @@ function DocsContent() {
                     </div>
                 </div>
 
-                {/* Content */}
                 <div className="max-w-7xl mx-auto px-6 py-12">
                     {activeTab === 'overview' && <OverviewSection />}
                     {activeTab === 'ideas' && <IdeasSection />}
                     {activeTab === 'architecture' && <ArchitectureSection />}
                     {activeTab === 'contracts' && <ContractsSection />}
                     {activeTab === 'agent' && <AgentSection />}
+                    {activeTab === 'builder' && <BuilderSection />}
                     {activeTab === 'frontend' && <FrontendSection />}
                     {activeTab === 'api' && <ApiSection />}
                     {activeTab === 'security' && <SecuritySection />}
@@ -233,11 +220,11 @@ function OverviewSection() {
                 <div className="grid md:grid-cols-3 gap-4">
                     {[
                         { icon: Workflow, title: 'Visual Strategy Builder', desc: 'Drag-and-drop node editor for custom strategies', color: 'text-purple-400' },
+                        { icon: BookOpen, title: 'Operations Manual', desc: 'Step-by-step guide for protocol operators', color: 'text-neon-cyan' },
                         { icon: Layers, title: 'Strategy Marketplace', desc: '6 pre-built strategies ready to deploy', color: 'text-blue-400' },
                         { icon: TrendingUp, title: 'Dashboard Command Center', desc: 'Real-time metrics, Active Fleet, execution logs', color: 'text-green-400' },
                         { icon: Lock, title: 'Wallet Persistence', desc: 'Auto-connect across sessions', color: 'text-amber-400' },
-                        { icon: Database, title: 'Supabase Integration', desc: 'Cloud persistence for strategies', color: 'text-pink-400' },
-                        { icon: Shield, title: 'Hot Potato Security', desc: 'Compiler-enforced flash loan safety', color: 'text-neon-cyan' },
+                        { icon: HardDrive, title: 'Walrus & Supabase', desc: 'Hybrid decentralized storage for forensic logs', color: 'text-pink-400' },
                     ].map((feature) => (
                         <div key={feature.title} className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors">
                             <feature.icon className={`w-6 h-6 ${feature.color} mb-3`} />
@@ -653,6 +640,65 @@ pnpm --filter @suiloop/agent dev "Loop 0.5 SUI please"
     );
 }
 
+function BuilderSection() {
+    return (
+        <div className="space-y-12">
+            <section>
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <Workflow className="text-neon-purple" />
+                    Strategy Architect (Builder)
+                </h2>
+                <p className="text-gray-400 mb-8 leading-relaxed">
+                    The Architect is a visual, node-based programming environment that allows you to construct complex financial logic without writing Move code.
+                    It compiles your visual nodes into a <strong className="text-white">Strategy Kernel</strong> that can be deployed atomically.
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors">
+                        <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+                            <Layers className="w-5 h-5 text-neon-cyan" />
+                            Visual Logic Nodes
+                        </h3>
+                        <ul className="space-y-2 text-sm text-gray-400">
+                            <li>• <strong>Signal Inputs</strong>: Price thresholds, CRON ticks, Mempool scans</li>
+                            <li>• <strong>Logic Gates</strong>: Balance checks, Risk guards, Conditionals</li>
+                            <li>• <strong>DeFi Actions</strong>: Navi supply/borrow, DeepBook orders, Flash loans</li>
+                        </ul>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors">
+                        <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+                            <Zap className="w-5 h-5 text-amber-500" />
+                            Atomic Compilation
+                        </h3>
+                        <p className="text-sm text-gray-400">
+                            When you click "Compile Kernel", your logic is validated and optimized into a single Programmable Transaction Block (PTB).
+                            This ensures that either all actions succeed, or the entire transaction fails, protecting your capital.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className="bg-neon-purple/5 border border-neon-purple/20 rounded-2xl p-8">
+                <h3 className="text-xl font-bold mb-4">Tactical Advantages</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div>
+                        <div className="text-neon-purple font-bold mb-1">0% Code</div>
+                        <p className="text-xs text-gray-500">Pure visual architecture for rapid prototyping.</p>
+                    </div>
+                    <div>
+                        <div className="text-neon-purple font-bold mb-1">100% Move</div>
+                        <p className="text-xs text-gray-500">Under the hood, it generates optimized Move vectors.</p>
+                    </div>
+                    <div>
+                        <div className="text-neon-purple font-bold mb-1">Live Simulation</div>
+                        <p className="text-xs text-gray-500">Verify logic integrity before mainnet release.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+}
+
 function FrontendSection() {
     return (
         <div className="space-y-12">
@@ -680,11 +726,12 @@ function FrontendSection() {
                 <div className="space-y-4">
                     {[
                         { path: '/', name: 'Landing Page', desc: 'Hero, features, live terminal, Builder highlight', lines: 330 },
+                        { path: '/how-to-use', name: 'Operations Manual', desc: 'Step-by-step guide for new operators', lines: 180 },
                         { path: '/dashboard', name: 'Dashboard', desc: 'Command center, Active Fleet, execution logs', lines: 823 },
                         { path: '/strategies', name: 'Marketplace', desc: '6 pre-built strategies with one-click deploy', lines: 297 },
                         { path: '/strategies/builder', name: 'Visual Builder', desc: 'Drag-and-drop node editor for custom strategies', lines: 572 },
                         { path: '/analytics', name: 'Analytics', desc: 'Performance charts and metrics', lines: 200 },
-                        { path: '/docs', name: 'Documentation', desc: 'Technical documentation (this page)', lines: 700 },
+                        { path: '/docs', name: 'Documentation', desc: 'Technical documentation (this page)', lines: 1200 },
                     ].map((page) => (
                         <div key={page.path} className="bg-white/5 border border-white/10 rounded-lg p-4 flex items-center justify-between">
                             <div className="flex items-center gap-4">
@@ -985,17 +1032,43 @@ function SecuritySection() {
                 </div>
             </section>
 
-            {/* Audit Status */}
-            <section className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6">
-                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <AlertTriangle className="text-amber-400" />
-                    Audit Status
-                </h2>
-                <div className="flex items-center gap-4">
-                    <div className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-sm font-bold">
-                        Internal Audit
+            {/* Verification & Compliance */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-green-500/5 border border-green-500/20 rounded-xl p-6">
+                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                        <FileCheck className="text-green-400" />
+                        Formal Verification
+                    </h2>
+                    <div className="space-y-4 text-sm text-gray-300">
+                        <p>
+                            The <code className="text-white">atomic_engine</code> module is mathematically proven using the <strong>Move Prover</strong>.
+                        </p>
+                        <div className="bg-black/40 p-3 rounded font-mono text-xs text-green-300 border border-green-500/10">
+                            spec borrow_flash_loan {'{'}<br />
+                            &nbsp;&nbsp;ensures balance::value(pool) == old(balance) - amount;<br />
+                            {'}'}
+                        </div>
+                        <div className="flex items-center gap-2 text-green-400 font-bold">
+                            <CheckCircle size={16} /> Solvency Proven
+                        </div>
                     </div>
-                    <span className="text-gray-400">Professional audit scheduled for Q2 2026 (Mainnet launch)</span>
+                </div>
+
+                <div className="bg-pink-500/5 border border-pink-500/20 rounded-xl p-6">
+                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                        <HardDrive className="text-pink-400" />
+                        Walrus Decentralized Log
+                    </h2>
+                    <div className="space-y-4 text-sm text-gray-300">
+                        <p>
+                            Agent decisions are not black boxes. Every "thought" and action is serialized and stored on <strong>Sui Walrus</strong>.
+                        </p>
+                        <ul className="space-y-2">
+                            <li className="flex items-center gap-2 op-70"><CheckCircle size={14} /> Immutable Forensic Trail</li>
+                            <li className="flex items-center gap-2 op-70"><CheckCircle size={14} /> Blobs Signed by Agent Key</li>
+                            <li className="flex items-center gap-2 op-70"><CheckCircle size={14} /> Publicly Verifiable</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
         </div>

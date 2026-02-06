@@ -282,7 +282,7 @@ export default function StrategiesPage() {
                     ))}
 
                     {/* "Create New" Card */}
-                    <Link href="/strategies/builder" className="border border-dashed border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-4 hover:bg-white/5 transition-all text-gray-500 hover:text-white cursor-pointer min-h-[400px]">
+                    <Link href="/strategies/builder" className="border border-dashed border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-4 hover:bg-white/5 transition-all text-gray-400 hover:text-white cursor-pointer min-h-[400px]">
                         <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-2">
                             <Zap size={32} />
                         </div>
