@@ -99,6 +99,73 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// ═══════════════════════════════════════════════════════════════════════════
+// ONBOARDING PROTOCOL (Zero Friction)
+// ═══════════════════════════════════════════════════════════════════════════
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const isConfigured = () => {
+    return process.env.SUI_PRIVATE_KEY && process.env.OPENAI_API_KEY;
+};
+
+if (!isConfigured()) {
+    console.log('⚠️ System Not Configured. Launching Integration Wizard on port ' + port);
+
+    // Serve Wizard
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, 'setup/wizard.html'));
+    });
+
+    app.post('/setup', (req, res) => {
+        const { openaiKey, suiKey, supabaseUrl, supabaseKey } = req.body;
+
+        // Generate .env content
+        let envContent = `SUI_PRIVATE_KEY=${suiKey}\nOPENAI_API_KEY=${openaiKey}\n`;
+        if (supabaseUrl) envContent += `SUPABASE_URL=${supabaseUrl}\n`;
+        if (supabaseKey) envContent += `SUPABASE_SERVICE_KEY=${supabaseKey}\n`;
+
+        // Write .env to root of agent package
+        const envPath = path.resolve(process.cwd(), '.env');
+        try {
+            fs.writeFileSync(envPath, envContent);
+            console.log('✅ Configuration Saved. Rebooting...');
+
+            // In a real PM2/Docker setup, we would exit to restart.
+            // For dev mode, we ask user to restart manually but we assume next request picks it up if we re-loaded env (hard to do in runtime).
+            // So simpler: Save and respond OK.
+
+            res.json({ success: true });
+
+            // Graceful exit to force restart if running via nodemon/docker
+            setTimeout(() => process.exit(0), 1000);
+
+        } catch (error: any) {
+            console.error('Failed to write .env', error);
+            res.status(500).json({ error: error.message });
+        }
+    });
+
+    server.listen(port, () => {
+        console.log(`🔷 Wizard Active at http://localhost:${port}`);
+    });
+
+    // STOP HERE: Do not load other services if not configured
+    // This return is fake in TS top-level but practically we wrap the rest in "else" or just return if it was a function.
+    // However, since this is top-level code, we must structure it differently or use a flag.
+    // Refactoring to "boot" function would be cleanest, but for minimal diff:
+    // We will let the server start but routes will be weird.
+    // ACTUALLY: The cleanest way is to wrap the REST of the application initialization in an async function that we only call if configured.
+} else {
+    // CONTINUE NORMAL BOOT
+    startSystem();
+}
+
+// Duplicate definitions removed. Using hoisted versions at bottom of file.
+
 // Initialize systems
 initializeDefaultKeys();
 
@@ -112,14 +179,7 @@ import { initializeSessionService } from './services/sessionService.js';
 import { initializeQueueService } from './services/queueService.js';
 import { initializeGatewayService, getGatewayService } from './services/gatewayService.js';
 
-initializeSchedulerService();
-initializeVoiceService();
-initializeTelegramService();
-initializeDiscordService();
-initializeTwitterService();
-initializeSessionService();
-initializeQueueService();
-initializeGatewayService();
+// Initializations moved to startSystem function
 
 // ═══════════════════════════════════════════════════════════════════════════
 // GATEWAY ROUTES (Health & Doctor)
@@ -860,49 +920,69 @@ app.post('/api/admin/rate-limits/clear', authMiddleware, requirePermission('admi
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Initialize WebSocket server
-initializeSubscriptionServer(server);
+// Initialize WebSocket server (Moved inside startSystem)
+// initializeSubscriptionServer(server);
 
-server.listen(port, () => {
-    console.log(`
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                                                                              ║
-║     ███████╗██╗   ██╗██╗██╗      ██████╗  ██████╗ ██████╗                    ║
-║     ██╔════╝██║   ██║██║██║     ██╔═══██╗██╔═══██╗██╔══██╗                   ║
-║     ███████╗██║   ██║██║██║     ██║   ██║██║   ██║██████╔╝                   ║
-║     ╚════██║██║   ██║██║██║     ██║   ██║██║   ██║██╔═══╝                    ║
-║     ███████║╚██████╔╝██║███████╗╚██████╔╝╚██████╔╝██║                        ║
-║     ╚══════╝ ╚═════╝ ╚═╝╚══════╝ ╚═════╝  ╚═════╝ ╚═╝                        ║
-║                                                                              ║
-║                    🤖 AUTONOMOUS AGENT API v2.0                              ║
-║                                                                              ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║                                                                              ║
-║  🌐 HTTP API:      http://localhost:${port}                                    ║
-║  🔌 WebSocket:     ws://localhost:${port}/ws/signals                           ║
-║                                                                              ║
-║  📡 Features:                                                                ║
-║     • API Key & JWT Authentication                                           ║
-║     • Rate Limiting (60 req/min standard)                                    ║
-║     • Webhook Notifications                                                  ║
-║     • Real-time Signal Subscriptions                                         ║
-║     • Autonomous Market Scanner                                              ║
-║                                                                              ║
-║  📚 Endpoints:                                                               ║
-║     GET  /health              - Health check                                 ║
-║     POST /api/auth/keys       - Generate API key                             ║
-║     POST /api/execute         - Execute strategy                             ║
-║     POST /api/webhooks        - Register webhook                             ║
-║     POST /api/subscriptions   - Subscribe to signals                         ║
-║     POST /api/loop/start      - Start autonomous loop                        ║
-║                                                                              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-    `);
+function startSystem() {
+    initializeServices();
+    // Initialize systems
+    initializeDefaultKeys();
+    initializeSubscriptionServer(server);
 
-    // Broadcast initial status
-    setTimeout(() => {
-        broadcastLog('info', 'System initialization complete. Monitoring active channels.');
-        broadcastLog('success', 'Neural Matrix online. Waiting for operator commands.');
-    }, 2000);
-});
+    server.listen(port, () => {
+        console.log(`
+    ╔═══════════════════════════════════════════════════════════════════════════════╗
+    ║                                                                              ║
+    ║     ███████╗██╗   ██╗██╗██╗      ██████╗  ██████╗ ██████╗                    ║
+    ║     ██╔════╝██║   ██║██║██║     ██╔═══██╗██╔═══██╗██╔══██╗                   ║
+    ║     ███████╗██║   ██║██║██║     ██║   ██║██║   ██║██████╔╝                   ║
+    ║     ╚════██║██║   ██║██║██║     ██║   ██║██║   ██║██╔═══╝                    ║
+    ║     ███████║╚██████╔╝██║███████╗╚██████╔╝╚██████╔╝██║                        ║
+    ║     ╚══════╝ ╚═════╝ ╚═╝╚══════╝ ╚═════╝  ╚═════╝ ╚═╝                        ║
+    ║                                                                              ║
+    ║                    🤖 AUTONOMOUS AGENT API v2.0                              ║
+    ║                                                                              ║
+    ╠══════════════════════════════════════════════════════════════════════════════╣
+    ║                                                                              ║
+    ║  🌐 HTTP API:      http://localhost:${port}                                    ║
+    ║  🔌 WebSocket:     ws://localhost:${port}/ws/signals                           ║
+    ║                                                                              ║
+    ║  📡 Features:                                                                ║
+    ║     • API Key & JWT Authentication                                           ║
+    ║     • Rate Limiting (60 req/min standard)                                    ║
+    ║     • Webhook Notifications                                                  ║
+    ║     • Real-time Signal Subscriptions                                         ║
+    ║     • Autonomous Market Scanner                                              ║
+    ║                                                                              ║
+    ║  📚 Endpoints:                                                               ║
+    ║     GET  /health              - Health check                                 ║
+    ║     POST /api/auth/keys       - Generate API key                             ║
+    ║     POST /api/execute         - Execute strategy                             ║
+    ║     POST /api/webhooks        - Register webhook                             ║
+    ║     POST /api/subscriptions   - Subscribe to signals                         ║
+    ║     POST /api/loop/start      - Start autonomous loop                        ║
+    ║                                                                              ║
+    ╚══════════════════════════════════════════════════════════════════════════════╝
+        `);
+
+        // Broadcast initial status
+        setTimeout(() => {
+            broadcastLog('info', 'System initialization complete. Monitoring active channels.');
+            broadcastLog('success', 'Neural Matrix online. Waiting for operator commands.');
+        }, 2000);
+    });
+}
+
+
+function initializeServices() {
+    initializeSchedulerService();
+    initializeVoiceService();
+    initializeTelegramService();
+    initializeDiscordService();
+    initializeTwitterService();
+    initializeSessionService();
+    initializeQueueService();
+    initializeGatewayService();
+}
 
 export { app, server };
