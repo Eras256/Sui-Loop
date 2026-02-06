@@ -9,6 +9,7 @@
         "frontendDist": "../dist"
     },
     "app": {
+        "withGlobalTauri": true,
         "windows": [
             {
                 "title": "SuiLoop Companion",
@@ -17,9 +18,14 @@
                 "resizable": false,
                 "fullscreen": false,
                 "decorations": false,
-                "transparent": true
+                "transparent": true,
+                "visible": false
             }
         ],
+        "trayIcon": {
+            "iconPath": "icons/32x32.png",
+            "iconAsTemplate": true
+        },
         "security": {
             "csp": null
         }

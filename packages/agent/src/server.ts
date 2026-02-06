@@ -110,6 +110,7 @@ import { initializeDiscordService } from './services/discordService.js';
 import { initializeTwitterService } from './services/twitterService.js';
 import { initializeSessionService } from './services/sessionService.js';
 import { initializeQueueService } from './services/queueService.js';
+import { initializeGatewayService, getGatewayService } from './services/gatewayService.js';
 
 initializeSchedulerService();
 initializeVoiceService();
@@ -118,6 +119,30 @@ initializeDiscordService();
 initializeTwitterService();
 initializeSessionService();
 initializeQueueService();
+initializeGatewayService();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GATEWAY ROUTES (Health & Doctor)
+// ═══════════════════════════════════════════════════════════════════════════
+
+app.get('/api/health', (req, res) => {
+    const gateway = getGatewayService();
+    if (gateway) {
+        res.json(gateway.getHeartbeat());
+    } else {
+        res.status(503).json({ status: 'starting' });
+    }
+});
+
+app.get('/api/doctor', authMiddleware, requirePermission('admin'), async (req, res) => {
+    const gateway = getGatewayService();
+    if (gateway) {
+        const report = await gateway.performHealthCheck();
+        res.json(report);
+    } else {
+        res.status(503).json({ status: 'unavailable' });
+    }
+});
 
 // Mount feature routes (marketplace, skills, memory, llm, browser)
 app.use('/api', featureRoutes);
