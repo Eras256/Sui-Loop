@@ -50,31 +50,34 @@ A futuristic "Glass & Neon" interface built on **Next.js 15**:
 
 ---
 
-## 🛠️ Installation & Setup
+## 🚀 Quick Start
 
-### Prerequisites
-- Node.js v18+
-- pnpm (recommended)
-- Sui CLI (for contract deployment)
+### Option A: The "One-Liner" (Linux/Mac)
+Installs dependencies, builds the neural matrix, and initializes the environment.
+```bash
+./install.sh
+```
 
-### logic Initialization
-1.  **Clone the Repository**
-    ```bash
-    git clone https://github.com/your-username/Sui-Loop.git
-    cd Sui-Loop
-    ```
+### Option B: Docker Deployment (Recommended for Production)
+Runs the Agent and Ops Unit in isolated containers.
+```bash
+docker-compose up --build -d
+```
+- **Ops Unit**: `http://localhost:3000`
+- **Neural Matrix**: `http://localhost:3001`
 
-2.  **Install Dependencies**
-    ```bash
-    pnpm install
-    ```
+### Option C: Manual Installation
+```bash
+# 1. Install dependencies
+pnpm install
 
-3.  **Start the Neural Matrix (Dev Mode)**
-    This command launches both the Next.js Frontend and the Agent Backend server in parallel.
-    ```bash
-    pnpm dev
-    ```
+# 2. Configure Environment
+cp .env.example .env
+# Edit .env with your credentials
 
+# 3. Ignite System
+pnpm dev
+```
     - **Frontend:** `http://localhost:3000`
     - **Agent API:** `http://localhost:3001`
     - **WebSocket Feed:** `ws://localhost:3001/ws/signals`

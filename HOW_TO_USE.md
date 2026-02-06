@@ -1,20 +1,37 @@
-
 # 🎮 How to Use SuiLoop
 
 Welcome to the **SuiLoop Command Center**. This guide will walk you through operating the first autonomous agent protocol on Sui.
 
-## 🏁 1. Getting Started
+## 🏁 Phase 0: Deployment & Initialization
 
-1.  **Launch the System**:
-    Open your terminal and run:
-    ```bash
-    pnpm dev
-    ```
-    Wait until you see the "SERVER RUNNING" and "Ready" messages.
+Choose your deployment vector matching your operational security level.
 
-2.  **Access the Dashboard**:
-    Open your browser to [http://localhost:3000](http://localhost:3000).
-    You will see the **Landing Page** with the 3D rotating Loop logo.
+### Vector A: Docker Containment (Recommended)
+Isolates the agent environment to prevent system interference.
+```bash
+# 1. Configure Credentials
+# Create .env and add SUI_PRIVATE_KEY and OPENAI_API_KEY
+nano .env
+
+# 2. Launch Containers
+docker-compose up -d --build
+
+# 3. Access Command Center
+# Open http://localhost:3000 in your browser
+```
+
+### Vector B: Cloud Deployment (Railway/Fly.io)
+For 24/7 autonomous operations (Cron Jobs).
+1.  **Railway**: Connect your GitHub repo. The system automatically detects `railway.json`.
+2.  **Variables**: Add `SUI_PRIVATE_KEY` and `OPENAI_API_KEY` in the Railway dashboard.
+3.  **Deploy**: The agent will auto-boot and start the Scheduler Service.
+
+### Vector C: Local Execution (Dev Mode)
+```bash
+./install.sh
+pnpm dev
+```
+You will see the **Landing Page** with the 3D rotating Loop logo.
 
 ---
 

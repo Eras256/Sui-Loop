@@ -1,37 +1,46 @@
-# Build Stage
-FROM node:18-alpine AS builder
+# Base stage for dependencies
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+# Install system dependencies for Puppeteer & Build tools
+RUN apt-get update && apt-get install -y \
+    openssl \
+    chromium \
+    ca-certificates \
+    procps \
+    git \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Puppeteer to skip download and use installed chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
+# Build stage
+FROM base AS build
+COPY . .
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm --filter @suiloop/agent build
 
-# Copy workspace config
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
-COPY packages/agent/package.json ./packages/agent/
+# Production stage
+FROM base AS production
+COPY --from=build /app/node_modules /app/node_modules
+COPY --from=build /app/packages/agent/dist /app/packages/agent/dist
+COPY --from=build /app/packages/agent/package.json /app/packages/agent/package.json
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Copy artifacts and data dirs if they exist, or create them
+RUN mkdir -p /app/.suiloop/data /app/.suiloop/skills /app/.suiloop/logs
 
-# Copy source code
-COPY packages/agent ./packages/agent
-
-# Build
 WORKDIR /app/packages/agent
-RUN pnpm build
 
-# Runtime Stage
-FROM node:18-alpine
+# Expose API and WebSocket ports
+EXPOSE 3001
 
-WORKDIR /app
-
-COPY --from=builder /app/packages/agent/dist ./dist
-COPY --from=builder /app/packages/agent/node_modules ./node_modules
-COPY --from=builder /app/packages/agent/package.json ./
-
-# Environment variables should be passed at runtime
-ENV NODE_ENV=production
-
-EXPOSE 3000
-
-CMD ["node", "dist/index.js"]
+# Start the agent
+CMD ["node", "dist/server.js"]

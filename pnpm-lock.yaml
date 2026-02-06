@@ -79,6 +79,9 @@ importers:
       telegraf:
         specifier: ^4.16.3
         version: 4.16.3
+      twitter-api-v2:
+        specifier: ^1.29.0
+        version: 1.29.0
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
@@ -4285,6 +4288,9 @@ packages:
 
   tweetnacl@1.0.3:
     resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
+
+  twitter-api-v2@1.29.0:
+    resolution: {integrity: sha512-v473q5bwme4N+DWSg6qY+JCvfg1nSJRWwui3HUALafxfqCvVkKiYmS/5x/pVeJwTmyeBxexMbzHwnzrH4h6oYQ==}
 
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
@@ -8817,6 +8823,8 @@ snapshots:
       - react
 
   tweetnacl@1.0.3: {}
+
+  twitter-api-v2@1.29.0: {}
 
   type-fest@0.21.3: {}
 

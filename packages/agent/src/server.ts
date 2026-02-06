@@ -105,9 +105,19 @@ initializeDefaultKeys();
 // Initialize Autonomous Services (SuiLoop v2.1)
 import { initializeSchedulerService } from './services/schedulerService.js';
 import { initializeVoiceService } from './services/voiceService.js';
+import { initializeTelegramService } from './services/telegramService.js';
+import { initializeDiscordService } from './services/discordService.js';
+import { initializeTwitterService } from './services/twitterService.js';
+import { initializeSessionService } from './services/sessionService.js';
+import { initializeQueueService } from './services/queueService.js';
 
 initializeSchedulerService();
 initializeVoiceService();
+initializeTelegramService();
+initializeDiscordService();
+initializeTwitterService();
+initializeSessionService();
+initializeQueueService();
 
 // Mount feature routes (marketplace, skills, memory, llm, browser)
 app.use('/api', featureRoutes);
@@ -656,6 +666,28 @@ app.post('/api/loop/stop', authMiddleware, requirePermission('execute'), (req: A
         success: stopped,
         message: stopped ? 'Autonomous loop stopped' : 'Loop not running'
     });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SESSION MANAGEMENT (Threads)
+// ═══════════════════════════════════════════════════════════════════════════
+
+import { getSessionService } from './services/sessionService.js';
+
+app.post('/api/sessions', authMiddleware, strictRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+    const sessionService = getSessionService();
+    if (!sessionService) return res.status(503).json({ success: false, error: 'Session Service not ready' });
+
+    const session = await sessionService.createSession(req.user!.userId, req.body.title);
+    res.json({ success: true, session });
+});
+
+app.get('/api/sessions', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+    const sessionService = getSessionService();
+    if (!sessionService) return res.status(503).json({ success: false, error: 'Session Service not ready' });
+
+    const sessions = sessionService.getUserSessions(req.user!.userId);
+    res.json({ success: true, sessions });
 });
 
 /**

@@ -20,19 +20,24 @@ Running on **Express** and **Node.js**, this is the brain of the operation.
 ### 4. Autonomous & Multimodal Core
 SuiLoop v2.1 introduces full autonomy capabilities, moving beyond simple reactive execution.
 
-#### A. Scheduler Service (Cron Automation)
+#### A. Session Manager (Context Isolation)
+The agent supports persistent conversational threads (`/api/sessions`), allowing for:
+- **Multi-tasking**: Users can maintain separate contexts for "Arbitrage Strategy" and "Portfolio Review".
+- **Pruning**: Automated cleanup of stale sessions to preserve LLM context window efficiency.
+
+#### B. Resilient Job Queue
+To ensure reliability in 24/7 operations, all heavy tasks (scans, executions) are routed through an in-memory Queue Service:
+- **Concurrency Control**: Limits simultaneous executions to prevent rate-limiting.
+- **Exponential Backoff**: Automated retries for failed API calls or network glitches.
+
+#### C. Scheduler Service (Cron Automation)
 - **Persistence**: Jobs are serialized to `.suiloop/data/jobs.json`, surviving agent restarts.
-- **Precision**: Uses `node-cron` for exact timing (e.g., "Run Flash Loan scan every 30 seconds" -> `*/30 * * * * *`).
+- **Precision**: Uses `node-cron` for exact timing.
 - **Integration**: Directly invokes `SkillManager` to execute strategies without HTTP overhead.
 
-#### B. Voice Service (Multimodal Interface)
-- **STT (Speech-to-Text)**: Processes OGG/WEBM audio via OpenAI Whisper model to transcribe voice commands.
-- **TTS (Text-to-Speech)**: Synthesizes agent responses using the `alloy` voice model for audio feedback.
-- **Workflow**:
-  1. Frontend captures Mic audio -> `POST /api/voice/transcribe`
-  2. Agent processes command -> LLM Decision
-  3. Agent Executes -> Generates Text Response
-  4. Agent converts Text -> Audio -> `POST /api/voice/speak`
+#### D. Voice Service (Multimodal Interface)
+- **STT (Speech-to-Text)**: Processes OGG/WEBM audio via OpenAI Whisper.
+- **TTS (Text-to-Speech)**: Synthesizes agent responses using the `alloy` voice model.
 
 ### 5. Deployment & Security
 The system is designed for secure, institutional environments:

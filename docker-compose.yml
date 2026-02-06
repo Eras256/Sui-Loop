@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # 🧠 The Neural Matrix (Agent Backend)
+  agent:
+    build:
+      context: .
+      dockerfile: packages/agent/Dockerfile
+    container_name: suiloop-agent
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      # Credentials (should be loaded from .env)
+      - SUI_PRIVATE_KEY=${SUI_PRIVATE_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - ALLOWED_ORIGINS=http://localhost:3000
+    volumes:
+      # Persist agent data (jobs, skills, memory)
+      - ./packages/agent/.suiloop:/app/.suiloop
+    ports:
+      - "3001:3001"
+    networks:
+      - suiloop-net
+
+  # 🖥️ The Ops Unit (Frontend)
+  web:
+    build:
+      context: .
+      dockerfile: packages/web/Dockerfile
+    container_name: suiloop-web
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - NEXT_PUBLIC_WS_URL=ws://localhost:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - agent
+    networks:
+      - suiloop-net
+
+networks:
+  suiloop-net:
+    driver: bridge
+
+volumes:
+  agent-data:
