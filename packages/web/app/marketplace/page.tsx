@@ -4,12 +4,13 @@ import Navbar from "@/components/layout/Navbar";
 import {
     Download, Star, Search, Filter, TrendingUp, Sparkles,
     CheckCircle, Package, ExternalLink, ChevronRight, Zap,
-    Code2, Bell, BarChart3, Database, Link2, Settings, Play
+    Code2, Bell, BarChart3, Database, Link2, Settings, Play, UserPlus
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import InstallSkillModal from "@/components/marketplace/InstallSkillModal";
 
 // Types
 interface MarketplaceSkill {
@@ -26,6 +27,7 @@ interface MarketplaceSkill {
     reviewCount: number;
     isVerified: boolean;
     isFeatured: boolean;
+    actions?: { name: string; description: string }[];
 }
 
 interface Category {
@@ -63,6 +65,8 @@ export default function MarketplacePage() {
     const [sortBy, setSortBy] = useState<"downloads" | "rating" | "newest">("downloads");
     const [installedSkills, setInstalledSkills] = useState<{ [key: string]: boolean }>({});
     const [stats, setStats] = useState({ totalSkills: 0, totalDownloads: 0 });
+    const [selectedSkillToInstall, setSelectedSkillToInstall] = useState<MarketplaceSkill | null>(null);
+    const [selectedSkillToExecute, setSelectedSkillToExecute] = useState<MarketplaceSkill | null>(null);
 
     // Fetch marketplace data
     useEffect(() => {
@@ -130,8 +134,12 @@ export default function MarketplacePage() {
                         downloads: 6234,
                         rating: 4.5,
                         reviewCount: 89,
+
                         isVerified: true,
-                        isFeatured: false
+                        isFeatured: false,
+                        actions: [
+                            { name: 'scanWhales', description: 'Trigger manual whale scan' }
+                        ]
                     },
                     {
                         id: 'lst-arbitrage',
@@ -272,6 +280,26 @@ export default function MarketplacePage() {
                     totalDownloads: mockSkills.reduce((sum, s) => sum + s.downloads, 0)
                 });
 
+                // Fetch installed skills from Agent
+                try {
+                    const installedRes = await fetch('/api/marketplace/installed');
+                    if (installedRes.ok) {
+                        const installedData = await installedRes.json();
+                        if (installedData.success && installedData.skills) {
+                            const installedMap: { [key: string]: boolean } = {};
+                            installedData.skills.forEach((s: any) => {
+                                installedMap[s.slug] = true;
+                                // Map both slug and potentially matching ID
+                                installedMap[s.id || s.slug] = true;
+                            });
+                            console.log('[Marketplace] Syncing installed skills:', installedMap);
+                            setInstalledSkills(installedMap);
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Could not fetch installed skills", e);
+                }
+
             } catch (error) {
                 console.error('Failed to fetch marketplace data:', error);
             } finally {
@@ -303,10 +331,13 @@ export default function MarketplacePage() {
             }
         });
 
-    const handleInstall = async (skill: MarketplaceSkill) => {
-        // En un entorno de producción real, usaríamos una mutación de un cliente como React Query
-        // para manejar estados de carga y errores de manera más robusta.
-        const toastId = toast.loading(`Installing ${skill.name}...`);
+    const handleInstall = async (agentId: string) => {
+        if (!selectedSkillToInstall) return;
+
+        const skill = selectedSkillToInstall;
+        setSelectedSkillToInstall(null); // Close modal
+
+        const toastId = toast.loading(`Installing ${skill.name} to unit ${agentId.slice(0, 10)}...`);
 
         try {
             // El backend está proxyado en Next.js (rewrites) o accesible directamente
@@ -316,7 +347,8 @@ export default function MarketplacePage() {
                 headers: {
                     'Content-Type': 'application/json',
                     // 'Authorization': 'Bearer ...' // In a real app
-                }
+                },
+                body: JSON.stringify({ targetAgent: agentId }) // Send agent ID
             });
 
             const data = await response.json();
@@ -341,44 +373,31 @@ export default function MarketplacePage() {
         }
     };
 
-
-
-    const handleRun = async (skill: MarketplaceSkill) => {
-        const toastId = toast.loading(`Initializing ${skill.name}...`);
+    const handleExecuteAction = async (skillSlug: string, actionName: string) => {
+        const toastId = toast.loading(`Executing ${actionName}...`);
         try {
-            // Demo mapping
-            const strategyMap: any = {
-                'flash-loan-executor': 'flash-loan-executor',
-                'sui-sniper-bot': 'flash-loan-executor' // Just for demo
-            };
-
-            const strategy = strategyMap[skill.id] || skill.id;
-
+            // Use execute-demo to allow execution without explicit authentication for this demo
             const response = await fetch('/api/execute-demo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ strategy })
+                body: JSON.stringify({ strategy: `${skillSlug}:${actionName}` })
             });
-
             const data = await response.json();
 
             if (data.success) {
-                toast.dismiss(toastId);
-                toast.success('Neural Loop Active', {
-                    description: `Strategy executed successfully. Check Ops Unit for telemetry.`,
-                    action: {
-                        label: "Watch Feed",
-                        onClick: () => window.location.href = "/agents"
-                    }
-                });
+                toast.success('Action executed successfully', { id: toastId });
+                setSelectedSkillToExecute(null);
             } else {
                 throw new Error(data.error);
             }
-        } catch (error) {
-            toast.dismiss(toastId);
-            toast.error('Execution Failed', { description: String(error) });
+        } catch (e) {
+            toast.error(`Execution failed: ${String(e)}`, { id: toastId });
         }
     };
+
+
+
+
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
@@ -497,21 +516,25 @@ export default function MarketplacePage() {
                                         </div>
 
                                         {installedSkills[skill.id] ? (
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleRun(skill);
-                                                }}
-                                                className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg hover:bg-green-500/20 text-sm font-medium transition-colors border border-green-500/20 z-10 relative"
-                                            >
-                                                <Play className="w-3.5 h-3.5" />
-                                                Run
-                                            </button>
+                                            <Link href="/dashboard">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg hover:bg-green-500/20 text-sm font-medium transition-colors border border-green-500/20 z-10 relative"
+                                                >
+                                                    <span className="relative flex h-2 w-2 mr-1">
+                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                                    </span>
+                                                    Monitor
+                                                </button>
+                                            </Link>
                                         ) : (
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleInstall(skill);
+                                                    setSelectedSkillToInstall(skill);
                                                 }}
                                                 className="flex items-center gap-2 px-3 py-1.5 bg-slate-700/50 hover:bg-purple-600 text-white rounded-lg text-sm font-medium transition-colors border border-slate-600/50 hover:border-purple-500/50 z-10 relative"
                                             >
@@ -660,17 +683,45 @@ export default function MarketplacePage() {
                                                 </span>
                                             </div>
 
-                                            {installedSkills[skill.id] ? (
-                                                <button
-                                                    onClick={() => handleRun(skill)}
-                                                    className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg hover:bg-green-500/20 text-sm font-medium transition-colors border border-green-500/20"
-                                                >
-                                                    <Play className="w-3.5 h-3.5" />
-                                                    Run
-                                                </button>
+                                            {installedSkills[skill.id] || installedSkills[skill.slug] ? (
+                                                <div className="flex gap-2">
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg text-sm font-medium border border-green-500/20 cursor-default">
+                                                        <span className="relative flex h-2 w-2">
+                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                                        </span>
+                                                        Active
+                                                    </div>
+
+                                                    {skill.actions && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                setSelectedSkillToExecute(skill);
+                                                            }}
+                                                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg hover:bg-blue-500/20 text-sm font-medium transition-colors border border-blue-500/20"
+                                                            title="Run Action"
+                                                        >
+                                                            <Play className="w-3 h-3" />
+                                                        </button>
+                                                    )}
+
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            setSelectedSkillToInstall(skill);
+                                                        }}
+                                                        className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 text-sm font-medium transition-colors border border-purple-500/20"
+                                                        title="Install to another agent"
+                                                    >
+                                                        <UserPlus className="w-3 h-3" />
+                                                    </button>
+                                                </div>
                                             ) : (
                                                 <button
-                                                    onClick={() => handleInstall(skill)}
+                                                    onClick={() => setSelectedSkillToInstall(skill)}
                                                     className="px-3 py-1.5 bg-purple-500/20 text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-500/30 transition-colors flex items-center gap-1"
                                                 >
                                                     <Zap className="w-3.5 h-3.5" />
@@ -716,6 +767,55 @@ export default function MarketplacePage() {
                     </div>
                 </div>
             </section>
-        </main>
+
+            {/* Install Modal */}
+            <InstallSkillModal
+                skill={selectedSkillToInstall}
+                isOpen={!!selectedSkillToInstall}
+                onClose={() => setSelectedSkillToInstall(null)}
+                //@ts-ignore
+                onInstall={handleInstall}
+            />
+            {/* Execute Modal */}
+            <AnimatePresence>
+                {selectedSkillToExecute && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                        onClick={() => setSelectedSkillToExecute(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-2xl p-6 shadow-2xl"
+                        >
+                            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                                <Play className="w-5 h-5 text-neon-cyan" />
+                                Execute {selectedSkillToExecute.name}
+                            </h3>
+                            <div className="space-y-3">
+                                {selectedSkillToExecute.actions?.map(action => (
+                                    <button
+                                        key={action.name}
+                                        onClick={() => handleExecuteAction(selectedSkillToExecute.slug, action.name)}
+                                        className="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-neon-cyan/30 transition-all group"
+                                    >
+                                        <div className="text-left">
+                                            <div className="font-mono text-neon-cyan text-sm group-hover:text-white transition-colors">{action.name}</div>
+                                            <div className="text-xs text-gray-500">{action.description}</div>
+                                        </div>
+                                        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-neon-cyan" />
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </main >
     );
 }

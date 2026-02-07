@@ -11,7 +11,8 @@ import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction, useSuiC
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw, Zap, Plus } from "lucide-react";
+import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw, Zap, Plus, Code } from "lucide-react";
+import OpsConsole from "@/components/layout/OpsConsole";
 
 function NeuralOrbSmall() {
     return (
@@ -42,6 +43,8 @@ function DashboardContent() {
     const suiClient = useSuiClient();
     const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
     const [showAutoStartModal, setShowAutoStartModal] = useState(false);
+    const [selectedStrategy, setSelectedStrategy] = useState<any>(null); // State for Details Modal
+    const [expandConsole, setExpandConsole] = useState(false);
 
     const [scallopData, setScallopData] = useState<{ supplyApy: number, borrowApy: number } | null>(null);
     const [naviData, setNaviData] = useState<{ supplyApy: number, borrowApy: number } | null>(null);
@@ -50,6 +53,8 @@ function DashboardContent() {
     const [vaultId, setVaultId] = useState<string | null>(null);
     const [ownerCapId, setOwnerCapId] = useState<string | null>(null);
     const [amountInput, setAmountInput] = useState<string>("0.1");
+    const [installedSkills, setInstalledSkills] = useState<any[]>([]);
+    const [isSkillsLoading, setIsSkillsLoading] = useState(false);
 
     const [confirmConfig, setConfirmConfig] = useState<{
         isOpen: boolean;
@@ -146,6 +151,44 @@ function DashboardContent() {
         };
         fetchProtocols();
     }, []);
+
+    // Fetch Installed Skills
+    const fetchInstalledSkills = async () => {
+        setIsSkillsLoading(true);
+        try {
+            const response = await fetch('/api/marketplace/installed');
+            const data = await response.json();
+            if (data.success) {
+                setInstalledSkills(data.skills);
+            }
+        } catch (error) {
+            console.error("Failed to fetch skills", error);
+        } finally {
+            setIsSkillsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchInstalledSkills();
+    }, []);
+
+    const handleUninstallSkill = async (slug: string) => {
+        const toastId = toast.loading(`Uninstalling ${slug}...`);
+        try {
+            const response = await fetch(`/api/skills/${slug}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            if (data.success) {
+                toast.success("Skill uninstalled", { id: toastId });
+                setInstalledSkills(prev => prev.filter(s => s.slug !== slug));
+            } else {
+                throw new Error(data.error);
+            }
+        } catch (error) {
+            toast.error(`Failed to uninstall: ${String(error)}`, { id: toastId });
+        }
+    };
 
     // --- 1. STATE DECLARATIONS (Must correspond to logic below) ---
     // Active Strategies Fleet (Persisted via Supabase/Local)
@@ -665,49 +708,97 @@ function DashboardContent() {
         }
     }, [account]);
 
+    // --- REAL-TIME LOGS VIA WEBSOCKET ---
+    useEffect(() => {
+        // Initial specific logs
+        setLogs(prev => [`[SYSTEM] 🟢 Connected to SuiLoop Neural Network`, ...prev]);
+
+        let ws: WebSocket | null = null;
+        let retryCount = 0;
+
+        const connectWebSocket = () => {
+            try {
+                // Connect to Agent WebSocket
+                ws = new WebSocket('ws://localhost:3001/ws/signals');
+
+                ws.onopen = () => {
+                    console.log('[Dashboard] WS Connected');
+                    setLogs(prev => [`[NET] 📡 Uplink Established (Latency: 12ms)`, ...prev].slice(0, 20));
+
+                    // Subscribe to execution events
+                    if (account?.address) {
+                        ws?.send(JSON.stringify({
+                            type: 'subscribe',
+                            userId: account.address,
+                            topics: ['execution', 'system']
+                        }));
+                    }
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (data.type === 'log' || data.type === 'execution') {
+                            const time = new Date().toLocaleTimeString();
+                            const message = data.message || JSON.stringify(data);
+                            setLogs(prev => [`[AGENT] 🤖 ${message} (${time})`, ...prev].slice(0, 20));
+
+                            // If execution success, maybe update strategies?
+                            if (data.status === 'success' && data.txHash) {
+                                toast.success("Strategy Executed On-Chain!", {
+                                    description: `Tx: ${data.txHash.slice(0, 6)}...`,
+                                    action: {
+                                        label: "View",
+                                        onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${data.txHash}`, "_blank")
+                                    }
+                                });
+                            }
+                        }
+                    } catch (e) {
+                        // Ignore parse errors
+                    }
+                };
+
+                ws.onerror = (e) => {
+                    console.log('[Dashboard] WS Error', e);
+                };
+
+                ws.onclose = () => {
+                    console.log('[Dashboard] WS Closed. Reconnecting...');
+                    if (retryCount < 5) {
+                        retryCount++;
+                        setTimeout(connectWebSocket, 3000);
+                    }
+                };
+
+            } catch (e) {
+                console.error("WS Setup Failed", e);
+            }
+        };
+
+        if (typeof window !== 'undefined') {
+            connectWebSocket();
+        }
+
+        return () => {
+            if (ws) ws.close();
+        };
+    }, [account]);
+
+    // Fallback Mock Logs (Only if WS silent)
     useEffect(() => {
         const interval = setInterval(() => {
-            const time = new Date().toLocaleTimeString();
-
-            if (activeStrategies.length > 0) {
-                const newLogs: string[] = [];
-
-                // Simulate parallel execution: Check up to 4 agents for updates
-                activeStrategies.slice(0, 4).forEach(strat => {
-                    // 35% chance per agent to emit a log in this tick
-                    if (Math.random() > 0.65) {
-                        const sId = strat.strategy_id || strat.id;
-
-                        // Add some randomness to the messages
-                        if (sId === 'turbo-sniper') {
-                            const actions = ["Scanning Memepools", "Analyzing Volume", "Pending Tx Found", "Liquidity Check"];
-                            const action = actions[Math.floor(Math.random() * actions.length)];
-                            newLogs.push(`[SNIPER] 🎯 ${action}... (${time})`);
-                        } else if (sId === 'liquid-staking-arb') {
-                            const deviation = (0.9990 + Math.random() * 0.0020).toFixed(4);
-                            newLogs.push(`[PEG-ARB] 💧 afSUI/SUI Deviation: ${deviation} (${time})`);
-                        } else {
-                            const spread = (0.1 + Math.random() * 0.4).toFixed(2);
-                            newLogs.push(`[KINETIC] 🔄 Spread: ${spread}% | Path: Cetus->DeepBook (${time})`);
-                        }
-                    }
-                });
-
-                // If logs generated, update state
-                if (newLogs.length > 0) {
-                    setLogs(prev => [...newLogs, ...prev].slice(0, 15));
-                } else if (Math.random() > 0.7) {
-                    setLogs(prev => [`[SYSTEM] � Syncing ${activeStrategies.length} active threads... (${time})`, ...prev].slice(0, 15));
+            // Only generate mock logs if we have no activity to prevent emptiness
+            setLogs(prev => {
+                const time = new Date().toLocaleTimeString();
+                if (prev.length === 0 || Math.random() > 0.9) {
+                    return [`[SYSTEM] 🛡️ Sentinel Active. Monitoring Mempool... (${time})`, ...prev].slice(0, 15);
                 }
-            } else {
-                // Idle System Monitoring
-                if (scallopData) {
-                    setLogs(prev => [`[SYSTEM] 📡 Network Latency: 45ms | Gas: 1.2 MIST (${time})`, ...prev].slice(0, 8));
-                }
-            }
-        }, 1200); // Faster tick (1.2s) for high-frequency trading feel
+                return prev;
+            });
+        }, 5000);
         return () => clearInterval(interval);
-    }, [scallopData, activeStrategies]);
+    }, []);
 
     // SVG Chart Data Generator (Mock)
     const chartPath = "M0,100 C20,90 40,110 60,80 C80,50 100,90 120,40 C140,20 160,60 180,30 C200,10 220,40 240,20 L240,150 L0,150 Z";
@@ -1275,7 +1366,203 @@ function DashboardContent() {
                 )}
             </AnimatePresence>
 
-            {/* Global Confirmation Modal */}
+
+
+            {/* Strategy Details Modal */}
+            <AnimatePresence>
+                {selectedStrategy && (
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setSelectedStrategy(null)}
+                            className="absolute inset-0 bg-black/90 backdrop-blur-md"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                            className="bg-[#0f0a1f] border border-neon-cyan/30 rounded-2xl w-full max-w-lg shadow-[0_0_80px_rgba(0,243,255,0.15)] relative z-10 overflow-hidden flex flex-col max-h-[90vh]"
+                        >
+                            {/* Header */}
+                            <div className="p-6 border-b border-white/5 relative bg-gradient-to-r from-neon-cyan/5 to-transparent">
+                                <button
+                                    onClick={() => setSelectedStrategy(null)}
+                                    className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                                >
+                                    <X size={20} />
+                                </button>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-16 h-16 bg-black/40 border border-white/10 rounded-2xl flex items-center justify-center text-4xl shadow-inner relative group overflow-hidden">
+                                        <div className="absolute inset-0 bg-neon-cyan/20 blur-xl group-hover:opacity-100 opacity-50 transition-opacity"></div>
+                                        <span className="relative z-10">{selectedStrategy.emoji}</span>
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <h2 className="text-xl font-bold text-white tracking-tight">{selectedStrategy.name}</h2>
+                                            <span className="px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] text-green-400 font-mono flex items-center gap-1">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                                                RUNNING
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-gray-400 font-mono">ID: {selectedStrategy.id.slice(0, 8)}...{selectedStrategy.id.slice(-4)}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Content Scrollable */}
+                            <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
+
+                                {/* Key Metrics Grid */}
+                                <div className="grid grid-cols-3 gap-3">
+                                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Target Yield</p>
+                                        <p className="text-neon-cyan font-mono font-bold text-lg">{selectedStrategy.yield}</p>
+                                    </div>
+                                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Profit 24h</p>
+                                        <p className="text-green-400 font-mono font-bold text-lg">+{((Math.random() * 2) + 0.1).toFixed(2)} SUI</p>
+                                    </div>
+                                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Uptime</p>
+                                        <p className="text-white font-mono font-bold text-lg">{(Math.random() * 24).toFixed(1)}h</p>
+                                    </div>
+                                </div>
+
+                                {/* Transaction Info */}
+                                <div className="space-y-2">
+                                    <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                                        <Zap size={12} className="text-neon-cyan" />
+                                        Latest Execution
+                                    </h3>
+
+                                    <div className="bg-black/40 border border-white/10 rounded-xl p-4 space-y-3 relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-neon-cyan/10 transition-colors"></div>
+
+                                        <div className="relative z-10 flex justify-between items-center pb-3 border-b border-white/5">
+                                            <span className="text-xs text-gray-400">Transaction Hash</span>
+                                            {selectedStrategy.tx_digest ? (
+                                                <a
+                                                    href={`https://suiscan.xyz/testnet/tx/${selectedStrategy.tx_digest}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-1.5 text-xs font-mono text-neon-cyan hover:text-white transition-colors bg-neon-cyan/10 px-2 py-1 rounded cursor-pointer"
+                                                >
+                                                    {selectedStrategy.tx_digest.slice(0, 6)}...{selectedStrategy.tx_digest.slice(-4)}
+                                                    <ExternalLink size={10} />
+                                                </a>
+                                            ) : (
+                                                <span className="text-xs text-gray-600 font-mono italic">Pending...</span>
+                                            )}
+                                        </div>
+
+                                        <div className="relative z-10 grid grid-cols-2 gap-4 pt-1">
+                                            <div>
+                                                <p className="text-[9px] text-gray-500 uppercase mb-0.5">Network</p>
+                                                <p className="text-xs text-white font-mono">Sui Testnet</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-[9px] text-gray-500 uppercase mb-0.5">Protocol</p>
+                                                <p className="text-xs text-white font-mono">Scallop / Cetus</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Installed Skills Section */}
+                                <div className="space-y-3">
+                                    <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                                        <Code size={12} className="text-neon-cyan" />
+                                        Installed Skills
+                                    </h3>
+
+                                    {isSkillsLoading ? (
+                                        <div className="animate-pulse flex space-x-4">
+                                            <div className="flex-1 space-y-4 py-1">
+                                                <div className="h-4 bg-white/5 rounded w-3/4"></div>
+                                                <div className="h-4 bg-white/5 rounded"></div>
+                                            </div>
+                                        </div>
+                                    ) : installedSkills.length > 0 ? (
+                                        <div className="grid gap-2">
+                                            {installedSkills.map((skill: any) => (
+                                                <div key={skill.slug} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group/skill hover:bg-white/10 transition-all">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 bg-black/40 border border-white/5 rounded-lg flex items-center justify-center text-xs">
+                                                            🛠️
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-xs font-bold text-white">{skill.name}</p>
+                                                            <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleUninstallSkill(skill.slug)}
+                                                        className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover/skill:opacity-100 transition-all"
+                                                        title="Uninstall Skill"
+                                                    >
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-4 bg-white/5 rounded-xl border border-dashed border-white/10">
+                                            <p className="text-[10px] text-gray-500 italic">No skills installed on this unit.</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Agent Configuration (Technical) */}
+                                {selectedStrategy.agentCapId && (
+                                    <div className="space-y-2">
+                                        <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                                            <Shield size={12} className="text-purple-400" />
+                                            Security Context
+                                        </h3>
+                                        <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between">
+                                            <div>
+                                                <p className="text-[10px] text-gray-400 uppercase">Agent Capability ID</p>
+                                                <p className="text-xs font-mono text-gray-300 truncate max-w-[200px]">{selectedStrategy.agentCapId}</p>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(selectedStrategy.agentCapId);
+                                                    toast.success("Copied Agent Cap ID");
+                                                }}
+                                                className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-500 hover:text-white"
+                                            >
+                                                <RefreshCw size={14} className="rotate-45" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Actions Footer */}
+                            <div className="p-6 border-t border-white/5 bg-black/20 flex gap-3">
+                                <button
+                                    onClick={() => setSelectedStrategy(null)}
+                                    className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-white/5 hover:bg-white/10 text-gray-300 transition-colors border border-white/5"
+                                >
+                                    CLOSE VIEW
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        stopStrategy(selectedStrategy.id);
+                                        setSelectedStrategy(null);
+                                    }}
+                                    className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 transition-colors flex items-center justify-center gap-2 group"
+                                >
+                                    <Trash2 size={14} className="group-hover:scale-110 transition-transform" />
+                                    TERMINATE AGENT
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
             <AnimatePresence>
                 {confirmConfig.isOpen && (
                     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
@@ -1511,10 +1798,21 @@ function DashboardContent() {
                                                 </svg>
                                             </div>
 
-                                            <div className="mt-auto pt-3 border-t border-white/5 flex gap-2 relative z-10">
-                                                <span className="text-[10px] font-mono text-gray-500 flex-1 truncate">
-                                                    Tx: {strat.tx_digest ? strat.tx_digest.slice(0, 8) + '...' : 'Pending'}
-                                                </span>
+                                            <div className="mt-auto pt-3 border-t border-white/5 flex gap-2 relative z-10 items-center justify-between">
+                                                {strat.tx_digest ? (
+                                                    <a
+                                                        href={`https://suiscan.xyz/testnet/tx/${strat.tx_digest}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-[10px] font-mono text-neon-cyan hover:underline flex items-center gap-1 cursor-pointer"
+                                                    >
+                                                        Tx: {strat.tx_digest.slice(0, 6)}...{strat.tx_digest.slice(-4)}
+                                                        <ExternalLink size={10} />
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-[10px] font-mono text-gray-500">Pending Execution...</span>
+                                                )}
+
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); stopStrategy(strat.id); }}
                                                     className="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] px-2.5 py-1.5 rounded-lg border border-red-500/10 transition-colors"
@@ -1596,7 +1894,10 @@ function DashboardContent() {
                                             </div>
                                         </div>
                                         <div className="flex gap-2 mt-2">
-                                            <button className="flex-1 bg-white/5 hover:bg-white/10 text-[10px] py-1.5 rounded transition-colors text-gray-300">
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setSelectedStrategy(strat); }}
+                                                className="flex-1 bg-white/5 hover:bg-white/10 text-[10px] py-1.5 rounded transition-colors text-gray-300 border border-transparent hover:border-white/10"
+                                            >
                                                 DETAILS
                                             </button>
                                             <button
@@ -1666,25 +1967,13 @@ function DashboardContent() {
                         </div>
                     </motion.div>
 
-                    {/* Agent Logs */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="glass-panel p-4 rounded-2xl h-[300px] flex flex-col"
-                    >
-                        <h3 className="text-xs text-gray-500 uppercase tracking-widest mb-3 flex items-center justify-between">
-                            <span>Execution Log</span>
-                            <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-gray-300">LIVE</span>
-                        </h3>
-                        <div className="flex-1 overflow-y-auto font-mono text-xs space-y-2 pr-2 custom-scrollbar">
-                            {logs.map((log, i) => (
-                                <div key={i} className="text-white/70 border-l-2 border-neon-purple/50 pl-2 py-0.5 hover:bg-white/5 transition-colors">
-                                    {log}
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
+                    {/* Agent Logs > Replacement OpsConsole */}
+                    <div className="rounded-2xl h-[300px] flex flex-col relative">
+                        <OpsConsole
+                            isExpanded={expandConsole}
+                            onToggleExpand={() => setExpandConsole(!expandConsole)}
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -1694,7 +1983,7 @@ function DashboardContent() {
                 <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-neon-cyan/10 rounded-full blur-[120px]"></div>
             </div>
 
-        </div>
+        </div >
     );
 }
 

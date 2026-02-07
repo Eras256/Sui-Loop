@@ -50,6 +50,17 @@ const skills = initializeSkillManager();
 // Initialize skill manager
 skills.initialize().catch(console.error);
 
+// Add event listeners for logs
+skills.on('log', (data: any) => {
+    broadcastLog(data.level, data.message);
+});
+skills.on('action:start', (data: any) => {
+    broadcastLog('info', `🚀 Action started: ${data.action} (${data.skill})`);
+});
+skills.on('action:complete', (data: any) => {
+    broadcastLog('success', `✅ Action completed: ${data.action} (${data.skill})`);
+});
+
 // ═══════════════════════════════════════════════════════════════════════════
 // LOOPHUB MARKETPLACE ROUTES
 // ═══════════════════════════════════════════════════════════════════════════
@@ -203,6 +214,11 @@ router.get('/marketplace/stats', async (_req: Request, res: Response) => {
 router.post('/marketplace/install/:skillId', async (req: AuthenticatedRequest, res: Response) => {
     try {
         const skillId = req.params.skillId as string;
+        const { targetAgent } = req.body;
+
+        if (targetAgent) {
+            broadcastLog('info', `🎯 Targeting installation for agent: ${targetAgent}`);
+        }
 
         // Get skill details from marketplace
         const skill = await loopHub.getSkill(skillId);

@@ -213,6 +213,16 @@ export class LoopHubClient extends EventEmitter {
                         handler: 'checkWhaleActivity'
                     }
                 ],
+                actions: [
+                    {
+                        name: 'scanWhales',
+                        description: 'Manually scan for whale activity immediately',
+                        handler: 'scanWhalesNow',
+                        parameters: {
+                            threshold: { type: 'number', description: 'Minimum transfer amount (SUI)', default: 10000 }
+                        }
+                    }
+                ],
                 downloads: 6234,
                 rating: 4.5,
                 reviewCount: 89,
@@ -982,9 +992,11 @@ export class LoopHubClient extends EventEmitter {
             // In production: await this.client.get(`/skills/${skillId}/download`, { responseType: 'blob' });
             // For now, return a virtual source that SkillManager understands
 
-            if (skill.sourceUrl && skill.sourceUrl.startsWith('github:')) {
-                return { success: true, source: skill.sourceUrl };
-            }
+            // For now, force LoopHub source to ensure mock files are generated
+            // since installFromGithub doesn't actually clone or generate metadata
+            // if (skill.sourceUrl && skill.sourceUrl.startsWith('github:')) {
+            //     return { success: true, source: skill.sourceUrl };
+            // }
 
             return { success: true, source: `loophub:${skill.slug}` };
         } catch (error) {

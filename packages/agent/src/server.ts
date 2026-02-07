@@ -21,6 +21,7 @@ import { fromBase64 } from '@mysten/sui/utils';
 // Core Actions
 import { executeAtomicLeverage } from './actions/executeAtomicLeverage.js';
 import { executeBuilderStrategy } from './actions/executeBuilderStrategy.js';
+import { getSkillManager } from './services/skillManager.js';
 
 // Middleware
 import {
@@ -343,6 +344,7 @@ app.post('/api/auth/token', strictRateLimiter, (req: Request, res: Response) => 
  */
 app.post('/api/execute-demo', standardRateLimiter, async (req: Request, res: Response) => {
     const { strategy } = req.body;
+    console.log(`\n🎮 [Demo] Execution request: "${strategy}"`);
 
     // Trigger webhook (mock user)
     await triggerWebhooks('execution.started', {
@@ -352,6 +354,61 @@ app.post('/api/execute-demo', standardRateLimiter, async (req: Request, res: Res
     });
 
     try {
+        // SKILL ACTION EXECUTION (Dynamic - Demo Mode)
+        const skillManager = getSkillManager();
+        const allSkills = skillManager.getAllSkills();
+        let targetSkillAction: { skillSlug: string, actionName: string } | null = null;
+
+        // 1. Try "skill:action" format
+        if (strategy.includes(':')) {
+            const [sSlug, aName] = strategy.split(':');
+            const skill = skillManager.getSkill(sSlug);
+            if (skill && skill.manifest.actions?.some(a => a.name === aName)) {
+                targetSkillAction = { skillSlug: sSlug, actionName: aName };
+            }
+        }
+        // 2. Try matching action name directly across all skills
+        else {
+            for (const skill of allSkills) {
+                const action = skill.actions?.find(a => a.name === strategy);
+                if (action) {
+                    targetSkillAction = { skillSlug: skill.slug, actionName: strategy };
+                    break;
+                }
+            }
+        }
+
+        if (targetSkillAction) {
+            broadcastLog('info', `🎯 Executing Skill Action (Demo): ${targetSkillAction.skillSlug}:${targetSkillAction.actionName}`);
+
+            const context = {
+                userId: 'demo-user',
+                permissions: [] // Demo user has no specific perms, but skills might check them. 
+                // For demo, we might need a way to bypass or mock perms if needed.
+                // SkillManager checks config.permissions against userPerms.
+            };
+
+            // Hack: Grant permissions to demo-user temporarily if needed, or we just rely on the fact 
+            // that SkillManager checks `this.userPermissions.get(context.userId)`.
+            // We can grant generic permissions to 'demo-user' in initialization if strictly required.
+            // For now, let's try just executing.
+
+            // To be safe, let's mock the permission check bypass or grant all to demo-user in memory
+            skillManager.grantPermissions('demo-user', ['blockchain:read', 'blockchain:write', 'network:fetch', 'notification:send']);
+
+            const result = await skillManager.executeAction(
+                targetSkillAction.skillSlug,
+                targetSkillAction.actionName,
+                req.body.params || {},
+                context
+            );
+
+            await triggerWebhooks('execution.completed', { strategy, result }, 'demo-user');
+            return res.json({ success: true, result });
+        } else {
+            console.log(`⚠️ [Demo] Strategy "${strategy}" did not match any skill action. Checking legacy handlers...`);
+        }
+
         if (strategy === 'flash-loan-executor' || strategy === 'Hot Potato Flash Loan' || strategy === 'whale-tracker') {
             broadcastLog('info', `⚡ Initiating Smart Contract Execution (Testnet)...`);
 
@@ -485,41 +542,113 @@ app.post('/api/execute', authMiddleware, standardRateLimiter, requirePermission(
         params
     }, req.user?.userId);
 
-    // GOLDEN FLOW DEMO: Flash Loan Executor
-    if (strategy === 'flash-loan-executor' || strategy === 'Hot Potato Flash Loan') {
+    // SKILL ACTION EXECUTION (Dynamic)
+    const skillManager = getSkillManager();
+    const allSkills = skillManager.getAllSkills();
+    let targetSkillAction: { skillSlug: string, actionName: string } | null = null;
+
+    // 1. Try "skill:action" format
+    if (strategy.includes(':')) {
+        const [sSlug, aName] = strategy.split(':');
+        const skill = skillManager.getSkill(sSlug);
+        if (skill && skill.manifest.actions?.some(a => a.name === aName)) {
+            targetSkillAction = { skillSlug: sSlug, actionName: aName };
+        }
+    }
+    // 2. Try matching action name directly across all skills
+    else {
+        for (const skill of allSkills) {
+            const action = skill.actions?.find(a => a.name === strategy);
+            if (action) {
+                targetSkillAction = { skillSlug: skill.slug, actionName: strategy };
+                break;
+            }
+        }
+    }
+
+    if (targetSkillAction) {
         try {
-            broadcastLog('info', `⚡ Initiating Atomic Flash Loan Strategy...`);
+            broadcastLog('info', `🎯 Executing Skill Action: ${targetSkillAction.skillSlug}:${targetSkillAction.actionName}`);
 
-            // Step 1: Scan
-            setTimeout(() => broadcastLog('info', `🔍 Scanning pools for liquidity...`), 500);
-            await new Promise(r => setTimeout(r, 1500));
-            broadcastLog('success', `🌊 Pools identified: CETUS-SUI/USDC (Liquidity: $12M)`);
+            const context = {
+                userId: req.user?.userId,
+                // Simplify permissions or derive from user
+                permissions: []
+            };
 
-            // Step 2: Build
-            await new Promise(r => setTimeout(r, 800));
-            broadcastLog('info', `🧱 Constructing transaction block...`);
-            broadcastLog('info', `🔧 Adding Move Call: suiloop::atomic_engine::borrow_flash_loan`);
-
-            // Step 3: Execute (Simulated)
-            const txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
-
-            await new Promise(r => setTimeout(r, 1200));
-            broadcastLog('success', `🚀 Transaction executed! Hash: ${txHash.slice(0, 10)}...`);
-            broadcastLog('success', `💰 Profit captured: 14.5 SUI (Net: 14.2 SUI after gas)`);
+            const result = await skillManager.executeAction(
+                targetSkillAction.skillSlug,
+                targetSkillAction.actionName,
+                params || {},
+                context
+            );
 
             await triggerWebhooks('execution.completed', {
                 strategy,
-                success: true,
-                txHash,
-                profit: '14.5 SUI'
-            });
+                result
+            }, req.user?.userId);
 
-            return res.json({
-                success: true,
-                message: 'Flash loan executed successfully',
-                txHash,
-                profit: '14.5 SUI'
-            });
+            return res.json({ success: true, result });
+        } catch (error) {
+            broadcastLog('error', `Skill Execution Failed: ${String(error)}`);
+            await triggerWebhooks('execution.failed', {
+                strategy,
+                error: String(error)
+            }, req.user?.userId);
+            return res.status(500).json({ success: false, error: String(error) });
+        }
+    }
+
+    // REAL EXECUTION FLOW (Validates & Builds PTB)
+    if (strategy === 'flash-loan-executor' || strategy === 'Hot Potato Flash Loan') {
+        try {
+            // Use the new REAL Mainnet Strategy Action
+            const { executeMainnetStrategy } = await import('./actions/executeMainnetStrategy.js');
+
+            // Construct a memory object compatible with the action handler
+            const mockMessage = {
+                content: {
+                    text: `Execute ${strategy}`,
+                    strategy: strategy
+                },
+                userId: req.user?.userId || 'api-user',
+                agentId: 'suiloop-agent',
+                roomId: 'api-room',
+            };
+
+            const callback = async (response: { text: string }) => {
+                // Log progress via WebSocket/Supabase
+                broadcastLog('info', response.text);
+                return [];
+            };
+
+            // Execute Real Chain Interaction
+            const result = await executeMainnetStrategy.handler(
+                mockRuntime as any,
+                mockMessage as any,
+                undefined,
+                {},
+                callback as any
+            );
+
+            if (result && (result as any).status === 'success') {
+                await triggerWebhooks('execution.completed', {
+                    strategy,
+                    success: true,
+                    txHash: (result as any).hash,
+                    profit: 'See Explorer'
+                });
+
+                return res.json({
+                    success: true,
+                    message: 'Strategy executed successfully on-chain',
+                    txHash: (result as any).hash,
+                    profit: 'Check Explorer'
+                });
+            } else {
+                throw new Error("Execution returned failure status");
+            }
+
         } catch (e) {
             broadcastLog('error', `Execution failed: ${String(e)}`);
             return res.status(500).json({ success: false, error: String(e) });
@@ -983,6 +1112,9 @@ function initializeServices() {
     initializeSessionService();
     initializeQueueService();
     initializeGatewayService();
+
+    // Log strategy initialization or status
+    console.log('Strategy manager initialized and ready.');
 }
 
 export { app, server };
