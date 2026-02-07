@@ -70,10 +70,10 @@ export default function Navbar() {
                 {/* Main navbar container */}
                 <div
                     className={`
-                        pointer-events-auto w-full max-w-7xl 2xl:max-w-[95%] mx-auto 
+                        pointer-events-auto w-full max-w-7xl 2xl:max-w-[98%] mx-auto 
                         backdrop-blur-md border border-white/10 
                         rounded-2xl sm:rounded-full 
-                        px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5
+                        px-3 sm:px-4 lg:px-4 xl:px-6 py-2 sm:py-2.5
                         flex items-center justify-between 
                         shadow-[0_4px_30px_rgba(0,0,0,0.1)]
                         transition-all duration-300
@@ -81,18 +81,18 @@ export default function Navbar() {
                     `}
                 >
                     {/* Left side: Logo + Badge */}
-                    <div className="flex items-center gap-2 sm:gap-4 lg:gap-8 min-w-0">
+                    <div className="flex items-center gap-1.5 xl:gap-4 min-w-0 shrink-0">
                         {/* Logo Section - Responsive */}
-                        <Link href="/" className="flex items-center gap-2 group shrink-0">
-                            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(189,0,255,0.3)] group-hover:scale-110 transition-transform">
-                                <span className="text-white font-mono font-bold text-sm sm:text-base">S</span>
+                        <Link href="/" className="flex items-center gap-1 xl:gap-2 group shrink-0">
+                            <div className="w-7 h-7 xl:w-8 xl:h-8 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(189,0,255,0.3)] group-hover:scale-110 transition-transform">
+                                <span className="text-white font-mono font-bold text-sm xl:text-base">S</span>
                             </div>
-                            {/* Logo text - hidden on very small screens, shown on sm+ */}
-                            <div className="hidden xs:flex flex-col min-[400px]:flex">
-                                <span className="font-bold text-white tracking-tighter leading-none text-sm sm:text-base group-hover:text-neon-cyan transition-colors">
+                            {/* Logo text - Optimized visibility */}
+                            <div className="hidden min-[450px]:flex flex-col">
+                                <span className="font-bold text-white tracking-tighter leading-none text-[10px] xl:text-base group-hover:text-neon-cyan transition-colors">
                                     SUILOOP
                                 </span>
-                                <span className="text-[8px] sm:text-[9px] text-gray-500 font-mono tracking-widest">
+                                <span className="text-[6px] xl:text-[9px] text-gray-500 font-mono tracking-widest leading-none">
                                     PROTOCOL
                                 </span>
                             </div>
@@ -100,7 +100,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Center: Desktop Navigation - visible on laptop (lg) and up */}
-                    <div className="hidden lg:flex items-center gap-1 flex-shrink-0">
+                    <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-shrink-0">
                         {navLinks.map((link) => {
                             const isActive = pathname === link.href;
                             const Icon = link.icon;
@@ -110,15 +110,15 @@ export default function Navbar() {
                                     key={link.name}
                                     href={link.href}
                                     className={`
-                                        relative px-2 xl:px-3 py-2 rounded-full text-xs font-medium 
-                                        transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap
+                                        relative px-1 xl:px-3 py-2 rounded-full text-[9px] xl:text-xs font-medium 
+                                        transition-all duration-300 flex items-center gap-1 xl:gap-1.5 whitespace-nowrap
                                         ${isActive
                                             ? "text-white bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                                             : "text-gray-400 hover:text-white hover:bg-white/5"
                                         }
                                     `}
                                 >
-                                    <Icon size={14} className={isActive ? "text-neon-cyan" : "text-gray-500"} />
+                                    <Icon className={isActive ? "text-neon-cyan w-[11px] h-[11px] xl:w-[14px] xl:h-[14px]" : "text-gray-500 w-[11px] h-[11px] xl:w-[14px] xl:h-[14px]"} />
                                     <span>{link.name}</span>
                                     {isActive && (
                                         <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-neon-cyan shadow-[0_0_10px_#00f3ff] rounded-full"></span>
@@ -131,28 +131,28 @@ export default function Navbar() {
                     {/* Right Side: Status + Wallet + CTA + Mobile Toggle */}
                     <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 shrink-0">
                         {/* Agent Status Indicator - lg+ */}
-                        <div className={`hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full border ${account ? "bg-green-500/10 border-green-500/20" : "bg-white/5 border-white/10"}`}>
-                            <span className="relative flex h-2 w-2">
+                        <div className={`hidden lg:flex items-center gap-1 xl:gap-2 px-1.5 xl:px-3 py-1.2 xl:py-1.5 rounded-full border ${account ? "bg-green-500/10 border-green-500/20" : "bg-white/5 border-white/10"}`}>
+                            <span className="relative flex h-1 w-1 xl:h-1.5 xl:w-1.5">
                                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
-                                <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
+                                <span className={`relative inline-flex rounded-full h-1 w-1 xl:h-1.5 xl:w-1.5 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
                             </span>
-                            <span className={`text-[10px] font-mono font-bold whitespace-nowrap ${account ? "text-green-400" : "text-gray-500"}`}>
+                            <span className={`text-[8px] xl:text-[10px] font-mono font-bold whitespace-nowrap ${account ? "text-green-400" : "text-gray-500"}`}>
                                 UNIT
                             </span>
                         </div>
 
                         {/* Connect Button - Responsive scaling */}
-                        <div className="navbar-connect-btn scale-[0.8] sm:scale-[0.85] md:scale-90 lg:scale-100 origin-right">
-                            <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-3 sm:!px-4 lg:!px-5 !py-2 !rounded-full !text-xs sm:!text-sm !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !whitespace-nowrap" />
+                        <div className="navbar-connect-btn scale-[0.75] xl:scale-100 origin-right">
+                            <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-3 xl:!px-5 !py-2 !rounded-full !text-[10px] xl:!text-xs !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !whitespace-nowrap" />
                         </div>
 
                         {/* CTA Button - Hidden on mobile/tablet, shown on lg+ as icon, full on xl */}
                         <Link
                             href="/strategies"
-                            className="hidden lg:flex items-center gap-1.5 bg-neon-cyan text-black px-3 py-2 rounded-full font-mono text-[10px] font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
+                            className="hidden lg:flex items-center gap-1 bg-neon-cyan text-black px-2 xl:px-3 py-2 rounded-full font-mono text-[9px] xl:text-[10px] font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
                         >
-                            <Rocket size={14} />
-                            <span className="hidden xl:inline">INIT VECTOR</span>
+                            <Rocket className="w-3 h-3 xl:w-3.5 xl:h-3.5" />
+                            <span className="hidden min-[1150px]:inline">INIT VECTOR</span>
                         </Link>
 
                         {/* Mobile Menu Toggle - Visible on lg and below */}
