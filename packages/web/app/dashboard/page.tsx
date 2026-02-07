@@ -3,7 +3,7 @@
 import Navbar from "@/components/layout/Navbar";
 
 import { Suspense, useState, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Float, Sphere, MeshTransmissionMaterial } from "@react-three/drei";
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction, useSuiC
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ExternalLink, Shield, X } from "lucide-react";
+import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw } from "lucide-react";
 
 function NeuralOrbSmall() {
     return (
@@ -45,9 +45,29 @@ function DashboardContent() {
 
     const [scallopData, setScallopData] = useState<{ supplyApy: number, borrowApy: number } | null>(null);
     const [naviData, setNaviData] = useState<{ supplyApy: number, borrowApy: number } | null>(null);
-    const [userBalance, setUserBalance] = useState<number>(0);
+    const [walletBalance, setWalletBalance] = useState<number>(0);
+    const [vaultBalance, setVaultBalance] = useState<number>(0);
     const [vaultId, setVaultId] = useState<string | null>(null);
     const [ownerCapId, setOwnerCapId] = useState<string | null>(null);
+    const [amountInput, setAmountInput] = useState<string>("0.1");
+
+    const [confirmConfig, setConfirmConfig] = useState<{
+        isOpen: boolean;
+        title: string;
+        description: React.ReactNode;
+        icon: React.ReactNode;
+        confirmText: string;
+        onConfirm: () => void;
+        type: 'danger' | 'info';
+    }>({
+        isOpen: false,
+        title: '',
+        description: '',
+        icon: null,
+        confirmText: '',
+        onConfirm: () => { },
+        type: 'info'
+    });
 
     // Fetch User Real Balance
     useEffect(() => {
@@ -55,12 +75,11 @@ function DashboardContent() {
 
         const fetchBalance = async () => {
             try {
-                // Dynamic import to avoid SSR issues with Sui Client if any
                 const { suiClient } = await import("@/lib/suiClient");
                 const balance = await suiClient.getBalance({ owner: account.address });
-                setUserBalance(parseInt(balance.totalBalance) / 1_000_000_000);
+                setWalletBalance(parseInt(balance.totalBalance) / 1_000_000_000);
             } catch (e) {
-                console.warn("Soft Error: Could not fetch SUI balance. RPC might be busy.", e);
+                console.warn("Soft Error: Wallet Fetch Failed", e);
             }
         };
 
@@ -69,7 +88,37 @@ function DashboardContent() {
         return () => clearInterval(interval);
     }, [account]);
 
-    // Fetch Real Protocol Data (Scallop + Navi)
+    // Fetch Vault Balance specifically
+    useEffect(() => {
+        if (!vaultId) {
+            setVaultBalance(0);
+            return;
+        }
+
+        const fetchVaultBalance = async () => {
+            try {
+                const { suiClient } = await import("@/lib/suiClient");
+                const object = await suiClient.getObject({
+                    id: vaultId,
+                    options: { showContent: true }
+                });
+
+                if (object.data?.content && 'fields' in object.data.content) {
+                    const fields = object.data.content.fields as any;
+                    const balanceValue = fields.balance || "0";
+                    setVaultBalance(parseInt(balanceValue) / 1_000_000_000);
+                }
+            } catch (e) {
+                console.warn("Soft Error: Vault Balance Scan Failed", e);
+            }
+        };
+
+        fetchVaultBalance();
+        const interval = setInterval(fetchVaultBalance, 10000);
+        return () => clearInterval(interval);
+    }, [vaultId]);
+
+    // Fetch Real Protocol Data
     useEffect(() => {
         const fetchProtocols = async () => {
             try {
@@ -277,6 +326,12 @@ function DashboardContent() {
             return;
         }
 
+        setShowAutoStartModal(true);
+    };
+
+    const executeDeploy = () => {
+        if (!account) return;
+
         const toastId = toast.loading(`🤖 AI Agent: Initializing ${currentStrategy.name}...`);
 
         // Determine Mode: V2 (AgentCap) or V1 (Script)
@@ -287,14 +342,14 @@ function DashboardContent() {
 
         try {
             // 0. Check Balance
-            if (userBalance < REQUIRED_BALANCE) {
+            if (walletBalance < REQUIRED_BALANCE) {
                 toast.error(`Insufficient Balance: You need at least ${REQUIRED_BALANCE} SUI for license fee + gas`);
                 return;
             }
 
             const tx = new Transaction();
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043";
-            const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID || "0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0";
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+            const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID || "0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165";
 
             const BORROW_AMOUNT = "100000000"; // 0.1 SUI
             const USER_FUNDS_AMOUNT = "500000"; // 0.0005 SUI
@@ -307,10 +362,9 @@ function DashboardContent() {
             // 2. Prepare Coin for Execution Funds
             const [userFundsCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(USER_FUNDS_AMOUNT)]);
 
-            // 3. Create Agent Cap (If Full Fee Paid) OR Pay Fee Manually (V1)
-            const isFullFee = REQUIRED_FEE === "5000000000";
-
-            if (useAgentCap && ownerCapId && isFullFee) {
+            // 3. Create Agent Cap (Hackathon Mode: 0.1 SUI OK)
+            // On the new contract (0x6736...), the fee is now 0.1 SUI, so we can create real capabilities!
+            if (useAgentCap && ownerCapId) {
                 const agentCap = tx.moveCall({
                     target: `${PACKAGE_ID}::atomic_engine::create_agent_cap`,
                     typeArguments: ["0x2::sui::SUI"],
@@ -324,7 +378,6 @@ function DashboardContent() {
                 tx.transferObjects([agentCap], account.address);
             } else {
                 tx.transferObjects([feeCoin], TREASURY_ADDR);
-                // Note: We skip AgentCap creation to avoid "Insufficient Fee" error
             }
 
             // 4. Exec Loop (V1 - Always run simulation for demo)
@@ -433,7 +486,43 @@ function DashboardContent() {
         }
     };
 
-    const stopStrategy = async (dbId: string) => {
+    const stopStrategy = (dbId: string) => {
+        const foundStrategy = activeStrategies.find(s => s.id === dbId || s.strategy_id === dbId);
+        if (!foundStrategy) return;
+
+        setConfirmConfig({
+            isOpen: true,
+            title: "Terminate Agent?",
+            description: (
+                <div className="space-y-3">
+                    <p className="text-xs text-gray-400">You are about to disconnect the autonomous logic for <span className="text-white font-bold">{foundStrategy.name}</span>.</p>
+                    <div className="bg-red-500/5 border border-red-500/10 p-3 rounded-xl text-left">
+                        <div className="flex items-center gap-2 mb-1.5">
+                            <AlertTriangle size={14} className="text-red-500" />
+                            <span className="text-[10px] font-bold text-red-200 uppercase tracking-wider">Protocol Warning</span>
+                        </div>
+                        <p className="text-[10px] text-gray-400 leading-relaxed font-mono">
+                            • Active positions will be frozen<br />
+                            • On-chain signature required<br />
+                            • Yield generation will cease immediately
+                        </p>
+                    </div>
+                </div>
+            ),
+            icon: <div className="relative">
+                <Shield size={32} className="text-red-500/50" />
+                <X size={16} className="absolute inset-0 m-auto text-red-500" />
+            </div>,
+            confirmText: "STOP EXECUTION",
+            type: 'danger',
+            onConfirm: () => {
+                setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                executeStopStrategy(dbId);
+            }
+        });
+    };
+
+    const executeStopStrategy = async (dbId: string) => {
         if (!account) return;
 
         // Find strategy to see if we have an on-chain license (AgentCap) to burn
@@ -446,7 +535,7 @@ function DashboardContent() {
             // Step 1: Revoke Agent Permission On-Chain (Burn AgentCap) if exists
             if (agentCapId) {
                 const tx = new Transaction();
-                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043";
+                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
 
                 tx.moveCall({
                     target: `${PACKAGE_ID}::atomic_engine::destroy_agent_cap`,
@@ -517,26 +606,11 @@ function DashboardContent() {
         }
     };
 
-    const clearAllStrategies = () => {
-        // Clear state
-        setActiveStrategies([]);
 
-        // Clear LocalStorage
-        if (account?.address) {
-            const localKey = `sui-loop-fleet-${account.address}`;
-            localStorage.removeItem(localKey);
-            console.log('[Dashboard] Cleared all strategies from LocalStorage');
-        }
-
-        toast.success("Fleet Purged", {
-            description: "All agents terminated and local cache cleared.",
-            icon: "💀"
-        });
-    };
 
     const confirmAutoStart = () => {
         setShowAutoStartModal(false);
-        handleDeploy();
+        executeDeploy();
     };
 
     useEffect(() => {
@@ -620,13 +694,191 @@ function DashboardContent() {
         }
     }, [account]);
 
+    const handleDeposit = () => {
+        if (!vaultId) return;
+
+        // Helper to update modal state
+        const updateModal = (val: string) => {
+            setConfirmConfig(prev => ({
+                ...prev,
+                isOpen: true,
+                title: "Deposit to Vault",
+                description: (
+                    <div className="space-y-4">
+                        <p className="text-xs text-gray-400">Transfer SUI from your wallet to the secure vault.</p>
+                        <div className="relative">
+                            <input
+                                type="number"
+                                defaultValue={val}
+                                onChange={(e) => {
+                                    setAmountInput(e.target.value);
+                                    updateModal(e.target.value);
+                                }}
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-neon-cyan outline-none transition-all"
+                                placeholder="0.00"
+                                step="0.1"
+                                autoFocus
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-gray-500 font-bold">SUI</span>
+                        </div>
+                    </div>
+                ),
+                icon: <RefreshCw size={32} className="text-neon-cyan" />,
+                confirmText: "CONFIRM DEPOSIT",
+                type: 'info',
+                onConfirm: () => {
+                    setConfirmConfig(p => ({ ...p, isOpen: false }));
+                    executeDeposit(val);
+                }
+            }));
+        };
+
+        updateModal(amountInput);
+    };
+
+    const executeDeposit = async (amount: string) => {
+        if (!account || !vaultId) return;
+        const toastId = toast.loading(`Executing Deposit of ${amount} SUI...`);
+        try {
+            const tx = new Transaction();
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+            const amountMist = BigInt(Math.floor(parseFloat(amount) * 1_000_000_000));
+
+            const [coin] = tx.splitCoins(tx.gas, [amountMist]);
+
+            tx.moveCall({
+                target: `${PACKAGE_ID}::atomic_engine::deposit`,
+                typeArguments: ["0x2::sui::SUI"],
+                arguments: [tx.object(vaultId), coin]
+            });
+
+            const result = await signAndExecuteTransaction({ transaction: tx as any });
+            toast.dismiss(toastId);
+            toast.success("Deposit Successful", {
+                description: `${amount} SUI moved to Vault.`,
+                action: {
+                    label: "View Tx",
+                    onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
+                }
+            });
+        } catch (e) {
+            console.error(e);
+            toast.dismiss(toastId);
+            toast.error("Deposit Failed");
+        }
+    };
+
+    const handleWithdraw = () => {
+        if (!vaultId || !ownerCapId) {
+            toast.error("OwnerCap not found. Only the vault owner can withdraw.");
+            return;
+        }
+
+        const updateModal = (val: string) => {
+            setConfirmConfig(prev => ({
+                ...prev,
+                isOpen: true,
+                title: "Withdraw from Vault",
+                description: (
+                    <div className="space-y-4">
+                        <p className="text-xs text-gray-400">Transfer SUI from the vault back to your wallet address.</p>
+                        <div className="relative">
+                            <input
+                                type="number"
+                                defaultValue={val}
+                                onChange={(e) => {
+                                    setAmountInput(e.target.value);
+                                    updateModal(e.target.value);
+                                }}
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-neon-cyan outline-none transition-all"
+                                placeholder="0.00"
+                                step="0.1"
+                                autoFocus
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-gray-500 font-bold">SUI</span>
+                        </div>
+                    </div>
+                ),
+                icon: <div className="rotate-180"><ChevronRight size={32} className="text-white" /></div>,
+                confirmText: "CONFIRM WITHDRAW",
+                type: 'info',
+                onConfirm: () => {
+                    setConfirmConfig(p => ({ ...p, isOpen: false }));
+                    executeWithdraw(val);
+                }
+            }));
+        };
+
+        updateModal(amountInput);
+    };
+
+    const executeWithdraw = async (amount: string) => {
+        if (!account || !vaultId || !ownerCapId) return;
+        const toastId = toast.loading("Executing Withdrawal...");
+        try {
+            const tx = new Transaction();
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+            const amountMist = BigInt(Math.floor(parseFloat(amount) * 1_000_000_000));
+
+            const [returnedCoin] = tx.moveCall({
+                target: `${PACKAGE_ID}::atomic_engine::withdraw`,
+                typeArguments: ["0x2::sui::SUI"],
+                arguments: [tx.object(vaultId), tx.object(ownerCapId), tx.pure.u64(amountMist)]
+            });
+
+            tx.transferObjects([returnedCoin], tx.pure.address(account.address));
+
+            const result = await signAndExecuteTransaction({ transaction: tx as any });
+            toast.dismiss(toastId);
+            toast.success("Withdrawal Successful", {
+                description: `${amount} SUI returned to your wallet.`,
+                action: {
+                    label: "View Tx",
+                    onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
+                }
+            });
+        } catch (e) {
+            console.error(e);
+            toast.dismiss(toastId);
+            toast.error("Withdrawal Failed");
+        }
+    };
+
     const handleCreateVault = () => {
         if (!account) return;
+
+        setConfirmConfig({
+            isOpen: true,
+            title: "Initialize Secure Vault?",
+            description: (
+                <div className="space-y-3">
+                    <p className="text-xs text-gray-400">Deploying a non-custodial <span className="text-neon-cyan">SUI Vault</span> on-chain.</p>
+                    <div className="bg-neon-cyan/5 border border-neon-cyan/20 p-3 rounded-xl text-left">
+                        <p className="text-[10px] text-gray-400 leading-relaxed font-mono">
+                            • Generates unique <span className="text-white">OwnerCap</span><br />
+                            • Enables automated agent trading<br />
+                            • Hot Potato security pattern active
+                        </p>
+                    </div>
+                    <p className="text-[9px] text-gray-500 italic">This transaction requires a small gas fee on Testnet.</p>
+                </div>
+            ),
+            icon: <Shield size={32} className="text-neon-cyan" />,
+            confirmText: "DEPLOY VAULT",
+            type: 'info',
+            onConfirm: () => {
+                setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                executeCreateVault();
+            }
+        });
+    };
+
+    const executeCreateVault = () => {
+        if (!account) return;
         const tx = new Transaction();
-        const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043";
+        const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
 
         // Call create_vault from atomic_engine module
-        // This is an entry function that shares the Vault and transfers OwnerCap internally
         tx.moveCall({
             target: `${PACKAGE_ID}::atomic_engine::create_vault`,
             typeArguments: ["0x2::sui::SUI"], // Creating a SUI Vault by default
@@ -720,39 +972,78 @@ function DashboardContent() {
             vaultData = JSON.parse(savedData);
         } catch {
             // Old format without OwnerCap ID - allow force reset
-            const forceReset = confirm(
-                "⚠️ Old Vault Format Detected\n\n" +
-                "This vault was created with an older version and cannot be destroyed on-chain automatically.\n" +
-                "Do you want to DISCONNECT ONLY (local reset)?\n\n" +
-                "This will clear your local view so you can create a new Vault."
-            );
-
-            if (forceReset) {
-                localStorage.removeItem(`sui-loop-vault-${account.address}`);
-                setVaultId(null);
-                toast.info("Vault Disconnected (Format Updated)", {
-                    description: "You can now create a new, fully compatible Vault."
-                });
-            }
+            setConfirmConfig({
+                isOpen: true,
+                title: "Old Format Detected",
+                description: (
+                    <div className="space-y-3">
+                        <p className="text-xs text-gray-400">This vault uses an legacy version and requires a local cache reset.</p>
+                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl text-left">
+                            <p className="text-[10px] text-gray-500 font-mono leading-relaxed">
+                                • Disconnect local view<br />
+                                • Clean start protocol<br />
+                                • On-chain assets safe
+                            </p>
+                        </div>
+                    </div>
+                ),
+                icon: <RefreshCw size={32} className="text-neon-cyan animate-spin-slow" />,
+                confirmText: "LOCAL RESET",
+                type: 'info',
+                onConfirm: () => {
+                    localStorage.removeItem(`sui-loop-vault-${account.address}`);
+                    setVaultId(null);
+                    setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                    toast.info("Vault Disconnected (Format Updated)", {
+                        description: "You can now create a new, fully compatible Vault."
+                    });
+                }
+            });
             return;
         }
 
-        const confirmed = confirm(
-            "🗑️ Destroy Vault?\n\n" +
-            "This will:\n" +
-            "1. Destroy the Vault on-chain\n" +
-            "2. Burn your OwnerCap\n" +
-            "3. Return any remaining SUI to your wallet\n\n" +
-            "This action cannot be undone. Continue?"
-        );
+        setConfirmConfig({
+            isOpen: true,
+            title: "Destroy Secure Vault?",
+            description: (
+                <div className="space-y-3">
+                    <p className="text-gray-400 text-xs">This action will execute a terminal cleanup protocol on your active vault.</p>
+                    <div className="grid grid-cols-1 gap-1.5 text-left">
+                        <div className="bg-red-500/5 border border-red-500/10 p-2 rounded-lg flex items-center gap-2.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                            <span className="text-[10px] font-mono text-red-200 uppercase">Destroy Vault On-Chain</span>
+                        </div>
+                        <div className="bg-red-500/5 border border-red-500/10 p-2 rounded-lg flex items-center gap-2.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-400 opacity-50" />
+                            <span className="text-[10px] font-mono text-gray-400 uppercase">Burn OwnerCap Registry</span>
+                        </div>
+                        <div className="bg-green-500/5 border border-green-500/10 p-2 rounded-lg flex items-center gap-2.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                            <span className="text-[10px] font-mono text-green-200 uppercase">Return SUI to Wallet</span>
+                        </div>
+                    </div>
+                    <p className="text-[9px] text-gray-500 italic uppercase tracking-tighter pt-1.5 border-t border-white/5">
+                        WARNING: Irreversible operation. Gas required.
+                    </p>
+                </div>
+            ),
+            icon: <Trash2 size={32} className="text-red-500" />,
+            confirmText: "CONFIRM TERMINAL",
+            type: 'danger',
+            onConfirm: async () => {
+                setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                await executeVaultDestruction(vaultData);
+            }
+        });
+    };
 
-        if (!confirmed) return;
-
+    const executeVaultDestruction = async (vaultData: any) => {
+        if (!account) return;
         const toastId = toast.loading("Destroying Vault...");
 
         try {
             const tx = new Transaction();
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID;
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
 
             // Call destroy_vault
             const [returnedCoin] = tx.moveCall({
@@ -786,7 +1077,29 @@ function DashboardContent() {
                     onError: (error) => {
                         toast.dismiss(toastId);
                         console.error("Destroy Vault Error:", error);
-                        toast.error("Failed to destroy vault: " + (error as any).message);
+
+                        const msg = (error as any).message || String(error);
+
+                        // Detect TypeMismatch (Legacy Vault Issue) which happens when contract is upgraded
+                        if (msg.includes("TypeMismatch") || msg.includes("CommandArgumentError")) {
+                            toast.error("Legacy Vault Detected", {
+                                description: "This vault belongs to an old contract version. Resetting local data to continue.",
+                                action: {
+                                    label: "Force Reset",
+                                    onClick: () => {
+                                        if (account?.address) {
+                                            localStorage.removeItem(`sui-loop-vault-${account.address}`);
+                                            setVaultId(null);
+                                            setOwnerCapId(null);
+                                            toast.success("Local data cleared. You can now create a new Vault.");
+                                        }
+                                    }
+                                },
+                                duration: 15000,
+                            });
+                        } else {
+                            toast.error("Failed to destroy vault: " + msg);
+                        }
                     }
                 }
             );
@@ -862,50 +1175,127 @@ function DashboardContent() {
             <Navbar />
 
             {/* Auto-Start Confirmation Modal */}
-            {showAutoStartModal && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="bg-[#0f0a1f] border border-neon-cyan/50 rounded-2xl p-8 max-w-md w-full shadow-[0_0_50px_rgba(0,243,255,0.2)] text-center"
-                    >
-                        <div className="w-16 h-16 bg-neon-cyan/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-                            <span className="text-3xl">{currentStrategy.emoji}</span>
-                        </div>
-                        <h2 className="text-2xl font-bold text-white mb-2">Deploy {currentStrategy.name}?</h2>
-                        <div className="bg-neon-cyan/10 border border-neon-cyan/20 p-3 rounded-lg mb-4">
-                            <p className="text-neon-cyan font-mono text-sm font-bold flex justify-between">
-                                <span>PROTOCOL FEE (TEST):</span>
-                                <span>0.10 SUI (~$0.09 USD)</span>
+            <AnimatePresence>
+                {showAutoStartModal && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setShowAutoStartModal(false)}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-[#0f0a1f] border border-neon-cyan/50 rounded-xl p-6 sm:p-7 max-w-sm w-full shadow-[0_0_50px_rgba(0,243,255,0.2)] text-center relative z-10 overflow-y-auto max-h-[90vh]"
+                        >
+                            <div className="w-14 h-14 bg-neon-cyan/20 border border-neon-cyan/30 rounded-full flex items-center justify-center mx-auto mb-4 relative group">
+                                <div className="absolute inset-0 bg-neon-cyan/20 rounded-full animate-ping group-hover:animate-none opacity-20"></div>
+                                <span className="text-2xl relative z-10">{currentStrategy.emoji}</span>
+                            </div>
+                            <h2 className="text-xl font-bold text-white mb-1.5 leading-tight">Deploy {currentStrategy.name}?</h2>
+                            <div className="bg-neon-cyan/5 border border-neon-cyan/20 p-3 rounded-lg mb-4">
+                                <div className="flex justify-between items-center text-[9px] text-gray-400 uppercase tracking-widest mb-0.5 font-mono">
+                                    <span>PROTOCOL FEE</span>
+                                    <span>AUTHORIZED</span>
+                                </div>
+                                <p className="text-neon-cyan font-mono text-base font-bold flex justify-between items-baseline">
+                                    <span>0.10</span>
+                                    <span className="text-[10px] ml-1 opacity-70 font-sans">SUI TESTNET</span>
+                                </p>
+                            </div>
+                            <p className="text-gray-400 mb-6 text-xs leading-relaxed max-w-[280px] mx-auto">
+                                Initializing autonomous logic gates. Deployment includes secure vault synchronization.
                             </p>
-                        </div>
-                        <p className="text-gray-400 mb-8 text-sm">
-                            Authorizing AI Agent execution. Secure Vault setup included.
-                        </p>
-                        <div className="flex gap-4">
-                            <button
-                                onClick={() => setShowAutoStartModal(false)}
-                                className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition-colors font-mono font-bold"
-                            >
-                                CANCEL
-                            </button>
-                            <button
-                                onClick={confirmAutoStart}
-                                className="flex-1 px-4 py-3 rounded-xl bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all font-mono font-bold shadow-[0_0_20px_rgba(0,243,255,0.3)]"
-                            >
-                                CONFIRM DEPLOY
-                            </button>
-                        </div>
-                    </motion.div>
-                </div>
-            )}
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setShowAutoStartModal(false)}
+                                    className="flex-1 px-3 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-colors font-mono font-bold text-[10px]"
+                                >
+                                    CANCEL
+                                </button>
+                                <button
+                                    onClick={confirmAutoStart}
+                                    className="flex-1 px-3 py-2.5 rounded-lg bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all font-mono font-bold text-[10px] shadow-[0_0_20px_rgba(0,243,255,0.2)] flex items-center justify-center gap-1.5 group"
+                                >
+                                    CONFIRM
+                                    <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Global Confirmation Modal */}
+            <AnimatePresence>
+                {confirmConfig.isOpen && (
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                            className="absolute inset-0 bg-black/90 backdrop-blur-md"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-[#0f0a1f] border border-white/10 rounded-2xl p-6 sm:p-7 max-w-[380px] w-full shadow-[0_0_100px_rgba(0,0,0,0.8)] relative z-10 overflow-hidden max-h-[90vh] flex flex-col"
+                        >
+                            {/* Decorative Glow */}
+                            <div className={`absolute -top-32 -right-32 w-64 h-64 rounded-full blur-[100px] opacity-20 ${confirmConfig.type === 'danger' ? 'bg-red-600' : 'bg-neon-cyan'}`} />
+
+                            <div className="relative z-10 flex flex-col items-center text-center overflow-y-auto custom-scrollbar">
+                                <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 shrink-0 ${confirmConfig.type === 'danger' ? 'bg-red-500/10 border border-red-500/30' : 'bg-neon-cyan/10 border border-neon-cyan/30'}`}>
+                                    {confirmConfig.icon && (
+                                        <div className="scale-[0.8]">
+                                            {confirmConfig.icon}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <h2 className="text-xl font-bold text-white mb-2 tracking-tight">
+                                    {confirmConfig.title}
+                                </h2>
+
+                                <div className="text-gray-400 text-xs mb-6 leading-relaxed">
+                                    {confirmConfig.description}
+                                </div>
+
+                                <div className="flex gap-2.5 w-full mt-2">
+                                    <button
+                                        onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                                        className="flex-1 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all font-bold text-[10px]"
+                                    >
+                                        DISMISS
+                                    </button>
+                                    <button
+                                        onClick={confirmConfig.onConfirm}
+                                        className={`flex-1 px-4 py-2.5 rounded-lg font-bold text-[10px] transition-all shadow-xl flex items-center justify-center gap-1.5 group ${confirmConfig.type === 'danger'
+                                            ? 'bg-red-600 hover:bg-red-500 text-white shadow-red-900/20'
+                                            : 'bg-neon-cyan hover:bg-neon-cyan/80 text-black shadow-cyan-900/20'
+                                            }`}
+                                    >
+                                        {confirmConfig.confirmText}
+                                        <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             {/* Real-Time Analytics Bar */}
             <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 relative z-10">
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
                     <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Secure Vault TVL</h3>
                     <div className="text-xl font-mono text-white font-bold">
-                        {userBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">SUI</span>
+                        {vaultBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">SUI</span>
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
@@ -918,7 +1308,7 @@ function DashboardContent() {
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
                     <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Projected Yield (24H)</h3>
                     <div className="text-xl font-mono text-white font-bold">
-                        +{(userBalance * ((scallopData?.supplyApy || 0) / 100 / 365)).toFixed(4)} <span className="text-xs text-gray-500">SUI</span>
+                        +{(vaultBalance * ((scallopData?.supplyApy || 0) / 100 / 365)).toFixed(4)} <span className="text-xs text-gray-500">SUI</span>
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
@@ -935,31 +1325,115 @@ function DashboardContent() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="lg:col-span-2 glass-panel rounded-2xl p-6 flex flex-col relative overflow-hidden min-h-[400px]"
+                    className="lg:col-span-2 space-y-6"
                 >
-                    {activeStrategies.length > 0 ? (
-                        <div className="flex flex-col h-full">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-sm text-gray-400 uppercase tracking-widest">Fleet Status Monitor ({activeStrategies.length}/4)</h2>
-                                <button onClick={clearAllStrategies} className="text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-2 py-1 rounded bg-red-500/10 hover:bg-red-500/20 transition-all">
-                                    KILL SWITCH (ALL)
-                                </button>
+                    {/* Persistent Secure Vault Control */}
+                    <div className="glass-panel rounded-2xl p-6 relative overflow-hidden border border-white/5 hover:border-white/10 transition-all">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                            <div className="flex items-center gap-5">
+                                <div className="w-16 h-16 bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-white/10 flex items-center justify-center relative group">
+                                    <Shield className={`${vaultId ? 'text-neon-cyan' : 'text-gray-600'} transition-colors`} size={32} />
+                                    {activeStrategies.length > 0 && (
+                                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 border-2 border-[#0f0a1f] rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+                                    )}
+                                </div>
+                                <div className="space-y-1">
+                                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                        Main Trading Vault
+                                        {vaultId && <span className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-2 py-0.5 rounded-full border border-neon-cyan/20">ACTIVE</span>}
+                                    </h3>
+                                    <p className="text-xs text-gray-500 font-mono">
+                                        {vaultId ? `ID: ${vaultId.slice(0, 6)}...${vaultId.slice(-4)}` : 'Vault ID: Not Created'} • {vaultBalance.toFixed(2)} SUI Locked
+                                    </p>
+                                    <div className="flex items-center gap-2 pt-1">
+                                        {activeStrategies.length > 0 ? (
+                                            <span className="text-[10px] font-bold text-green-400 flex items-center gap-1.5 bg-green-500/5 px-2 py-1 rounded-lg border border-green-500/10">
+                                                <RefreshCw size={10} className="animate-spin-slow" />
+                                                AGENT ACCESS: GRANTED 🔓
+                                            </span>
+                                        ) : (
+                                            <span className="text-[10px] font-bold text-orange-400 flex items-center gap-1.5 bg-orange-500/5 px-2 py-1 rounded-lg border border-orange-500/10">
+                                                <Shield size={10} />
+                                                AGENT ACCESS: REVOKED 🔒
+                                            </span>
+                                        )}
+                                        {vaultId && (
+                                            <button
+                                                onClick={handleDestroyVault}
+                                                className="text-gray-600 hover:text-red-500 transition-all p-1"
+                                                title="Destroy Vault"
+                                            >
+                                                <Trash2 size={12} />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-[300px]">
+
+                            <div className="flex items-center gap-3">
+                                {!vaultId ? (
+                                    <button
+                                        onClick={handleCreateVault}
+                                        className="bg-neon-cyan text-black font-bold text-xs px-6 py-3 rounded-xl hover:bg-neon-cyan/80 transition-all shadow-[0_0_20px_rgba(0,243,255,0.3)] animate-pulse"
+                                    >
+                                        + INITIALIZE VAULT
+                                    </button>
+                                ) : (
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={handleDeposit}
+                                            className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-lg"
+                                        >
+                                            Deposit
+                                        </button>
+                                        <button
+                                            onClick={handleWithdraw}
+                                            className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white text-xs font-bold transition-all hover:scale-105 active:scale-95"
+                                        >
+                                            Withdraw
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Background Glow Effect */}
+                        <div className={`absolute -right-20 -bottom-20 w-64 h-64 rounded-full blur-[100px] opacity-10 transition-colors duration-1000 ${activeStrategies.length > 0 ? 'bg-green-500' : 'bg-neon-cyan'}`}></div>
+                    </div>
+
+                    {/* Fleet Grid Section */}
+                    <div className="glass-panel rounded-2xl p-6 min-h-[400px]">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-sm text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                <RefreshCw size={14} className={activeStrategies.length > 0 ? "animate-spin-slow text-neon-cyan" : "text-gray-600"} />
+                                Fleet Status Monitor ({activeStrategies.length}/4)
+                            </h2>
+                            {activeStrategies.length === 0 && (
+                                <button onClick={handleDeploy} className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
+                                    DEPLOY DEFAULT LOOP
+                                </button>
+                            )}
+                        </div>
+
+                        {activeStrategies.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {activeStrategies.slice(0, 4).map((strat, i) => {
-                                    // Calculate dynamic yield based on real market data + strategy optimization
                                     const baseApy = scallopData ? scallopData.supplyApy : 0;
-                                    // Pseudo-random boost per strategy (0.5% - 3.5%)
                                     const boost = 0.5 + (strat.id.charCodeAt(0) % 30) / 10;
                                     const dynamicYield = (baseApy + boost).toFixed(2) + '%';
 
                                     return (
-                                        <div key={`strategy-grid-${i}`} className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col relative overflow-hidden group hover:border-neon-cyan/30 transition-all">
+                                        <motion.div
+                                            key={`strategy-grid-${i}`}
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col relative overflow-hidden group hover:border-neon-cyan/30 transition-all"
+                                        >
                                             <div className="flex justify-between items-start mb-2 relative z-10">
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-2xl">{strat.emoji}</span>
                                                     <div>
-                                                        <h3 className="font-bold text-sm leading-tight">{strat.name}</h3>
+                                                        <h3 className="font-bold text-sm leading-tight text-white">{strat.name}</h3>
                                                         <span className="text-[10px] text-green-400 font-mono flex items-center gap-1">
                                                             <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
                                                             ACTIVE
@@ -976,137 +1450,45 @@ function DashboardContent() {
                                             <div className="flex-1 relative mt-2 min-h-[60px]">
                                                 <svg className="w-full h-full overflow-visible" preserveAspectRatio="none">
                                                     <path
-                                                        d={`M0,${30 + (i * 10)} Q${50 + (i * 20)},${10 + (i * 5)} 100,${40 - (i * 5)} T200,${20 + (i * 10)}`}
+                                                        d={`M0,${30 + (i * 5)} Q${50 + (i * 10)},${10 + (i * 2)} 100,${40 - (i * 2)} T200,${20 + (i * 5)}`}
                                                         fill="none"
                                                         stroke={i % 2 === 0 ? "#00f3ff" : "#bd00ff"}
                                                         strokeWidth="2"
                                                         vectorEffect="non-scaling-stroke"
-                                                        className="drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]"
+                                                        className="drop-shadow-[0_0_5px_rgba(0,243,255,0.4)]"
                                                     />
-                                                    <circle cx="200" cy={`${20 + (i * 10)}`} r="3" fill="#fff" className="animate-pulse" />
+                                                    <circle cx="200" cy={`${20 + (i * 5)}`} r="2.5" fill="#fff" className="animate-pulse" />
                                                 </svg>
                                             </div>
 
                                             <div className="mt-auto pt-3 border-t border-white/5 flex gap-2 relative z-10">
-                                                <span className="text-[10px] font-mono text-gray-400 flex-1">
-                                                    Tx: {strat.tx_digest ? strat.tx_digest.slice(0, 6) + '...' : 'Pending'}
+                                                <span className="text-[10px] font-mono text-gray-500 flex-1 truncate">
+                                                    Tx: {strat.tx_digest ? strat.tx_digest.slice(0, 8) + '...' : 'Pending'}
                                                 </span>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); stopStrategy(strat.id); }}
-                                                    className="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded transition-colors"
+                                                    className="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] px-2.5 py-1.5 rounded-lg border border-red-500/10 transition-colors"
                                                 >
                                                     STOP
                                                 </button>
                                             </div>
-
-                                            {/* Background Glow */}
-                                            <div className={`absolute -right-10 -bottom-10 w-24 h-24 rounded-full blur-[40px] opacity-20 ${i % 2 === 0 ? 'bg-neon-cyan' : 'bg-neon-purple'}`}></div>
-                                        </div>
+                                        </motion.div>
                                     );
                                 })}
                             </div>
-                        </div>
-                    ) : (
-                        <>
-                            <div className="flex flex-col h-full relative z-10">
-                                <div className="flex justify-between items-start mb-6">
-                                    <div>
-                                        <h2 className="text-sm text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-2">
-                                            <Shield size={14} className="text-neon-cyan" />
-                                            Secure Vaults
-                                        </h2>
-                                        <div className="text-4xl font-mono text-white flex items-center gap-2">
-                                            0.00 <span className="text-base text-gray-500">SUI</span>
-                                        </div>
-                                        <div className="mt-1 flex items-center gap-2">
-                                            <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                                                NON-CUSTODIAL
-                                            </span>
-                                            <span className="text-[10px] text-gray-500 flex items-center gap-2">
-                                                {vaultId ? (
-                                                    <>
-                                                        <span className="text-neon-cyan">
-                                                            Vault ID: {vaultId.slice(0, 6)}...{vaultId.slice(-4)}
-                                                        </span>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                handleDestroyVault();
-                                                            }}
-                                                            className="text-gray-600 hover:text-red-400 transition-colors"
-                                                            title="Destroy Vault & Recover Funds"
-                                                        >
-                                                            <X size={10} />
-                                                        </button>
-                                                    </>
-                                                ) : (
-                                                    <span>Vault ID: Not Created</span>
-                                                )}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        {!vaultId ? (
-                                            <button
-                                                onClick={handleCreateVault}
-                                                className="bg-neon-cyan text-black font-bold text-xs px-4 py-2 rounded hover:bg-neon-cyan/80 transition-colors shadow-[0_0_15px_rgba(0,243,255,0.3)] animate-pulse"
-                                            >
-                                                + NEW VAULT
-                                            </button>
-                                        ) : (
-                                            <div className="text-right">
-                                                <div className="text-neon-cyan text-xs font-mono font-bold">SECURE VAULT ACTIVE</div>
-                                                <div className="text-[10px] text-gray-500">Ready for automated trading</div>
-                                            </div>
-                                        )}
-                                    </div>
+                        ) : (
+                            <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-4">
+                                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-4xl grayscale opacity-50 relative">
+                                    <div className="absolute inset-0 bg-white/5 rounded-full animate-ping opacity-20"></div>
+                                    💤
                                 </div>
-
-                                {/* Visual Vault Representation */}
-                                <div className="flex-1 bg-white/5 border border-white/10 rounded-xl p-6 flex items-center justify-between group hover:border-neon-cyan/30 transition-all">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-16 h-16 bg-gradient-to-br from-gray-800 to-black rounded-xl border border-white/10 flex items-center justify-center relative">
-                                            <Shield className="text-gray-400 group-hover:text-neon-cyan transition-colors" size={32} />
-                                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-[#0f0a1f] rounded-full" title="Agent Access Revoked"></div>
-                                        </div>
-                                        <div>
-                                            <h3 className="text-lg font-bold text-white">Main Trading Vault</h3>
-                                            <p className="text-xs text-gray-400 mb-2">0 SUI Locked • 0 Strategies</p>
-
-                                            {/* Agent Permissions Toggle Mock */}
-                                            <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">
-                                                <span className="text-[10px] text-gray-400 uppercase tracking-wider">Agent Access:</span>
-                                                <button
-                                                    onClick={() => handleRevokeAgent()}
-                                                    className="text-[10px] font-bold text-red-400 hover:text-red-300 cursor-pointer transition-colors"
-                                                    title="Click to revoke agent permissions"
-                                                >
-                                                    REVOKED 🔒
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex flex-col gap-2">
-                                        <button className="text-xs border border-white/20 hover:bg-white/5 text-white px-4 py-2 rounded transition-colors">
-                                            Deposit
-                                        </button>
-                                        <button className="text-xs border border-white/20 hover:bg-white/5 text-gray-400 hover:text-white px-4 py-2 rounded transition-colors">
-                                            Withdraw
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="mt-6 text-center">
-                                    <p className="text-xs text-gray-500 max-w-md mx-auto">
-                                        <span className="text-neon-cyan">Security Note:</span> This vault uses the <strong>Hot Potato</strong> pattern.
-                                        Agents can execute trades but <span className="underline decoration-red-500/50">cannot withdraw</span> your funds.
-                                    </p>
+                                <div className="space-y-1">
+                                    <p className="text-gray-400 font-medium">No agents currently deployed.</p>
+                                    <p className="text-xs text-gray-600 max-w-xs mx-auto">Initialize your Secure Vault and select a strategy to begin automated trading.</p>
                                 </div>
                             </div>
-                        </>
-                    )}
+                        )}
+                    </div>
                 </motion.div>
 
                 {/* Right Column: Stats & Agent Controls */}
