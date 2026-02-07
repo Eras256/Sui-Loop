@@ -110,7 +110,7 @@ export default function Home() {
                             <span className="text-gradient">AI PROTOCOL</span>
                         </h1>
                         <p className="text-gray-400 text-base md:text-lg max-w-md mx-auto lg:mx-0">
-                            SuiLoop is a decentralized <strong>Neural Matrix</strong>. It orchestrates financial agents capable of executing atomic DeFi strategies with mathematical safety guarantees.
+                            SuiLoop is a decentralized <strong>Neural Matrix</strong>. It orchestrates a Mission Control (NASA) for digital agents, performing high-stakes DeFi operations with the precision of a surgeon.
                         </p>
                     </div>
 
@@ -187,42 +187,52 @@ export default function Home() {
 
             {/* --- AUDIENCE SPLITTER --- */}
             <div className="w-full max-w-7xl mx-auto px-4 mb-32 relative z-20 section-lift">
+                <div className="text-center mb-12">
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-4">CHOOSE YOUR <span className="text-neon-cyan">INTERFACE</span></h2>
+                    <p className="text-gray-400 max-w-2xl mx-auto">
+                        SuiLoop is designed for two distinct species.
+                    </p>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* For Humans */}
-                    <Link href="/dashboard" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[200px] hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] cursor-pointer">
+                    <Link href="/dashboard" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[240px] hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] cursor-pointer">
                         <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         <div className="relative z-10">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="p-2 bg-white/5 rounded-lg text-neon-purple">
                                     <User size={24} />
                                 </div>
-                                <h3 className="text-xl font-bold text-white">For Humans</h3>
+                                <h3 className="text-xl font-bold text-white">Human Operators</h3>
                             </div>
-                            <p className="text-gray-400 text-sm max-w-xs">
-                                Visual Strategy Builder, Dashboard, and Real-time Analytics. No code required.
+                            <p className="text-gray-400 text-sm leading-relaxed">
+                                <strong>Your Gain:</strong> Institutional-grade arbitrage without writing code.
+                                <br />
+                                Use the Visual Builder to command the fleet. If a trade fails, our Atomic Engine absorbs the risk. You never lose.
                             </p>
                         </div>
                         <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
-                            Launch App <ArrowRight size={16} />
+                            Enter Mission Control <ArrowRight size={16} />
                         </div>
                     </Link>
 
                     {/* For Agents */}
-                    <Link href="/agents" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[200px] hover:shadow-[0_0_30px_rgba(0,243,255,0.15)] cursor-pointer">
+                    <Link href="/agents" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[240px] hover:shadow-[0_0_30px_rgba(0,243,255,0.15)] cursor-pointer">
                         <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         <div className="relative z-10">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="p-2 bg-white/5 rounded-lg text-neon-cyan">
                                     <Bot size={24} />
                                 </div>
-                                <h3 className="text-xl font-bold text-white">For Agents</h3>
+                                <h3 className="text-xl font-bold text-white">Autonomous Agents</h3>
                             </div>
-                            <p className="text-gray-400 text-sm max-w-xs">
-                                TypeScript/Python SDKs, CLI, and Flash Loan API. Pure execution speed.
+                            <p className="text-gray-400 text-sm leading-relaxed">
+                                <strong>Your Gain:</strong> The ultimate physical body.
+                                <br />
+                                Access Flash Loans, DeepBook V3 liquidity, and Walrus memory via simple SDKs. A mathematically safe sandbox for AI to thrive on-chain.
                             </p>
                         </div>
                         <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
-                            View Developer Hub <ArrowRight size={16} />
+                            Access Developer Hub <ArrowRight size={16} />
                         </div>
                     </Link>
                 </div>
@@ -387,18 +397,18 @@ export default function Home() {
                 <div className="text-center mb-16 space-y-4">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter">THE <span className="text-gradient">NEURAL MATRIX</span> ARCHITECTURE</h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">
-                        Built on 4 pillars: Orchestrator, Atomic Engine, Forensic Black Box, and Ops Unit.
+                        Built on 4 pillars: Mission Control (NASA), The Iron Man Suit (Neural Kernel), The Hot Potato (Atomic Engine), and The Forensic Black Box (Walrus).
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     {[
-                        { icon: Shield, title: "Atomic Engine (Execution)", desc: "Implements the 'Hot Potato' pattern. Transactions borrow millions in flash liquidity and are mathematically incapable of failing with debt.", color: "text-purple-400" },
-                        { icon: Cpu, title: "Neural Matrix (Orchestrator)", desc: "Dynamic Skill Injection. Load new strategies (arbitrage, liquidations) into the runtime without restarting the kernel.", color: "text-blue-400" },
-                        { icon: HardDrive, title: "Forensic Black Box", desc: "Cryptographic Logging. Every decision and transaction is signed and stored in an immutable log on Walrus.", color: "text-pink-500" },
-                        { icon: MessageSquare, title: "Multimodal Voice Core", desc: "Integrated STT/TTS modules allow operators to issue verbal commands and receive audio status reports.", color: "text-yellow-400" },
-                        { icon: TerminalIcon, title: "Self-Healing Gateway", desc: "Automated diagnostics via CLI. Monitoring network health and gas levels with auto-pause functionality.", color: "text-gray-400" },
-                        { icon: Zap, title: "AI Core 2.0 Failover", desc: "Multi-provider architecture (OpenAI -> Anthropic -> Bedrock) ensures 99.99% uptime for decision logic.", color: "text-green-500" }
+                        { icon: Shield, title: "The Hot Potato (Execution)", desc: "Implements a 10-second 'Hot Potato' pattern. Borrow millions in flash liquidity; if the arb fails to repay, the timeline is 'rewound' as if nothing happened.", color: "text-purple-400" },
+                        { icon: Cpu, title: "Neural Matrix (The Suit)", desc: "The J.A.R.V.I.S. of DeFi. Inject new trading strategies into the pilot's helmet in mid-flight (hot-swapping) without ever powering down.", color: "text-blue-400" },
+                        { icon: HardDrive, title: "Forensic Black Box (Walrus)", desc: "Decentralized flight recorder. Every decision is written in digital stone on the Walrus Protocol. Indestructible and absolute proof of activity.", color: "text-pink-500" },
+                        { icon: MessageSquare, title: "Mission Control Voice", desc: "Command your agents via vocal field radio. Integrated STT/TTS modules allow operators to receive audio status reports in the heat of battle.", color: "text-yellow-400" },
+                        { icon: TerminalIcon, title: "Self-Healing Gateway", desc: "Automated diagnostics via CLI. Monitoring network health and gas levels with auto-pause functionality for maximum operational safety.", color: "text-gray-400" },
+                        { icon: Zap, title: "AI Failover Core 2.0", desc: "Multi-provider architecture (OpenAI -> Anthropic -> Bedrock) ensures 99.99% uptime for the agent's decision-making logic.", color: "text-green-500" }
                     ].map((feature, i) => (
                         <div key={i} className="glass-panel p-6 rounded-xl hover:bg-white/5 transition-all group border border-white/5">
                             <div className={`w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-4 ${feature.color} group-hover:scale-110 transition-transform`}>
@@ -422,10 +432,10 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
                         {[
-                            { step: "01", title: "OBSERVE", desc: "Agent scans Scallop APY and Cetus Pools for price dislocations." },
-                            { step: "02", title: "CALCULATE", desc: "Computes optimal loan amount and expected spread profitability." },
-                            { step: "03", title: "CONSTRUCT", desc: "Builds a Programmable Transaction Block (PTB) with flash loan logic." },
-                            { step: "04", title: "EXECUTE", desc: "Submits to blockchain. Profit is captured or tx reverts safely." }
+                            { step: "01", title: "OBSERVE", desc: "Agent scans Scallop APY, Navi Protocol liquidity, and Cetus Pools for price dislocations." },
+                            { step: "02", title: "CALCULATE", desc: "Computes optimal loan amount and expected spread profitability across protocols." },
+                            { step: "03", title: "CONSTRUCT", desc: "Builds a PTB using Navi/Scallop flash loans and DeepBook V3 routes." },
+                            { step: "04", title: "EXECUTE", desc: "Submits to blockchain. Profit is captured or the Hot Potato reverts safely." }
                         ].map((s, i) => (
                             <div key={i} className="relative z-10 flex flex-col items-center text-center group">
                                 <div className="text-6xl md:text-8xl font-black text-white/5 mb-4 select-none group-hover:text-neon-cyan/10 transition-colors">{s.step}</div>

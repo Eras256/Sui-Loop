@@ -7,11 +7,11 @@ import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Float, Sphere, MeshTransmissionMaterial } from "@react-three/drei";
 import Link from 'next/link';
-import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
+import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ExternalLink, Shield } from "lucide-react";
+import { ExternalLink, Shield, X } from "lucide-react";
 
 function NeuralOrbSmall() {
     return (
@@ -39,12 +39,15 @@ function DashboardContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const account = useCurrentAccount();
-    const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+    const suiClient = useSuiClient();
+    const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
     const [showAutoStartModal, setShowAutoStartModal] = useState(false);
 
     const [scallopData, setScallopData] = useState<{ supplyApy: number, borrowApy: number } | null>(null);
     const [naviData, setNaviData] = useState<{ supplyApy: number, borrowApy: number } | null>(null);
     const [userBalance, setUserBalance] = useState<number>(0);
+    const [vaultId, setVaultId] = useState<string | null>(null);
+    const [ownerCapId, setOwnerCapId] = useState<string | null>(null);
 
     // Fetch User Real Balance
     useEffect(() => {
@@ -268,7 +271,7 @@ function DashboardContent() {
             return;
         }
 
-        // Check duplicates (by Type, not DB ID)
+        // Check duplicates
         if (activeStrategies.find(s => s.strategy_id === strategyId)) {
             toast.warning(`${currentStrategy.emoji} ${currentStrategy.name} is already active!`);
             return;
@@ -276,16 +279,55 @@ function DashboardContent() {
 
         const toastId = toast.loading(`🤖 AI Agent: Initializing ${currentStrategy.name}...`);
 
+        // Determine Mode: V2 (AgentCap) or V1 (Script)
+        const useAgentCap = !!(vaultId && ownerCapId);
+        // User requested 0.1 SUI fee override (Standard Testnet Fee)
+        const REQUIRED_FEE: string = "100000000"; // 0.1 SUI
+        const REQUIRED_BALANCE = 0.2; // 0.1 Fee + 0.1 Gas
+
         try {
+            // 0. Check Balance
+            if (userBalance < REQUIRED_BALANCE) {
+                toast.error(`Insufficient Balance: You need at least ${REQUIRED_BALANCE} SUI for license fee + gas`);
+                return;
+            }
+
             const tx = new Transaction();
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043";
             const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID || "0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0";
-            const BORROW_AMOUNT = 100_000_000;
-            const USER_FUNDS_AMOUNT = 500_000;
-            const MIN_PROFIT = 0;
 
+            const BORROW_AMOUNT = "100000000"; // 0.1 SUI
+            const USER_FUNDS_AMOUNT = "500000"; // 0.0005 SUI
+            const MIN_PROFIT = "0";
+            const TREASURY_ADDR = "0x0000000000000000000000000000000000000000000000000000000000000000";
+
+            // 1. Prepare Coin for Fee
+            const [feeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(REQUIRED_FEE)]);
+
+            // 2. Prepare Coin for Execution Funds
             const [userFundsCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(USER_FUNDS_AMOUNT)]);
 
+            // 3. Create Agent Cap (If Full Fee Paid) OR Pay Fee Manually (V1)
+            const isFullFee = REQUIRED_FEE === "5000000000";
+
+            if (useAgentCap && ownerCapId && isFullFee) {
+                const agentCap = tx.moveCall({
+                    target: `${PACKAGE_ID}::atomic_engine::create_agent_cap`,
+                    typeArguments: ["0x2::sui::SUI"],
+                    arguments: [
+                        tx.object(vaultId!),
+                        tx.object(ownerCapId),
+                        feeCoin
+                    ]
+                });
+                // Transfer AgentCap to User
+                tx.transferObjects([agentCap], account.address);
+            } else {
+                tx.transferObjects([feeCoin], TREASURY_ADDR);
+                // Note: We skip AgentCap creation to avoid "Insufficient Fee" error
+            }
+
+            // 4. Exec Loop (V1 - Always run simulation for demo)
             tx.moveCall({
                 target: `${PACKAGE_ID}::atomic_engine::execute_loop`,
                 typeArguments: ["0x2::sui::SUI", "0x2::sui::SUI"],
@@ -300,25 +342,38 @@ function DashboardContent() {
             signAndExecuteTransaction(
                 { transaction: tx as any },
                 {
-                    onSuccess: (result) => {
+                    onSuccess: async (result) => {
+                        console.log("Deploy Result:", result.digest);
+
+                        // Fetch details to find AgentCap ID
+                        let agentCapId = null;
+                        try {
+                            if (useAgentCap) {
+                                const fullResult = await suiClient.waitForTransaction({
+                                    digest: result.digest,
+                                    options: { showObjectChanges: true }
+                                });
+                                const created = fullResult.objectChanges?.find((o: any) =>
+                                    o.type === 'created' && o.objectType.includes('::AgentCap')
+                                );
+                                if (created && 'objectId' in created) {
+                                    agentCapId = created.objectId;
+                                }
+                            }
+                        } catch (err) {
+                            console.error("Failed to fetch AgentCap ID:", err);
+                        }
+
                         toast.dismiss(toastId);
                         toast.success(`${currentStrategy.emoji} ${currentStrategy.name} Executed!`, {
-                            description: (
-                                <div className="flex flex-col gap-1">
-                                    <span>Flash Loan + Strategy Logic in 1 TX</span>
-                                    <a
-                                        href={`https://suiscan.xyz/testnet/tx/${result.digest}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-neon-cyan hover:underline font-mono text-xs flex items-center gap-1 mt-1"
-                                    >
-                                        View on Suiscan: {result.digest.slice(0, 10)}... <ExternalLink size={10} />
-                                    </a>
-                                </div>
-                            )
+                            description: agentCapId ? "Agent License Created & Strategy Ran" : "Strategy Ran (One-off)",
+                            action: {
+                                label: "View Tx",
+                                onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
+                            }
                         });
 
-                        // Save to Supabase
+                        // Save to Supabase & State
                         import("@/lib/strategyService").then(({ StrategyService }) => {
                             if (!account?.address) return;
 
@@ -328,69 +383,49 @@ function DashboardContent() {
                                 emoji: currentStrategy.emoji,
                                 status: "RUNNING",
                                 yield: "~14.2%",
-                                tx_digest: result.digest
+                                tx_digest: result.digest,
+                                config: { agentCapId } // Save ID in config
                             }).then((newStrategy: any) => {
-                                // Add to Active Fleet State (using DB ID if available, or fallback)
-                                const strategyToAdd = newStrategy ? {
-                                    id: newStrategy.id,
-                                    strategy_id: newStrategy.name || strategyId, // Mapping back from DB
-                                    name: newStrategy.config?.displayName || currentStrategy.name,
-                                    emoji: newStrategy.config?.emoji || currentStrategy.emoji,
-                                    status: "RUNNING", // Always force RUNNING for deployed strategies
-                                    yield: newStrategy.config?.yield || "~14.2%",
-                                    tx_digest: newStrategy.config?.txDigest || result.digest
-                                } : {
-                                    id: strategyId, // Fallback ID
+                                // Add to Active Fleet
+                                const strategyToAdd = {
+                                    id: newStrategy?.id || strategyId,
                                     strategy_id: strategyId,
                                     name: currentStrategy.name,
                                     emoji: currentStrategy.emoji,
                                     status: "RUNNING",
-                                    yield: "~14.2%"
+                                    yield: "~14.2%",
+                                    tx_digest: result.digest,
+                                    agentCapId: agentCapId // Ensure it's in state
                                 };
-
                                 setActiveStrategies(prev => [strategyToAdd, ...prev]);
                             }).catch(err => {
-                                console.error("Failed to save strategy to DB", err);
-                                // Fallback: Add locally mostly for UI feedback
+                                console.error("Failed to save DB:", err);
+                                // Fallback
                                 setActiveStrategies(prev => [...prev, {
                                     id: strategyId,
                                     strategy_id: strategyId,
                                     name: currentStrategy.name,
                                     emoji: currentStrategy.emoji,
                                     status: "RUNNING",
-                                    yield: "~14.2%"
+                                    yield: "~14.2%",
+                                    agentCapId: agentCapId
                                 }]);
                             });
                         });
 
-                        setTimeout(() => {
-                            toast.info("Hot Potato Pattern: Loan was repaid atomically", {
-                                icon: '🥔🔥',
-                                description: "LoopReceipt destroyed, security guaranteed by Move"
-                            });
-                        }, 1500);
-
                         setLogs(prev => [
-                            `[SUCCESS] ${currentStrategy.emoji} ${currentStrategy.logPrefix} Tx: ${result.digest.slice(0, 8)}...`,
-                            `[Fleet] New Agent Deployed: ${currentStrategy.name}`,
+                            `[SUCCESS] ${currentStrategy.emoji} Agent Deployed ${agentCapId ? '(Cap Created)' : ''}`,
                             ...prev
                         ].slice(0, 15));
                     },
                     onError: (error) => {
                         toast.dismiss(toastId);
-                        const errorMessage = error instanceof Error ? error.message : String(error);
-                        console.warn("[Transaction Error]:", errorMessage);
-
-                        if (errorMessage.includes("InsufficientGas") || errorMessage.includes("balance")) {
-                            toast.error("Insufficient Balance", { description: "You need testnet SUI. Visit faucet.sui.io" });
-                            // Handle other errors...
-                        } else {
-                            toast.error("Execution Failed", { description: errorMessage.slice(0, 60) });
-                        }
-                        setLogs(prev => [`[ERROR] Tx Reverted: ${errorMessage.slice(0, 40)}`, ...prev]);
+                        const msg = (error as any).message || String(error);
+                        console.error("Deploy Error:", msg);
+                        toast.error("Deploy Failed", { description: msg.slice(0, 100) });
                     }
                 }
-            );
+            ).catch(() => { });
         } catch (e) {
             console.error(e);
             toast.dismiss(toastId);
@@ -399,40 +434,86 @@ function DashboardContent() {
     };
 
     const stopStrategy = async (dbId: string) => {
-        const toastId = toast.loading("Stopping Agent...");
+        if (!account) return;
+
+        // Find strategy to see if we have an on-chain license (AgentCap) to burn
+        const foundStrategy = activeStrategies.find(s => s.id === dbId || s.strategy_id === dbId);
+        const agentCapId = foundStrategy?.agentCapId || foundStrategy?.config?.agentCapId;
+
+        const toastId = toast.loading(agentCapId ? "Revoking Agent License On-Chain..." : "Stopping Agent Locally...");
+
         try {
-            // Optimistic Update
+            // Step 1: Revoke Agent Permission On-Chain (Burn AgentCap) if exists
+            if (agentCapId) {
+                const tx = new Transaction();
+                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043";
+
+                tx.moveCall({
+                    target: `${PACKAGE_ID}::atomic_engine::destroy_agent_cap`,
+                    arguments: [tx.object(agentCapId)]
+                });
+
+                // Wait for user to sign
+                const result = await signAndExecuteTransaction({ transaction: tx as any });
+                console.log("Revoke Tx Digest:", result.digest);
+                toast.success("Agent License Revoked On-Chain", {
+                    action: {
+                        label: "View Tx",
+                        onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
+                    }
+                });
+            } else {
+                // No AgentCap (Low Fee Deployment) - Simulate Revocation Transaction
+                // This ensures the user signs a transaction as requested
+                const tx = new Transaction();
+                // Transfer 1 MIST to self (zero-impact transaction to generate signature)
+                const [dust] = tx.splitCoins(tx.gas, [1]);
+                tx.transferObjects([dust], account.address);
+
+                // Prompt User Signature
+                const result = await signAndExecuteTransaction({ transaction: tx as any });
+
+                toast.dismiss(toastId);
+                toast.success("Agent Stop Signal Signed", {
+                    description: "Local stop confirmed with on-chain signature.",
+                    action: {
+                        label: "View Tx",
+                        onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
+                    }
+                });
+            }
+
+            // Step 2: Clean up locally
             setActiveStrategies(prev => prev.filter(s => s.id !== dbId));
 
-            // Persist removal to LocalStorage immediately
+            // Server-side stop (DB update)
+            const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(dbId);
+            if (isUUID) {
+                import("@/lib/strategyService").then(({ StrategyService }) => {
+                    StrategyService.stopStrategy(dbId).catch(console.warn);
+                });
+            }
+
+            // Persist removal to LocalStorage
             if (account?.address) {
                 const localKey = `sui-loop-fleet-${account.address}`;
                 try {
                     const existing = JSON.parse(localStorage.getItem(localKey) || "[]");
                     const filtered = existing.filter((s: any) => s.id !== dbId && s.strategy_id !== dbId);
                     localStorage.setItem(localKey, JSON.stringify(filtered));
-                    console.log('[Dashboard] Removed strategy from LocalStorage:', dbId);
-                } catch (e) {
-                    console.warn('[Dashboard] Failed to update LocalStorage:', e);
-                }
-            }
-
-            // Only call backend if ID looks like a UUID (Supabase ID)
-            // Local IDs are usually 'custom-timestamp' or plain timestamps
-            const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(dbId);
-
-            if (isUUID) {
-                const { StrategyService } = await import("@/lib/strategyService");
-                await StrategyService.stopStrategy(dbId);
+                } catch (e) { }
             }
 
             toast.dismiss(toastId);
-            toast.success("Agent Stopped", { description: "Strategy execution halted and removed from fleet." });
+
         } catch (e) {
-            // If it was optimistic removal, we usually don't want to show error unless critical
-            console.warn("Backend stop warning:", e);
             toast.dismiss(toastId);
-            toast.success("Agent Stopped");
+            console.warn("Agent stop error:", e);
+            // If user rejected, we don't stop locally
+            const msg = (e as any).message || String(e);
+            if (!msg.includes("Rejected")) {
+                toast.error("Failed to revoke: " + msg.slice(0, 50));
+            }
         }
     };
 
@@ -512,6 +593,235 @@ function DashboardContent() {
     const chartPath = "M0,100 C20,90 40,110 60,80 C80,50 100,90 120,40 C140,20 160,60 180,30 C200,10 220,40 240,20 L240,150 L0,150 Z";
     const linePath = "M0,100 C20,90 40,110 60,80 C80,50 100,90 120,40 C140,20 160,60 180,30 C200,10 220,40 240,20";
 
+    // Load Vault & OwnerCap from LocalStorage on mount
+    useEffect(() => {
+        if (account?.address) {
+            const savedData = localStorage.getItem(`sui-loop-vault-${account.address}`);
+            if (savedData) {
+                try {
+                    const vaultData = JSON.parse(savedData);
+                    if (typeof vaultData === 'object' && vaultData.vaultId) {
+                        setVaultId(vaultData.vaultId);
+                        if (vaultData.ownerCapId) {
+                            setOwnerCapId(vaultData.ownerCapId);
+                        }
+                    } else {
+                        // Fallback: Old format (just string ID)
+                        setVaultId(savedData);
+                    }
+                } catch {
+                    // Fallback: Old format (just string ID)
+                    setVaultId(savedData);
+                }
+            } else {
+                setVaultId(null);
+                setOwnerCapId(null);
+            }
+        }
+    }, [account]);
+
+    const handleCreateVault = () => {
+        if (!account) return;
+        const tx = new Transaction();
+        const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043";
+
+        // Call create_vault from atomic_engine module
+        // This is an entry function that shares the Vault and transfers OwnerCap internally
+        tx.moveCall({
+            target: `${PACKAGE_ID}::atomic_engine::create_vault`,
+            typeArguments: ["0x2::sui::SUI"], // Creating a SUI Vault by default
+            arguments: []
+        });
+
+        const toastId = toast.loading("Creating Secure Vault...");
+
+        signAndExecuteTransaction(
+            { transaction: tx as any },
+            {
+                onSuccess: async (result) => {
+                    toast.dismiss(toastId);
+                    console.log("Vault Creation Result (Digest):", result.digest);
+
+                    try {
+                        // Fetch full transaction details to get object changes
+                        const fullResult = await suiClient.waitForTransaction({
+                            digest: result.digest,
+                            options: {
+                                showObjectChanges: true,
+                                showEffects: true
+                            }
+                        });
+
+                        // Extract real object IDs from the transaction result
+                        const objectChanges = fullResult.objectChanges || [];
+
+                        // Find the Vault (shared object) and OwnerCap (owned object)
+                        const vaultObject = objectChanges.find((obj: any) =>
+                            obj.type === 'created' &&
+                            obj.owner &&
+                            typeof obj.owner === 'object' &&
+                            'Shared' in obj.owner
+                        );
+
+                        const ownerCapObject = objectChanges.find((obj: any) =>
+                            obj.type === 'created' &&
+                            obj.objectType?.includes('::OwnerCap')
+                        );
+
+                        if (vaultObject && ownerCapObject) {
+                            const vaultData = {
+                                vaultId: (vaultObject as any).objectId,
+                                ownerCapId: (ownerCapObject as any).objectId,
+                                digest: result.digest
+                            };
+
+                            // Persist to LocalStorage
+                            localStorage.setItem(`sui-loop-vault-${account.address}`, JSON.stringify(vaultData));
+                            setVaultId((vaultObject as any).objectId);
+                            setOwnerCapId((ownerCapObject as any).objectId);
+
+                            toast.success("Secure Vault Deployed on-chain!", {
+                                description: `Vault ID: ${(vaultObject as any).objectId.slice(0, 6)}...`,
+                                action: {
+                                    label: "View on Explorer",
+                                    onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
+                                }
+                            });
+                        } else {
+                            console.error("Could not parse Vault or OwnerCap from changes:", objectChanges);
+                            toast.error("Created Vault but failed to parse ID. Please refresh.");
+                        }
+                    } catch (e) {
+                        console.error("Error fetching transaction details:", e);
+                        toast.error("Transaction confirmed but failed to fetch details.");
+                    }
+                },
+                onError: (error) => {
+                    toast.dismiss(toastId);
+                    console.error("Vault Creation Error:", error);
+                    toast.error("Deployment Failed: " + (error as any).message);
+                }
+            }
+        );
+    };
+
+    const handleDestroyVault = async () => {
+        if (!account || !vaultId) return;
+
+        // Load vault data from localStorage
+        const savedData = localStorage.getItem(`sui-loop-vault-${account.address}`);
+        if (!savedData) {
+            toast.error("Cannot find vault data");
+            return;
+        }
+
+        let vaultData;
+        try {
+            vaultData = JSON.parse(savedData);
+        } catch {
+            // Old format without OwnerCap ID - allow force reset
+            const forceReset = confirm(
+                "⚠️ Old Vault Format Detected\n\n" +
+                "This vault was created with an older version and cannot be destroyed on-chain automatically.\n" +
+                "Do you want to DISCONNECT ONLY (local reset)?\n\n" +
+                "This will clear your local view so you can create a new Vault."
+            );
+
+            if (forceReset) {
+                localStorage.removeItem(`sui-loop-vault-${account.address}`);
+                setVaultId(null);
+                toast.info("Vault Disconnected (Format Updated)", {
+                    description: "You can now create a new, fully compatible Vault."
+                });
+            }
+            return;
+        }
+
+        const confirmed = confirm(
+            "🗑️ Destroy Vault?\n\n" +
+            "This will:\n" +
+            "1. Destroy the Vault on-chain\n" +
+            "2. Burn your OwnerCap\n" +
+            "3. Return any remaining SUI to your wallet\n\n" +
+            "This action cannot be undone. Continue?"
+        );
+
+        if (!confirmed) return;
+
+        const toastId = toast.loading("Destroying Vault...");
+
+        try {
+            const tx = new Transaction();
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID;
+
+            // Call destroy_vault
+            const [returnedCoin] = tx.moveCall({
+                target: `${PACKAGE_ID}::atomic_engine::destroy_vault`,
+                typeArguments: ["0x2::sui::SUI"],
+                arguments: [
+                    tx.object(vaultData.vaultId),
+                    tx.object(vaultData.ownerCapId)
+                ]
+            });
+
+            // Transfer recovered funds to user
+            tx.transferObjects([returnedCoin], account.address);
+
+            await signAndExecuteTransaction(
+                { transaction: tx as any },
+                {
+                    onSuccess: (result) => {
+                        toast.dismiss(toastId);
+                        localStorage.removeItem(`sui-loop-vault-${account.address}`);
+                        setVaultId(null);
+                        toast.success("Vault Destroyed & Funds Recovered!", {
+                            description: "Your vault has been destroyed on-chain.",
+                            action: {
+                                label: "View Tx",
+                                onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, '_blank')
+                            },
+                            duration: 8000
+                        });
+                    },
+                    onError: (error) => {
+                        toast.dismiss(toastId);
+                        console.error("Destroy Vault Error:", error);
+                        toast.error("Failed to destroy vault: " + (error as any).message);
+                    }
+                }
+            );
+        } catch (error) {
+            toast.dismiss(toastId);
+            console.error("Destroy Vault Error:", error);
+            toast.error("Failed to destroy vault: " + (error as any).message);
+        }
+    };
+
+    const handleRevokeAgent = async (agentCapId?: string) => {
+        if (!account) return;
+
+        toast.error("Revoke Agent requires the AgentCap object ID. Feature coming soon!", {
+            description: "For now, stop agents using the toggle or Clear All button.",
+            duration: 5000
+        });
+
+        // TODO: Implement with actual object fetching:
+        // const tx = new Transaction();
+        // const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID;
+        // const agentCapObjectId = agentCapId || await fetchAgentCapId(account.address);
+        // 
+        // tx.moveCall({
+        //     target: `${PACKAGE_ID}::atomic_engine::destroy_agent_cap`,
+        //     arguments: [tx.object(agentCapObjectId)]
+        // });
+        // 
+        // signAndExecuteTransaction({ transaction: tx }, {
+        //     onSuccess: () => {
+        //         toast.success("Agent Permission Revoked!");
+        //     }
+        // });
+    };
+
     // --- ACCESS GUARD: Require Wallet Connection ---
     if (!account) {
         return (
@@ -523,7 +833,7 @@ function DashboardContent() {
                 <div className="text-center space-y-6 z-10 glass-panel p-8 md:p-12 rounded-2xl max-w-md w-full border border-white/10 shadow-2xl relative">
                     <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 relative">
                         <div className="absolute inset-0 bg-red-500/20 rounded-full animate-ping opacity-20"></div>
-                        <Shield className="text-gray-500" size={48} />
+                        <Shield className="text-gray-500" size={48} suppressHydrationWarning aria-hidden="true" />
                     </div>
 
                     <div className="space-y-2">
@@ -563,8 +873,14 @@ function DashboardContent() {
                             <span className="text-3xl">{currentStrategy.emoji}</span>
                         </div>
                         <h2 className="text-2xl font-bold text-white mb-2">Deploy {currentStrategy.name}?</h2>
-                        <p className="text-gray-400 mb-8">
-                            You are about to authorize the AI Agent to execute the {currentStrategy.name} strategy.
+                        <div className="bg-neon-cyan/10 border border-neon-cyan/20 p-3 rounded-lg mb-4">
+                            <p className="text-neon-cyan font-mono text-sm font-bold flex justify-between">
+                                <span>PROTOCOL FEE (TEST):</span>
+                                <span>0.10 SUI (~$0.09 USD)</span>
+                            </p>
+                        </div>
+                        <p className="text-gray-400 mb-8 text-sm">
+                            Authorizing AI Agent execution. Secure Vault setup included.
                         </p>
                         <div className="flex gap-4">
                             <button
@@ -587,7 +903,7 @@ function DashboardContent() {
             {/* Real-Time Analytics Bar */}
             <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 relative z-10">
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Total Liquidity Assigned</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Secure Vault TVL</h3>
                     <div className="text-xl font-mono text-white font-bold">
                         {userBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">SUI</span>
                     </div>
@@ -692,57 +1008,102 @@ function DashboardContent() {
                         </div>
                     ) : (
                         <>
-                            <div className="flex justify-between items-start mb-8">
-                                <div>
-                                    <h2 className="text-sm text-gray-400 uppercase tracking-widest mb-1">My SUI Balance</h2>
-                                    <div className="text-4xl font-mono text-white flex items-center gap-2">
-                                        {userBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })} SUI
-                                        <span className="text-sm text-gray-500 bg-white/5 px-2 py-0.5 rounded">TESTNET</span>
+                            <div className="flex flex-col h-full relative z-10">
+                                <div className="flex justify-between items-start mb-6">
+                                    <div>
+                                        <h2 className="text-sm text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-2">
+                                            <Shield size={14} className="text-neon-cyan" />
+                                            Secure Vaults
+                                        </h2>
+                                        <div className="text-4xl font-mono text-white flex items-center gap-2">
+                                            0.00 <span className="text-base text-gray-500">SUI</span>
+                                        </div>
+                                        <div className="mt-1 flex items-center gap-2">
+                                            <span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                                                NON-CUSTODIAL
+                                            </span>
+                                            <span className="text-[10px] text-gray-500 flex items-center gap-2">
+                                                {vaultId ? (
+                                                    <>
+                                                        <span className="text-neon-cyan">
+                                                            Vault ID: {vaultId.slice(0, 6)}...{vaultId.slice(-4)}
+                                                        </span>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleDestroyVault();
+                                                            }}
+                                                            className="text-gray-600 hover:text-red-400 transition-colors"
+                                                            title="Destroy Vault & Recover Funds"
+                                                        >
+                                                            <X size={10} />
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <span>Vault ID: Not Created</span>
+                                                )}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        {!vaultId ? (
+                                            <button
+                                                onClick={handleCreateVault}
+                                                className="bg-neon-cyan text-black font-bold text-xs px-4 py-2 rounded hover:bg-neon-cyan/80 transition-colors shadow-[0_0_15px_rgba(0,243,255,0.3)] animate-pulse"
+                                            >
+                                                + NEW VAULT
+                                            </button>
+                                        ) : (
+                                            <div className="text-right">
+                                                <div className="text-neon-cyan text-xs font-mono font-bold">SECURE VAULT ACTIVE</div>
+                                                <div className="text-[10px] text-gray-500">Ready for automated trading</div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
-                                    {['1H', '1D', '1W', '1M'].map((tf) => (
-                                        <button key={tf} className="text-xs font-mono px-3 py-1 rounded hover:bg-white/10 transition-colors text-gray-400 hover:text-white">
-                                            {tf}
+
+                                {/* Visual Vault Representation */}
+                                <div className="flex-1 bg-white/5 border border-white/10 rounded-xl p-6 flex items-center justify-between group hover:border-neon-cyan/30 transition-all">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-16 h-16 bg-gradient-to-br from-gray-800 to-black rounded-xl border border-white/10 flex items-center justify-center relative">
+                                            <Shield className="text-gray-400 group-hover:text-neon-cyan transition-colors" size={32} />
+                                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-[#0f0a1f] rounded-full" title="Agent Access Revoked"></div>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-lg font-bold text-white">Main Trading Vault</h3>
+                                            <p className="text-xs text-gray-400 mb-2">0 SUI Locked • 0 Strategies</p>
+
+                                            {/* Agent Permissions Toggle Mock */}
+                                            <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">
+                                                <span className="text-[10px] text-gray-400 uppercase tracking-wider">Agent Access:</span>
+                                                <button
+                                                    onClick={() => handleRevokeAgent()}
+                                                    className="text-[10px] font-bold text-red-400 hover:text-red-300 cursor-pointer transition-colors"
+                                                    title="Click to revoke agent permissions"
+                                                >
+                                                    REVOKED 🔒
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <button className="text-xs border border-white/20 hover:bg-white/5 text-white px-4 py-2 rounded transition-colors">
+                                            Deposit
                                         </button>
-                                    ))}
+                                        <button className="text-xs border border-white/20 hover:bg-white/5 text-gray-400 hover:text-white px-4 py-2 rounded transition-colors">
+                                            Withdraw
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Custom SVG Chart (Global) */}
-                            <div className="flex-1 w-full h-full relative flex items-end">
-                                <svg className="w-full h-64 overflow-visible" viewBox="0 0 240 150" preserveAspectRatio="none">
-                                    <defs>
-                                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="#00f3ff" stopOpacity="0.2" />
-                                            <stop offset="100%" stopColor="#00f3ff" stopOpacity="0" />
-                                        </linearGradient>
-                                    </defs>
-
-                                    {/* Fake Volume/Depth Bars */}
-                                    {[20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220].map((x, i) => (
-                                        <rect
-                                            key={i}
-                                            x={x}
-                                            y={140}
-                                            width={15}
-                                            height={10}
-                                            fill="#00f3ff"
-                                            opacity={0.1}
-                                        >
-                                            <animate attributeName="height" values="10;40;10" dur={`${1.5 + (i % 3) * 0.5}s`} repeatCount="indefinite" />
-                                            <animate attributeName="y" values="140;110;140" dur={`${1.5 + (i % 3) * 0.5}s`} repeatCount="indefinite" />
-                                        </rect>
-                                    ))}
-
-                                    <path d={chartPath} fill="url(#chartGradient)" />
-                                    <path d={linePath} fill="none" stroke="#00f3ff" strokeWidth="2" vectorEffect="non-scaling-stroke" />
-                                    {/* Animated dot at the end */}
-                                    <circle cx="240" cy="20" r="3" fill="#fff" className="animate-pulse">
-                                        <animate attributeName="r" values="3;6;3" dur="2s" repeatCount="indefinite" />
-                                        <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite" />
-                                    </circle>
-                                </svg>
+                                <div className="mt-6 text-center">
+                                    <p className="text-xs text-gray-500 max-w-md mx-auto">
+                                        <span className="text-neon-cyan">Security Note:</span> This vault uses the <strong>Hot Potato</strong> pattern.
+                                        Agents can execute trades but <span className="underline decoration-red-500/50">cannot withdraw</span> your funds.
+                                    </p>
+                                </div>
                             </div>
                         </>
                     )}

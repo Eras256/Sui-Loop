@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package } from "lucide-react";
+import { LayoutDashboard, Compass, ChartNoAxesColumn, FileText, Menu, X, Rocket, Zap, Bot, Package } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -50,13 +50,13 @@ export default function Navbar() {
     }, [mobileMenuOpen]);
 
     const navLinks = [
-        { name: "ENCLAVE", href: "/dashboard", icon: LayoutDashboard },
-        { name: "INTEL", href: "/analytics", icon: BarChart2 },
+        { name: "MISSION CTRL", href: "/dashboard", icon: LayoutDashboard },
+        { name: "INTEL OPS", href: "/analytics", icon: ChartNoAxesColumn },
         { name: "ARSENAL", href: "/strategies", icon: Zap },
         { name: "NEXUS", href: "/marketplace", icon: Package },
-        { name: "ARCHITECT", href: "/strategies/builder", icon: Compass },
+        { name: "STRAT LABS", href: "/strategies/builder", icon: Compass },
         { name: "THESIS", href: "/docs", icon: FileText },
-        { name: "OPS UNIT", href: "/agents", icon: Bot }, // AGREGADO
+        { name: "OPS UNIT", href: "/agents", icon: Bot },
         { name: "MANUAL", href: "/how-to-use", icon: FileText },
     ];
 
@@ -70,7 +70,7 @@ export default function Navbar() {
                 {/* Main navbar container */}
                 <div
                     className={`
-                        pointer-events-auto w-full max-w-7xl mx-auto 
+                        pointer-events-auto w-full max-w-7xl 2xl:max-w-[95%] mx-auto 
                         backdrop-blur-md border border-white/10 
                         rounded-2xl sm:rounded-full 
                         px-3 sm:px-4 lg:px-6 py-2 sm:py-2.5
@@ -155,7 +155,7 @@ export default function Navbar() {
                             <span className="hidden xl:inline">INIT VECTOR</span>
                         </Link>
 
-                        {/* Mobile Menu Toggle */}
+                        {/* Mobile Menu Toggle - Visible on lg and below */}
                         <button
                             className="lg:hidden min-w-[44px] min-h-[44px] w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors ml-1"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

@@ -9,6 +9,7 @@ export interface ActiveStrategy {
     yield: string;
     tx_digest?: string;
     created_at?: string;
+    config?: any;
 }
 
 export const StrategyService = {
@@ -39,7 +40,8 @@ export const StrategyService = {
             status: row.status,
             yield: row.config?.yield || '0%',
             tx_digest: row.config?.txDigest,
-            created_at: row.created_at
+            created_at: row.created_at,
+            config: row.config // Return full config
         }));
     },
 
@@ -65,7 +67,8 @@ export const StrategyService = {
                         displayName: strategy.name,
                         emoji: strategy.emoji,
                         yield: strategy.yield,
-                        txDigest: strategy.tx_digest
+                        txDigest: strategy.tx_digest,
+                        ...strategy.config
                     }
                 } as any)
                 .eq('id', (existing as any).id)
@@ -90,7 +93,8 @@ export const StrategyService = {
                     displayName: strategy.name,
                     emoji: strategy.emoji,
                     yield: strategy.yield,
-                    txDigest: strategy.tx_digest
+                    txDigest: strategy.tx_digest,
+                    ...strategy.config
                 }
             } as any)
             .select()
