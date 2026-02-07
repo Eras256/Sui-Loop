@@ -70,10 +70,10 @@ export default function Navbar() {
                 {/* Main navbar container */}
                 <div
                     className={`
-                        pointer-events-auto w-full max-w-7xl 2xl:max-w-[98%] mx-auto 
+                        pointer-events-auto w-[98%] 2xl:w-[96%] mx-auto 
                         backdrop-blur-md border border-white/10 
                         rounded-2xl sm:rounded-full 
-                        px-3 sm:px-4 lg:px-4 xl:px-6 py-2 sm:py-2.5
+                        px-4 xl:px-8 py-2 xl:py-3
                         flex items-center justify-between 
                         shadow-[0_4px_30px_rgba(0,0,0,0.1)]
                         transition-all duration-300
@@ -81,18 +81,18 @@ export default function Navbar() {
                     `}
                 >
                     {/* Left side: Logo + Badge */}
-                    <div className="flex items-center gap-1.5 xl:gap-4 min-w-0 shrink-0">
+                    <div className="flex items-center gap-4 xl:gap-8 min-w-0 shrink-0">
                         {/* Logo Section - Responsive */}
-                        <Link href="/" className="flex items-center gap-1 xl:gap-2 group shrink-0">
-                            <div className="w-7 h-7 xl:w-8 xl:h-8 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(189,0,255,0.3)] group-hover:scale-110 transition-transform">
-                                <span className="text-white font-mono font-bold text-sm xl:text-base">S</span>
+                        <Link href="/" className="flex items-center gap-2 group shrink-0">
+                            <div className="w-8 h-8 xl:w-9 xl:h-9 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(189,0,255,0.3)] group-hover:scale-110 transition-transform">
+                                <span className="text-white font-mono font-bold text-base xl:text-lg">S</span>
                             </div>
                             {/* Logo text - Optimized visibility */}
-                            <div className="hidden min-[450px]:flex flex-col">
-                                <span className="font-bold text-white tracking-tighter leading-none text-[10px] xl:text-base group-hover:text-neon-cyan transition-colors">
+                            <div className="hidden xs:flex flex-col">
+                                <span className="font-bold text-white tracking-tighter leading-none text-xs xl:text-lg group-hover:text-neon-cyan transition-colors">
                                     SUILOOP
                                 </span>
-                                <span className="text-[6px] xl:text-[9px] text-gray-500 font-mono tracking-widest leading-none">
+                                <span className="hidden xl:block text-[9px] text-gray-500 font-mono tracking-widest leading-none">
                                     PROTOCOL
                                 </span>
                             </div>
@@ -100,7 +100,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Center: Desktop Navigation - visible on laptop (lg) and up */}
-                    <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-shrink-0">
+                    <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-1 justify-center mx-4">
                         {navLinks.map((link) => {
                             const isActive = pathname === link.href;
                             const Icon = link.icon;
@@ -110,18 +110,18 @@ export default function Navbar() {
                                     key={link.name}
                                     href={link.href}
                                     className={`
-                                        relative px-1 xl:px-3 py-2 rounded-full text-[9px] xl:text-xs font-medium 
-                                        transition-all duration-300 flex items-center gap-1 xl:gap-1.5 whitespace-nowrap
+                                        relative px-2 xl:px-4 py-2 rounded-full text-[10px] xl:text-xs font-bold 
+                                        transition-all duration-300 flex items-center gap-1 xl:gap-2 whitespace-nowrap
                                         ${isActive
                                             ? "text-white bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                                             : "text-gray-400 hover:text-white hover:bg-white/5"
                                         }
                                     `}
                                 >
-                                    <Icon className={isActive ? "text-neon-cyan w-[11px] h-[11px] xl:w-[14px] xl:h-[14px]" : "text-gray-500 w-[11px] h-[11px] xl:w-[14px] xl:h-[14px]"} />
+                                    <Icon className={isActive ? "text-neon-cyan w-3 h-3 xl:w-3.5 xl:h-3.5" : "text-gray-500 w-3 h-3 xl:w-3.5 xl:h-3.5"} />
                                     <span>{link.name}</span>
                                     {isActive && (
-                                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-neon-cyan shadow-[0_0_10px_#00f3ff] rounded-full"></span>
+                                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-neon-cyan shadow-[0_0_10px_#00f3ff] rounded-full"></span>
                                     )}
                                 </Link>
                             );
@@ -142,8 +142,8 @@ export default function Navbar() {
                         </div>
 
                         {/* Connect Button - Responsive scaling */}
-                        <div className="navbar-connect-btn scale-[0.75] xl:scale-100 origin-right">
-                            <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-3 xl:!px-5 !py-2 !rounded-full !text-[10px] xl:!text-xs !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !whitespace-nowrap" />
+                        <div className="navbar-connect-btn scale-[0.85] xl:scale-100 origin-right">
+                            <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-4 xl:!px-5 !py-2 !rounded-full !text-[11px] xl:!text-xs !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !whitespace-nowrap" />
                         </div>
 
                         {/* CTA Button - Hidden on mobile/tablet, shown on lg+ as icon, full on xl */}

@@ -10,7 +10,7 @@ export default function ManifestoPage() {
         <main className="min-h-screen bg-black text-white selection:bg-neon-cyan/30">
             <Navbar />
 
-            <div className="max-w-4xl mx-auto px-6 pt-32 pb-24 relative overflow-hidden">
+            <div className="max-w-4xl mx-auto px-6 pt-40 pb-24 relative overflow-hidden">
                 {/* Background Decor */}
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-purple/5 rounded-full blur-[100px] pointer-events-none -z-10" />
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-neon-cyan/5 rounded-full blur-[100px] pointer-events-none -z-10" />
@@ -81,7 +81,12 @@ export default function ManifestoPage() {
                         </p>
                         <p className="text-gray-300">
                             In <strong className="text-white">Sui Move</strong>, everything is an Object. An Agent is an Object. It can own other Objects (NFTs, Coins, Access Passes).
-                            This Object-Oriented nature maps 1:1 with how AI models perceive the world. An AI agent on Sui isn't just a wallet; it's a sovereign digital entity with encapsulated state.
+                            This Object-Oriented nature maps 1:1 with how AI models perceive the world.
+                        </p>
+                        <p className="text-gray-300">
+                            SuiLoop takes this further with the <strong className="text-neon-cyan">Secure Enclave Pattern</strong>: Your capital lives in a non-custodial Vault.
+                            The user holds the <strong className="text-white">OwnerCap</strong> (Full Withdrawal Rights), while the Agent only receives an <strong className="text-white">AgentCap</strong> (Execution Actions Only).
+                            This is the first time in history that an AI can trade with institutional capital without the risk of the model going rogue and stealing the funds.
                         </p>
                     </section>
 
@@ -125,8 +130,8 @@ export default function ManifestoPage() {
                                 <li className="flex items-start gap-3">
                                     <Database className="text-pink-500 mt-1" />
                                     <div>
-                                        <strong className="text-white block">Walrus Memory</strong>
-                                        <span className="text-gray-500 text-sm">Decentralized forensic logging. Every agent decision is immutable and auditable on Walrus.</span>
+                                        <strong className="text-white block">Walrus Black Box</strong>
+                                        <span className="text-gray-500 text-sm">Decentralized forensic auditing. Every agent signature and decision is permanently logged to Walrus for post-mortem analysis.</span>
                                     </div>
                                 </li>
                             </ul>

@@ -50,7 +50,7 @@ function DocsContent() {
                 <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-neon-cyan/10 blur-[120px] rounded-full" />
             </div>
 
-            <div className="relative z-10 pt-24">
+            <div className="relative z-10 pt-36">
                 <div className="max-w-7xl mx-auto px-6 pb-8 border-b border-white/10">
                     <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors">
                         <ArrowLeft className="w-4 h-4" />

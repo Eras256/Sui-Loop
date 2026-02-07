@@ -31,7 +31,7 @@ export default function HowToUsePage() {
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-neon-purple/5 blur-[150px] rounded-full" />
             </div>
 
-            <div className="relative z-10 pt-32 pb-20">
+            <div className="relative z-10 pt-40 pb-20">
                 <div className="max-w-5xl mx-auto px-6">
                     {/* Header */}
                     <div className="text-center mb-20 section-lift">
@@ -110,20 +110,20 @@ export default function HowToUsePage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
                                     <h4 className="text-white font-bold flex items-center gap-2">
-                                        <Cpu size={18} className="text-neon-cyan" />
-                                        Agent Reliability
+                                        <Shield size={18} className="text-neon-cyan" />
+                                        Non-Custodial Safety
                                     </h4>
                                     <p className="text-sm text-gray-400 leading-relaxed">
-                                        Ensure your browser tab remains active or deploy the companion desktop app for 100% heartbeat uptime. The ElizaOS core works best with constant telemetry.
+                                        SuiLoop uses a dual-cap system. Your <span className="text-white font-bold">OwnerCap</span> never leaves your cold wallet, meaning only you can withdraw funds. The <span className="text-neon-purple font-bold">AgentCap</span> only authorizes execution, preventing any unauthorized outflows.
                                     </p>
                                 </div>
                                 <div className="space-y-4">
                                     <h4 className="text-white font-bold flex items-center gap-2">
-                                        <Shield size={18} className="text-neon-purple" />
-                                        Safety Latency
+                                        <Terminal size={18} className="text-neon-purple" />
+                                        Developer Uplink
                                     </h4>
                                     <p className="text-sm text-gray-400 leading-relaxed">
-                                        While the "Atomic Loop" is near-instant, always verify your drawdown limits in the Architect builder before high-volume deployment.
+                                        Power users can scaffold custom combat units using our CLI. Run <code className="bg-white/5 px-1 rounded text-neon-cyan">npx suiloop create-unit</code> to inject custom Move kernels or Python/Node.js logic directly into the Neural Matrix.
                                     </p>
                                 </div>
                             </div>
@@ -158,59 +158,73 @@ export default function HowToUsePage() {
 
 const STEPS = [
     {
-        title: "Uplink Wallet",
-        description: "Connect your Sui wallet to establish an encrypted session. SuiLoop supports all major Sui wallets with persistent session restoration.",
+        title: "Uplink Session",
+        description: "Connect your Sui wallet to establish an encrypted session. SuiLoop supports all major Sui wallets (Sui Wallet, OKX, Surf) with persistent session restoration and auto-reconnect.",
         icon: Wallet,
         color: "from-blue-400 to-cyan-400",
         features: [
             "Support for Sui Wallet & OKX",
             "Hardware wallet compatible",
             "Auto-restores session",
-            "Low-gas optimization"
+            "DeepBook V3 Integration"
         ],
         actionLabel: "Connect Now",
         actionHref: "/dashboard"
     },
     {
-        title: "Architect Logic",
-        description: "Use the Visual Strategy Builder to create your financial kernel. Drag and drop triggers, conditions, and actions without writing a single line of Move code.",
+        title: "Secure Enclave",
+        description: "Deploy your non-custodial Secure Vault. This Move-native contract generates your OwnerCap, ensuring only you can withdraw funds while the AgentCap delegates execution rights.",
+        icon: Shield,
+        color: "from-neon-cyan to-teal-500",
+        features: [
+            "Single-block deployment",
+            "OwnerCap Withdrawal Control",
+            "Non-custodial by design",
+            "Move Hot Potato Safety"
+        ],
+        actionLabel: "Initialize Vault",
+        actionHref: "/dashboard"
+    },
+    {
+        title: "Strategy Arsenal",
+        description: "Design your logic in the Visual Builder or clone institutional templates. SuiLoop's 'Arsenal' features proven loops for Arbitrage, Yield Aggregation, and Peg Restoration.",
         icon: MousePointer2,
         color: "from-neon-purple to-purple-600",
         features: [
-            "Node-based editor",
-            "Custom triggers & CRONs",
-            "DEX & Lending connectors",
-            "Real-time validation"
+            "Visual Node Editor",
+            "Institutional Templates",
+            "Risk/Reward metrics",
+            "DEX & Lending Connectors"
         ],
         actionLabel: "Open Builder",
         actionHref: "/strategies/builder"
     },
     {
-        title: "Select Arsenal",
-        description: "Browse the Protocol Arsenal for institutional-grade strategy templates. Clone optimized loops for Arbitrage, Yield Aggregation, and LST Peg Restoration.",
-        icon: Zap,
-        color: "from-amber-400 to-orange-500",
-        features: [
-            "Verified templates",
-            "Live APY performance",
-            "One-click cloning",
-            "Risk/Reward metrics"
-        ],
-        actionLabel: "Browse Arsenal",
-        actionHref: "/strategies"
-    },
-    {
         title: "Deploy Agent",
-        description: "Initialize your ElizaOS autonomous agent. Scale your strategies across the Sui Network with mathematical safety guaranteed by the Hot Potato pattern.",
+        description: "Inject your logic into the Autonomous Core. Using ElizaOS, your agent monitors the matrix in real-time, executing atomic transaction blocks (PTBs) with superhuman speed.",
         icon: Cpu,
         color: "from-green-400 to-emerald-500",
         features: [
-            "Autonomous execution",
-            "Single-block atomicity",
-            "Walrus forensic logging",
-            "Fail-safe protection"
+            "Autonomous Execution",
+            "Atomic PTB Logic",
+            "Zero-Latency Tracking",
+            "Move 2024 Safety Rails"
         ],
-        actionLabel: "Command Enclave",
+        actionLabel: "Command Center",
         actionHref: "/dashboard"
+    },
+    {
+        title: "Forensic Audit",
+        description: "Full transparency via Black Box data. Every agent decision and signature is immutably logged to Walrus, providing a decentralized audit trail for forensic analysis.",
+        icon: Terminal,
+        color: "from-amber-400 to-orange-500",
+        features: [
+            "Walrus Forensic Logs",
+            "Immutability Guaranteed",
+            "Decentralized Auditing",
+            "Black Box Data Export"
+        ],
+        actionLabel: "Audit Logs",
+        actionHref: "/agents"
     }
 ];

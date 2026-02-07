@@ -13,7 +13,7 @@ const BASE_STRATEGIES = [
     {
         id: "sui-usdc-loop",
         name: "SUI-USDC Kinetic Vector",
-        description: "High-frequency triangular arbitrage between DeepBook, Cetus, and Turbos. Executes only when spread > 0.4%.",
+        description: "High-frequency triangular arbitrage secured by Move atomic PTBs. Executes only when spread > 0.4% with Hot Potato safety.",
         risk: "Low",
         tags: ["Stable", "Blue Chip"],
         color: "from-blue-500 to-cyan-500",
@@ -199,7 +199,7 @@ export default function StrategiesPage() {
     };
 
     return (
-        <main className="min-h-screen relative overflow-x-hidden flex flex-col pt-32 pb-20">
+        <main className="min-h-screen relative overflow-x-hidden flex flex-col pt-36 pb-20">
             {/* Background elements */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-purple/20 rounded-full blur-[120px] opacity-50"></div>
@@ -236,8 +236,9 @@ export default function StrategiesPage() {
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <Cpu size={48} className="text-white opacity-90 drop-shadow-lg" />
                                 </div>
-                                <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-2 py-1 rounded text-xs font-mono border border-white/10">
-                                    KERNEL v3.0.1
+                                <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-2 py-1 rounded text-xs font-mono border border-white/10 flex items-center gap-1">
+                                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                    SECURE KERNEL v3.0.1
                                 </div>
                             </div>
 

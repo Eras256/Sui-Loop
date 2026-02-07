@@ -93,7 +93,7 @@ export default function AnalyticsPage() {
     const totalValueLocked = activeStrategies.length * 500 + userBalance; // Assuming ~500 SUI per strategy logic
 
     return (
-        <main className="min-h-screen pt-24 px-4 pb-12 relative overflow-hidden">
+        <main className="min-h-screen pt-36 px-4 pb-12 relative overflow-hidden">
             <Navbar />
 
             {/* Background */}

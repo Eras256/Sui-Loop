@@ -385,7 +385,7 @@ export default function MarketplacePage() {
             <Navbar />
 
             {/* Hero Section */}
-            <section className="relative pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+            <section className="relative pt-36 pb-12 px-4 sm:px-6 lg:px-8">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.1),transparent_70%)]" />
 
                 <div className="max-w-7xl mx-auto relative z-10">

@@ -11,7 +11,7 @@ import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction, useSuiC
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw } from "lucide-react";
+import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw, Zap, Plus } from "lucide-react";
 
 function NeuralOrbSmall() {
     return (
@@ -77,7 +77,9 @@ function DashboardContent() {
             try {
                 const { suiClient } = await import("@/lib/suiClient");
                 const balance = await suiClient.getBalance({ owner: account.address });
-                setWalletBalance(parseInt(balance.totalBalance) / 1_000_000_000);
+                const total = Number(BigInt(balance.totalBalance)) / 1_000_000_000;
+                setWalletBalance(total);
+                console.log(`[Dashboard] Account ${account.address.slice(0, 6)}... balance sync: ${total} SUI`);
             } catch (e) {
                 console.warn("Soft Error: Wallet Fetch Failed", e);
             }
@@ -342,8 +344,17 @@ function DashboardContent() {
 
         try {
             // 0. Check Balance
+            console.log(`[Deploy] Wallet: ${walletBalance} SUI, Required: ${REQUIRED_BALANCE} SUI`);
             if (walletBalance < REQUIRED_BALANCE) {
-                toast.error(`Insufficient Balance: You need at least ${REQUIRED_BALANCE} SUI for license fee + gas`);
+                toast.error(`Insufficient Balance: You need at least ${REQUIRED_BALANCE} SUI for license fee + gas`, {
+                    description: `Detected: ${walletBalance.toFixed(4)} SUI. Re-syncing balance...`
+                });
+
+                // Force an immediate re-sync
+                import("@/lib/suiClient").then(async ({ suiClient }) => {
+                    const balance = await suiClient.getBalance({ owner: account.address });
+                    setWalletBalance(Number(BigInt(balance.totalBalance)) / 1_000_000_000);
+                });
                 return;
             }
 
@@ -439,7 +450,7 @@ function DashboardContent() {
                                 tx_digest: result.digest,
                                 config: { agentCapId } // Save ID in config
                             }).then((newStrategy: any) => {
-                                // Add to Active Fleet
+                                // Add to Active Fleet (with deduplication)
                                 const strategyToAdd = {
                                     id: newStrategy?.id || strategyId,
                                     strategy_id: strategyId,
@@ -450,19 +461,28 @@ function DashboardContent() {
                                     tx_digest: result.digest,
                                     agentCapId: agentCapId // Ensure it's in state
                                 };
-                                setActiveStrategies(prev => [strategyToAdd, ...prev]);
+                                setActiveStrategies(prev => {
+                                    const filtered = prev.filter(s => s.id !== strategyId && s.strategy_id !== strategyId);
+                                    return [strategyToAdd, ...filtered];
+                                });
                             }).catch(err => {
                                 console.error("Failed to save DB:", err);
-                                // Fallback
-                                setActiveStrategies(prev => [...prev, {
-                                    id: strategyId,
-                                    strategy_id: strategyId,
-                                    name: currentStrategy.name,
-                                    emoji: currentStrategy.emoji,
-                                    status: "RUNNING",
-                                    yield: "~14.2%",
-                                    agentCapId: agentCapId
-                                }]);
+                                // Fallback (with deduplication)
+                                setActiveStrategies(prev => {
+                                    const filtered = prev.filter(s => s.id !== strategyId && s.strategy_id !== strategyId);
+                                    return [
+                                        {
+                                            id: strategyId,
+                                            strategy_id: strategyId,
+                                            name: currentStrategy.name,
+                                            emoji: currentStrategy.emoji,
+                                            status: "RUNNING",
+                                            yield: "~14.2%",
+                                            agentCapId: agentCapId
+                                        },
+                                        ...filtered
+                                    ];
+                                });
                             });
                         });
 
@@ -595,14 +615,40 @@ function DashboardContent() {
 
             toast.dismiss(toastId);
 
-        } catch (e) {
+        } catch (e: any) {
             toast.dismiss(toastId);
             console.warn("Agent stop error:", e);
-            // If user rejected, we don't stop locally
-            const msg = (e as any).message || String(e);
-            if (!msg.includes("Rejected")) {
-                toast.error("Failed to revoke: " + msg.slice(0, 50));
-            }
+            const msg = e.message || String(e);
+
+            if (msg.includes("Rejected")) return;
+
+            // If it's a network error (502) or the object doesn't exist, offer "Force Remove"
+            toast.error("Protocol Sync Failed", {
+                description: `Code: ${msg.slice(0, 30)}...`,
+                action: {
+                    label: "FORCE REMOVE",
+                    onClick: () => {
+                        // 1. Force clean up local state
+                        setActiveStrategies(prev => prev.filter(s => s.id !== dbId));
+
+                        // 2. Force clean up database (Uplink)
+                        import("@/lib/strategyService").then(({ StrategyService }) => {
+                            StrategyService.stopStrategy(dbId).catch(err => console.error("DB Cleanup failed:", err));
+                        });
+
+                        // 3. Force clean up local storage
+                        if (account?.address) {
+                            const localKey = `sui-loop-fleet-${account.address}`;
+                            try {
+                                const existing = JSON.parse(localStorage.getItem(localKey) || "[]");
+                                const filtered = existing.filter((s: any) => s.id !== dbId && s.strategy_id !== dbId);
+                                localStorage.setItem(localKey, JSON.stringify(filtered));
+                            } catch (err) { }
+                        }
+                        toast.success("Agent forced out of fleet and database cleaned");
+                    }
+                }
+            });
         }
     };
 
@@ -1171,7 +1217,7 @@ function DashboardContent() {
     }
 
     return (
-        <div className="min-h-screen pt-24 pb-12 px-4 md:px-8 relative overflow-hidden">
+        <div className="min-h-screen pt-36 pb-12 px-4 md:px-8 relative overflow-hidden">
             <Navbar />
 
             {/* Auto-Start Confirmation Modal */}
@@ -1296,6 +1342,10 @@ function DashboardContent() {
                     <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Secure Vault TVL</h3>
                     <div className="text-xl font-mono text-white font-bold">
                         {vaultBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">SUI</span>
+                    </div>
+                    <div className="text-[10px] text-gray-500 mt-1 flex items-center gap-1.5 font-sans">
+                        <div className="w-1 h-1 rounded-full bg-neon-cyan" />
+                        WALLET: {walletBalance.toFixed(3)} SUI
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
@@ -1560,6 +1610,22 @@ function DashboardContent() {
                                 ))}
                             </div>
                         )}
+
+                        {/* Quick Actions at the bottom of the Fleet card */}
+                        <div className="mt-6 pt-4 border-t border-white/5 flex flex-col gap-2 relative z-10">
+                            <Link href="/strategies" className="w-full">
+                                <button className="w-full bg-white/5 hover:bg-white/10 text-[11px] font-bold py-2 rounded-xl transition-all border border-white/10 text-gray-300 flex items-center justify-center gap-2">
+                                    <Zap className="w-3 h-3 text-neon-cyan" />
+                                    DEPLOY MORE AGENTS
+                                </button>
+                            </Link>
+                            <Link href="/strategies/builder" className="w-full">
+                                <button className="w-full bg-neon-cyan/10 hover:bg-neon-cyan/20 text-[11px] font-bold py-2 rounded-xl transition-all border border-neon-cyan/20 text-neon-cyan flex items-center justify-center gap-2">
+                                    <Plus className="w-3 h-3" />
+                                    CREATE YOUR AGENT
+                                </button>
+                            </Link>
+                        </div>
                     </motion.div>
 
                     {/* Market Intelligence (Navi & Scallop) */}

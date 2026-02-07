@@ -139,8 +139,12 @@ export default function AgentsPage() {
                                     <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">OPERATIONAL</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm">Navi Liquidity Feed</span>
-                                    <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">ONLINE</span>
+                                    <span className="text-sm">Secure Enclave</span>
+                                    <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">SHIELD ACTIVE</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-sm">Walrus Auditing</span>
+                                    <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">LOGGING</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm">Latency</span>
@@ -311,8 +315,8 @@ export default function AgentsPage() {
                                 Institutional Security
                             </h3>
                             <p className="text-xs text-gray-300 leading-relaxed opacity-80">
-                                All agent interactions are secured by Move guarantees and signed nonces.
-                                Keys are permission-scoped and can be revoked instantly.
+                                All agent interactions are secured by Move guarantees (OwnerCap) and signed nonces.
+                                Transactions are atomically executed in a single PTB. Forensic logs are permanently stored on Walrus decentralized storage.
                             </p>
                             <button
                                 onClick={() => {

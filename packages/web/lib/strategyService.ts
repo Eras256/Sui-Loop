@@ -17,13 +17,11 @@ export const StrategyService = {
     async getStrategies(walletAddress: string): Promise<ActiveStrategy[]> {
         if (!supabase) return [];
 
-        // We assume 'strategies' table stores config JSON which contains our frontend metadata
-        // Or we map the raw DB rows to our frontend shape
+        console.log('[StrategyService] Fetching kernels for:', walletAddress);
+
         const { data, error } = await supabase
             .from('strategies')
             .select('*')
-            // Temporarily filtering by config check or if you have a wallet_column
-            // Since schema has user_id, we try to match that, or assume RLS handles it
             .eq('user_id', walletAddress)
             .order('created_at', { ascending: false });
 
@@ -47,7 +45,10 @@ export const StrategyService = {
 
     // Save a new deployed strategy (or update existing with same name)
     async deployStrategy(walletAddress: string, strategy: ActiveStrategy) {
-        if (!supabase) return null;
+        if (!supabase) {
+            console.error('Supabase client not initialized. Check your environment variables.');
+            throw new Error('Persistence Layer Offline');
+        }
 
         // First check if strategy with same name exists for this user
         const { data: existing } = await supabase
@@ -76,8 +77,8 @@ export const StrategyService = {
                 .single();
 
             if (error) {
-                console.warn('Supabase update failed:', error.message || error);
-                return null;
+                console.error('Supabase update failed:', error.message, error.details, error.hint);
+                throw new Error(error.message || 'Supabase Update Error');
             }
             return data;
         }
@@ -101,8 +102,8 @@ export const StrategyService = {
             .single();
 
         if (error) {
-            console.warn('Supabase deploy skipped (using local fallback caused by):', error.message || error);
-            return null;
+            console.error('Supabase deploy failed:', error.message, error.details, error.hint, error);
+            throw new Error(error.message || 'Supabase Deployment Error');
         }
 
         return data;

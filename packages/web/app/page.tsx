@@ -90,7 +90,7 @@ export default function Home() {
             <Navbar />
 
             {/* Hero Section */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 pt-28 px-4 pb-32">
+            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 pt-40 px-4 pb-32">
 
                 {/* Left: Text & Terminal */}
                 <div className="flex flex-col justify-center space-y-6 md:space-y-8 z-10 order-2 lg:order-1">

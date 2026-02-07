@@ -18,6 +18,7 @@
         "@scallop-io/sui-scallop-sdk": "^2.3.14",
         "@supabase/supabase-js": "^2.94.0",
         "@tanstack/react-query": "^5.0.0",
+        "@xyflow/react": "^12.10.0",
         "clsx": "^2.1.1",
         "framer-motion": "^11.18.2",
         "lucide-react": "^0.563.0",
