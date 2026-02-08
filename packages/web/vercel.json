@@ -1,9 +1,6 @@
 {
-    "version": 2,
-    "buildCommand": "cd ../.. && pnpm install && pnpm --filter suiloop-web build",
+    "buildCommand": "next build",
+    "installCommand": "pnpm install",
     "outputDirectory": ".next",
-    "framework": "nextjs",
-    "regions": [
-        "sfo1"
-    ]
+    "framework": "nextjs"
 }
