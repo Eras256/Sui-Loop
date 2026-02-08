@@ -67,7 +67,7 @@ export default function Home() {
     useEffect(() => {
         const logs = [
             "Initializing core agent...",
-            "Connecting to Sui Devnet...",
+            "Connecting to Sui Network...",
             "DeepBook Liquidity: OPTIMAL",
             "Navi Protocol: CONNECTED",
             "Scanning for arb opportunities...",
@@ -90,7 +90,7 @@ export default function Home() {
             <Navbar />
 
             {/* Hero Section */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 pt-40 px-4 pb-32">
+            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 pt-32 md:pt-40 px-4 pb-32">
 
                 {/* Left: Text & Terminal */}
                 <div className="flex flex-col justify-center space-y-6 md:space-y-8 z-10 order-2 lg:order-1">
@@ -116,7 +116,7 @@ export default function Home() {
 
                     {/* Glass Terminal */}
                     <div className="glass-panel rounded-xl p-3 md:p-4 font-mono text-sm h-40 md:h-48 overflow-y-auto w-full max-w-lg border-l-4 border-neon-cyan bg-black/40 mx-auto lg:mx-0">
-                        <div className="text-xs text-gray-500 mb-2 border-b border-gray-800 pb-1">AGENT_KERNEL_V1 // LIVE FEED</div>
+                        <div className="text-xs text-gray-500 mb-2 border-b border-gray-800 pb-1">AGENT_KERNEL_v0.0.7 // LIVE FEED</div>
                         {agentLog.map((log, i) => (
                             <div key={i} className="text-neon-cyan/80 mb-1 text-xs md:text-sm">
                                 <span className="text-gray-600 mr-2">{">"}</span>
@@ -195,7 +195,7 @@ export default function Home() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* For Humans */}
-                    <Link href="/dashboard" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[240px] hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] cursor-pointer">
+                    <Link href="/dashboard" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between min-h-[240px] hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] cursor-pointer">
                         <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         <div className="relative z-10">
                             <div className="flex items-center gap-3 mb-4">
@@ -216,7 +216,7 @@ export default function Home() {
                     </Link>
 
                     {/* For Agents */}
-                    <Link href="/agents" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between h-[240px] hover:shadow-[0_0_30px_rgba(0,243,255,0.15)] cursor-pointer">
+                    <Link href="/agents" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between min-h-[240px] hover:shadow-[0_0_30px_rgba(0,243,255,0.15)] cursor-pointer">
                         <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         <div className="relative z-10">
                             <div className="flex items-center gap-3 mb-4">
@@ -268,7 +268,7 @@ export default function Home() {
                             </div>
                             <div className="text-base text-gray-500 mt-2">
                                 [SYSTEM] <span className="text-green-400">Verifying Dependencies... OK</span><br />
-                                [SYSTEM] <span className="text-green-400">Igniting Neural Core... OK</span><br />
+                                [SYSTEM] <span className="text-green-400">Igniting Neural Core v0.0.7... OK</span><br />
                                 <span className="text-neon-cyan blink">? Select Personality: {">"} [Arbitrage_V1]</span>
                             </div>
                         </div>
@@ -309,7 +309,7 @@ export default function Home() {
                                 <Download size={24} className="text-gray-300 group-hover:text-neon-cyan transition-colors" />
                             </div>
                             <div className="text-left">
-                                <span className="block text-xs uppercase tracking-widest text-neon-cyan/80 mb-0.5">v0.1.7 Available</span>
+                                <span className="block text-xs uppercase tracking-widest text-neon-cyan/80 mb-0.5">v0.2.3 Available</span>
                                 <span className="block text-lg font-bold tracking-tight">Download Companion</span>
                             </div>
                         </div>
@@ -458,7 +458,7 @@ export default function Home() {
                     <div className="space-y-6 z-10">
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-neon-purple/10 border border-neon-purple/30 rounded-full text-neon-purple text-sm font-mono">
                             <span className="w-2 h-2 bg-neon-purple rounded-full animate-pulse"></span>
-                            NEW IN v0.0.5
+                            NEW IN v0.0.7
                         </div>
                         <h2 className="text-3xl md:text-5xl font-black tracking-tighter">
                             VISUAL <span className="text-gradient">STRATEGY BUILDER</span>

@@ -238,7 +238,7 @@ export default function StrategiesPage() {
                                 </div>
                                 <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-2 py-1 rounded text-xs font-mono border border-white/10 flex items-center gap-1">
                                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                                    SECURE KERNEL v3.0.1
+                                    SECURE KERNEL v0.0.7
                                 </div>
                             </div>
 

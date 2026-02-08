@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Terminal, Activity, Maximize2, Minimize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getWebSocketUrl } from '@/lib/constants';
 
 export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded: boolean, onToggleExpand: () => void }) {
     const [logs, setLogs] = useState<any[]>([]);
@@ -14,13 +15,13 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
         let reconnectTimer: NodeJS.Timeout;
 
         const connect = () => {
-            ws = new WebSocket('ws://localhost:3001/ws/signals');
+            ws = new WebSocket(getWebSocketUrl('/ws/signals'));
 
             ws.onopen = () => {
                 setLogs(prev => [...prev, {
                     timestamp: new Date().toISOString(),
                     level: 'system',
-                    message: 'CONNECTED TO SUILOOP MATRIX'
+                    message: 'CONNECTED TO SUILOOP MATRIX v0.0.7'
                 }]);
             };
 
@@ -101,10 +102,10 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
                             <span className="text-gray-600 mr-2">[{new Date(log.timestamp).toLocaleTimeString()}]</span>
                             <span
                                 className={`font-bold mr-2 ${log.level === 'error' ? 'text-red-500' :
-                                        log.level === 'warn' ? 'text-yellow-500' :
-                                            log.level === 'success' ? 'text-green-400' :
-                                                log.level === 'system' ? 'text-neon-cyan' :
-                                                    'text-blue-400'
+                                    log.level === 'warn' ? 'text-yellow-500' :
+                                        log.level === 'success' ? 'text-green-400' :
+                                            log.level === 'system' ? 'text-neon-cyan' :
+                                                'text-blue-400'
                                     }`}
                             >
                                 {log.level?.toUpperCase()}

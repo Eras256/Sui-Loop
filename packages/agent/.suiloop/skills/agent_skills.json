@@ -1,0 +1,12 @@
+{
+  "1d24eb4c-0ff7-4801-afb8-6be03d771eb9": [
+    "price-oracle"
+  ],
+  "0fbd9d2a-3566-4478-9a1a-30b21d511fea": [
+    "knowledge-graph"
+  ],
+  "06175c10-efa6-4642-889e-ab17531d9daf": [
+    "flash-loan-executor",
+    "social-sentiment"
+  ]
+}

@@ -81,7 +81,7 @@ export default function MarketplacePage() {
                         id: 'flash-loan-executor',
                         name: 'Flash Loan Executor',
                         slug: 'flash-loan-executor',
-                        version: '2.1.0',
+                        version: '0.0.7',
                         description: 'Execute atomic flash loans using the Hot Potato pattern.',
                         author: 'SuiLoop Team',
                         category: 'trading',
@@ -220,7 +220,7 @@ export default function MarketplacePage() {
                         id: 'twitter-sentiment',
                         name: 'Twitter/X Sentiment Analyzer',
                         slug: 'twitter-sentiment',
-                        version: '2.0.0',
+                        version: '0.0.7',
                         description: 'Real-time sentiment analysis of crypto Twitter.',
                         author: 'SocialFi',
                         category: 'analysis',
@@ -360,7 +360,7 @@ export default function MarketplacePage() {
                     description: "The skill is now available in your agent and ready to use. Check the Ops Unit for logs.",
                     action: {
                         label: "View Logs",
-                        onClick: () => window.location.href = "/agents"
+                        onClick: () => window.location.href = "/dashboard"
                     }
                 });
             } else {
@@ -515,21 +515,33 @@ export default function MarketplacePage() {
                                             </span>
                                         </div>
 
-                                        {installedSkills[skill.id] ? (
-                                            <Link href="/dashboard">
+                                        {installedSkills[skill.id] || installedSkills[skill.slug] ? (
+                                            <div className="flex gap-2 z-20 relative">
+                                                <Link href="/dashboard">
+                                                    <button
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg hover:bg-green-500/20 text-sm font-medium transition-colors border border-green-500/20"
+                                                    >
+                                                        <span className="relative flex h-2 w-2">
+                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                                        </span>
+                                                        Monitor
+                                                    </button>
+                                                </Link>
+
                                                 <button
                                                     onClick={(e) => {
+                                                        e.preventDefault();
                                                         e.stopPropagation();
+                                                        setSelectedSkillToInstall(skill);
                                                     }}
-                                                    className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg hover:bg-green-500/20 text-sm font-medium transition-colors border border-green-500/20 z-10 relative"
+                                                    className="flex items-center justify-center p-2 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 transition-all border border-purple-500/20"
+                                                    title="Install to another unit"
                                                 >
-                                                    <span className="relative flex h-2 w-2 mr-1">
-                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                                    </span>
-                                                    Monitor
+                                                    <UserPlus size={16} />
                                                 </button>
-                                            </Link>
+                                            </div>
                                         ) : (
                                             <button
                                                 onClick={(e) => {
@@ -685,13 +697,15 @@ export default function MarketplacePage() {
 
                                             {installedSkills[skill.id] || installedSkills[skill.slug] ? (
                                                 <div className="flex gap-2">
-                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg text-sm font-medium border border-green-500/20 cursor-default">
-                                                        <span className="relative flex h-2 w-2">
-                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                                        </span>
-                                                        Active
-                                                    </div>
+                                                    <Link href="/dashboard">
+                                                        <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg text-sm font-medium border border-green-500/20 hover:bg-green-500/20 transition-all cursor-pointer">
+                                                            <span className="relative flex h-2 w-2">
+                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                                            </span>
+                                                            Monitor
+                                                        </div>
+                                                    </Link>
 
                                                     {skill.actions && (
                                                         <button

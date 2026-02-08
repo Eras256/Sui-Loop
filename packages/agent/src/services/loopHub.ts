@@ -562,6 +562,112 @@ export class LoopHubClient extends EventEmitter {
                 publishedAt: new Date('2025-08-05'),
                 updatedAt: new Date('2026-01-22'),
                 sourceUrl: 'github:slackdev/suiloop-slack'
+            },
+            {
+                id: 'sui-deep-research',
+                name: 'Sui Deep Research',
+                slug: 'sui-deep-research',
+                version: '1.0.0',
+                description: 'Autonomous web scraping and analysis engine. Reads whitepapers, news, and protocol documentation.',
+                author: 'SuiLoop Core',
+                category: 'analysis',
+                tags: ['web-scraping', 'research', 'analysis', 'autonomous'],
+                permissions: ['browser:control', 'network:fetch', 'notification:send'],
+                actions: [
+                    {
+                        name: 'scrape_url',
+                        description: 'Extract text content from a specific URL for analysis.',
+                        handler: 'browserActions.extractData',
+                        parameters: {
+                            url: { type: 'string', description: 'Target URL to scrape', required: true },
+                            selectors: { type: 'object', description: 'CSS Selectors map', required: true }
+                        }
+                    },
+                    {
+                        name: 'analyze_protocol',
+                        description: 'Visit a protocol\'s landing page to extract key metrics.',
+                        handler: 'browserActions.scrapePools',
+                        parameters: {
+                            protocol: { type: 'string', description: 'Name of the protocol', required: true }
+                        }
+                    }
+                ],
+                downloads: 1205,
+                rating: 5.0,
+                reviewCount: 42,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-02-01'),
+                updatedAt: new Date('2026-02-01')
+            },
+            {
+                id: 'social-sentiment',
+                name: 'Social Sentiment',
+                slug: 'social-sentiment',
+                version: '1.0.0',
+                description: 'Listen to the pulse of the market. Monitors Twitter/X for bullish/bearish trends.',
+                author: 'SuiLoop Core',
+                category: 'analysis',
+                tags: ['sentiment', 'social', 'twitter', 'trends'],
+                permissions: ['network:fetch', 'notification:send'],
+                actions: [
+                    {
+                        name: 'analyze_sentiment',
+                        description: 'Scan recent tweets for a specific keyword and calculate sentiment.',
+                        handler: 'twitterActions.analyzeSentiment',
+                        parameters: {
+                            keyword: { type: 'string', description: 'Keyword or ticker', required: true }
+                        }
+                    },
+                    {
+                        name: 'get_trending_topics',
+                        description: 'Get current trending topics in the Sui ecosystem.',
+                        handler: 'twitterActions.getTrending'
+                    }
+                ],
+                downloads: 980,
+                rating: 4.8,
+                reviewCount: 28,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-02-02'),
+                updatedAt: new Date('2026-02-02')
+            },
+            {
+                id: 'knowledge-graph',
+                name: 'Knowledge Graph',
+                slug: 'knowledge-graph',
+                version: '1.0.0',
+                description: 'Universal search engine and context builder. Understands why the market is moving.',
+                author: 'SuiLoop Core',
+                category: 'analysis',
+                tags: ['search', 'context', 'knowledge', 'tavily'],
+                permissions: ['network:fetch', 'filesystem:read'],
+                actions: [
+                    {
+                        name: 'search_knowledge',
+                        description: 'Perform a complex search query to answer questions.',
+                        handler: 'knowledgeActions.search',
+                        parameters: {
+                            query: { type: 'string', description: 'The natural language question', required: true }
+                        }
+                    },
+                    {
+                        name: 'explain_market_event',
+                        description: 'Lookup recent news to explain significant price movements.',
+                        handler: 'knowledgeActions.explainEvent',
+                        parameters: {
+                            asset: { type: 'string', description: 'Asset symbol', required: true }
+                        }
+                    }
+                ],
+                downloads: 850,
+                rating: 4.9,
+                reviewCount: 35,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-02-03'),
+                updatedAt: new Date('2026-02-03')
             }
         ];
 

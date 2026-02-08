@@ -46,7 +46,7 @@ const displayCallback = async (response: { text: string; content?: unknown }) =>
 async function main() {
     console.log(`
 ╔═══════════════════════════════════════════════════════════╗
-║                  🚀 SUILOOP AGENT v0.0.4                  ║
+║                  🚀 SUILOOP AGENT v0.0.7                  ║
 ║              Atomic Flash Loans on Sui Testnet            ║
 ╚═══════════════════════════════════════════════════════════╝
     `);

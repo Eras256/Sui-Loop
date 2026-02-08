@@ -33,6 +33,8 @@ export type LLMProviderType =
     | 'synthetic'
     | 'custom';
 
+export type LLMProvider = LLMProviderType;
+
 export interface LLMConfig {
     provider: LLMProviderType;
     apiKey?: string;
@@ -519,7 +521,45 @@ export class LLMService extends EventEmitter {
         throw new Error('All LLM providers failed.');
     }
 
-    // ... Stream, Complete, etc (Simplified delegates)
+    async *streamChat(request: ChatRequest): AsyncGenerator<StreamChunk> {
+        const providersToTry = [this.activeProvider, ...(this.config.fallbacks || [])];
+
+        for (const providerType of providersToTry) {
+            const provider = this.providers.get(providerType);
+            if (!provider) continue;
+
+            try {
+                for await (const chunk of provider.streamChat(request)) {
+                    yield chunk;
+                }
+                return;
+            } catch (error: any) {
+                console.warn(`⚠️ Provider ${providerType} failed during stream: ${error.message}. Switching to fallback...`);
+                this.emit('provider:failure', { provider: providerType, error: error.message });
+            }
+        }
+
+        throw new Error('All LLM providers failed during stream.');
+    }
+
+    async getModels(): Promise<string[]> {
+        const provider = this.providers.get(this.activeProvider);
+        if (!provider) return [];
+        try {
+            return await provider.getModels();
+        } catch (error) {
+            console.error('Failed to get models:', error);
+            return [];
+        }
+    }
+
+    switchProvider(type: LLMProviderType): void {
+        if (this.providers.has(type)) {
+            this.activeProvider = type;
+        } else {
+            throw new Error(`Provider ${type} not found or not initialized`);
+        }
+    }
 
     static getSuiLoopSystemPrompt(): string {
         return `You are SuiLoop AI. Specialized in Sui DeFi.`;

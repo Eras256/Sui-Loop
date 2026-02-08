@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
 import { Key, Lock, Copy, CheckCircle, RefreshCw, AlertTriangle, Shield } from 'lucide-react';
 import { toast } from 'sonner';
+import { API_URL } from '@/lib/constants';
 
 interface ApiKeyData {
     apiKey: string;
@@ -46,8 +47,8 @@ export default function ApiKeyManager() {
             console.log("Signature obtained:", signature);
 
             // 2. Get JWT Token
-            console.log("2. Fetching JWT token from http://localhost:3001/api/auth/token...");
-            const tokenRes = await fetch('http://localhost:3001/api/auth/token', {
+            console.log(`2. Fetching JWT token from ${API_URL}/api/auth/token...`);
+            const tokenRes = await fetch(`${API_URL}/api/auth/token`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -55,7 +56,7 @@ export default function ApiKeyManager() {
                     signature: signature
                 })
             }).catch(err => {
-                throw new Error(`Connection to Agent API failed: ${err.message}. Is the server running on port 3001?`);
+                throw new Error(`Connection to Agent API failed: ${err.message}. Is the server running at ${API_URL}?`);
             });
 
             if (!tokenRes.ok) {
@@ -71,7 +72,7 @@ export default function ApiKeyManager() {
 
             // 3. Generate API Key
             console.log("3. Requesting API Key...");
-            const keyRes = await fetch('http://localhost:3001/api/auth/keys', {
+            const keyRes = await fetch(`${API_URL}/api/auth/keys`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

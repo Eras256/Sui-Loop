@@ -6,6 +6,7 @@ import ApiKeyManager from "@/components/docs/ApiKeyManager";
 import { Terminal, Cpu, Activity, Signal, Shield, Radio, Code, Zap, Copy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { getWebSocketUrl } from "@/lib/constants";
 
 export default function AgentsPage() {
     const [activeTab, setActiveTab] = useState<'logs' | 'sdk'>('logs');
@@ -20,7 +21,7 @@ export default function AgentsPage() {
 
         const connect = () => {
             // Connect to real backend WebSocket
-            ws = new WebSocket('ws://localhost:3001/ws/signals');
+            ws = new WebSocket(getWebSocketUrl('/ws/signals'));
 
             ws.onopen = () => {
                 setLogs(prev => [...prev, {
@@ -97,7 +98,7 @@ export default function AgentsPage() {
                         className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono text-neon-cyan mb-4"
                     >
                         <Radio className="w-3 h-3 animate-pulse" />
-                        SYSTEM ONLINE: v2.0.5 // ENCRYPTED
+                        SYSTEM ONLINE: v0.0.7 // ENCRYPTED
                     </motion.div>
 
                     <motion.h1
@@ -206,12 +207,12 @@ export default function AgentsPage() {
                             <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center hover:bg-white/10 transition-colors cursor-pointer">
                                 <Code className="w-6 h-6 mx-auto mb-2 text-blue-400" />
                                 <div className="text-sm font-bold">Python SDK</div>
-                                <div className="text-xs text-green-400">v0.1.0 Ready</div>
+                                <div className="text-xs text-green-400">v0.0.7 Ready</div>
                             </div>
                             <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center hover:bg-white/10 transition-colors cursor-pointer">
                                 <Zap className="w-6 h-6 mx-auto mb-2 text-yellow-400" />
                                 <div className="text-sm font-bold">Node.js SDK</div>
-                                <div className="text-xs text-green-400">v0.1.0 Ready</div>
+                                <div className="text-xs text-green-400">v0.0.7 Ready</div>
                             </div>
                         </div>
                     </motion.div>

@@ -15,6 +15,9 @@ import fs from 'fs-extra';
 import path from 'path';
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
+import { browserActions, getBrowserService } from './browserService.js';
+import { twitterActions, getTwitterService } from './twitterService.js';
+import { knowledgeActions, getKnowledgeService } from './knowledgeService.js';
 
 // ============================================================================
 // TYPES
@@ -240,10 +243,13 @@ export class SkillManager extends EventEmitter {
     private loader: SkillLoader = new SkillLoader();
     private skillsDir: string;
     private userPermissions: Map<string, SkillPermission[]> = new Map();
+    private agentSkills: Map<string, Set<string>> = new Map(); // agentId -> Set<skillSlug>
+    private agentSkillsFile: string;
 
     constructor(skillsDir?: string) {
         super();
         this.skillsDir = skillsDir || path.join(process.cwd(), '.suiloop', 'skills');
+        this.agentSkillsFile = path.join(this.skillsDir, 'agent_skills.json');
     }
 
     /**
@@ -257,6 +263,9 @@ export class SkillManager extends EventEmitter {
 
         // Load installed skills
         await this.loadInstalledSkills();
+
+        // Load agent assignments
+        await this.loadAgentSkills();
 
         console.log(`🔌 Skill Manager initialized with ${this.skills.size} skills`);
     }
@@ -388,7 +397,62 @@ export class SkillManager extends EventEmitter {
         const handlers = new Map<string, Function>();
 
         // Load action handlers
+        // Load action handlers
         for (const action of manifest.actions || []) {
+            // 1. Check for Core Service Handlers
+            if (action.handler && action.handler.startsWith('browserActions.')) {
+                const method = action.handler.split('.')[1];
+                handlers.set(action.name, async (params: any) => {
+                    const service = getBrowserService();
+                    if (!service) throw new Error('Browser Service not initialized');
+
+                    // @ts-ignore
+                    const actionDef = (browserActions as any)[method];
+                    if (actionDef && actionDef.handler) {
+                        // Map params to arguments if necessary, or pass straight through
+                        // Ideally handlers should accept (service, params)
+                        // For browserActions, they currently accept (service, ...args).
+                        // Create a bridge here:
+                        if (method === 'scrapePrice') return actionDef.handler(service, params.token);
+                        if (method === 'scrapePools') return actionDef.handler(service, params.dex);
+                        if (method === 'screenshot') return actionDef.handler(service, params.url);
+                        if (method === 'extractData') return actionDef.handler(service, params.url, params.selectors);
+
+                        return actionDef.handler(service, params);
+                    }
+                });
+                continue;
+            }
+
+            if (action.handler && action.handler.startsWith('twitterActions.')) {
+                const method = action.handler.split('.')[1];
+                handlers.set(action.name, async (params: any) => {
+                    const service = getTwitterService();
+                    if (!service) throw new Error('Twitter Service not initialized');
+                    // @ts-ignore
+                    const actionDef = (twitterActions as any)[method];
+                    if (actionDef && actionDef.handler) {
+                        return await actionDef.handler(service, params);
+                    }
+                });
+                continue;
+            }
+
+            if (action.handler && action.handler.startsWith('knowledgeActions.')) {
+                const method = action.handler.split('.')[1];
+                handlers.set(action.name, async (params: any) => {
+                    const service = getKnowledgeService();
+                    if (!service) throw new Error('Knowledge Service not initialized');
+                    // @ts-ignore
+                    const actionDef = (knowledgeActions as any)[method];
+                    if (actionDef && actionDef.handler) {
+                        return await actionDef.handler(service, params);
+                    }
+                });
+                continue;
+            }
+
+            // 2. key-based File Handler Loading
             const handlerPath = path.join(skillPath, action.handler + '.js');
             if (await fs.pathExists(handlerPath)) {
                 try {
@@ -639,6 +703,108 @@ export default async function ${action.handler}(params, context) {
         return Array.from(this.skills.values())
             .filter(s => s.isEnabled)
             .map(s => s.manifest);
+    }
+
+    /**
+     * Load agent skills assignments
+     */
+    private async loadAgentSkills(): Promise<void> {
+        try {
+            if (await fs.pathExists(this.agentSkillsFile)) {
+                const data = await fs.readJson(this.agentSkillsFile);
+                for (const [agentId, slugs] of Object.entries(data)) {
+                    if (Array.isArray(slugs)) {
+                        this.agentSkills.set(agentId, new Set(slugs as string[]));
+                    }
+                }
+            } else {
+                // Initialize EMPTY agent assignments
+                // NO default skills for anyone unless explicitly assigned
+                this.agentSkills.clear();
+            }
+        } catch (error) {
+            console.error('Failed to load agent skills:', error);
+        }
+    }
+
+    /**
+     * Save agent skills assignments
+     */
+    private async saveAgentSkills(): Promise<void> {
+        try {
+            const data: Record<string, string[]> = {};
+            for (const [agentId, slugs] of this.agentSkills.entries()) {
+                data[agentId] = Array.from(slugs);
+            }
+            await fs.writeJson(this.agentSkillsFile, data, { spaces: 2 });
+        } catch (error) {
+            console.error('Failed to save agent skills:', error);
+        }
+    }
+
+    /**
+     * Assign a skill to an agent
+     */
+    async assignSkillToAgent(slug: string, agentId: string): Promise<boolean> {
+        if (!this.skills.has(slug)) return false;
+
+        let targetSet = this.agentSkills.get(agentId);
+        if (!targetSet) {
+            targetSet = new Set();
+            this.agentSkills.set(agentId, targetSet);
+        }
+
+        targetSet.add(slug);
+        await this.saveAgentSkills();
+        return true;
+    }
+
+    /**
+     * Remove a skill from an agent
+     */
+    async unassignSkillFromAgent(slug: string, agentId: string): Promise<boolean> {
+        if (!this.agentSkills.has(agentId)) {
+            // Check global
+            if (agentId !== 'global' && this.agentSkills.get('global')?.has(slug)) {
+                // Cannot unassign global skill from specific agent unless we copy-on-write?
+                // For now, allow removing from specific list only.
+                // If a skill is global, it's effectively locked for everyone unless we remove from global.
+                return false;
+            }
+            return false;
+        }
+
+        const removed = this.agentSkills.get(agentId)!.delete(slug);
+        if (removed) {
+            await this.saveAgentSkills();
+        }
+        return removed;
+    }
+
+    /**
+     * Get skills assigned to an agent
+     */
+    /**
+     * Get skills assigned to an agent (includes Global skills)
+     */
+    getSkillsForAgent(agentId: string): SkillManifest[] {
+        const specificSlugs = this.agentSkills.get(agentId) || new Set<string>();
+        const globalSlugs = this.agentSkills.get('global') || new Set<string>();
+
+        // Merge specific and global skills
+        const effectiveSlugs = new Set([...specificSlugs, ...globalSlugs]);
+
+        return Array.from(effectiveSlugs)
+            .map(slug => this.skills.get(slug))
+            .filter((s): s is SkillInstance => !!s)
+            .map(s => s.manifest);
+    }
+
+    /**
+     * Check if a skill is globally assigned
+     */
+    isGlobalSkill(slug: string): boolean {
+        return this.agentSkills.get('global')?.has(slug) || false;
     }
 
     /**

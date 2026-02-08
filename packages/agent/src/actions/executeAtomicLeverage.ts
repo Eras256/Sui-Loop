@@ -29,9 +29,9 @@ const scallopService = new ScallopService();
 const NETWORK = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || "testnet";
 const SUI_DECIMALS = 1_000_000_000;
 
-// Default Contract IDs (v0.0.4)
-const DEFAULT_PACKAGE_ID = "0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043";
-const DEFAULT_POOL_ID = "0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0";
+// Default Contract IDs (v0.0.7)
+const DEFAULT_PACKAGE_ID = "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+const DEFAULT_POOL_ID = "0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165";
 
 /**
  * Parse amount from user message

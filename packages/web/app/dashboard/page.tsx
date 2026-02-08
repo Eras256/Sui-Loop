@@ -11,8 +11,9 @@ import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction, useSuiC
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw, Zap, Plus, Code } from "lucide-react";
+import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw, Zap, Plus, Code, Cpu } from "lucide-react";
 import OpsConsole from "@/components/layout/OpsConsole";
+import { getWebSocketUrl } from "@/lib/constants";
 
 function NeuralOrbSmall() {
     return (
@@ -54,6 +55,9 @@ function DashboardContent() {
     const [ownerCapId, setOwnerCapId] = useState<string | null>(null);
     const [amountInput, setAmountInput] = useState<string>("0.1");
     const [installedSkills, setInstalledSkills] = useState<any[]>([]);
+
+    const tradingSkills = installedSkills.filter(s => s.category === 'trading' || s.category === 'defi');
+    const activePlugins = installedSkills.filter(s => s.category !== 'trading' && s.category !== 'defi');
     const [isSkillsLoading, setIsSkillsLoading] = useState(false);
 
     const [confirmConfig, setConfirmConfig] = useState<{
@@ -153,10 +157,12 @@ function DashboardContent() {
     }, []);
 
     // Fetch Installed Skills
-    const fetchInstalledSkills = async () => {
+    const fetchInstalledSkills = async (agentId?: string) => {
+        if (!agentId) return;
+
         setIsSkillsLoading(true);
         try {
-            const response = await fetch('/api/marketplace/installed');
+            const response = await fetch(`/api/marketplace/installed?agentId=${agentId}`);
             const data = await response.json();
             if (data.success) {
                 setInstalledSkills(data.skills);
@@ -169,13 +175,17 @@ function DashboardContent() {
     };
 
     useEffect(() => {
-        fetchInstalledSkills();
-    }, []);
+        if (selectedStrategy?.id) {
+            fetchInstalledSkills(selectedStrategy.id);
+        }
+    }, [selectedStrategy]);
 
     const handleUninstallSkill = async (slug: string) => {
+        if (!selectedStrategy?.id) return;
+
         const toastId = toast.loading(`Uninstalling ${slug}...`);
         try {
-            const response = await fetch(`/api/skills/${slug}`, {
+            const response = await fetch(`/api/skills/${slug}?agentId=${selectedStrategy.id}`, {
                 method: 'DELETE'
             });
             const data = await response.json();
@@ -598,6 +608,8 @@ function DashboardContent() {
             // Step 1: Revoke Agent Permission On-Chain (Burn AgentCap) if exists
             if (agentCapId) {
                 const tx = new Transaction();
+                tx.setSender(account.address);
+
                 const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
 
                 tx.moveCall({
@@ -618,6 +630,8 @@ function DashboardContent() {
                 // No AgentCap (Low Fee Deployment) - Simulate Revocation Transaction
                 // This ensures the user signs a transaction as requested
                 const tx = new Transaction();
+                tx.setSender(account.address);
+
                 // Transfer 1 MIST to self (zero-impact transaction to generate signature)
                 const [dust] = tx.splitCoins(tx.gas, [1]);
                 tx.transferObjects([dust], account.address);
@@ -719,7 +733,7 @@ function DashboardContent() {
         const connectWebSocket = () => {
             try {
                 // Connect to Agent WebSocket
-                ws = new WebSocket('ws://localhost:3001/ws/signals');
+                ws = new WebSocket(getWebSocketUrl('/ws/signals'));
 
                 ws.onopen = () => {
                     console.log('[Dashboard] WS Connected');
@@ -1412,7 +1426,7 @@ function DashboardContent() {
                             </div>
 
                             {/* Content Scrollable */}
-                            <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
+                            <div className="p-6 overflow-y-auto custom-scrollbar space-y-6 flex-1 min-h-0">
 
                                 {/* Key Metrics Grid */}
                                 <div className="grid grid-cols-3 gap-3">
@@ -1422,7 +1436,7 @@ function DashboardContent() {
                                     </div>
                                     <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
                                         <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Profit 24h</p>
-                                        <p className="text-green-400 font-mono font-bold text-lg">+{((Math.random() * 2) + 0.1).toFixed(2)} SUI</p>
+                                        <p className="text-green-400 font-mono font-bold text-lg">+{(0.24).toFixed(2)} SUI</p>
                                     </div>
                                     <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
                                         <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Uptime</p>
@@ -1470,6 +1484,55 @@ function DashboardContent() {
                                     </div>
                                 </div>
 
+                                {/* Installed Plugins Section */}
+                                <div className="space-y-3">
+                                    <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                                        <Cpu size={12} className="text-purple-400" />
+                                        Installed Plugins
+                                    </h3>
+
+                                    {isSkillsLoading ? (
+                                        <div className="animate-pulse flex space-x-4">
+                                            <div className="flex-1 space-y-4 py-1">
+                                                <div className="h-4 bg-white/5 rounded w-3/4"></div>
+                                                <div className="h-4 bg-white/5 rounded"></div>
+                                            </div>
+                                        </div>
+                                    ) : activePlugins.length > 0 ? (
+                                        <div className="grid gap-2">
+                                            {activePlugins.map((skill: any) => (
+                                                <div key={skill.slug} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group/skill hover:bg-white/10 transition-all">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 bg-black/40 border border-white/5 rounded-lg flex items-center justify-center text-xs">
+                                                            {skill.isGlobal ? '🌐' : '🛠️'}
+                                                        </div>
+                                                        <div>
+                                                            <div className="flex items-center gap-2">
+                                                                <p className="text-xs font-bold text-white">{skill.name}</p>
+                                                                {skill.isGlobal && (
+                                                                    <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">GLOBAL</span>
+                                                                )}
+                                                            </div>
+                                                            <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleUninstallSkill(skill.slug)}
+                                                        className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover/skill:opacity-100 transition-all"
+                                                        title="Uninstall"
+                                                    >
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-4 bg-white/5 rounded-xl border border-dashed border-white/10">
+                                            <p className="text-[10px] text-gray-500 italic">No plugins installed on this unit.</p>
+                                        </div>
+                                    )}
+                                </div>
+
                                 {/* Installed Skills Section */}
                                 <div className="space-y-3">
                                     <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
@@ -1484,23 +1547,28 @@ function DashboardContent() {
                                                 <div className="h-4 bg-white/5 rounded"></div>
                                             </div>
                                         </div>
-                                    ) : installedSkills.length > 0 ? (
+                                    ) : tradingSkills.length > 0 ? (
                                         <div className="grid gap-2">
-                                            {installedSkills.map((skill: any) => (
+                                            {tradingSkills.map((skill: any) => (
                                                 <div key={skill.slug} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group/skill hover:bg-white/10 transition-all">
                                                     <div className="flex items-center gap-3">
                                                         <div className="w-8 h-8 bg-black/40 border border-white/5 rounded-lg flex items-center justify-center text-xs">
-                                                            🛠️
+                                                            {skill.isGlobal ? '🌐' : '🛠️'}
                                                         </div>
                                                         <div>
-                                                            <p className="text-xs font-bold text-white">{skill.name}</p>
+                                                            <div className="flex items-center gap-2">
+                                                                <p className="text-xs font-bold text-white">{skill.name}</p>
+                                                                {skill.isGlobal && (
+                                                                    <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">GLOBAL</span>
+                                                                )}
+                                                            </div>
                                                             <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
                                                         </div>
                                                     </div>
                                                     <button
                                                         onClick={() => handleUninstallSkill(skill.slug)}
                                                         className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover/skill:opacity-100 transition-all"
-                                                        title="Uninstall Skill"
+                                                        title="Uninstall"
                                                     >
                                                         <Trash2 size={14} />
                                                     </button>

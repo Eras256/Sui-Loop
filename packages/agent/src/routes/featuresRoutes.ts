@@ -237,6 +237,16 @@ router.post('/marketplace/install/:skillId', async (req: AuthenticatedRequest, r
         if (downloadResult.source) {
             broadcastLog('info', `📦 Installing skill package: ${skill.name} (${skill.version})...`);
             await skills.installSkill(downloadResult.source);
+
+            // If target agent specified, assign it strictly to that agent
+            if (targetAgent && targetAgent !== 'global') {
+                await skills.assignSkillToAgent(skill.slug, targetAgent);
+                broadcastLog('success', `✅ Skill assigned to agent: ${targetAgent}`);
+            } else {
+                // If global (or not specified), assign to global
+                await skills.assignSkillToAgent(skill.slug, 'global');
+            }
+
             broadcastLog('success', `✅ Skill installed successfully: ${skill.name}`);
 
             // Simulate skill initialization broadcast
@@ -266,16 +276,28 @@ router.post('/marketplace/install/:skillId', async (req: AuthenticatedRequest, r
  * GET /api/marketplace/installed
  * Get list of installed marketplace skills
  */
-router.get('/marketplace/installed', async (_req: Request, res: Response) => {
+router.get('/marketplace/installed', async (req: Request, res: Response) => {
     try {
-        const manifests = skills.getAllSkills();
+        const agentId = req.query.agentId as string;
+
+        // If agentId provided, get skills for that agent
+        // Otherwise get ALL global skills (backward compatibility)
+        let manifests;
+        if (agentId) {
+            manifests = skills.getSkillsForAgent(agentId);
+        } else {
+            manifests = skills.getAllSkills();
+        }
+
         const installed = manifests.map(m => {
             const instance = skills.getSkill(m.slug);
             return {
                 slug: m.slug,
                 name: m.name,
                 version: m.version,
-                isEnabled: instance ? instance.isEnabled : false
+                isEnabled: instance ? instance.isEnabled : false,
+                isGlobal: skills.isGlobalSkill(m.slug),
+                category: m.category
             };
         });
         res.json({ success: true, skills: installed });
@@ -353,8 +375,21 @@ router.post('/skills/install', async (req: AuthenticatedRequest, res: Response) 
 router.delete('/skills/:slug', async (req: AuthenticatedRequest, res: Response) => {
     try {
         const slug = req.params.slug as string;
+        const agentId = req.query.agentId as string;
+
+        if (agentId) {
+            // Unassign from specific agent
+            const unassigned = await skills.unassignSkillFromAgent(slug, agentId);
+            if (unassigned) {
+                return res.json({ success: true, message: `Skill removed from agent ${agentId}` });
+            } else {
+                return res.status(404).json({ success: false, message: 'Skill not assigned to this agent (or is global)' });
+            }
+        }
+
+        // Global uninstall
         await skills.uninstallSkill(slug);
-        res.json({ success: true, message: 'Skill uninstalled' });
+        res.json({ success: true, message: 'Skill uninstalled globally' });
     } catch (error) {
         res.status(500).json({ success: false, error: String(error) });
     }

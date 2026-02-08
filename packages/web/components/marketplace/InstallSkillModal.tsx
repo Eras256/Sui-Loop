@@ -17,15 +17,16 @@ interface InstallSkillModalProps {
     isOpen: boolean;
     onClose: () => void;
     onInstall: (agentId: string) => void;
+    isInstalling?: boolean;
 }
 
 // Default Global Agent
 const GLOBAL_AGENT: Agent = { id: "global", name: "Neural Matrix (Global)", type: "System Wide", status: "System" };
 
-export default function InstallSkillModal({ skill, isOpen, onClose, onInstall }: InstallSkillModalProps) {
+export default function InstallSkillModal({ skill, isOpen, onClose, onInstall, isInstalling = false }: InstallSkillModalProps) {
     const account = useCurrentAccount();
     const [activeAgents, setActiveAgents] = useState<Agent[]>([GLOBAL_AGENT]);
-    const [selectedAgent, setSelectedAgent] = useState<string>(GLOBAL_AGENT.id);
+    const [selectedAgent, setSelectedAgent] = useState<string>("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     // Load Real Agents from LocalStorage (synced with Dashboard)
@@ -46,9 +47,19 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall }:
 
                     // Combine Global + Real Agents
                     setActiveAgents([GLOBAL_AGENT, ...agents]);
+
+                    // Default to first real agent if available, otherwise global
+                    if (agents.length > 0) {
+                        setSelectedAgent(agents[0].id);
+                    } else {
+                        setSelectedAgent(GLOBAL_AGENT.id);
+                    }
+                } else {
+                    setSelectedAgent(GLOBAL_AGENT.id);
                 }
             } catch (e) {
                 console.error("Failed to load active agents", e);
+                setSelectedAgent(GLOBAL_AGENT.id);
             }
         }
     }, [isOpen, account]);
@@ -65,7 +76,7 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall }:
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={onClose}
+                        onClick={() => !isInstalling && onClose()}
                         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                     />
 
@@ -88,8 +99,9 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall }:
                                     </div>
                                 </div>
                                 <button
-                                    onClick={onClose}
-                                    className="text-gray-500 hover:text-white transition-colors"
+                                    onClick={() => !isInstalling && onClose()}
+                                    className={`text-gray-500 hover:text-white transition-colors ${isInstalling ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    disabled={isInstalling}
                                 >
                                     <X size={20} />
                                 </button>
@@ -102,8 +114,9 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall }:
                                 <label className="text-xs text-gray-400 font-mono uppercase tracking-wider">Select Target Unit</label>
                                 <div className="relative">
                                     <button
-                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex items-center justify-between hover:border-purple-500/50 transition-colors"
+                                        onClick={() => !isInstalling && setIsDropdownOpen(!isDropdownOpen)}
+                                        className={`w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex items-center justify-between hover:border-purple-500/50 transition-colors ${isInstalling ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        disabled={isInstalling}
                                     >
                                         <div className="flex items-center gap-3">
                                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${currentAgent.id === 'global' ? 'bg-neon-cyan/20 text-neon-cyan' : 'bg-purple-500/20 text-purple-400'}`}>
@@ -158,7 +171,7 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall }:
                                 <div className="space-y-1">
                                     <h4 className="text-xs font-bold text-blue-300">Security Check</h4>
                                     <p className="text-[10px] text-blue-200/60 leading-relaxed">
-                                        Installing {skill.name} grants this unit capability to execute transactions related to {skill.tags[0] || 'DeFi'}.
+                                        Installing {skill.name} grants this unit capability to execute transactions related to {skill.tags?.[0] || skill.category || 'DeFi'}.
                                         {selectedAgent === 'global' ? ' This will apply to ALL active agents.' : ' This applies only to the selected agent.'}
                                     </p>
                                 </div>
@@ -166,10 +179,20 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall }:
 
                             <button
                                 onClick={() => onInstall(selectedAgent)}
-                                className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-purple-500/20 active:scale-[0.98] flex items-center justify-center gap-2"
+                                disabled={isInstalling}
+                                className={`w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-purple-500/20 active:scale-[0.98] flex items-center justify-center gap-2 ${isInstalling ? 'opacity-70 cursor-wait' : 'hover:from-purple-500 hover:to-blue-500'}`}
                             >
-                                <Download size={18} />
-                                Install Capability
+                                {isInstalling ? (
+                                    <>
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        <span>Installing...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Download size={18} />
+                                        <span>Install Capability</span>
+                                    </>
+                                )}
                             </button>
                         </div>
                     </motion.div>

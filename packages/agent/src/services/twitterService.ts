@@ -57,3 +57,38 @@ export function initializeTwitterService(): TwitterService {
 export function getTwitterService(): TwitterService | null {
     return twitterService;
 }
+
+// Actions for Skill Manager
+export const twitterActions = {
+    postUpdate: {
+        name: 'POST_UPDATE',
+        description: 'Post a status update to Twitter',
+        handler: async (service: TwitterService, params: { text: string }) => {
+            return await service.tweet(params.text);
+        }
+    },
+    analyzeSentiment: {
+        name: 'ANALYZE_SENTIMENT',
+        description: 'Analyze sentiment for a keyword (Mock)',
+        handler: async (service: TwitterService, params: { keyword: string }) => {
+            // Mock sentiment analysis
+            return {
+                keyword: params.keyword,
+                sentimentScore: 0.85, // 0-1
+                volume: 'High',
+                topMention: `@SuiLoop is crushing it! $${params.keyword} to the moon! 🚀`
+            };
+        }
+    },
+    getTrending: {
+        name: 'GET_TRENDING',
+        description: 'Get trending topics (Mock)',
+        handler: async (service: TwitterService) => {
+            return [
+                { topic: '$SUI', volume: 15400 },
+                { topic: '#SuiLoop', volume: 8200 },
+                { topic: 'DeFi', volume: 54000 }
+            ];
+        }
+    }
+};

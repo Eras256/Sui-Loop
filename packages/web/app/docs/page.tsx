@@ -66,7 +66,7 @@ function DocsContent() {
                                 <div className="flex items-center gap-3">
                                     <h1 className="text-4xl md:text-5xl font-bold font-mono tracking-tight">DOCUMENTATION</h1>
                                     <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs font-mono rounded-full border border-green-500/30">
-                                        v1.0.0
+                                        v0.0.7
                                     </span>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@ function DocsContent() {
                                 <GitBranch className="w-4 h-4" />
                                 GitHub
                             </a>
-                            <a href="https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043" target="_blank" className="px-4 py-2 bg-neon-cyan/10 border border-neon-cyan/30 rounded-lg text-sm font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-colors flex items-center gap-2">
+                            <a href="https://suiscan.xyz/testnet/object/0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb" target="_blank" className="px-4 py-2 bg-neon-cyan/10 border border-neon-cyan/30 rounded-lg text-sm font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-colors flex items-center gap-2">
                                 <ExternalLink className="w-4 h-4" />
                                 Suiscan
                             </a>
@@ -142,9 +142,9 @@ function OverviewSection() {
             {/* Hero Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                    { label: 'Testnet Version', value: 'v0.0.5', color: 'text-neon-cyan' },
-                    { label: 'Unit Tests', value: '5/5 ✓', color: 'text-green-400' },
-                    { label: 'Pool Liquidity', value: '1 SUI', color: 'text-purple-400' },
+                    { label: 'Testnet Version', value: 'v0.0.7', color: 'text-neon-cyan' },
+                    { label: 'Unit Tests', value: '12/12 ✓', color: 'text-green-400' },
+                    { label: 'Neural Plugins', value: '3 Active', color: 'text-purple-400' },
                     { label: 'Flash Loan Fee', value: '0.3%', color: 'text-amber-400' },
                 ].map((stat) => (
                     <div key={stat.label} className="bg-white/5 border border-white/10 rounded-xl p-4">
@@ -215,7 +215,7 @@ function OverviewSection() {
             <section>
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                     <Rocket className="text-amber-400" />
-                    Key Features (v0.0.5)
+                    Key Features (v0.0.7)
                 </h2>
                 <div className="grid md:grid-cols-3 gap-4">
                     {[
@@ -279,7 +279,7 @@ function OverviewSection() {
                     </table>
                 </div>
                 <div className="mt-4 text-sm text-gray-400">
-                    <strong>Agent Wallet:</strong> <code className="text-neon-cyan">0x8bd468b0e5941e75484e95191d99ff6234b2ab24e3b91650715b6df8cf8e4eba</code>
+                    <strong>Agent Wallet:</strong> <code className="text-neon-cyan">0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb</code>
                 </div>
             </section>
         </div>
@@ -403,7 +403,7 @@ function ContractsSection() {
         <div className="space-y-12">
             {/* Deployed Contracts */}
             <section>
-                <h2 className="text-2xl font-bold mb-6">Deployed Contracts (Testnet v0.0.5)</h2>
+                <h2 className="text-2xl font-bold mb-6">Deployed Contracts (Testnet v0.0.7)</h2>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
@@ -417,8 +417,8 @@ function ContractsSection() {
                             <tr className="border-b border-white/5 hover:bg-white/5">
                                 <td className="py-4 px-4 text-white font-bold">Package</td>
                                 <td className="py-4 px-4 text-neon-cyan break-all">
-                                    <a href="https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043" target="_blank" className="hover:underline">
-                                        0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043
+                                    <a href="https://suiscan.xyz/testnet/object/0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb" target="_blank" className="hover:underline">
+                                        0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb
                                     </a>
                                 </td>
                                 <td className="py-4 px-4 text-gray-400">Immutable Move Logic (Hot Potato)</td>
@@ -426,8 +426,8 @@ function ContractsSection() {
                             <tr className="border-b border-white/5 hover:bg-white/5">
                                 <td className="py-4 px-4 text-white font-bold">MockPool</td>
                                 <td className="py-4 px-4 text-amber-500 break-all">
-                                    <a href="https://suiscan.xyz/testnet/object/0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0" target="_blank" className="hover:underline">
-                                        0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0
+                                    <a href="https://suiscan.xyz/testnet/object/0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165" target="_blank" className="hover:underline">
+                                        0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165
                                     </a>
                                 </td>
                                 <td className="py-4 px-4 text-gray-400">Shared Liquidity Object (SUI/SUI)</td>
@@ -532,7 +532,7 @@ public struct MockPool<phantom Base, phantom Quote> has key, store {
                         </div>
                     ))}
                     <div className="mt-4 pt-4 border-t border-white/10 text-green-400">
-                        Test result: OK. Total tests: 5; passed: 5; failed: 0
+                        Test result: OK. Total tests: 12; passed: 12; failed: 0
                     </div>
                 </div>
             </section>
@@ -563,7 +563,7 @@ function AgentSection() {
                             <span className="font-bold">REAL SIGNING - Verified On-Chain</span>
                         </div>
                         <p className="text-sm text-gray-400 mt-2">
-                            Agent Wallet: <code className="text-neon-cyan">0x8bd468b0...8e4eba</code>
+                            Agent Wallet: <code className="text-neon-cyan">0x673686ac6a...f7c079</code>
                         </p>
                     </div>
                 </div>
@@ -577,16 +577,16 @@ function AgentSection() {
                         {`packages/agent/src/
 ├── actions/
 │   ├── executeAtomicLeverage.ts    # Main transaction action
-│   └── index.ts
-├── providers/
-│   └── deepBookProvider.ts         # Market data provider
 ├── services/
-│   ├── walrusService.ts            # Decentralized storage
-│   ├── scallopService.ts           # Lending protocol
-│   └── cetusService.ts             # DEX integration
-├── run.ts                          # Standalone runner
-├── server.ts                       # HTTP API server
-└── index.ts                        # Main exports`}
+│   ├── loopHub.ts                  # Central agent orchestration
+│   ├── skillManager.ts             # Dynamic capability loader
+│   ├── llmService.ts               # Titan Champion brain integration
+│   ├── browserService.ts           # Web scraping & deep research
+│   ├── twitterService.ts           # Social sentiment analysis
+│   └── knowledgeService.ts         # Market context engine
+├── providers/
+│   └── suiProvider.ts              # Blockchain interface
+└── run.ts                          # Autonomous loop runner`}
                     </pre>
                 </div>
             </section>
@@ -629,8 +629,8 @@ pnpm --filter @suiloop/agent dev
 pnpm --filter @suiloop/agent dev "Loop 0.5 SUI please"
 
 # Expected output:
-🚀 SUILOOP AGENT v0.0.5
-🤖 Agent Wallet: 0x8bd468b0e5941e75...
+🚀 SUILOOP AGENT v0.0.7
+🤖 Agent Wallet: 0x673686ac6a1a...
 📝 Signing transaction...
 ✅ Transaction Successful: 5X6TDFkYvjvCb2LS...
 🔗 View on Suiscan: https://suiscan.xyz/testnet/tx/...`}
@@ -727,11 +727,12 @@ function FrontendSection() {
                     {[
                         { path: '/', name: 'Landing Page', desc: 'Hero, features, live terminal, Builder highlight', lines: 330 },
                         { path: '/how-to-use', name: 'Operations Manual', desc: 'Step-by-step guide for new operators', lines: 180 },
-                        { path: '/dashboard', name: 'Dashboard', desc: 'Command center, Active Fleet, execution logs', lines: 823 },
-                        { path: '/strategies', name: 'Marketplace', desc: '6 pre-built strategies with one-click deploy', lines: 297 },
+                        { path: '/dashboard', name: 'Dashboard', desc: 'Command center, Active Fleet, execution logs', lines: 2073 },
+                        { path: '/marketplace', name: 'Marketplace', desc: 'Pre-built strategies with multi-agent deploy', lines: 835 },
+                        { path: '/plugins', name: 'Neural Extensions', desc: 'Core plugins: Research, Sentiment, Knowledge', lines: 272 },
                         { path: '/strategies/builder', name: 'Visual Builder', desc: 'Drag-and-drop node editor for custom strategies', lines: 572 },
                         { path: '/analytics', name: 'Analytics', desc: 'Performance charts and metrics', lines: 200 },
-                        { path: '/docs', name: 'Documentation', desc: 'Technical documentation (this page)', lines: 1200 },
+                        { path: '/docs', name: 'Documentation', desc: 'Technical documentation (this page)', lines: 1172 },
                     ].map((page) => (
                         <div key={page.path} className="bg-white/5 border border-white/10 rounded-lg p-4 flex items-center justify-between">
                             <div className="flex items-center gap-4">
@@ -852,8 +853,8 @@ function ApiSection() {
                             <span className="text-sm font-mono text-gray-400">packages/web/.env.local</span>
                         </div>
                         <pre className="p-4 text-sm font-mono text-gray-300">
-                            {`NEXT_PUBLIC_PACKAGE_ID=0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043
-NEXT_PUBLIC_POOL_ID=0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0
+                            {`NEXT_PUBLIC_PACKAGE_ID=0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb
+NEXT_PUBLIC_POOL_ID=0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165
 NEXT_PUBLIC_SUI_NETWORK=testnet
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key`}
@@ -866,8 +867,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key`}
                         </div>
                         <pre className="p-4 text-sm font-mono text-gray-300">
                             {`SUI_PRIVATE_KEY=suiprivkey1...
-SUI_PACKAGE_ID=0x9a2f0c4ce...
-SUI_POOL_ID=0x0839e6ce6...
+SUI_PACKAGE_ID=0x673686ac6...
+SUI_POOL_ID=0xb10cc9e5d...
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_KEY=your_service_role_key`}
                         </pre>
@@ -908,11 +909,11 @@ pnpm build`}
                         </div>
                         <pre className="p-4 text-xs font-mono text-gray-300 overflow-x-auto">
                             {`sui client call \\
-  --package 0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043 \\
+  --package 0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb \\
   --module atomic_engine \\
   --function add_liquidity \\
   --type-args 0x2::sui::SUI 0x2::sui::SUI \\
-  --args 0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0 <COIN_ID> \\
+  --args 0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165 <COIN_ID> \\
   --gas-budget 50000000`}
                         </pre>
                     </div>
@@ -925,9 +926,9 @@ pnpm build`}
                             {`sui client ptb --gas-budget 50000000 \\
   --split-coins gas "[10000000]" \\
   --assign user_funds \\
-  --move-call 0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043::atomic_engine::execute_loop \\
+  --move-call 0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb::atomic_engine::execute_loop \\
     "<0x2::sui::SUI, 0x2::sui::SUI>" \\
-    @0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0 \\
+    @0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165 \\
     user_funds \\
     100000000 \\
     0`}

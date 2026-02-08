@@ -103,9 +103,14 @@ export default function AnalyticsPage() {
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10">
-                <header className="mb-10 flex justify-between items-end">
+                <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                     <div>
-                        <h1 className="text-4xl font-bold mb-2 text-white tracking-tight">INTELLIGENCE OPS</h1>
+                        <div className="flex items-center gap-3 mb-2">
+                            <h1 className="text-4xl font-bold text-white tracking-tight">INTELLIGENCE OPS</h1>
+                            <span className="px-2 py-0.5 bg-neon-cyan/10 text-neon-cyan text-[10px] font-mono rounded border border-neon-cyan/20">
+                                v0.0.7
+                            </span>
+                        </div>
                         <p className="text-gray-400 font-mono text-sm">Real-time surveillance of on-chain liquidity vectors {account ? `// TARGET: ${account.address.slice(0, 6)}...${account.address.slice(-4)}` : '// GUEST MODE'}</p>
                     </div>
                     {!account && (

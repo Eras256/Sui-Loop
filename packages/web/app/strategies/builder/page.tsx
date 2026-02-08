@@ -363,7 +363,7 @@ function StrategyBuilderInner() {
                 <div className="p-4 border-b border-white/10 space-y-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">Component Lab</h2>
-                        <span className="text-[10px] font-mono text-neon-cyan/50">v4.0.2</span>
+                        <span className="text-[10px] font-mono text-neon-cyan/50">v0.0.7</span>
                     </div>
                     <div className="relative">
                         <Search className="absolute left-3 top-2.5 text-gray-500" size={14} />

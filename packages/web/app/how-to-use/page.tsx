@@ -37,7 +37,7 @@ export default function HowToUsePage() {
                     <div className="text-center mb-20 section-lift">
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-neon-cyan/10 border border-neon-cyan/30 rounded-full text-neon-cyan text-xs font-mono mb-6">
                             <BookOpen size={14} />
-                            OPERATIONS MANUAL V1.0
+                            OPERATIONS MANUAL v0.0.7
                         </div>
                         <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6">
                             HOW TO <span className="text-gradient">OPERATE</span>
@@ -172,8 +172,8 @@ const STEPS = [
         actionHref: "/dashboard"
     },
     {
-        title: "Secure Enclave",
-        description: "Deploy your non-custodial Secure Vault. This Move-native contract generates your OwnerCap, ensuring only you can withdraw funds while the AgentCap delegates execution rights.",
+        title: "Deploy Core Unit",
+        description: "Deploy your autonomous agent base. This Move-native contract generates your OwnerCap, ensuring only you can withdraw funds while the AgentCap delegates execution rights.",
         icon: Shield,
         color: "from-neon-cyan to-teal-500",
         features: [
@@ -182,14 +182,28 @@ const STEPS = [
             "Non-custodial by design",
             "Move Hot Potato Safety"
         ],
-        actionLabel: "Initialize Vault",
+        actionLabel: "Initialize Agent",
         actionHref: "/dashboard"
     },
     {
-        title: "Strategy Arsenal",
-        description: "Design your logic in the Visual Builder or clone institutional templates. SuiLoop's 'Arsenal' features proven loops for Arbitrage, Yield Aggregation, and Peg Restoration.",
-        icon: MousePointer2,
+        title: "Skill Integration",
+        description: "Empower your agent via the Neural Marketplace. Install modular skills like 'Atomic Flash Loan', 'Price Monitor', or 'Whale Tracker' to customize your unit's intelligence.",
+        icon: Cpu, // Changed icon to represent modular chips/skills
         color: "from-neon-purple to-purple-600",
+        features: [
+            "Modular Skill Architecture",
+            "One-Click Installation",
+            "Agent-Specific Memory",
+            "Hot-Swappable Logic"
+        ],
+        actionLabel: "Browse Marketplace",
+        actionHref: "/marketplace"
+    },
+    {
+        title: "Strategy Builder",
+        description: "Design custom logic loops in the Visual Editor. Connect DEXs, Lending Protocols, and Mathematical models to create proprietary trading algorithms for your agents.",
+        icon: MousePointer2,
+        color: "from-pink-500 to-rose-500",
         features: [
             "Visual Node Editor",
             "Institutional Templates",
@@ -200,31 +214,17 @@ const STEPS = [
         actionHref: "/strategies/builder"
     },
     {
-        title: "Deploy Agent",
-        description: "Inject your logic into the Autonomous Core. Using ElizaOS, your agent monitors the matrix in real-time, executing atomic transaction blocks (PTBs) with superhuman speed.",
-        icon: Cpu,
-        color: "from-green-400 to-emerald-500",
-        features: [
-            "Autonomous Execution",
-            "Atomic PTB Logic",
-            "Zero-Latency Tracking",
-            "Move 2024 Safety Rails"
-        ],
-        actionLabel: "Command Center",
-        actionHref: "/dashboard"
-    },
-    {
-        title: "Forensic Audit",
-        description: "Full transparency via Black Box data. Every agent decision and signature is immutably logged to Walrus, providing a decentralized audit trail for forensic analysis.",
+        title: "Live Monitoring",
+        description: "Watch your fleet in action. The Command Center provides real-time telemetry, transaction traces, and forensic logs backed by decentralized storage.",
         icon: Terminal,
         color: "from-amber-400 to-orange-500",
         features: [
+            "Real-Time Telemetry",
             "Walrus Forensic Logs",
-            "Immutability Guaranteed",
             "Decentralized Auditing",
-            "Black Box Data Export"
+            "Stop-Loss Triggers"
         ],
-        actionLabel: "Audit Logs",
-        actionHref: "/agents"
+        actionLabel: "Command Center",
+        actionHref: "/dashboard"
     }
 ];

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { LayoutDashboard, Compass, ChartNoAxesColumn, FileText, Menu, X, Rocket, Zap, Bot, Package } from "lucide-react";
+import { House, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package, Cpu } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,6 +12,11 @@ export default function Navbar() {
     const account = useCurrentAccount();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Handle scroll effect for navbar
     useEffect(() => {
@@ -50,14 +55,15 @@ export default function Navbar() {
     }, [mobileMenuOpen]);
 
     const navLinks = [
-        { name: "MISSION CTRL", href: "/dashboard", icon: LayoutDashboard },
-        { name: "INTEL OPS", href: "/analytics", icon: ChartNoAxesColumn },
-        { name: "ARSENAL", href: "/strategies", icon: Zap },
-        { name: "NEXUS", href: "/marketplace", icon: Package },
-        { name: "STRAT LABS", href: "/strategies/builder", icon: Compass },
-        { name: "THESIS", href: "/docs", icon: FileText },
-        { name: "OPS UNIT", href: "/agents", icon: Bot },
-        { name: "MANUAL", href: "/how-to-use", icon: FileText },
+        { name: "HOME", href: "/", icon: House },
+        { name: "DASHBOARD", href: "/dashboard", icon: LayoutDashboard },
+        { name: "ANALYTICS", href: "/analytics", icon: BarChart2 },
+        { name: "STRATEGIES", href: "/strategies", icon: Zap },
+        { name: "MARKETPLACE", href: "/marketplace", icon: Package },
+        { name: "PLUGINS", href: "/plugins", icon: Cpu },
+        { name: "BUILDER", href: "/strategies/builder", icon: Compass },
+        { name: "AGENTS", href: "/agents", icon: Bot },
+        { name: "DOCS", href: "/docs", icon: FileText },
     ];
 
     const closeMobileMenu = useCallback(() => {
@@ -88,11 +94,11 @@ export default function Navbar() {
                                 <span className="text-white font-mono font-bold text-base xl:text-lg">S</span>
                             </div>
                             {/* Logo text - Optimized visibility */}
-                            <div className="hidden xs:flex flex-col">
+                            <div className="hidden min-[1150px]:flex flex-col">
                                 <span className="font-bold text-white tracking-tighter leading-none text-xs xl:text-lg group-hover:text-neon-cyan transition-colors">
                                     SUILOOP
                                 </span>
-                                <span className="hidden xl:block text-[9px] text-gray-500 font-mono tracking-widest leading-none">
+                                <span className="hidden 2xl:block text-[9px] text-gray-500 font-mono tracking-widest leading-none">
                                     PROTOCOL
                                 </span>
                             </div>
@@ -100,46 +106,75 @@ export default function Navbar() {
                     </div>
 
                     {/* Center: Desktop Navigation - visible on laptop (lg) and up */}
-                    <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-1 justify-center mx-4">
-                        {navLinks.map((link) => {
-                            const isActive = pathname === link.href;
-                            const Icon = link.icon;
+                    <div className="hidden lg:flex items-center gap-1 xl:gap-3 flex-1 justify-center mx-2 xl:mx-6">
+                        <div className="flex items-center gap-1 p-1 bg-white/[0.03] border border-white/5 rounded-full backdrop-blur-md">
+                            {navLinks.map((link) => {
+                                const isActive = pathname === link.href;
+                                const Icon = link.icon;
+                                return (
+                                    <Link
+                                        key={link.name}
+                                        href={link.href}
+                                        className={`
+                                            relative px-3 xl:px-4 py-2 rounded-full text-[10px] xl:text-xs font-bold 
+                                            transition-colors duration-300 flex items-center gap-2 whitespace-nowrap group
+                                            ${isActive ? "text-white" : "text-gray-400 hover:text-white"}
+                                        `}
+                                    >
+                                        {/* Shared Layout Background Animation */}
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="nav-active"
+                                                className="absolute inset-0 bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)] rounded-full border border-white/10"
+                                                transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+                                            />
+                                        )}
 
-                            return (
-                                <Link
-                                    key={link.name}
-                                    href={link.href}
-                                    className={`
-                                        relative px-2 xl:px-4 py-2 rounded-full text-[10px] xl:text-xs font-bold 
-                                        transition-all duration-300 flex items-center gap-1 xl:gap-2 whitespace-nowrap
-                                        ${isActive
-                                            ? "text-white bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-                                            : "text-gray-400 hover:text-white hover:bg-white/5"
-                                        }
-                                    `}
-                                >
-                                    <Icon className={isActive ? "text-neon-cyan w-3 h-3 xl:w-3.5 xl:h-3.5" : "text-gray-500 w-3 h-3 xl:w-3.5 xl:h-3.5"} />
-                                    <span>{link.name}</span>
-                                    {isActive && (
-                                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-neon-cyan shadow-[0_0_10px_#00f3ff] rounded-full"></span>
-                                    )}
-                                </Link>
-                            );
-                        })}
+                                        <Icon className={`
+                                            relative z-10 w-3.5 h-3.5 xl:w-4 xl:h-4 transition-transform group-hover:scale-110
+                                            ${isActive ? "text-neon-cyan" : "text-gray-500"}
+                                        `} />
+
+                                        <span className={`
+                                            relative z-10
+                                            ${isActive ? "inline" : "hidden min-[1650px]:inline"}
+                                        `}>
+                                            {link.name}
+                                        </span>
+
+                                        {/* Hover Label Tooltip/Expansion Effect */}
+                                        {!isActive && (
+                                            <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white/10 backdrop-blur-md border border-white/10 rounded text-[8px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                                                {link.name}
+                                            </span>
+                                        )}
+
+                                        {isActive && (
+                                            <motion.span
+                                                layoutId="nav-dot"
+                                                className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-neon-cyan shadow-[0_0_10px_#00f3ff] rounded-full"
+                                            />
+                                        )}
+                                    </Link>
+                                );
+                            })}
+                        </div>
                     </div>
 
                     {/* Right Side: Status + Wallet + CTA + Mobile Toggle */}
                     <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 shrink-0">
                         {/* Agent Status Indicator - lg+ */}
-                        <div className={`hidden lg:flex items-center gap-1 xl:gap-2 px-1.5 xl:px-3 py-1.2 xl:py-1.5 rounded-full border ${account ? "bg-green-500/10 border-green-500/20" : "bg-white/5 border-white/10"}`}>
-                            <span className="relative flex h-1 w-1 xl:h-1.5 xl:w-1.5">
-                                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
-                                <span className={`relative inline-flex rounded-full h-1 w-1 xl:h-1.5 xl:w-1.5 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
-                            </span>
-                            <span className={`text-[8px] xl:text-[10px] font-mono font-bold whitespace-nowrap ${account ? "text-green-400" : "text-gray-500"}`}>
-                                UNIT
-                            </span>
-                        </div>
+                        {mounted && (
+                            <div className={`hidden min-[1400px]:flex items-center gap-1 xl:gap-2 px-1.5 xl:px-3 py-1.2 xl:py-1.5 rounded-full border ${account ? "bg-green-500/10 border-green-500/20" : "bg-white/5 border-white/10"}`}>
+                                <span className="relative flex h-1 w-1 xl:h-1.5 xl:w-1.5">
+                                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
+                                    <span className={`relative inline-flex rounded-full h-1 w-1 xl:h-1.5 xl:w-1.5 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
+                                </span>
+                                <span className={`text-[8px] xl:text-[10px] font-mono font-bold whitespace-nowrap ${account ? "text-green-400" : "text-gray-500"}`}>
+                                    UNIT
+                                </span>
+                            </div>
+                        )}
 
                         {/* Connect Button - Responsive scaling */}
                         <div className="navbar-connect-btn scale-[0.85] xl:scale-100 origin-right">
@@ -149,15 +184,15 @@ export default function Navbar() {
                         {/* CTA Button - Hidden on mobile/tablet, shown on lg+ as icon, full on xl */}
                         <Link
                             href="/strategies"
-                            className="hidden lg:flex items-center gap-1 bg-neon-cyan text-black px-2 xl:px-3 py-2 rounded-full font-mono text-[9px] xl:text-[10px] font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
+                            className="hidden min-[1300px]:flex items-center gap-1 bg-neon-cyan text-black px-2 xl:px-3 py-2 rounded-full font-mono text-[9px] xl:text-[10px] font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
                         >
                             <Rocket className="w-3 h-3 xl:w-3.5 xl:h-3.5" />
-                            <span className="hidden min-[1150px]:inline">INIT VECTOR</span>
+                            <span className="hidden min-[1550px]:inline">INIT VECTOR</span>
                         </Link>
 
                         {/* Mobile Menu Toggle - Visible on lg and below */}
                         <button
-                            className="lg:hidden min-w-[44px] min-h-[44px] w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors ml-1"
+                            className="lg:hidden shrink-0 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-neon-cyan/10 transition-colors ml-1 group"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                             aria-expanded={mobileMenuOpen}
@@ -165,6 +200,7 @@ export default function Navbar() {
                             <motion.div
                                 animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
                                 transition={{ duration: 0.2 }}
+                                className="text-gray-400 group-hover:text-white"
                             >
                                 {mobileMenuOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <Menu size={20} className="sm:w-6 sm:h-6" />}
                             </motion.div>
@@ -194,21 +230,23 @@ export default function Navbar() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -20, scale: 0.95 }}
                             transition={{ duration: 0.25, ease: "easeOut" }}
-                            className="fixed top-[72px] sm:top-[80px] left-3 right-3 sm:left-4 sm:right-4 z-50 p-3 sm:p-4 rounded-2xl glass-panel xl:hidden overflow-hidden max-h-[calc(100vh-100px)] overflow-y-auto"
+                            className="fixed top-[72px] sm:top-[80px] left-3 right-3 sm:left-4 sm:right-4 z-50 p-2 sm:p-4 rounded-2xl glass-panel lg:hidden overflow-hidden max-h-[85vh] overflow-y-auto custom-scrollbar"
                         >
 
                             {/* Mobile Status Badge */}
-                            <div className="flex items-center justify-end mb-4 pb-3 border-b border-white/5">
-                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/5">
-                                    <span className="relative flex h-2 w-2">
-                                        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
-                                        <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
-                                    </span>
-                                    <span className="text-[10px] text-gray-400 font-mono">
-                                        {account ? "ACTIVE" : "IDLE"}
-                                    </span>
+                            {mounted && (
+                                <div className="flex items-center justify-end mb-4 pb-3 border-b border-white/5">
+                                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/5">
+                                        <span className="relative flex h-2 w-2">
+                                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
+                                            <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
+                                        </span>
+                                        <span className="text-[10px] text-gray-400 font-mono">
+                                            {account ? "ACTIVE" : "IDLE"}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Navigation Links */}
                             <div className="space-y-1">

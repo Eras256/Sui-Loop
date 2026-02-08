@@ -35,7 +35,7 @@ export default function Footer() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-12">
                 {/* Brand */}
-                <div className="col-span-2">
+                <div className="col-span-2 md:col-span-1">
                     <Link href="/" className="flex items-center gap-2 mb-4 group w-fit">
                         <div className="w-8 h-8 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(189,0,255,0.3)] group-hover:scale-110 transition-transform">
                             <span className="text-white font-mono font-bold">S</span>
@@ -57,19 +57,30 @@ export default function Footer() {
                     </div>
                 </div>
 
-                {/* Links */}
+                {/* Protocol */}
                 <div>
-                    <h4 className="text-white font-bold mb-4 text-sm sm:text-base">Protocol</h4>
-                    <ul className="space-y-2 sm:space-y-3 text-sm text-gray-400">
-                        <li><Link href="/dashboard" className="hover:text-neon-cyan transition-colors">Enclave</Link></li>
-                        <li><Link href="/strategies" className="hover:text-neon-cyan transition-colors">Protocol Arsenal</Link></li>
-                        <li><Link href="/manifesto" className="hover:text-neon-cyan transition-colors">Thesis</Link></li>
-                        <li><Link href="/how-to-use" className="hover:text-neon-cyan transition-colors">Operations Manual</Link></li>
-                        <li><Link href="/strategies/builder" className="hover:text-neon-cyan transition-colors">Architect (Builder)</Link></li>
+                    <h4 className="text-white font-bold mb-4 text-sm sm:text-base tracking-tight">Mainframe</h4>
+                    <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
+                        <li><Link href="/dashboard" className="hover:text-neon-cyan transition-colors">Enclave Dashboard</Link></li>
                         <li><Link href="/analytics" className="hover:text-neon-cyan transition-colors">Intel Ops</Link></li>
+                        <li><Link href="/strategies" className="hover:text-neon-cyan transition-colors">Strategy Arsenal</Link></li>
+                        <li><Link href="/strategies/builder" className="hover:text-neon-cyan transition-colors">Visual Architect</Link></li>
+                        <li><Link href="/marketplace" className="hover:text-neon-cyan transition-colors">Neural Marketplace</Link></li>
+                        <li><Link href="/plugins" className="hover:text-neon-cyan transition-colors">Cognitive Plugins</Link></li>
+                    </ul>
+                </div>
+
+                {/* Technical */}
+                <div>
+                    <h4 className="text-white font-bold mb-4 text-sm sm:text-base tracking-tight">Intelligence</h4>
+                    <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
+                        <li><Link href="/agents" className="hover:text-neon-cyan transition-colors">Active Agents</Link></li>
+                        <li><Link href="/manifesto" className="hover:text-neon-cyan transition-colors">Protocol Manifesto</Link></li>
+                        <li><Link href="/how-to-use" className="hover:text-neon-cyan transition-colors">Operations Manual</Link></li>
+                        <li><Link href="/docs" className="hover:text-neon-cyan transition-colors">Technical Docs</Link></li>
                         <li>
                             <a
-                                href="https://suiscan.xyz/testnet/object/0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043"
+                                href="https://suiscan.xyz/testnet/object/0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="hover:text-neon-cyan transition-colors flex items-center gap-1.5"
@@ -82,7 +93,7 @@ export default function Footer() {
                 </div>
 
                 {/* Social */}
-                <div>
+                <div className="col-span-2 md:col-span-1">
                     <h4 className="text-white font-bold mb-4 text-sm sm:text-base">Community</h4>
                     <div className="flex flex-wrap gap-3">
                         <a href="https://x.com/Vaiosx" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-black hover:text-white transition-all hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-transparent hover:border-white/20">
@@ -128,7 +139,7 @@ export default function Footer() {
                         </span>
                         UPLINK ESTABLISHED
                     </span>
-                    <span className="text-gray-600">KERNEL v1.0.0 // ENCRYPTED</span>
+                    <span className="text-gray-600">KERNEL v0.0.7 // ENCRYPTED</span>
                 </div>
             </div>
         </footer>
