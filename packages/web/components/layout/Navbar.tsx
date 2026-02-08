@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { House, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package, Cpu } from "lucide-react";
+import { Home, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package, Cpu } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -55,7 +55,7 @@ export default function Navbar() {
     }, [mobileMenuOpen]);
 
     const navLinks = [
-        { name: "HOME", href: "/", icon: House },
+        { name: "HOME", href: "/", icon: Home },
         { name: "DASHBOARD", href: "/dashboard", icon: LayoutDashboard },
         { name: "ANALYTICS", href: "/analytics", icon: BarChart2 },
         { name: "STRATEGIES", href: "/strategies", icon: Zap },

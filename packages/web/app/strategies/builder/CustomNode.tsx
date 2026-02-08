@@ -57,7 +57,7 @@ const CustomNode = ({ data, selected }: NodeProps) => {
                             <span className="text-[10px] text-gray-500 font-mono uppercase bg-white/5 px-1.5 py-0.5 rounded">
                                 {data.type as string}
                             </span>
-                            {data.sublabel && (
+                            {!!data.sublabel && (
                                 <span className="text-[9px] text-neon-purple font-mono uppercase truncate opacity-70">
                                     {data.sublabel as string}
                                 </span>
