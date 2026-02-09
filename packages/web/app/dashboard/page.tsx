@@ -412,6 +412,9 @@ function DashboardContent() {
             }
 
             const tx = new Transaction();
+            // EXPLICIT GAS BUDGET to prevent "Sponsored Transaction" errors in wallets
+            tx.setGasBudget(100000000);
+
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
             const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID || "0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165";
 
