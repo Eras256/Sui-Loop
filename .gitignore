@@ -42,3 +42,5 @@ sui-test-validator
 sui-data-ingestion
 sui-bridge-cli
 move-analyzer
+.vercel
+.env*.local
