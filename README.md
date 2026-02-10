@@ -5,6 +5,8 @@
 
 **SuiLoop** is the first **Institutional-Grade Autonomous Agent Protocol** native to the **Sui Network**. It functions as a decentralized "Neural Matrix" that orchestrates financial agents ("Warheads") capable of executing atomic DeFi strategies with mathematical safety guarantees.
 
+🔗 **Live Deployment:** [https://sui-loop-web.vercel.app/](https://sui-loop-web.vercel.app/)
+
 Unlike traditional bots, SuiLoop utilizes **Sui Move's "Hot Potato" pattern** to enforce atomic arbitrage loops—transactions that borrow millions in flash liquidity and are mathematically incapable of failing with debt; they either profit or revert entirely.
 
 ---

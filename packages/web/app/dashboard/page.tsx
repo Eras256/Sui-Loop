@@ -456,9 +456,9 @@ function DashboardContent() {
             }
 
             const tx = new Transaction();
+            tx.setSender(account.address); // Explicitly set sender to ensure wallet pays gas
             // GAS BUDGET: Removed explicit setting to allow wallet auto-estimation.
             // This fixes "Insufficient sponsored budget" on some wallets that misinterpret the manual budget.
-            // tx.setGasBudget(50000000);
 
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
             const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID || "0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165";
@@ -2001,7 +2001,7 @@ function DashboardContent() {
                                 </div>
                                 <p className="text-sm text-gray-400">No agents running.</p>
                                 <button onClick={handleDeploy} className="text-xs bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
-                                    Deploy Default Loop
+                                    Deploy Loop (v2.0)
                                 </button>
                             </div>
                         ) : (
