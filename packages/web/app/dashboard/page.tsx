@@ -646,6 +646,14 @@ function DashboardContent() {
     const executeStopStrategy = async (dbId: string) => {
         if (!account) return;
 
+        // Network Check (Strict)
+        if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
+            toast.error("Wrong Network Detected", {
+                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            });
+            return;
+        }
+
         // Find strategy to see if we have an on-chain license (AgentCap) to burn
         const foundStrategy = activeStrategies.find(s => s.id === dbId || s.strategy_id === dbId);
         const agentCapId = foundStrategy?.agentCapId || foundStrategy?.config?.agentCapId;
@@ -1028,9 +1036,19 @@ function DashboardContent() {
 
     const executeWithdraw = async (amount: string) => {
         if (!account || !vaultId || !ownerCapId) return;
+
+        // Network Check (Strict)
+        if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
+            toast.error("Wrong Network Detected", {
+                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            });
+            return;
+        }
+
         const toastId = toast.loading("Executing Withdrawal...");
         try {
             const tx = new Transaction();
+            tx.setSender(account.address);
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
             const amountMist = BigInt(Math.floor(parseFloat(amount) * 1_000_000_000));
 
@@ -1089,7 +1107,18 @@ function DashboardContent() {
 
     const executeCreateVault = () => {
         if (!account) return;
+
+        // Network Check (Strict)
+        if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
+            toast.error("Wrong Network Detected", {
+                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            });
+            return;
+        }
+
         const tx = new Transaction();
+        tx.setSender(account.address);
+
         const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
 
         // Call create_vault from atomic_engine module
@@ -1253,10 +1282,20 @@ function DashboardContent() {
 
     const executeVaultDestruction = async (vaultData: any) => {
         if (!account) return;
+
+        // Network Check (Strict)
+        if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
+            toast.error("Wrong Network Detected", {
+                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            });
+            return;
+        }
+
         const toastId = toast.loading("Destroying Vault...");
 
         try {
             const tx = new Transaction();
+            tx.setSender(account.address);
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
 
             // Call destroy_vault
