@@ -26,10 +26,19 @@ export default function Home() {
             return;
         }
 
+        // Network Check (Strict)
+        if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
+            toast.error("Wrong Network Detected", {
+                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            });
+            return;
+        }
+
         const toastId = toast.loading("Building Deployment Transaction...");
 
         try {
             const tx = new Transaction();
+            tx.setSender(account.address);
             // Create a self-transfer of 1000 MIST (0.000001 SUI) to simulate "Activation Cost"
             const [coin] = tx.splitCoins(tx.gas, [1000]);
             tx.transferObjects([coin], account.address);

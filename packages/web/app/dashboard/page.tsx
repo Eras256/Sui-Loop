@@ -960,9 +960,19 @@ function DashboardContent() {
 
     const executeDeposit = async (amount: string) => {
         if (!account || !vaultId) return;
+
+        // Network Check (Strict)
+        if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
+            toast.error("Wrong Network Detected", {
+                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            });
+            return;
+        }
+
         const toastId = toast.loading(`Executing Deposit of ${amount} SUI...`);
         try {
             const tx = new Transaction();
+            tx.setSender(account.address);
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
             const amountMist = BigInt(Math.floor(parseFloat(amount) * 1_000_000_000));
 
