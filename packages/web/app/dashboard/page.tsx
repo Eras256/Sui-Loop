@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Float, Sphere, MeshTransmissionMaterial } from "@react-three/drei";
 import Link from 'next/link';
-import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
+import { ConnectButton, useCurrentAccount, useSignTransaction, useSuiClient } from '@mysten/dapp-kit';
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -78,7 +78,23 @@ function DashboardContent() {
     const searchParams = useSearchParams();
     const account = useCurrentAccount();
     const suiClient = useSuiClient();
-    const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+    const { mutateAsync: signTransaction } = useSignTransaction();
+
+    // Helper: Sign transaction with wallet, then execute via suiClient directly.
+    // This completely bypasses the wallet's built-in gas sponsorship mechanism,
+    // which causes "Insufficient sponsored budget for Gas Fee" errors.
+    const signAndExecuteTransaction = async ({ transaction }: { transaction: any }): Promise<{ digest: string }> => {
+        const { bytes, signature } = await signTransaction({ transaction });
+        const result = await suiClient.executeTransactionBlock({
+            transactionBlock: bytes,
+            signature,
+            options: {
+                showEffects: true,
+                showObjectChanges: true,
+            },
+        });
+        return { digest: result.digest };
+    };
     const [showAutoStartModal, setShowAutoStartModal] = useState(false);
     const [selectedStrategy, setSelectedStrategy] = useState<any>(null); // State for Details Modal
     const [expandConsole, setExpandConsole] = useState(false);
@@ -420,7 +436,7 @@ function DashboardContent() {
         setShowAutoStartModal(true);
     };
 
-    const executeDeploy = () => {
+    const executeDeploy = async () => {
         if (!account) return;
 
         const toastId = toast.loading(`🤖 AI Agent: Initializing ${currentStrategy.name}...`);
@@ -504,102 +520,91 @@ function DashboardContent() {
                 ]
             });
 
-            signAndExecuteTransaction(
-                { transaction: tx as any },
-                {
-                    onSuccess: async (result) => {
-                        console.log("Deploy Result:", result.digest);
+            const result = await signAndExecuteTransaction({ transaction: tx as any });
 
-                        // Fetch details to find AgentCap ID
-                        let agentCapId = null;
-                        try {
-                            if (useAgentCap) {
-                                const fullResult = await suiClient.waitForTransaction({
-                                    digest: result.digest,
-                                    options: { showObjectChanges: true }
-                                });
-                                const created = fullResult.objectChanges?.find((o: any) =>
-                                    o.type === 'created' && o.objectType.includes('::AgentCap')
-                                );
-                                if (created && 'objectId' in created) {
-                                    agentCapId = created.objectId;
-                                }
-                            }
-                        } catch (err) {
-                            console.error("Failed to fetch AgentCap ID:", err);
-                        }
+            console.log("Deploy Result:", result.digest);
 
-                        toast.dismiss(toastId);
-                        toast.success(`${currentStrategy.emoji} ${currentStrategy.name} Executed!`, {
-                            description: agentCapId ? "Agent License Created & Strategy Ran" : "Strategy Ran (One-off)",
-                            action: {
-                                label: "View Tx",
-                                onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
-                            }
-                        });
+            // Fetch details to find AgentCap ID
+            let agentCapId = null;
+            try {
+                if (useAgentCap) {
+                    const fullResult = await suiClient.waitForTransaction({
+                        digest: result.digest,
+                        options: { showObjectChanges: true }
+                    });
+                    const created = fullResult.objectChanges?.find((o: any) =>
+                        o.type === 'created' && o.objectType.includes('::AgentCap')
+                    );
+                    if (created && 'objectId' in created) {
+                        agentCapId = created.objectId;
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch AgentCap ID:", err);
+            }
 
-                        // Save to Supabase & State
-                        import("@/lib/strategyService").then(({ StrategyService }) => {
-                            if (!account?.address) return;
+            toast.dismiss(toastId);
+            toast.success(`${currentStrategy.emoji} ${currentStrategy.name} Executed!`, {
+                description: agentCapId ? "Agent License Created & Strategy Ran" : "Strategy Ran (One-off)",
+                action: {
+                    label: "View Tx",
+                    onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
+                }
+            });
 
-                            StrategyService.deployStrategy(account.address, {
+            // Save to Supabase & State
+            import("@/lib/strategyService").then(({ StrategyService }) => {
+                if (!account?.address) return;
+
+                StrategyService.deployStrategy(account.address, {
+                    strategy_id: strategyId,
+                    name: currentStrategy.name,
+                    emoji: currentStrategy.emoji,
+                    status: "RUNNING",
+                    yield: "~14.2%",
+                    tx_digest: result.digest,
+                    config: { agentCapId } // Save ID in config
+                }).then((newStrategy: any) => {
+                    // Add to Active Fleet (with deduplication)
+                    const strategyToAdd = {
+                        id: newStrategy?.id || strategyId,
+                        strategy_id: strategyId,
+                        name: currentStrategy.name,
+                        emoji: currentStrategy.emoji,
+                        status: "RUNNING",
+                        yield: "~14.2%",
+                        tx_digest: result.digest,
+                        agentCapId: agentCapId // Ensure it's in state
+                    };
+                    setActiveStrategies(prev => {
+                        const filtered = prev.filter(s => s.id !== strategyId && s.strategy_id !== strategyId);
+                        return [strategyToAdd, ...filtered];
+                    });
+                }).catch((err: any) => {
+                    console.error("Failed to save DB:", err);
+                    // Fallback (with deduplication)
+                    setActiveStrategies(prev => {
+                        const filtered = prev.filter(s => s.id !== strategyId && s.strategy_id !== strategyId);
+                        return [
+                            {
+                                id: strategyId,
                                 strategy_id: strategyId,
                                 name: currentStrategy.name,
                                 emoji: currentStrategy.emoji,
                                 status: "RUNNING",
                                 yield: "~14.2%",
-                                tx_digest: result.digest,
-                                config: { agentCapId } // Save ID in config
-                            }).then((newStrategy: any) => {
-                                // Add to Active Fleet (with deduplication)
-                                const strategyToAdd = {
-                                    id: newStrategy?.id || strategyId,
-                                    strategy_id: strategyId,
-                                    name: currentStrategy.name,
-                                    emoji: currentStrategy.emoji,
-                                    status: "RUNNING",
-                                    yield: "~14.2%",
-                                    tx_digest: result.digest,
-                                    agentCapId: agentCapId // Ensure it's in state
-                                };
-                                setActiveStrategies(prev => {
-                                    const filtered = prev.filter(s => s.id !== strategyId && s.strategy_id !== strategyId);
-                                    return [strategyToAdd, ...filtered];
-                                });
-                            }).catch(err => {
-                                console.error("Failed to save DB:", err);
-                                // Fallback (with deduplication)
-                                setActiveStrategies(prev => {
-                                    const filtered = prev.filter(s => s.id !== strategyId && s.strategy_id !== strategyId);
-                                    return [
-                                        {
-                                            id: strategyId,
-                                            strategy_id: strategyId,
-                                            name: currentStrategy.name,
-                                            emoji: currentStrategy.emoji,
-                                            status: "RUNNING",
-                                            yield: "~14.2%",
-                                            agentCapId: agentCapId
-                                        },
-                                        ...filtered
-                                    ];
-                                });
-                            });
-                        });
+                                agentCapId: agentCapId
+                            },
+                            ...filtered
+                        ];
+                    });
+                });
+            });
 
-                        setLogs(prev => [
-                            `[SUCCESS] ${currentStrategy.emoji} Agent Deployed ${agentCapId ? '(Cap Created)' : ''}`,
-                            ...prev
-                        ].slice(0, 15));
-                    },
-                    onError: (error) => {
-                        toast.dismiss(toastId);
-                        const msg = (error as any).message || String(error);
-                        console.error("Deploy Error:", msg);
-                        toast.error("Deploy Failed", { description: msg.slice(0, 100) });
-                    }
-                }
-            ).catch(() => { });
+            setLogs(prev => [
+                `[SUCCESS] ${currentStrategy.emoji} Agent Deployed ${agentCapId ? '(Cap Created)' : ''}`,
+                ...prev
+            ].slice(0, 15));
         } catch (e) {
             console.error(e);
             toast.dismiss(toastId);
@@ -1115,7 +1120,7 @@ function DashboardContent() {
         });
     };
 
-    const executeCreateVault = () => {
+    const executeCreateVault = async () => {
         if (!account) return;
 
         // Network Check (Strict)
@@ -1140,74 +1145,64 @@ function DashboardContent() {
 
         const toastId = toast.loading("Creating Secure Vault...");
 
-        signAndExecuteTransaction(
-            { transaction: tx as any },
-            {
-                onSuccess: async (result) => {
-                    toast.dismiss(toastId);
-                    console.log("Vault Creation Result (Digest):", result.digest);
+        try {
+            const result = await signAndExecuteTransaction({ transaction: tx as any });
+            toast.dismiss(toastId);
+            console.log("Vault Creation Result (Digest):", result.digest);
 
-                    try {
-                        // Fetch full transaction details to get object changes
-                        const fullResult = await suiClient.waitForTransaction({
-                            digest: result.digest,
-                            options: {
-                                showObjectChanges: true,
-                                showEffects: true
-                            }
-                        });
-
-                        // Extract real object IDs from the transaction result
-                        const objectChanges = fullResult.objectChanges || [];
-
-                        // Find the Vault (shared object) and OwnerCap (owned object)
-                        const vaultObject = objectChanges.find((obj: any) =>
-                            obj.type === 'created' &&
-                            obj.owner &&
-                            typeof obj.owner === 'object' &&
-                            'Shared' in obj.owner
-                        );
-
-                        const ownerCapObject = objectChanges.find((obj: any) =>
-                            obj.type === 'created' &&
-                            obj.objectType?.includes('::OwnerCap')
-                        );
-
-                        if (vaultObject && ownerCapObject) {
-                            const vaultData = {
-                                vaultId: (vaultObject as any).objectId,
-                                ownerCapId: (ownerCapObject as any).objectId,
-                                digest: result.digest
-                            };
-
-                            // Persist to LocalStorage
-                            localStorage.setItem(`sui-loop-vault-${account.address}`, JSON.stringify(vaultData));
-                            setVaultId((vaultObject as any).objectId);
-                            setOwnerCapId((ownerCapObject as any).objectId);
-
-                            toast.success("Secure Vault Deployed on-chain!", {
-                                description: `Vault ID: ${(vaultObject as any).objectId.slice(0, 6)}...`,
-                                action: {
-                                    label: "View on Explorer",
-                                    onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
-                                }
-                            });
-                        } else {
-                            console.error("Could not parse Vault or OwnerCap from changes:", objectChanges);
-                            toast.error("Created Vault but failed to parse ID. Please refresh.");
-                        }
-                    } catch (e) {
-                        console.error("Error fetching transaction details:", e);
-                        toast.error("Transaction confirmed but failed to fetch details.");
-                    }
-                },
-                onError: (error) => {
-                    toast.dismiss(toastId);
-                    console.error("Vault Creation Error:", error);
-                    toast.error("Deployment Failed: " + (error as any).message);
+            // Fetch full transaction details to get object changes
+            const fullResult = await suiClient.waitForTransaction({
+                digest: result.digest,
+                options: {
+                    showObjectChanges: true,
+                    showEffects: true
                 }
+            });
+
+            // Extract real object IDs from the transaction result
+            const objectChanges = fullResult.objectChanges || [];
+
+            // Find the Vault (shared object) and OwnerCap (owned object)
+            const vaultObject = objectChanges.find((obj: any) =>
+                obj.type === 'created' &&
+                obj.owner &&
+                typeof obj.owner === 'object' &&
+                'Shared' in obj.owner
+            );
+
+            const ownerCapObject = objectChanges.find((obj: any) =>
+                obj.type === 'created' &&
+                obj.objectType?.includes('::OwnerCap')
+            );
+
+            if (vaultObject && ownerCapObject) {
+                const vaultData = {
+                    vaultId: (vaultObject as any).objectId,
+                    ownerCapId: (ownerCapObject as any).objectId,
+                    digest: result.digest
+                };
+
+                // Persist to LocalStorage
+                localStorage.setItem(`sui-loop-vault-${account.address}`, JSON.stringify(vaultData));
+                setVaultId((vaultObject as any).objectId);
+                setOwnerCapId((ownerCapObject as any).objectId);
+
+                toast.success("Secure Vault Deployed on-chain!", {
+                    description: `Vault ID: ${(vaultObject as any).objectId.slice(0, 6)}...`,
+                    action: {
+                        label: "View on Explorer",
+                        onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
+                    }
+                });
+            } else {
+                console.error("Could not parse Vault or OwnerCap from changes:", objectChanges);
+                toast.error("Created Vault but failed to parse ID. Please refresh.");
             }
-        );
+        } catch (e: any) {
+            toast.dismiss(toastId);
+            console.error("Vault Creation Error:", e);
+            toast.error("Deployment Failed: " + (e?.message || String(e)));
+        }
     };
 
     const handleDestroyVault = async () => {
@@ -1321,51 +1316,18 @@ function DashboardContent() {
             // Transfer recovered funds to user
             tx.transferObjects([returnedCoin], account.address);
 
-            await signAndExecuteTransaction(
-                { transaction: tx as any },
-                {
-                    onSuccess: (result) => {
-                        toast.dismiss(toastId);
-                        localStorage.removeItem(`sui-loop-vault-${account.address}`);
-                        setVaultId(null);
-                        toast.success("Vault Destroyed & Funds Recovered!", {
-                            description: "Your vault has been destroyed on-chain.",
-                            action: {
-                                label: "View Tx",
-                                onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, '_blank')
-                            },
-                            duration: 8000
-                        });
-                    },
-                    onError: (error) => {
-                        toast.dismiss(toastId);
-                        console.error("Destroy Vault Error:", error);
-
-                        const msg = (error as any).message || String(error);
-
-                        // Detect TypeMismatch (Legacy Vault Issue) which happens when contract is upgraded
-                        if (msg.includes("TypeMismatch") || msg.includes("CommandArgumentError")) {
-                            toast.error("Legacy Vault Detected", {
-                                description: "This vault belongs to an old contract version. Resetting local data to continue.",
-                                action: {
-                                    label: "Force Reset",
-                                    onClick: () => {
-                                        if (account?.address) {
-                                            localStorage.removeItem(`sui-loop-vault-${account.address}`);
-                                            setVaultId(null);
-                                            setOwnerCapId(null);
-                                            toast.success("Local data cleared. You can now create a new Vault.");
-                                        }
-                                    }
-                                },
-                                duration: 15000,
-                            });
-                        } else {
-                            toast.error("Failed to destroy vault: " + msg);
-                        }
-                    }
-                }
-            );
+            const result = await signAndExecuteTransaction({ transaction: tx as any });
+            toast.dismiss(toastId);
+            localStorage.removeItem(`sui-loop-vault-${account.address}`);
+            setVaultId(null);
+            toast.success("Vault Destroyed & Funds Recovered!", {
+                description: "Your vault has been destroyed on-chain.",
+                action: {
+                    label: "View Tx",
+                    onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, '_blank')
+                },
+                duration: 8000
+            });
         } catch (error) {
             toast.dismiss(toastId);
             console.error("Destroy Vault Error:", error);

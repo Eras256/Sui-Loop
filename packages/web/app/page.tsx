@@ -1,6 +1,6 @@
 'use client';
 
-import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
+import { ConnectButton, useCurrentAccount, useSignTransaction, useSuiClient } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import Link from "next/link";
 import { Canvas } from "@react-three/fiber";
@@ -16,11 +16,24 @@ import Navbar from "@/components/layout/Navbar";
 export default function Home() {
     const router = useRouter();
     const account = useCurrentAccount();
-    const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+    const suiClient = useSuiClient();
+    const { mutateAsync: signTransaction } = useSignTransaction();
     const [agentLog, setAgentLog] = useState<string[]>([]);
     const [pkgManager, setPkgManager] = useState("npm");
 
-    const handleDeploy = () => {
+    // Helper: Sign transaction with wallet, then execute via suiClient directly.
+    // This completely bypasses the wallet's built-in gas sponsorship mechanism.
+    const signAndExecuteTransaction = async ({ transaction }: { transaction: any }): Promise<{ digest: string }> => {
+        const { bytes, signature } = await signTransaction({ transaction });
+        const result = await suiClient.executeTransactionBlock({
+            transactionBlock: bytes,
+            signature,
+            options: { showEffects: true },
+        });
+        return { digest: result.digest };
+    };
+
+    const handleDeploy = async () => {
         if (!account) {
             toast.error("Please connect your Sui Wallet first");
             return;
@@ -43,32 +56,20 @@ export default function Home() {
             const [coin] = tx.splitCoins(tx.gas, [1000]);
             tx.transferObjects([coin], account.address);
 
-            signAndExecuteTransaction(
-                {
-                    transaction: tx as any,
-                },
-                {
-                    onSuccess: (result) => {
-                        toast.dismiss(toastId);
-                        toast.success("Agent Activated On-Chain", {
-                            description: `Digest: ${result.digest.slice(0, 10)}...`
-                        });
-
-                        setTimeout(() => {
-                            router.push("/dashboard");
-                        }, 2000);
-                    },
-                    onError: (error) => {
-                        toast.dismiss(toastId);
-                        toast.error("Transaction Failed", {
-                            description: error.message
-                        });
-                    },
-                }
-            );
-        } catch (e) {
+            const result = await signAndExecuteTransaction({ transaction: tx as any });
             toast.dismiss(toastId);
-            toast.error("Failed to build transaction");
+            toast.success("Agent Activated On-Chain", {
+                description: `Digest: ${result.digest.slice(0, 10)}...`
+            });
+
+            setTimeout(() => {
+                router.push("/dashboard");
+            }, 2000);
+        } catch (e: any) {
+            toast.dismiss(toastId);
+            toast.error("Transaction Failed", {
+                description: e?.message || "Failed to build transaction"
+            });
         }
     };
 
