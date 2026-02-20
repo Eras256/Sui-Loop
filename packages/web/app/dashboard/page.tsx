@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw, Zap, Plus, Code, Cpu } from "lucide-react";
 import OpsConsole from "@/components/layout/OpsConsole";
+import { writeLog } from "@/lib/logger";
 import { getWebSocketUrl } from "@/lib/constants";
 
 function useWebSocket(url: string, onMessage: (event: MessageEvent) => void) {
@@ -683,6 +684,13 @@ function DashboardContent() {
                 `[SUCCESS] ${currentStrategy.emoji} Agent Deployed ${agentCapId ? '(Cap Created)' : ''}`,
                 ...prev
             ].slice(0, 15));
+
+            // Write live log to Supabase Ops Console
+            writeLog(
+                `${currentStrategy.emoji} AGENT DEPLOYED: ${currentStrategy.name} ${agentCapId ? '| AgentCap Created' : '| One-off Mode'} | tx: ${result.digest.slice(0, 12)}...`,
+                'success',
+                account?.address
+            );
         } catch (e) {
             console.error(e);
             toast.dismiss(toastId);

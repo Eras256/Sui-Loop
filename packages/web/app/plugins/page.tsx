@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import InstallSkillModal from "@/components/marketplace/InstallSkillModal";
 import { toast } from "sonner";
+import { writeLog } from "@/lib/logger";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 
 // Core Plugins Definition
@@ -129,6 +130,9 @@ export default function PluginsPage() {
             const updatedLocal = { ...existingLocal, [selectedPlugin.slug]: true };
             localStorage.setItem(agentLocalKey, JSON.stringify(updatedLocal));
             setInstalledSkills(prev => ({ ...prev, [selectedPlugin.slug]: true }));
+
+            // Write live log to Supabase Ops Console
+            writeLog(`PLUGIN INSTALLED: ${selectedPlugin.name} → agent ${agentId}`, 'success', agentId);
 
             // Close modal after success
             setSelectedPlugin(null);
