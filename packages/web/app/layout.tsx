@@ -9,8 +9,8 @@ import Footer from "@/components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "SuiLoop | Atomic Leverage",
-    description: "State of Art DeFi on Sui",
+    title: "SuiLoop | Institutional AI Intelligence Protocol",
+    description: "The first Atomic Intelligence Protocol on Sui. Orchestrate mission-critical DeFi operations with autonomous agents powered by ElizaOS and DeepBook V3 flash vectors.",
 };
 
 export default function RootLayout({

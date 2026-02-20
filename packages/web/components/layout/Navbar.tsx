@@ -142,9 +142,9 @@ export default function Navbar() {
                                             {link.name}
                                         </span>
 
-                                        {/* Hover Label Tooltip/Expansion Effect */}
+                                        {/* Hover Label Tooltip - below the pill */}
                                         {!isActive && (
-                                            <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white/10 backdrop-blur-md border border-white/10 rounded text-[8px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                                            <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/80 backdrop-blur-md border border-white/10 rounded text-[8px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
                                                 {link.name}
                                             </span>
                                         )}

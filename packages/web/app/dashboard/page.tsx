@@ -252,6 +252,22 @@ function DashboardContent() {
                 'sui-deep-research': { slug: 'sui-deep-research', name: 'Sui Deep Research', version: '0.0.7', category: 'intelligence', isGlobal: true },
                 'social-sentiment': { slug: 'social-sentiment', name: 'Social Sentiment', version: '0.0.7', category: 'intelligence', isGlobal: true },
                 'knowledge-graph': { slug: 'knowledge-graph', name: 'Knowledge Graph', version: '0.0.7', category: 'intelligence', isGlobal: true },
+                'flash-loan-engine': { slug: 'flash-loan-engine', name: 'Flash Loan Engine', version: '0.0.7', category: 'defi', isGlobal: false },
+                'onchain-oracle': { slug: 'onchain-oracle', name: 'On-Chain Oracle', version: '0.0.7', category: 'data', isGlobal: true },
+                'risk-shield': { slug: 'risk-shield', name: 'Risk Shield', version: '0.0.7', category: 'risk', isGlobal: false },
+                'auto-compounder': { slug: 'auto-compounder', name: 'Auto-Compounder', version: '0.0.7', category: 'yield', isGlobal: false },
+                'portfolio-rebalancer': { slug: 'portfolio-rebalancer', name: 'Portfolio Rebalancer', version: '0.0.7', category: 'portfolio', isGlobal: false },
+                'mev-interceptor': { slug: 'mev-interceptor', name: 'MEV Interceptor', version: '0.0.7', category: 'mev', isGlobal: false },
+                'liquidity-sniper': { slug: 'liquidity-sniper', name: 'Liquidity Sniper', version: '0.0.7', category: 'sniping', isGlobal: false },
+                // Marketplace Skills — 8 new
+                'navi-lending-bot': { slug: 'navi-lending-bot', name: 'Navi Lending Bot', version: '1.1.0', category: 'trading', isGlobal: false },
+                'deepbook-market-maker': { slug: 'deepbook-market-maker', name: 'DeepBook Market Maker', version: '0.9.2', category: 'trading', isGlobal: false },
+                'stop-loss-guardian': { slug: 'stop-loss-guardian', name: 'Stop-Loss Guardian', version: '2.2.0', category: 'utility', isGlobal: false },
+                'eliza-trading-brain': { slug: 'eliza-trading-brain', name: 'ElizaOS Trading Brain', version: '0.0.7', category: 'analysis', isGlobal: true },
+                'walrus-storage-logger': { slug: 'walrus-storage-logger', name: 'Walrus Storage Logger', version: '1.0.0', category: 'utility', isGlobal: true },
+                'cross-dex-aggregator': { slug: 'cross-dex-aggregator', name: 'Cross-DEX Aggregator', version: '3.1.0', category: 'trading', isGlobal: true },
+                'pnl-reporter': { slug: 'pnl-reporter', name: 'P&L Real-Time Reporter', version: '1.4.0', category: 'analysis', isGlobal: false },
+                'webhook-trigger': { slug: 'webhook-trigger', name: 'Webhook Event Trigger', version: '2.0.0', category: 'integration', isGlobal: false },
             };
 
             // Read from localStorage PER-AGENT (where Marketplace + Plugins pages persist installs)
@@ -316,6 +332,10 @@ function DashboardContent() {
             // Update state
             setInstalledSkills(prev => prev.filter(s => s.slug !== slug));
             toast.success("Skill uninstalled", { id: toastId });
+
+            // Log to Ops Console
+            const skillName = installedSkills.find(s => s.slug === slug)?.name || slug;
+            writeLog(`PLUGIN REMOVED: ${skillName} — uninstalled from agent ${agentId}`, 'warn', agentId);
         } catch (error) {
             toast.error(`Failed to uninstall: ${String(error)}`, { id: toastId });
         }
@@ -339,7 +359,19 @@ function DashboardContent() {
     const STRATEGIES: Record<string, { name: string, logPrefix: string, emoji: string }> = {
         "sui-usdc-loop": { name: "SUI/USDC Kinetic Loop", logPrefix: "ARBITRAGE", emoji: "🔄" },
         "turbo-sniper": { name: "Meme Volatility Sniper", logPrefix: "SNIPER", emoji: "🎯" },
-        "liquid-staking-arb": { name: "LST Peg Restoration", logPrefix: "PEG-ARB", emoji: "💧" }
+        "liquid-staking-arb": { name: "LST Peg Restoration", logPrefix: "PEG-ARB", emoji: "💧" },
+        "eliza-sentiment": { name: "Eliza Sentiment Engine", logPrefix: "AI-SENTIMENT", emoji: "🧠" },
+        "lending-loop-max": { name: "Navi-Scallop Recursive Yield", logPrefix: "LENDING", emoji: "📈" },
+        "blue-chip-dca": { name: "Weighted DCA Accumulator", logPrefix: "DCA", emoji: "💰" },
+        "stable-yield-agg": { name: "Stablecoin Optimization Loop", logPrefix: "STABLE", emoji: "🏦" },
+        "cetus-clmm-active": { name: "CLMM Active Provisioner", logPrefix: "CLMM", emoji: "🛠️" },
+        "bluefin-delta-neutral": { name: "Delta Neutral Funding Farmer", logPrefix: "DELTA", emoji: "⚖️" },
+        "mev-capture": { name: "MEV Extraction Engine", logPrefix: "MEV", emoji: "⚡" },
+        "perp-funding-arb": { name: "Perp Funding Rate Arbitrage", logPrefix: "PERP-FUND", emoji: "📊" },
+        "pyth-oracle-sniper": { name: "Oracle Latency Arbitrageur", logPrefix: "ORACLE-ARB", emoji: "🔭" },
+        "dual-yield-compounder": { name: "Dual Token Yield Compounder", logPrefix: "DUAL-YIELD", emoji: "🌀" },
+        "liquidation-hunter": { name: "Liquidation Vector", logPrefix: "LIQUIDATION", emoji: "🩸" },
+        "cross-chain-bridge-arb": { name: "Cross-Chain Spread Capture", logPrefix: "BRIDGE-ARB", emoji: "🌉" },
     };
 
     const strategyId = searchParams.get('strategy') || "sui-usdc-loop";
@@ -691,6 +723,34 @@ function DashboardContent() {
                 'success',
                 account?.address
             );
+
+            // Strategy-specific boot logs (sequential, simulates agent coming online)
+            const STRATEGY_BOOT_LOGS: Record<string, Array<{ msg: string; level: 'info' | 'success' | 'warn' | 'system' }>> = {
+                'sui-usdc-loop': [{ msg: 'ARBITRAGE: Scanning SUI/USDC spread on DeepBook V3...', level: 'info' }, { msg: 'ARBITRAGE: Spread window detected (0.47%). Executing flash vector.', level: 'success' }],
+                'turbo-sniper': [{ msg: 'SNIPER: Monitoring Cetus mempool for new meme launches...', level: 'info' }, { msg: 'SNIPER: High-velocity token detected. Entering position.', level: 'warn' }],
+                'liquid-staking-arb': [{ msg: 'PEG-ARB: Reading afSUI/vSUI peg deviation...', level: 'info' }, { msg: 'PEG-ARB: Deviation 0.3% detected. Restoring peg via LST swap.', level: 'success' }],
+                'eliza-sentiment': [{ msg: 'AI-SENTIMENT: ElizaOS agent initializing X/Twitter feed scanner...', level: 'info' }, { msg: 'AI-SENTIMENT: Bullish signal detected — $SUI trending. Entering long.', level: 'success' }],
+                'lending-loop-max': [{ msg: 'LENDING: Binding Navi + Scallop recursive collateral positions...', level: 'info' }, { msg: 'LENDING: Recursive yield loop active — effective APY 3.2x base.', level: 'success' }],
+                'blue-chip-dca': [{ msg: 'DCA: TWAP schedule loaded — 4h intervals. Monitoring SUI price...', level: 'info' }, { msg: 'DCA: First buy order queued. Accumulation mode active.', level: 'success' }],
+                'stable-yield-agg': [{ msg: 'STABLE: Scanning USDC/USDT rates across Scallop, Navi, Cetus...', level: 'info' }, { msg: 'STABLE: Rotating capital to Cetus Pool (highest rate: 19.8%).', level: 'success' }],
+                'cetus-clmm-active': [{ msg: 'CLMM: Reading concentrated liquidity range for SUI/USDC pool...', level: 'info' }, { msg: 'CLMM: Position in range [$0.94-$1.06]. Fees accumulating.', level: 'success' }],
+                'bluefin-delta-neutral': [{ msg: 'DELTA: Opening Spot long + Perp short simultaneously...', level: 'info' }, { msg: 'DELTA: Delta neutral achieved. Funding rate harvest: +0.04%/8h.', level: 'success' }],
+                'mev-capture': [{ msg: 'MEV: Mempool scanning active — watching for front-run opportunities...', level: 'info' }, { msg: 'MEV: 1 transaction front-run. Profit captured: +0.12 SUI.', level: 'warn' }],
+                'perp-funding-arb': [{ msg: 'PERP-FUND: Reading Bluefin perpetual funding rates...', level: 'info' }, { msg: 'PERP-FUND: Positive funding confirmed (+0.04%). Harvesting every 8h.', level: 'success' }],
+                'pyth-oracle-sniper': [{ msg: 'ORACLE-ARB: Watching Pyth Network for price update blocks...', level: 'info' }, { msg: 'ORACLE-ARB: Latency window detected. Executing same-block arbitrage.', level: 'success' }],
+                'dual-yield-compounder': [{ msg: 'DUAL-YIELD: Splitting collateral — 50% validators, 50% Scallop USDC...', level: 'info' }, { msg: 'DUAL-YIELD: Dual yield stream active. SUI staking + USDC lending live.', level: 'success' }],
+                'liquidation-hunter': [{ msg: 'LIQUIDATION: Scanning Navi & Scallop for undercollateralized positions...', level: 'info' }, { msg: 'LIQUIDATION: Target found (LTV 94%). Executing liquidation at 5% discount.', level: 'warn' }],
+                'cross-chain-bridge-arb': [{ msg: 'BRIDGE-ARB: Checking Sui vs ETH price delta via Wormhole...', level: 'info' }, { msg: 'BRIDGE-ARB: 1.2% spread on USDC detected. Bridging and trading atomically.', level: 'success' }],
+            };
+
+            const bootLogs = STRATEGY_BOOT_LOGS[strategyId];
+            if (bootLogs) {
+                bootLogs.forEach((entry, i) => {
+                    setTimeout(() => {
+                        writeLog(entry.msg, entry.level, account?.address);
+                    }, (i + 1) * 2000);
+                });
+            }
         } catch (e) {
             console.error(e);
             toast.dismiss(toastId);
@@ -1971,7 +2031,7 @@ function DashboardContent() {
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-sm text-gray-400 uppercase tracking-widest flex items-center gap-2">
                                 <RefreshCw size={14} className={activeStrategies.length > 0 ? "animate-spin-slow text-neon-cyan" : "text-gray-600"} />
-                                Fleet Status Monitor ({activeStrategies.length}/4)
+                                Fleet Status Monitor ({activeStrategies.length}/10)
                             </h2>
                             {activeStrategies.length === 0 && (
                                 <button onClick={handleDeploy} className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
@@ -1982,7 +2042,7 @@ function DashboardContent() {
 
                         {activeStrategies.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {activeStrategies.slice(0, 4).map((strat, i) => {
+                                {activeStrategies.slice(0, 10).map((strat, i) => {
                                     const baseApy = scallopData ? scallopData.supplyApy : 0;
                                     const boost = 0.5 + (strat.id.charCodeAt(0) % 30) / 10;
                                     const dynamicYield = (baseApy + boost).toFixed(2) + '%';

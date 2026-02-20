@@ -261,16 +261,136 @@ export default function MarketplacePage() {
                         reviewCount: 45,
                         isVerified: false,
                         isFeatured: false
+                    },
+                    {
+                        id: 'navi-lending-bot',
+                        name: 'Navi Lending Bot',
+                        slug: 'navi-lending-bot',
+                        version: '1.1.0',
+                        description: 'Auto-manages lending positions on Navi Protocol. Monitors health factor and rebalances collateral to avoid liquidation.',
+                        author: 'NaviLabs',
+                        category: 'trading',
+                        tags: ['navi', 'lending', 'health-factor'],
+                        downloads: 5230,
+                        rating: 4.6,
+                        reviewCount: 98,
+                        isVerified: true,
+                        isFeatured: true
+                    },
+                    {
+                        id: 'deepbook-market-maker',
+                        name: 'DeepBook Market Maker',
+                        slug: 'deepbook-market-maker',
+                        version: '0.9.2',
+                        description: 'Places and manages limit orders on DeepBook V3. Earns maker rebates by providing continuous two-sided liquidity.',
+                        author: 'MMGuild',
+                        category: 'trading',
+                        tags: ['deepbook', 'market-making', 'limit-orders'],
+                        downloads: 3870,
+                        rating: 4.4,
+                        reviewCount: 61,
+                        isVerified: true,
+                        isFeatured: false
+                    },
+                    {
+                        id: 'stop-loss-guardian',
+                        name: 'Stop-Loss Guardian',
+                        slug: 'stop-loss-guardian',
+                        version: '2.2.0',
+                        description: 'Monitors position prices and executes atomic stop-loss orders on DeepBook when thresholds are breached. Zero-latency protection.',
+                        author: 'RiskArsenal',
+                        category: 'utility',
+                        tags: ['stop-loss', 'risk', 'protection'],
+                        downloads: 11230,
+                        rating: 4.8,
+                        reviewCount: 203,
+                        isVerified: true,
+                        isFeatured: true
+                    },
+                    {
+                        id: 'eliza-trading-brain',
+                        name: 'ElizaOS Trading Brain',
+                        slug: 'eliza-trading-brain',
+                        version: '0.0.7',
+                        description: 'Embeds an ElizaOS AI agent as a decision-making layer for your strategies. The agent evaluates market context before each execution.',
+                        author: 'SuiLoop Team',
+                        category: 'analysis',
+                        tags: ['eliza', 'ai', 'decision-engine'],
+                        downloads: 7654,
+                        rating: 4.7,
+                        reviewCount: 127,
+                        isVerified: true,
+                        isFeatured: true
+                    },
+                    {
+                        id: 'walrus-storage-logger',
+                        name: 'Walrus Storage Logger',
+                        slug: 'walrus-storage-logger',
+                        version: '1.0.0',
+                        description: 'Archives all agent execution logs to Sui Walrus decentralized storage. Provides permanent, verifiable audit trails on-chain.',
+                        author: 'WalrusDevs',
+                        category: 'utility',
+                        tags: ['walrus', 'storage', 'logs', 'audit'],
+                        downloads: 2980,
+                        rating: 4.3,
+                        reviewCount: 44,
+                        isVerified: true,
+                        isFeatured: false
+                    },
+                    {
+                        id: 'cross-dex-aggregator',
+                        name: 'Cross-DEX Aggregator',
+                        slug: 'cross-dex-aggregator',
+                        version: '3.1.0',
+                        description: 'Routes swaps across Cetus, Turbos, Kriya, and DeepBook to ensure best execution price. Split-route supported.',
+                        author: 'AggregateDAO',
+                        category: 'trading',
+                        tags: ['dex', 'aggregator', 'swap', 'routing'],
+                        downloads: 14320,
+                        rating: 4.9,
+                        reviewCount: 298,
+                        isVerified: true,
+                        isFeatured: true
+                    },
+                    {
+                        id: 'pnl-reporter',
+                        name: 'P&L Real-Time Reporter',
+                        slug: 'pnl-reporter',
+                        version: '1.4.0',
+                        description: 'Calculates realized and unrealized P&L across all agent positions. Sends daily summaries to Telegram or Discord.',
+                        author: 'PortfolioLabs',
+                        category: 'analysis',
+                        tags: ['pnl', 'reporting', 'analytics'],
+                        downloads: 4560,
+                        rating: 4.5,
+                        reviewCount: 78,
+                        isVerified: true,
+                        isFeatured: false
+                    },
+                    {
+                        id: 'webhook-trigger',
+                        name: 'Webhook Event Trigger',
+                        slug: 'webhook-trigger',
+                        version: '2.0.0',
+                        description: 'Exposes a secure webhook endpoint to trigger agent actions from external systems (TradingView, Zapier, custom bots).',
+                        author: 'IntegrationHub',
+                        category: 'integration',
+                        tags: ['webhook', 'trigger', 'external', 'automation'],
+                        downloads: 6780,
+                        rating: 4.6,
+                        reviewCount: 115,
+                        isVerified: true,
+                        isFeatured: false
                     }
                 ];
 
                 const mockCategories: Category[] = [
-                    { id: 'trading', name: 'Trading', count: 5, icon: '📈' },
-                    { id: 'analysis', name: 'Analysis', count: 3, icon: '🔍' },
+                    { id: 'trading', name: 'Trading', count: 8, icon: '📈' },
+                    { id: 'analysis', name: 'Analysis', count: 5, icon: '🔍' },
                     { id: 'notification', name: 'Notifications', count: 1, icon: '🔔' },
-                    { id: 'integration', name: 'Integrations', count: 1, icon: '🔗' },
+                    { id: 'integration', name: 'Integrations', count: 2, icon: '🔗' },
                     { id: 'data', name: 'Data', count: 2, icon: '📊' },
-                    { id: 'utility', name: 'Utilities', count: 1, icon: '🛠️' }
+                    { id: 'utility', name: 'Utilities', count: 3, icon: '🛠️' }
                 ];
 
                 setSkills(mockSkills);
@@ -373,6 +493,39 @@ export default function MarketplacePage() {
 
                 // Log the install event to Supabase (shows in Ops Console)
                 writeLog(`SKILL INSTALLED: ${skill.name} → agent ${agentId}`, 'success', agentId);
+
+                // Skill-specific bootup logs (sequential, simulates skill activating)
+                const SKILL_BOOT_LOGS: Record<string, Array<{ msg: string; level: 'info' | 'success' | 'warn' }>> = {
+                    'flash-loan-executor': [{ msg: 'SKILL: Flash Loan Executor binding to Hot Potato module...', level: 'info' }, { msg: 'SKILL: Atomic flash loan ready. Reviewing arbitrage routes.', level: 'success' }],
+                    'price-oracle': [{ msg: 'SKILL: Multi-Source Oracle aggregating CoinGecko + DeFiLlama + Pyth...', level: 'info' }, { msg: 'SKILL: Price feeds live — 200+ assets tracked.', level: 'success' }],
+                    'telegram-alerts-pro': [{ msg: 'SKILL: Telegram bot connecting to notification channel...', level: 'info' }, { msg: 'SKILL: Telegram Alerts Pro active. Test message sent.', level: 'success' }],
+                    'whale-tracker': [{ msg: 'SKILL: Whale Tracker initializing top-100 wallet scanner...', level: 'info' }, { msg: 'SKILL: 3 whale wallets flagged for accumulation. Monitoring.', level: 'warn' }],
+                    'lst-arbitrage': [{ msg: 'SKILL: LST Arbitrage Bot reading afSUI/vSUI peg status...', level: 'info' }, { msg: 'SKILL: Peg deviation within range. Watching for unstaking epoch.', level: 'success' }],
+                    'scallop-optimizer': [{ msg: 'SKILL: Scallop Optimizer reading current lending APY...', level: 'info' }, { msg: 'SKILL: Optimal supply allocation found — rebalancing 12% collateral.', level: 'success' }],
+                    'discord-integration': [{ msg: 'SKILL: Discord Bot binding to guild via OAuth2...', level: 'info' }, { msg: 'SKILL: Slash commands registered. Discord integration live.', level: 'success' }],
+                    'portfolio-tracker': [{ msg: 'SKILL: Portfolio Tracker indexing wallet positions...', level: 'info' }, { msg: 'SKILL: 7 open positions tracked. P&L dashboard ready.', level: 'success' }],
+                    'pyth-oracle': [{ msg: 'SKILL: Pyth Network Oracle subscribing to price feeds...', level: 'info' }, { msg: 'SKILL: 230 Pyth price feeds active. Staleness guard enabled.', level: 'success' }],
+                    'twitter-sentiment': [{ msg: 'SKILL: X/Twitter Sentiment scanning $SUI ecosystem keywords...', level: 'info' }, { msg: 'SKILL: Bullish sentiment index: 72%. Signal feed active.', level: 'success' }],
+                    'cetus-lp-manager': [{ msg: 'SKILL: Cetus LP Manager reading CLMM position ranges...', level: 'info' }, { msg: 'SKILL: 2 positions in range. Auto-rebalance armed.', level: 'success' }],
+                    'gas-optimizer': [{ msg: 'SKILL: Gas Optimizer analyzing transaction batching opportunities...', level: 'info' }, { msg: 'SKILL: Batch mode enabled. Estimated 34% gas savings.', level: 'success' }],
+                    'navi-lending-bot': [{ msg: 'SKILL: Navi Lending Bot reading health factor across positions...', level: 'info' }, { msg: 'SKILL: Health factor 1.82 — safe. Auto-rebalance threshold set.', level: 'success' }],
+                    'deepbook-market-maker': [{ msg: 'SKILL: DeepBook Market Maker placing two-sided limit orders...', level: 'info' }, { msg: 'SKILL: 4 limit orders placed. Maker rebate capture active.', level: 'success' }],
+                    'stop-loss-guardian': [{ msg: 'SKILL: Stop-Loss Guardian monitoring 3 open positions...', level: 'info' }, { msg: 'SKILL: Stop orders armed at -8% threshold. Protection active.', level: 'warn' }],
+                    'eliza-trading-brain': [{ msg: 'SKILL: ElizaOS Trading Brain loading LLM context model...', level: 'info' }, { msg: 'SKILL: AI decision layer active. Pre-execution analysis enabled.', level: 'success' }],
+                    'walrus-storage-logger': [{ msg: 'SKILL: Walrus Logger connecting to decentralized storage...', level: 'info' }, { msg: 'SKILL: Storage endpoint active. Logs will be archived on-chain.', level: 'success' }],
+                    'cross-dex-aggregator': [{ msg: 'SKILL: Cross-DEX Aggregator indexing Cetus, Turbos, Kriya, DeepBook...', level: 'info' }, { msg: 'SKILL: 4 DEXes indexed. Best-route execution enabled.', level: 'success' }],
+                    'pnl-reporter': [{ msg: 'SKILL: P&L Reporter calculating realized/unrealized positions...', level: 'info' }, { msg: 'SKILL: Daily P&L report scheduled. Delivery target: Telegram.', level: 'success' }],
+                    'webhook-trigger': [{ msg: 'SKILL: Webhook Trigger generating secure endpoint key...', level: 'info' }, { msg: 'SKILL: Webhook live at /api/hook/{agentId}. Ready for TradingView.', level: 'success' }],
+                };
+
+                const bootLogs = SKILL_BOOT_LOGS[skill.slug];
+                if (bootLogs) {
+                    bootLogs.forEach((entry, i) => {
+                        setTimeout(() => {
+                            writeLog(entry.msg, entry.level, agentId);
+                        }, (i + 1) * 1500);
+                    });
+                }
 
                 toast.success(`${skill.name} installed successfully!`, {
                     description: "The skill is now available in your agent and ready to use. Check the Ops Unit for logs.",

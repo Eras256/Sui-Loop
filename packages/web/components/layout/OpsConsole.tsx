@@ -44,7 +44,12 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'logs' },
                 (payload) => {
-                    setLogs(prev => [...prev, payload.new].slice(-50));
+                    setLogs(prev => {
+                        // Deduplicate: skip if same id already exists
+                        const exists = prev.some(l => l.id === payload.new.id);
+                        if (exists) return prev;
+                        return [...prev, payload.new].slice(-50);
+                    });
                 }
             )
             .subscribe((s) => {
@@ -110,7 +115,7 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
                     )}
                     {logs.map((log, i) => (
                         <div
-                            key={log.id ?? i}
+                            key={log.id ? `${log.id}-${i}` : i}
                             className="break-all border-l-2 pl-2 py-0.5 hover:bg-white/5 transition-colors"
                             style={{
                                 borderColor:

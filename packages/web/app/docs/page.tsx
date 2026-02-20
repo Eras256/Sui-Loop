@@ -144,7 +144,7 @@ function OverviewSection() {
                 {[
                     { label: 'Testnet Version', value: 'v0.0.7', color: 'text-neon-cyan' },
                     { label: 'Unit Tests', value: '12/12 ✓', color: 'text-green-400' },
-                    { label: 'Neural Plugins', value: '3 Active', color: 'text-purple-400' },
+                    { label: 'Neural Plugins', value: '11 Active', color: 'text-purple-400' },
                     { label: 'Flash Loan Fee', value: '0.3%', color: 'text-amber-400' },
                 ].map((stat) => (
                     <div key={stat.label} className="bg-white/5 border border-white/10 rounded-xl p-4">
@@ -221,7 +221,7 @@ function OverviewSection() {
                     {[
                         { icon: Workflow, title: 'Visual Strategy Builder', desc: 'Drag-and-drop node editor for custom strategies', color: 'text-purple-400' },
                         { icon: BookOpen, title: 'Operations Manual', desc: 'Step-by-step guide for protocol operators', color: 'text-neon-cyan' },
-                        { icon: Layers, title: 'Strategy Marketplace', desc: '6 pre-built strategies ready to deploy', color: 'text-blue-400' },
+                        { icon: Layers, title: 'Strategy Marketplace', desc: '15 pre-built strategies ready to deploy', color: 'text-blue-400' },
                         { icon: TrendingUp, title: 'Dashboard Command Center', desc: 'Real-time metrics, Active Fleet, execution logs', color: 'text-green-400' },
                         { icon: Lock, title: 'Wallet Persistence', desc: 'Auto-connect across sessions', color: 'text-amber-400' },
                         { icon: HardDrive, title: 'Walrus & Supabase', desc: 'Hybrid decentralized storage for forensic logs', color: 'text-pink-400' },

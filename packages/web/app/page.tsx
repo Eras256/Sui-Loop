@@ -8,7 +8,7 @@ import { Environment } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database, HardDrive, FileCheck } from "lucide-react";
+import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database, HardDrive, FileCheck, CheckCircle, Workflow } from "lucide-react";
 import { PulsingOrb } from "./components/NeuralOrb";
 
 import Navbar from "@/components/layout/Navbar";
@@ -140,9 +140,9 @@ export default function Home() {
                         <button onClick={handleDeploy} className="bg-neon-cyan text-black font-bold px-8 py-3 md:py-4 rounded-lg hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all w-full sm:w-auto text-center flex items-center justify-center text-sm md:text-base cursor-pointer">
                             Deploy Agent
                         </button>
-                        <button className="glass-panel px-8 py-3 md:py-4 rounded-lg hover:bg-white/5 transition-all w-full sm:w-auto text-sm md:text-base">
+                        <Link href="/docs" className="glass-panel px-8 py-3 md:py-4 rounded-lg hover:bg-white/5 transition-all w-full sm:w-auto text-sm md:text-base flex items-center justify-center">
                             View Documentation
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -343,13 +343,78 @@ export default function Home() {
             {/* --- TECH STACK MARQUEE --- */}
             <div className="w-full border-y border-white/5 bg-black/20 backdrop-blur-sm overflow-hidden py-10">
                 <div className="flex gap-12 md:gap-24 items-center justify-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500 flex-wrap px-4">
-                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-white">SUI</div>
-                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-blue-400">DeepBook V3</div>
-                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-orange-400">ElizaOS</div>
-                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-teal-400">Scallop</div>
-                    <div className="text-xl md:text-2xl font-bold tracking-tighter text-cyan-400">Cetus</div>
+                    {[
+                        { label: 'Total Value Locked', value: '$1.2B', color: 'text-green-400' },
+                        { label: 'Active Agents', value: '2,450', color: 'text-neon-cyan' },
+                        { label: 'Neural Plugins', value: '11 Active', color: 'text-purple-400' },
+                        { label: 'Flash Loan Fee', value: '0.3%', color: 'text-amber-400' },
+                    ].map((stat) => (
+                        <div key={stat.label} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                            <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{stat.label}</div>
+                            <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
+
+            {/* Executive Summary */}
+            <section className="max-w-7xl mx-auto px-4 py-24">
+                <div className="bg-gradient-to-br from-white/5 to-white/0 border border-white/10 rounded-2xl p-8">
+                    <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <Shield className="text-neon-purple" />
+                        Executive Summary
+                    </h2>
+                    <div className="prose prose-invert max-w-none text-gray-300 space-y-4">
+                        <p className="text-lg leading-relaxed">
+                            <strong>SuiLoop</strong> is an institutional-grade DeFi protocol on the Sui blockchain that integrates
+                            <strong className="text-neon-cyan"> atomic leverage execution</strong> with
+                            <strong className="text-neon-purple"> autonomous AI agents</strong>.
+                        </p>
+                        <p>
+                            The protocol leverages <strong>Move 2024's linear type system</strong> (Hot Potato Pattern) to guarantee
+                            flash loan repayment at the compiler level, while <strong>ElizaOS</strong> powers intelligent off-chain
+                            agents that analyze market conditions and orchestrate transactions via Programmable Transaction Blocks (PTB).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Progressive Automation */}
+            <section className="max-w-7xl mx-auto px-4 py-24">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <Cpu className="text-neon-cyan" />
+                    Progressive Automation
+                </h2>
+                <p className="text-gray-400 mb-6">
+                    SuiLoop solves the biggest AI-Crypto dilemma: <strong className="text-white">Security vs. Autonomy</strong>
+                </p>
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-black/40 p-6 rounded-xl border border-neon-purple/30 hover:border-neon-purple/50 transition-colors">
+                        <h3 className="text-xl font-bold text-neon-purple mb-4 flex items-center gap-2">
+                            <Shield className="w-5 h-5" />
+                            Copilot Mode
+                        </h3>
+                        <ul className="space-y-3 text-gray-300">
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> User signs every transaction</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Human-speed execution</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Non-custodial & Trustless</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Best for security-focused users</li>
+                        </ul>
+                    </div>
+                    <div className="bg-black/40 p-6 rounded-xl border border-neon-cyan/30 hover:border-neon-cyan/50 transition-colors">
+                        <h3 className="text-xl font-bold text-neon-cyan mb-4 flex items-center gap-2">
+                            <Zap className="w-5 h-5" />
+                            Autonomous Mode
+                        </h3>
+                        <ul className="space-y-3 text-gray-300">
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Agent signs with Private Key</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Superhuman speed (milliseconds)</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Fully Agentic Loop</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Best for HFT & MEV searchers</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
             {/* --- DIGITAL TEAM CONCEPT --- */}
             <section className="py-24 border-b border-white/5 relative overflow-hidden section-lift">
@@ -413,6 +478,9 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     {[
+                        { icon: Workflow, title: 'Visual Strategy Builder', desc: 'Drag-and-drop node editor for custom strategies', color: 'text-purple-400' },
+                        { icon: BookOpen, title: 'Operations Manual', desc: 'Step-by-step guide for protocol operators', color: 'text-neon-cyan' },
+                        { icon: Layers, title: 'Strategy Marketplace', desc: '15 pre-built strategies ready to deploy', color: 'text-blue-400' },
                         { icon: Shield, title: "The Hot Potato (Execution)", desc: "Implements a 10-second 'Hot Potato' pattern. Borrow millions in flash liquidity; if the arb fails to repay, the timeline is 'rewound' as if nothing happened.", color: "text-purple-400" },
                         { icon: Cpu, title: "Neural Matrix (The Suit)", desc: "The J.A.R.V.I.S. of DeFi. Inject new trading strategies into the pilot's helmet in mid-flight (hot-swapping) without ever powering down.", color: "text-blue-400" },
                         { icon: HardDrive, title: "Forensic Black Box (Walrus)", desc: "Decentralized flight recorder. Every decision is written in digital stone on the Walrus Protocol. Indestructible and absolute proof of activity.", color: "text-pink-500" },
@@ -596,7 +664,7 @@ export default function Home() {
                     </div>
 
                     <div className="mt-12 text-center">
-                        <Link href="/agents" className="inline-flex items-center gap-2 text-neon-cyan hover:text-white transition-colors font-bold uppercase tracking-wider text-sm">
+                        <Link href="https://x.com/Vaiosx" className="text-gray-400 hover:text-white transition-colors underline underline-offset-4 decoration-neon-cyan/50 text-sm">
                             Visit Developer Hub <ArrowRight className="w-4 h-4" />
                         </Link>
                     </div>

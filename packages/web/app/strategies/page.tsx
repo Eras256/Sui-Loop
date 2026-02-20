@@ -90,7 +90,61 @@ const BASE_STRATEGIES = [
         tags: ["Hedging", "Complex"],
         color: "from-slate-800 to-blue-900",
         baseApy: 28.3
-    }
+    },
+    {
+        id: "mev-capture",
+        name: "MEV Extraction Engine",
+        description: "Front-runs low-slippage DEX transactions by detecting pending swaps in the mempool and executing ahead of them atomically.",
+        risk: "High",
+        tags: ["MEV", "Degen"],
+        color: "from-orange-600 to-red-700",
+        baseApy: 112.5
+    },
+    {
+        id: "perp-funding-arb",
+        name: "Perp Funding Rate Arbitrage",
+        description: "Continuously harvests positive funding rates on Bluefin perpetuals. Holds delta-neutral exposure to capture funding every 8 hours.",
+        risk: "Low",
+        tags: ["Derivatives", "Safe"],
+        color: "from-violet-700 to-indigo-800",
+        baseApy: 32.8
+    },
+    {
+        id: "pyth-oracle-sniper",
+        name: "Oracle Latency Arbitrageur",
+        description: "Exploits latency between on-chain Pyth price updates and DEX spot prices. Executes within the same block as oracle refresh.",
+        risk: "Medium",
+        tags: ["Oracle", "Technical"],
+        color: "from-emerald-600 to-teal-700",
+        baseApy: 58.1
+    },
+    {
+        id: "dual-yield-compounder",
+        name: "Dual Token Yield Compounder",
+        description: "Simultaneously earns SUI staking rewards and USDC lending yield by splitting collateral across Scallop and native validators.",
+        risk: "Very Low",
+        tags: ["Savings", "Staking"],
+        color: "from-cyan-600 to-blue-700",
+        baseApy: 19.3
+    },
+    {
+        id: "liquidation-hunter",
+        name: "Liquidation Vector",
+        description: "Monitors undercollateralized positions across Navi and Scallop. Triggers liquidations at protocol discount, capturing instant profit.",
+        risk: "High",
+        tags: ["Liquidation", "High Yield"],
+        color: "from-red-700 to-rose-800",
+        baseApy: 87.4
+    },
+    {
+        id: "cross-chain-bridge-arb",
+        name: "Cross-Chain Spread Capture",
+        description: "Detects price discrepancies between Sui and other chains via Wormhole. Bridges and trades atomically before spread closes.",
+        risk: "Medium",
+        tags: ["Bridge", "Arbitrage"],
+        color: "from-fuchsia-600 to-purple-700",
+        baseApy: 41.7
+    },
 ];
 
 import { useCurrentAccount } from "@mysten/dapp-kit";
@@ -141,6 +195,24 @@ export default function StrategiesPage() {
                 } else if (s.id === 'bluefin-delta-neutral') {
                     dynamicApy = 28 + (Math.random() * 4 - 2);
                     dynamicTvl = 3200 + Math.random() * 150;
+                } else if (s.id === 'mev-capture') {
+                    dynamicApy = 90 + (Math.random() * 60 - 20);
+                    dynamicTvl = 380 + Math.random() * 80;
+                } else if (s.id === 'perp-funding-arb') {
+                    dynamicApy = 30 + (Math.random() * 6 - 2);
+                    dynamicTvl = 2100 + Math.random() * 120;
+                } else if (s.id === 'pyth-oracle-sniper') {
+                    dynamicApy = 50 + (Math.random() * 20 - 8);
+                    dynamicTvl = 720 + Math.random() * 60;
+                } else if (s.id === 'dual-yield-compounder') {
+                    dynamicApy = 19 + (Math.random() * 1.5);
+                    dynamicTvl = 6800 + Math.random() * 200;
+                } else if (s.id === 'liquidation-hunter') {
+                    dynamicApy = 75 + (Math.random() * 30 - 10);
+                    dynamicTvl = 540 + Math.random() * 100;
+                } else if (s.id === 'cross-chain-bridge-arb') {
+                    dynamicApy = 38 + (Math.random() * 10 - 4);
+                    dynamicTvl = 1450 + Math.random() * 90;
                 } else {
                     // Kinetic loop depends on volume
                     dynamicApy = 12 + (Math.random() * 4);

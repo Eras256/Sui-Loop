@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Navbar from "@/components/layout/Navbar";
 import ApiKeyManager from "@/components/docs/ApiKeyManager";
 import { Terminal, Cpu, Activity, Signal, Shield, Radio, Code, Zap, Copy } from 'lucide-react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { supabase } from "@/lib/supabase";
@@ -34,7 +35,12 @@ export default function AgentsPage() {
         const channel = db
             .channel('agents-realtime-logs')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'logs' }, (payload) => {
-                setLogs(prev => [...prev, payload.new].slice(-100));
+                setLogs(prev => {
+                    // Deduplicate: skip if same id already exists
+                    const exists = prev.some(l => l.id === payload.new.id);
+                    if (exists) return prev;
+                    return [...prev, payload.new].slice(-100);
+                });
             })
             .subscribe();
 

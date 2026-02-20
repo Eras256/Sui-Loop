@@ -149,7 +149,7 @@ export default function ManifestoPage() {
                     <div className="flex justify-center gap-4">
                         <Link href="https://github.com/Eras256/Sui-Loop" className="text-gray-400 hover:text-white transition-colors underline underline-offset-4 decoration-neon-cyan/50">GitHub</Link>
                         <Link href="/docs" className="text-gray-400 hover:text-white transition-colors underline underline-offset-4 decoration-neon-cyan/50">Documentation</Link>
-                        <Link href="https://twitter.com/suiloop" className="text-gray-400 hover:text-white transition-colors underline underline-offset-4 decoration-neon-cyan/50">Twitter</Link>
+                        <Link href="https://x.com/Vaiosx" className="text-gray-400 hover:text-white transition-colors underline underline-offset-4 decoration-neon-cyan/50">Twitter</Link>
                     </div>
                 </div>
 
