@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     // Simulate installation logic
     // In a real app, this would update DB or user preferences
@@ -10,9 +10,12 @@ export async function POST(
     // Artificial delay for UX
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
+    // Await params as required in Next.js 15
+    const { id } = await params;
+
     return NextResponse.json({
         success: true,
         installed: true,
-        pluginId: params.id
+        pluginId: id
     });
 }
