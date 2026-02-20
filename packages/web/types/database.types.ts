@@ -90,6 +90,29 @@ export interface Database {
                     created_at?: string
                 }
             }
+            logs: {
+                Row: {
+                    id: string
+                    agent_id: string | null
+                    level: string
+                    message: string
+                    timestamp: string
+                }
+                Insert: {
+                    id?: string
+                    agent_id?: string | null
+                    level?: string
+                    message: string
+                    timestamp?: string
+                }
+                Update: {
+                    id?: string
+                    agent_id?: string | null
+                    level?: string
+                    message?: string
+                    timestamp?: string
+                }
+            }
         }
         Views: {
             [_ in never]: never

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Terminal, Maximize2, Minimize2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
+import { writeLog } from '@/lib/logger';
 
 export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded: boolean, onToggleExpand: () => void }) {
     const [logs, setLogs] = useState<any[]>([]);
@@ -49,6 +50,8 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
             .subscribe((s) => {
                 if (s === 'SUBSCRIBED') {
                     setStatus('online');
+                    // Write a real system log so the console shows activity on connect
+                    writeLog('SuiLoop Neural Matrix ONLINE — Realtime feed active', 'system');
                 } else if (s === 'CLOSED' || s === 'CHANNEL_ERROR') {
                     setStatus('unavailable');
                 }

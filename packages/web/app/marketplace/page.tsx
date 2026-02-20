@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { writeLog } from "@/lib/logger";
 import InstallSkillModal from "@/components/marketplace/InstallSkillModal";
 
 // Types
@@ -369,6 +370,9 @@ export default function MarketplacePage() {
                 const newInstalled = { ...existingLocal, [skill.id]: true, [skill.slug]: true };
                 localStorage.setItem(agentLocalKey, JSON.stringify(newInstalled));
                 setInstalledSkills(prev => ({ ...prev, [skill.id]: true, [skill.slug]: true }));
+
+                // Log the install event to Supabase (shows in Ops Console)
+                writeLog(`SKILL INSTALLED: ${skill.name} → agent ${agentId}`, 'success', agentId);
 
                 toast.success(`${skill.name} installed successfully!`, {
                     description: "The skill is now available in your agent and ready to use. Check the Ops Unit for logs.",
