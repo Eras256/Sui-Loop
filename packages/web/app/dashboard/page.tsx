@@ -233,11 +233,56 @@ function DashboardContent() {
 
         setIsSkillsLoading(true);
         try {
-            const response = await fetch(`/api/marketplace/installed?agentId=${agentId}`);
-            const data = await response.json();
-            if (data.success) {
-                setInstalledSkills(data.skills);
+            // Skills/Plugins catalog (matches Marketplace + Plugins pages)
+            const SKILL_CATALOG: Record<string, any> = {
+                'flash-loan-executor': { slug: 'flash-loan-executor', name: 'Flash Loan Executor', version: '0.0.7', category: 'trading', isGlobal: false },
+                'price-oracle': { slug: 'price-oracle', name: 'Multi-Source Price Oracle', version: '1.5.0', category: 'data', isGlobal: true },
+                'telegram-alerts-pro': { slug: 'telegram-alerts-pro', name: 'Telegram Alerts Pro', version: '3.0.0', category: 'notification', isGlobal: true },
+                'whale-tracker': { slug: 'whale-tracker', name: 'Whale Tracker', version: '1.2.0', category: 'analysis', isGlobal: false },
+                'lst-arbitrage': { slug: 'lst-arbitrage', name: 'LST Arbitrage Bot', version: '2.0.0', category: 'trading', isGlobal: false },
+                'scallop-optimizer': { slug: 'scallop-optimizer', name: 'Scallop Yield Optimizer', version: '1.8.0', category: 'trading', isGlobal: false },
+                'discord-integration': { slug: 'discord-integration', name: 'Discord Bot Integration', version: '2.5.0', category: 'integration', isGlobal: true },
+                'portfolio-tracker': { slug: 'portfolio-tracker', name: 'Portfolio Tracker', version: '1.3.0', category: 'analysis', isGlobal: false },
+                'pyth-oracle': { slug: 'pyth-oracle', name: 'Pyth Network Oracle', version: '2.1.0', category: 'data', isGlobal: true },
+                'twitter-sentiment': { slug: 'twitter-sentiment', name: 'Twitter/X Sentiment Analyzer', version: '0.0.7', category: 'analysis', isGlobal: false },
+                'cetus-lp-manager': { slug: 'cetus-lp-manager', name: 'Cetus LP Manager', version: '2.0.0', category: 'trading', isGlobal: false },
+                'gas-optimizer': { slug: 'gas-optimizer', name: 'Gas Optimizer', version: '1.0.0', category: 'utility', isGlobal: false },
+                // Core Plugins (from /plugins page)
+                'sui-deep-research': { slug: 'sui-deep-research', name: 'Sui Deep Research', version: '0.0.7', category: 'intelligence', isGlobal: true },
+                'social-sentiment': { slug: 'social-sentiment', name: 'Social Sentiment', version: '0.0.7', category: 'intelligence', isGlobal: true },
+                'knowledge-graph': { slug: 'knowledge-graph', name: 'Knowledge Graph', version: '0.0.7', category: 'intelligence', isGlobal: true },
+            };
+
+            // Read from localStorage (where Marketplace + Plugins pages persist installs)
+            const localSkills = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
+            const localPlugins = JSON.parse(localStorage.getItem('suiloop-plugins') || '{}');
+            const allLocalInstalled = { ...localSkills, ...localPlugins };
+
+            // Build full skill objects from the catalog
+            const resolved: any[] = [];
+            for (const key of Object.keys(allLocalInstalled)) {
+                if (allLocalInstalled[key] && SKILL_CATALOG[key]) {
+                    resolved.push(SKILL_CATALOG[key]);
+                }
             }
+
+            // Also try the API (merge if available)
+            try {
+                const response = await fetch(`/api/marketplace/installed?agentId=${agentId}`);
+                const data = await response.json();
+                if (data.success && data.skills?.length > 0) {
+                    const existingSlugs = new Set(resolved.map(s => s.slug));
+                    for (const s of data.skills) {
+                        if (!existingSlugs.has(s.slug)) {
+                            resolved.push(s);
+                        }
+                    }
+                }
+            } catch {
+                // API unavailable, localStorage data is sufficient
+            }
+
+            setInstalledSkills(resolved);
         } catch (error) {
             console.error("Failed to fetch skills", error);
         } finally {
@@ -256,16 +301,19 @@ function DashboardContent() {
 
         const toastId = toast.loading(`Uninstalling ${slug}...`);
         try {
-            const response = await fetch(`/api/skills/${slug}?agentId=${selectedStrategy.id}`, {
-                method: 'DELETE'
-            });
-            const data = await response.json();
-            if (data.success) {
-                toast.success("Skill uninstalled", { id: toastId });
-                setInstalledSkills(prev => prev.filter(s => s.slug !== slug));
-            } else {
-                throw new Error(data.error);
-            }
+            // Remove from localStorage
+            const localSkills = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
+            const localPlugins = JSON.parse(localStorage.getItem('suiloop-plugins') || '{}');
+
+            delete localSkills[slug];
+            delete localPlugins[slug];
+
+            localStorage.setItem('suiloop-skills', JSON.stringify(localSkills));
+            localStorage.setItem('suiloop-plugins', JSON.stringify(localPlugins));
+
+            // Update state
+            setInstalledSkills(prev => prev.filter(s => s.slug !== slug));
+            toast.success("Skill uninstalled", { id: toastId });
         } catch (error) {
             toast.error(`Failed to uninstall: ${String(error)}`, { id: toastId });
         }
