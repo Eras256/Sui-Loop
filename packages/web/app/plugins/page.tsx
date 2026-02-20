@@ -79,10 +79,15 @@ export default function PluginsPage() {
                 data.skills.forEach((s: any) => {
                     map[s.slug] = true;
                 });
-                setInstalledSkills(map);
+                // Merge with LocalStorage (Offline Persistence)
+                const local = JSON.parse(localStorage.getItem('suiloop-plugins') || '{}');
+                setInstalledSkills({ ...map, ...local });
             }
         } catch (error) {
             console.error('Failed to fetch installed status:', error);
+            // Fallback to local
+            const local = JSON.parse(localStorage.getItem('suiloop-plugins') || '{}');
+            setInstalledSkills(local);
         }
     };
 
@@ -118,9 +123,14 @@ export default function PluginsPage() {
                 }
             });
 
+            // Persist locally
+            const updatedLocal = { ...installedSkills, [selectedPlugin.slug]: true };
+            localStorage.setItem('suiloop-plugins', JSON.stringify(updatedLocal));
+            setInstalledSkills(updatedLocal);
+
             // Close modal after success
             setSelectedPlugin(null);
-            fetchInstalledStatus();
+            // fetchInstalledStatus(); // No need to re-fetch, we updated locally
         } catch (error: any) {
             console.error('Failed to install plugin:', error);
             toast.error(error.message || 'Installation failed', { id: toastId });

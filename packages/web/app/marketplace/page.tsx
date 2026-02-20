@@ -292,12 +292,19 @@ export default function MarketplacePage() {
                                 // Map both slug and potentially matching ID
                                 installedMap[s.id || s.slug] = true;
                             });
-                            console.log('[Marketplace] Syncing installed skills:', installedMap);
-                            setInstalledSkills(installedMap);
+                            // Merge with LocalStorage (Offline Persistence)
+                            const local = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
+                            console.log('[Marketplace] Syncing installed skills + local:', { ...installedMap, ...local });
+                            setInstalledSkills({ ...installedMap, ...local });
                         }
+                    } else {
+                        throw new Error('API Error');
                     }
                 } catch (e) {
-                    console.warn("Could not fetch installed skills", e);
+                    console.warn("Could not fetch installed skills, falling back to local", e);
+                    // Fallback to local
+                    const local = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
+                    setInstalledSkills(local);
                 }
 
             } catch (error) {
@@ -355,7 +362,12 @@ export default function MarketplacePage() {
 
             if (data.success) {
                 toast.dismiss(toastId);
-                setInstalledSkills(prev => ({ ...prev, [skill.id]: true }));
+
+                // Update local persistence
+                const newInstalled = { ...installedSkills, [skill.id]: true, [skill.slug]: true };
+                localStorage.setItem('suiloop-skills', JSON.stringify(newInstalled));
+                setInstalledSkills(newInstalled);
+
                 toast.success(`${skill.name} installed successfully!`, {
                     description: "The skill is now available in your agent and ready to use. Check the Ops Unit for logs.",
                     action: {
