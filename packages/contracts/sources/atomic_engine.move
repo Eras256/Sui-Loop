@@ -19,7 +19,7 @@ module suiloop::atomic_engine {
     /// Fee for deploying an Agent (License). 
     /// Target: ~$4.50 USD. Assuming 1 SUI ~ $0.90 USD => ~5 SUI.
     /// Rounding to 5 SUI for protocol revenue.
-    const DEPLOYMENT_FEE: u64 = 100_000_000; // 0.1 SUI (Hackathon/Testnet Price)
+    const DEPLOYMENT_FEE: u64 = 100_000_000; // 0.1 SUI (Testnet Price)
     
     /// Protocol Treasury Address (Placeholder)
     const TREASURY: address = @0x7b8f95e347b4899d453046777777777777777777777777777777777777777777;

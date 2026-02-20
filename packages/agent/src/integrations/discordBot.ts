@@ -302,7 +302,7 @@ class SuiLoopDiscordBot {
                         '3️⃣ `/suiloop deploy` - Deploy a strategy'
                 }
             )
-            .setFooter({ text: 'Built for ETHGlobal HackMoney 2026' })
+            .setFooter({ text: 'Powered by SuiLoop' })
             .setTimestamp();
 
         const row = new ActionRowBuilder<ButtonBuilder>()

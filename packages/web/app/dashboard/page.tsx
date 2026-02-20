@@ -519,7 +519,7 @@ function DashboardContent() {
             // 2. Prepare Coin for Execution Funds
             const [userFundsCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(USER_FUNDS_AMOUNT)]);
 
-            // 3. Create Agent Cap (Hackathon Mode: 0.1 SUI OK)
+            // 3. Create Agent Cap (Testnet Mode: 0.1 SUI OK)
             // On the new contract (0x6736...), the fee is now 0.1 SUI, so we can create real capabilities!
             if (useAgentCap && ownerCapId) {
                 const agentCap = tx.moveCall({

@@ -4,34 +4,7 @@ import { Twitter, Github, Globe, ExternalLink, Trophy, Sparkles } from "lucide-r
 export default function Footer() {
     return (
         <footer className="w-full border-t border-white/5 bg-black/30 backdrop-blur-md pt-12 pb-8 relative z-10">
-            {/* ETHGlobal HackMoney 2026 Banner */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10">
-                <a
-                    href="https://ethglobal.com/events/hackmoney2026"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block w-full p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-orange-500/10 border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-300 hover:shadow-[0_0_40px_rgba(234,179,8,0.15)]"
-                >
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-3 sm:gap-4">
-                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                                <Trophy size={24} className="text-white sm:w-7 sm:h-7" />
-                            </div>
-                            <div className="text-center sm:text-left">
-                                <div className="flex items-center gap-2 justify-center sm:justify-start">
-                                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-yellow-500">Official Submission</span>
-                                    <Sparkles size={12} className="text-yellow-500 animate-pulse" />
-                                </div>
-                                <h3 className="text-lg sm:text-xl font-bold text-white">ETHGlobal HackMoney 2026</h3>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-500/20 text-yellow-400 font-mono text-xs sm:text-sm group-hover:bg-yellow-500 group-hover:text-black transition-all">
-                            View Event
-                            <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </div>
-                    </div>
-                </a>
-            </div>
+
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-12">
                 {/* Brand */}
@@ -103,17 +76,7 @@ export default function Footer() {
                             </svg>
                         </a>
                     </div>
-                    {/* ETHGlobal Link */}
-                    <a
-                        href="https://ethglobal.com/events/hackmoney2026"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 inline-flex items-center gap-1.5 text-xs text-yellow-500 hover:text-yellow-400 transition-colors"
-                    >
-                        <Trophy size={12} />
-                        HackMoney 2026
-                        <ExternalLink size={10} />
-                    </a>
+
                 </div>
             </div>
 
