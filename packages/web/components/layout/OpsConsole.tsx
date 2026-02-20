@@ -3,57 +3,52 @@
 import { useState, useEffect, useRef } from 'react';
 import { Terminal, Activity, Maximize2, Minimize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getWebSocketUrl } from '@/lib/constants';
+import { supabase } from '@/lib/supabase';
 
 export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded: boolean, onToggleExpand: () => void }) {
     const [logs, setLogs] = useState<any[]>([]);
     const logsEndRef = useRef<HTMLDivElement>(null);
 
-    // WebSocket Connection
+    // Supabase Connection
     useEffect(() => {
-        let ws: WebSocket;
-        let reconnectTimer: NodeJS.Timeout;
+        // Initial Fetch
+        const fetchInitialLogs = async () => {
+            try {
+                const { data, error } = await supabase!
+                    .from('logs')
+                    .select('*')
+                    .order('timestamp', { ascending: false })
+                    .limit(20);
 
-        const connect = () => {
-            ws = new WebSocket(getWebSocketUrl('/ws/signals'));
-
-            ws.onopen = () => {
-                setLogs(prev => [...prev, {
-                    timestamp: new Date().toISOString(),
-                    level: 'system',
-                    message: 'CONNECTED TO SUILOOP MATRIX v0.0.7'
-                }]);
-            };
-
-            ws.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    // Filter important logs for dashboard view
-                    if (data.type === 'log' || data.type === 'execution' || data.type === 'system_log') {
-                        const logMsg = data.log ? data.log.message : (data.message || JSON.stringify(data));
-                        const logLevel = data.log ? data.log.level : (data.level || 'info');
-
-                        setLogs(prev => [...prev, {
-                            timestamp: new Date().toISOString(),
-                            level: logLevel,
-                            message: logMsg
-                        }].slice(-50)); // Keep last 50 logs for performance
-                    }
-                } catch (e) {
-                    // ignore
+                if (data && !error) {
+                    // Reverse to show oldest first (chronological) because we fetch newest first
+                    setLogs(data.reverse());
                 }
-            };
-
-            ws.onclose = () => {
-                reconnectTimer = setTimeout(connect, 3000);
-            };
+            } catch (e) {
+                console.error("Failed to fetch logs", e);
+            }
         };
+        fetchInitialLogs();
 
-        connect();
+        // Realtime Subscription
+        const channel = supabase!
+            .channel('realtime-logs')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'logs' }, (payload) => {
+                const newLog = payload.new;
+                setLogs(prev => [...prev, newLog].slice(-50));
+            })
+            .subscribe((status) => {
+                if (status === 'SUBSCRIBED') {
+                    setLogs(prev => [...prev, {
+                        timestamp: new Date().toISOString(),
+                        level: 'system',
+                        message: 'CONNECTED TO SUILOOP MATRIX v0.0.7'
+                    }]);
+                }
+            });
 
         return () => {
-            if (ws) ws.close();
-            clearTimeout(reconnectTimer);
+            supabase!.removeChannel(channel);
         };
     }, []);
 
