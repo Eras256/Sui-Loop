@@ -1,24 +1,40 @@
-// Mocking walrus-data-sdk since it might not be installed
-// Real implementation would import { WalrusClient } from "walrus-data-sdk";
+import axios from 'axios';
+
+const WALRUS_PUBLISHER = 'https://publisher.walrus-testnet.walrus.space';
 
 export class WalrusService {
-    private client: any;
+    constructor() { }
 
-    constructor() {
-        // this.client = new WalrusClient(...);
-    }
-
+    /**
+     * Uploads trade log data to the Walrus decentralized storage network.
+     */
     async logTradeToWalrus(tradeData: Record<string, any>): Promise<string> {
-        console.log("Uploading trade log to Walrus...", tradeData);
+        console.log("🦭 Uploading trade log to Walrus...", tradeData);
 
-        // Mock upload
-        // const { blob_id } = await this.client.store({
-        //     type: 'trade_log',
-        //     content: tradeData,
-        //     timestamp: Date.now()
-        // }, { epochs: 5 });
+        try {
+            const payload = JSON.stringify({
+                type: 'trade_log',
+                content: tradeData,
+                timestamp: new Date().toISOString()
+            });
 
-        const mockBlobId = "blob_v1_xyz789";
-        return mockBlobId;
+            // Modern Walrus Testnet REST API endpoint for storing blobs is /v1/blobs (2025/2026)
+            const response = await axios.put(`${WALRUS_PUBLISHER}/v1/blobs?epochs=5`, payload, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (response.data && (response.data.newlyCreated || response.data.alreadyCertified)) {
+                const blobId = response.data.newlyCreated?.blobObject?.blobId ||
+                    response.data.alreadyCertified?.blobId;
+
+                console.log(`✅ Trade log successfully archived to Walrus! Blob ID: ${blobId}`);
+                return blobId;
+            }
+
+            throw new Error('Unexpected response format from Walrus node.');
+        } catch (error: any) {
+            console.error(`⚠️ Failed to upload trade log to Walrus:`, error.message);
+            throw error;
+        }
     }
 }

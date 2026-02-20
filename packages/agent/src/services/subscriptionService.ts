@@ -430,9 +430,8 @@ async function uploadLogsToWalrus() {
     console.log(`🦭 Archiving ${logsSnapshot.length} logs to Walrus decentralized storage...`);
 
     try {
-        // Current Walrus Testnet Publisher API (v1/store)
-        // Note: In production, this might require payment/epoch handling
-        const response = await axios.put(`${WALRUS_PUBLISHER}/v1/store?epochs=5`, payload, {
+        // Current Walrus Testnet Publisher API (v1/blobs)
+        const response = await axios.put(`${WALRUS_PUBLISHER}/v1/blobs?epochs=5`, payload, {
             headers: { 'Content-Type': 'application/json' }
         });
 
