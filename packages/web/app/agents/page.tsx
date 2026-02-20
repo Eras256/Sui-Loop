@@ -6,7 +6,7 @@ import ApiKeyManager from "@/components/docs/ApiKeyManager";
 import { Terminal, Cpu, Activity, Signal, Shield, Radio, Code, Zap, Copy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { getWebSocketUrl } from "@/lib/constants";
+import { supabase } from "@/lib/supabase";
 
 export default function AgentsPage() {
     const [activeTab, setActiveTab] = useState<'logs' | 'sdk'>('logs');
@@ -14,59 +14,32 @@ export default function AgentsPage() {
     const [logs, setLogs] = useState<any[]>([]);
     const logsEndRef = useRef<HTMLDivElement>(null);
 
-    // WebSocket Connection for Live Logs
+    // Supabase Realtime for Live Logs
     useEffect(() => {
-        let ws: WebSocket;
-        let reconnectTimer: NodeJS.Timeout;
+        if (!supabase) return; // Guard: no Supabase config
+        const db = supabase;
 
-        const connect = () => {
-            // Connect to real backend WebSocket
-            ws = new WebSocket(getWebSocketUrl('/ws/signals'));
-
-            ws.onopen = () => {
-                setLogs(prev => [...prev, {
-                    timestamp: new Date().toISOString(),
-                    level: 'system',
-                    message: 'CONNECTED TO SUILOOP NEURAL MATRIX'
-                }]);
-            };
-
-            ws.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data.type === 'system_log') {
-                        setLogs(prev => [...prev, data.log].slice(-100)); // Keep last 100 logs
-                    } else if (data.type === 'welcome') {
-                        setLogs(prev => [...prev, {
-                            timestamp: new Date().toISOString(),
-                            level: 'info',
-                            message: data.message
-                        }]);
-                    }
-                } catch (e) {
-                    console.error('WebSocket parse error', e);
-                }
-            };
-
-            ws.onerror = () => {
-                // Silent error to avoid spamming console
-            };
-
-            ws.onclose = () => {
-                setLogs(prev => [...prev, {
-                    timestamp: new Date().toISOString(),
-                    level: 'warn',
-                    message: 'CONNECTION LOST - RECONNECTING...'
-                }]);
-                reconnectTimer = setTimeout(connect, 3000);
-            };
+        // Fetch recent logs on mount
+        const fetchInitialLogs = async () => {
+            const { data } = await db
+                .from('logs')
+                .select('*')
+                .order('timestamp', { ascending: false })
+                .limit(30);
+            if (data) setLogs(data.reverse());
         };
+        fetchInitialLogs();
 
-        connect();
+        // Subscribe to new logs in real time
+        const channel = db
+            .channel('agents-realtime-logs')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'logs' }, (payload) => {
+                setLogs(prev => [...prev, payload.new].slice(-100));
+            })
+            .subscribe();
 
         return () => {
-            if (ws) ws.close();
-            clearTimeout(reconnectTimer);
+            db.removeChannel(channel);
         };
     }, []);
 
@@ -306,7 +279,7 @@ export default function AgentsPage() {
                             )}
 
                             <p className="mt-4 text-xs text-gray-500">
-                                {activeTab === 'logs' ? 'Connecting to neural matrix via secure websocket...' : 'Use the Generated Key above to authenticate your autonomous units.'}
+                                {activeTab === 'logs' ? 'Live feed via Supabase Realtime. Logs from all active agents appear here.' : 'Use the Generated Key above to authenticate your autonomous units.'}
                             </p>
                         </div>
 
