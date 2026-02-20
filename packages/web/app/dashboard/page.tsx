@@ -93,7 +93,26 @@ function DashboardContent() {
                 showObjectChanges: true,
             },
         });
+
+        // Surface move-level errors (effects.status.error)
+        const status = (result as any)?.effects?.status;
+        if (status && status.status !== 'success') {
+            throw new Error(status.error || 'Transaction failed on-chain');
+        }
+
         return { digest: result.digest };
+    };
+
+    // Helper: fetch the live shared-object reference (version + digest) from chain.
+    // Using a stale version causes "not available for consumption" errors.
+    const getLiveObjectRef = async (objectId: string) => {
+        const obj = await suiClient.getObject({ id: objectId, options: { showOwner: true } });
+        if (!obj.data) throw new Error(`Object ${objectId} not found on-chain`);
+        return {
+            objectId: obj.data.objectId,
+            initialSharedVersion: (obj.data.owner as any)?.Shared?.initial_shared_version ?? 0,
+            mutable: true,
+        };
     };
     const [showAutoStartModal, setShowAutoStartModal] = useState(false);
     const [selectedStrategy, setSelectedStrategy] = useState<any>(null); // State for Details Modal
@@ -471,11 +490,6 @@ function DashboardContent() {
                 return;
             }
 
-            const tx = new Transaction();
-            tx.setSender(account.address); // Explicitly set sender to ensure wallet pays gas
-            // GAS BUDGET: Removed explicit setting to allow wallet auto-estimation.
-            // This fixes "Insufficient sponsored budget" on some wallets that misinterpret the manual budget.
-
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
             const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID || "0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165";
 
@@ -483,6 +497,21 @@ function DashboardContent() {
             const USER_FUNDS_AMOUNT = "500000"; // 0.0005 SUI
             const MIN_PROFIT = "0";
             const TREASURY_ADDR = "0x0000000000000000000000000000000000000000000000000000000000000000";
+
+            // Fetch live shared-object reference to avoid stale-version errors.
+            // This ensures we always use the current on-chain version/digest of the pool.
+            let poolRef;
+            try {
+                poolRef = await getLiveObjectRef(POOL_ID);
+            } catch (refErr) {
+                console.warn('[Deploy] Could not fetch live pool ref, falling back to object ID:', refErr);
+                poolRef = null;
+            }
+
+            const tx = new Transaction();
+            tx.setSender(account.address); // Explicitly set sender to ensure wallet pays gas
+            // GAS BUDGET: Removed explicit setting to allow wallet auto-estimation.
+            // This fixes "Insufficient sponsored budget" on some wallets that misinterpret the manual budget.
 
             // 1. Prepare Coin for Fee
             const [feeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(REQUIRED_FEE)]);
@@ -508,12 +537,12 @@ function DashboardContent() {
                 tx.transferObjects([feeCoin], TREASURY_ADDR);
             }
 
-            // 4. Exec Loop (V1 - Always run simulation for demo)
+            // 4. Exec Loop — use live sharedObjectRef if available to prevent stale-version errors
             tx.moveCall({
                 target: `${PACKAGE_ID}::atomic_engine::execute_loop`,
                 typeArguments: ["0x2::sui::SUI", "0x2::sui::SUI"],
                 arguments: [
-                    tx.object(POOL_ID),
+                    poolRef ? tx.sharedObjectRef(poolRef) : tx.object(POOL_ID),
                     userFundsCoin,
                     tx.pure.u64(BORROW_AMOUNT),
                     tx.pure.u64(MIN_PROFIT),
