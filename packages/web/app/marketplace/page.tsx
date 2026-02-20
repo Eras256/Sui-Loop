@@ -363,10 +363,12 @@ export default function MarketplacePage() {
             if (data.success) {
                 toast.dismiss(toastId);
 
-                // Update local persistence
-                const newInstalled = { ...installedSkills, [skill.id]: true, [skill.slug]: true };
-                localStorage.setItem('suiloop-skills', JSON.stringify(newInstalled));
-                setInstalledSkills(newInstalled);
+                // Update local persistence (per-agent)
+                const agentLocalKey = `suiloop-skills-${agentId}`;
+                const existingLocal = JSON.parse(localStorage.getItem(agentLocalKey) || '{}');
+                const newInstalled = { ...existingLocal, [skill.id]: true, [skill.slug]: true };
+                localStorage.setItem(agentLocalKey, JSON.stringify(newInstalled));
+                setInstalledSkills(prev => ({ ...prev, [skill.id]: true, [skill.slug]: true }));
 
                 toast.success(`${skill.name} installed successfully!`, {
                     description: "The skill is now available in your agent and ready to use. Check the Ops Unit for logs.",

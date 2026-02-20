@@ -123,10 +123,12 @@ export default function PluginsPage() {
                 }
             });
 
-            // Persist locally
-            const updatedLocal = { ...installedSkills, [selectedPlugin.slug]: true };
-            localStorage.setItem('suiloop-plugins', JSON.stringify(updatedLocal));
-            setInstalledSkills(updatedLocal);
+            // Persist locally (per-agent)
+            const agentLocalKey = `suiloop-plugins-${agentId}`;
+            const existingLocal = JSON.parse(localStorage.getItem(agentLocalKey) || '{}');
+            const updatedLocal = { ...existingLocal, [selectedPlugin.slug]: true };
+            localStorage.setItem(agentLocalKey, JSON.stringify(updatedLocal));
+            setInstalledSkills(prev => ({ ...prev, [selectedPlugin.slug]: true }));
 
             // Close modal after success
             setSelectedPlugin(null);

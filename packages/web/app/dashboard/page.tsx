@@ -253,9 +253,9 @@ function DashboardContent() {
                 'knowledge-graph': { slug: 'knowledge-graph', name: 'Knowledge Graph', version: '0.0.7', category: 'intelligence', isGlobal: true },
             };
 
-            // Read from localStorage (where Marketplace + Plugins pages persist installs)
-            const localSkills = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
-            const localPlugins = JSON.parse(localStorage.getItem('suiloop-plugins') || '{}');
+            // Read from localStorage PER-AGENT (where Marketplace + Plugins pages persist installs)
+            const localSkills = JSON.parse(localStorage.getItem(`suiloop-skills-${agentId}`) || '{}');
+            const localPlugins = JSON.parse(localStorage.getItem(`suiloop-plugins-${agentId}`) || '{}');
             const allLocalInstalled = { ...localSkills, ...localPlugins };
 
             // Build full skill objects from the catalog
@@ -301,15 +301,16 @@ function DashboardContent() {
 
         const toastId = toast.loading(`Uninstalling ${slug}...`);
         try {
-            // Remove from localStorage
-            const localSkills = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
-            const localPlugins = JSON.parse(localStorage.getItem('suiloop-plugins') || '{}');
+            // Remove from localStorage (per-agent)
+            const agentId = selectedStrategy.id;
+            const localSkills = JSON.parse(localStorage.getItem(`suiloop-skills-${agentId}`) || '{}');
+            const localPlugins = JSON.parse(localStorage.getItem(`suiloop-plugins-${agentId}`) || '{}');
 
             delete localSkills[slug];
             delete localPlugins[slug];
 
-            localStorage.setItem('suiloop-skills', JSON.stringify(localSkills));
-            localStorage.setItem('suiloop-plugins', JSON.stringify(localPlugins));
+            localStorage.setItem(`suiloop-skills-${agentId}`, JSON.stringify(localSkills));
+            localStorage.setItem(`suiloop-plugins-${agentId}`, JSON.stringify(localPlugins));
 
             // Update state
             setInstalledSkills(prev => prev.filter(s => s.slug !== slug));
