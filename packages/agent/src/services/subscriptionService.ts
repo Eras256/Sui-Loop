@@ -444,7 +444,7 @@ async function uploadLogsToWalrus() {
             // Broadcast this system event so the frontend knows logs are safe
             broadcastLog('success', `Logs archived to Walrus (Blob: ${blobId?.slice(0, 10)}...)`, {
                 blobId,
-                explorerUrl: `https://walrus-testnet.walrus.site/${blobId}`
+                explorerUrl: `https://walruscan.com/testnet/blob/${blobId}`
             });
         }
     } catch (error: any) {
