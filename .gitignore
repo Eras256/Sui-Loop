@@ -62,3 +62,6 @@ dist/
 # Vercel
 .vercel
 .env*.local
+
+# Private prompts
+NIRIUM_PROMPT.md
