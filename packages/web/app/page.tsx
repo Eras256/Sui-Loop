@@ -321,7 +321,7 @@ export default function Home() {
                                 <Download size={24} className="text-gray-300 group-hover:text-neon-cyan transition-colors" />
                             </div>
                             <div className="text-left">
-                                <span className="block text-xs uppercase tracking-widest text-neon-cyan/80 mb-0.5">v0.2.3 Available</span>
+                                <span className="block text-xs uppercase tracking-widest text-neon-cyan/80 mb-0.5">v0.0.7 Available</span>
                                 <span className="block text-lg font-bold tracking-tight">Download Companion</span>
                             </div>
                         </div>
