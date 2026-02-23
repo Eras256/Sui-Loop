@@ -80,8 +80,10 @@ export default function Home() {
             "Connecting to Sui Network...",
             "DeepBook Liquidity: OPTIMAL",
             "Navi Protocol: CONNECTED",
+            "Walrus Blackbox: ARMED — forensic logging active",
+            "USDC Vault: INDEXED — Navi & Scallop pools ready",
             "Scanning for arb opportunities...",
-            "Calculated spread: 0.45%"
+            "Calculated spread: 0.45% — executing flash vector"
         ];
         let i = 0;
         const interval = setInterval(() => {
@@ -89,7 +91,7 @@ export default function Home() {
                 setAgentLog(prev => [...prev, logs[i]]);
                 i++;
             }
-        }, 1500);
+        }, 1200);
         return () => clearInterval(interval);
     }, []);
 
@@ -346,8 +348,9 @@ export default function Home() {
                     {[
                         { label: 'Total Value Locked', value: '$1.2B', color: 'text-green-400' },
                         { label: 'Active Agents', value: '2,450', color: 'text-neon-cyan' },
-                        { label: 'Neural Plugins', value: '11 Active', color: 'text-purple-400' },
+                        { label: 'Neural Plugins', value: '13+ Active', color: 'text-purple-400' },
                         { label: 'Flash Loan Fee', value: '0.3%', color: 'text-amber-400' },
+                        { label: 'Assets Supported', value: 'SUI + USDC', color: 'text-blue-400' },
                     ].map((stat) => (
                         <div key={stat.label} className="bg-white/5 border border-white/10 rounded-xl p-4">
                             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{stat.label}</div>
@@ -480,7 +483,7 @@ export default function Home() {
                     {[
                         { icon: Workflow, title: 'Visual Strategy Builder', desc: 'Drag-and-drop node editor for custom strategies', color: 'text-purple-400' },
                         { icon: BookOpen, title: 'Operations Manual', desc: 'Step-by-step guide for protocol operators', color: 'text-neon-cyan' },
-                        { icon: Layers, title: 'Strategy Marketplace', desc: '15 pre-built strategies ready to deploy', color: 'text-blue-400' },
+                        { icon: Layers, title: 'Strategy Marketplace', desc: '16+ pre-built strategies ready to deploy. SUI & USDC asset selector on each.', color: 'text-blue-400' },
                         { icon: Shield, title: "The Hot Potato (Execution)", desc: "Implements a 10-second 'Hot Potato' pattern. Borrow millions in flash liquidity; if the arb fails to repay, the timeline is 'rewound' as if nothing happened.", color: "text-purple-400" },
                         { icon: Cpu, title: "Neural Matrix (The Suit)", desc: "The J.A.R.V.I.S. of DeFi. Inject new trading strategies into the pilot's helmet in mid-flight (hot-swapping) without ever powering down.", color: "text-blue-400" },
                         { icon: HardDrive, title: "Forensic Black Box (Walrus)", desc: "Decentralized flight recorder. Every decision is written in digital stone on the Walrus Protocol. Indestructible and absolute proof of activity.", color: "text-pink-500" },
@@ -547,10 +550,10 @@ export default function Home() {
                         </p>
                         <ul className="space-y-3 text-gray-300">
                             {[
-                                "Drag & drop node-based editor",
-                                "Save drafts for later editing",
+                                "6 node categories: Atomic Engine · AI · Swaps · Security · Social · Signals",
+                                "SUI / USDC asset selector per strategy",
                                 "Deploy with one-click wallet signature",
-                                "Version history with restore"
+                                "Export Schema for sharing or auditing"
                             ].map((item, i) => (
                                 <li key={i} className="flex items-center gap-3">
                                     <div className="w-5 h-5 rounded-full bg-neon-cyan/20 flex items-center justify-center">
@@ -681,6 +684,12 @@ export default function Home() {
                     </Link>
                     <Link href="/strategies/builder" className="border border-neon-purple text-neon-purple font-bold px-10 py-4 rounded-full hover:bg-neon-purple/10 transition-all text-lg cursor-pointer">
                         Open Builder
+                    </Link>
+                    <Link href="/marketplace" className="border border-blue-500/50 text-blue-400 font-bold px-10 py-4 rounded-full hover:bg-blue-500/10 transition-all text-lg cursor-pointer">
+                        Marketplace
+                    </Link>
+                    <Link href="/plugins" className="border border-pink-500/50 text-pink-400 font-bold px-10 py-4 rounded-full hover:bg-pink-500/10 transition-all text-lg cursor-pointer">
+                        Plugins
                     </Link>
                     <Link href="/docs" className="border border-white/10 text-white font-bold px-10 py-4 rounded-full hover:bg-white/5 transition-all text-lg cursor-pointer">
                         Read Docs

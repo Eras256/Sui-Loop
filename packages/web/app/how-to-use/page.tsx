@@ -123,7 +123,8 @@ export default function HowToUsePage() {
                                         Developer Uplink
                                     </h4>
                                     <p className="text-sm text-gray-400 leading-relaxed">
-                                        Power users can scaffold custom combat units using our CLI. Run <code className="bg-white/5 px-1 rounded text-neon-cyan">npx suiloop create-unit</code> to inject custom Move kernels or Python/Node.js logic directly into the Neural Matrix.
+                                        Power users can scaffold custom units using our CLI. Run <code className="bg-white/5 px-1 rounded text-neon-cyan">npx suiloop create-unit</code> to inject custom Move kernels or Python/Node.js logic directly into the Neural Matrix.
+                                        All agent decisions are cryptographically signed and uploaded to <span className="text-white font-bold">Sui Walrus</span> for tamper-proof forensic auditing.
                                     </p>
                                 </div>
                             </div>
@@ -139,6 +140,12 @@ export default function HowToUsePage() {
                                 className="bg-neon-cyan text-black font-bold px-10 py-4 rounded-full hover:shadow-[0_0_30px_rgba(0,243,255,0.4)] transition-all flex items-center gap-2"
                             >
                                 <Zap size={20} /> Deploy Now
+                            </Link>
+                            <Link
+                                href="/agents"
+                                className="border border-neon-purple/40 text-neon-purple font-bold px-10 py-4 rounded-full hover:bg-neon-purple/10 transition-all"
+                            >
+                                Agents Console
                             </Link>
                             <Link
                                 href="/docs"
@@ -201,30 +208,30 @@ const STEPS = [
     },
     {
         title: "Strategy Builder",
-        description: "Design custom logic loops in the Visual Editor. Connect DEXs, Lending Protocols, and Mathematical models to create proprietary trading algorithms for your agents.",
+        description: "Design custom logic loops in the Visual Editor. Connect 6 node categories including the Atomic Engine (Flash Loans, Execute Loop), AI Intelligence, and Trading & Swap connectors. Select SUI or USDC vault asset before compiling your kernel.",
         icon: MousePointer2,
         color: "from-pink-500 to-rose-500",
         features: [
-            "Visual Node Editor",
-            "Institutional Templates",
-            "Risk/Reward metrics",
-            "DEX & Lending Connectors"
+            "Visual Node Editor (drag & drop)",
+            "Atomic Engine: FLASH_LOAN, EXECUTE_LOOP",
+            "SUI / USDC asset selector",
+            "Export Schema as JSON"
         ],
         actionLabel: "Open Builder",
         actionHref: "/strategies/builder"
     },
     {
         title: "Live Monitoring",
-        description: "Watch your fleet in action. The Command Center provides real-time telemetry, transaction traces, and forensic logs backed by decentralized storage.",
+        description: "Watch your fleet in action. The Command Center and Agents Console provide real-time telemetry, RPC latency, transaction traces, and forensic logs backed by decentralized Walrus storage.",
         icon: Terminal,
         color: "from-amber-400 to-orange-500",
         features: [
-            "Real-Time Telemetry",
-            "Walrus Forensic Logs",
+            "Real-Time Telemetry & RPC Latency",
+            "Walrus Forensic Logs (immutable)",
             "Decentralized Auditing",
             "Stop-Loss Triggers"
         ],
-        actionLabel: "Command Center",
-        actionHref: "/dashboard"
+        actionLabel: "Agents Console",
+        actionHref: "/agents"
     }
 ];

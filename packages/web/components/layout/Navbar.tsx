@@ -90,8 +90,8 @@ export default function Navbar() {
                     <div className="flex items-center gap-4 xl:gap-8 min-w-0 shrink-0">
                         {/* Logo Section - Responsive */}
                         <Link href="/" className="flex items-center gap-2 group shrink-0">
-                            <div className="w-8 h-8 xl:w-9 xl:h-9 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(189,0,255,0.3)] group-hover:scale-110 transition-transform">
-                                <span className="text-white font-mono font-bold text-base xl:text-lg">S</span>
+                            <div className="relative flex items-center justify-center w-8 h-8 xl:w-10 xl:h-10 group-hover:scale-110 transition-transform">
+                                <img src="/logo_transparent.png" alt="SuiLoop Logo" className="w-full h-full object-contain object-center scale-[1.3] drop-shadow-[0_0_10px_rgba(189,0,255,0.4)]" />
                             </div>
                             {/* Logo text - Optimized visibility */}
                             <div className="hidden min-[1150px]:flex flex-col">
@@ -165,13 +165,16 @@ export default function Navbar() {
                     <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 shrink-0">
                         {/* Agent Status Indicator - lg+ */}
                         {mounted && (
-                            <div className={`hidden min-[1400px]:flex items-center gap-1 xl:gap-2 px-1.5 xl:px-3 py-1.2 xl:py-1.5 rounded-full border ${account ? "bg-green-500/10 border-green-500/20" : "bg-white/5 border-white/10"}`}>
+                            <div className={`hidden min-[1400px]:flex items-center gap-1 xl:gap-2 px-1.5 xl:px-3 py-1.5 rounded-full border transition-all ${account
+                                    ? 'bg-green-500/10 border-green-500/20'
+                                    : 'bg-white/5 border-white/10'
+                                }`}>
                                 <span className="relative flex h-1 w-1 xl:h-1.5 xl:w-1.5">
-                                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
-                                    <span className={`relative inline-flex rounded-full h-1 w-1 xl:h-1.5 xl:w-1.5 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
+                                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? 'bg-green-400' : 'bg-gray-400'}`}></span>
+                                    <span className={`relative inline-flex rounded-full h-1 w-1 xl:h-1.5 xl:w-1.5 ${account ? 'bg-green-500' : 'bg-gray-500'}`}></span>
                                 </span>
-                                <span className={`text-[8px] xl:text-[10px] font-mono font-bold whitespace-nowrap ${account ? "text-green-400" : "text-gray-500"}`}>
-                                    UNIT
+                                <span className={`text-[8px] xl:text-[10px] font-mono font-bold whitespace-nowrap ${account ? 'text-green-400' : 'text-gray-500'}`}>
+                                    {account ? 'SUI TESTNET' : 'OFFLINE'}
                                 </span>
                             </div>
                         )}
@@ -187,7 +190,7 @@ export default function Navbar() {
                             className="hidden min-[1300px]:flex items-center gap-1 bg-neon-cyan text-black px-2 xl:px-3 py-2 rounded-full font-mono text-[9px] xl:text-[10px] font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
                         >
                             <Rocket className="w-3 h-3 xl:w-3.5 xl:h-3.5" />
-                            <span className="hidden min-[1550px]:inline">INIT VECTOR</span>
+                            <span className="hidden min-[1550px]:inline">STRATEGIES</span>
                         </Link>
 
                         {/* Mobile Menu Toggle - Visible on lg and below */}
@@ -235,16 +238,22 @@ export default function Navbar() {
 
                             {/* Mobile Status Badge */}
                             {mounted && (
-                                <div className="flex items-center justify-end mb-4 pb-3 border-b border-white/5">
+                                <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
                                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/5">
                                         <span className="relative flex h-2 w-2">
-                                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? "bg-green-400" : "bg-gray-400"}`}></span>
-                                            <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? "bg-green-500" : "bg-gray-500"}`}></span>
+                                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? 'bg-green-400' : 'bg-gray-400'}`}></span>
+                                            <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? 'bg-green-500' : 'bg-gray-500'}`}></span>
                                         </span>
                                         <span className="text-[10px] text-gray-400 font-mono">
-                                            {account ? "ACTIVE" : "IDLE"}
+                                            {account ? `${account.address.slice(0, 6)}...${account.address.slice(-4)}` : 'WALLET NOT CONNECTED'}
                                         </span>
                                     </div>
+                                    {account && (
+                                        <div className="flex items-center gap-1">
+                                            <span className="text-[9px] bg-blue-500/20 text-[#4ca2ff] px-1.5 py-0.5 rounded font-mono font-bold">SUI</span>
+                                            <span className="text-[9px] bg-neon-purple/20 text-neon-purple px-1.5 py-0.5 rounded font-mono font-bold">USDC</span>
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
@@ -311,6 +320,23 @@ export default function Navbar() {
                                     <Zap size={20} className="text-black" />
                                     <span className="text-sm sm:text-base">INITIALIZE VECTOR</span>
                                     <Rocket size={18} className="text-black" />
+                                </Link>
+                            </motion.div>
+
+                            {/* Builder secondary CTA */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.35 }}
+                                className="mt-2"
+                            >
+                                <Link
+                                    href="/strategies/builder"
+                                    onClick={closeMobileMenu}
+                                    className="min-h-[48px] p-4 rounded-xl bg-white/5 border border-neon-purple/30 text-neon-purple font-bold flex items-center justify-center gap-3 hover:bg-neon-purple/10 transition-all active:scale-[0.98]"
+                                >
+                                    <Cpu size={18} />
+                                    <span className="text-sm sm:text-base">STRATEGY BUILDER</span>
                                 </Link>
                             </motion.div>
                         </motion.div>

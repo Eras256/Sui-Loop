@@ -1,6 +1,5 @@
 module suiloop::scallop_interface {
     use sui::coin::Coin;
-    use sui::balance::Balance;
 
     // A placeholder for Scallop's Market object
     public struct Market has key {
@@ -17,9 +16,9 @@ module suiloop::scallop_interface {
     // --- Core Scallop Functions (Matching Mainnet Signatures) ---
 
     public fun borrow_flash_loan<CoinType>(
-        market: &mut Market, 
-        amount: u64, 
-        ctx: &mut TxContext
+        _market: &mut Market, 
+        _amount: u64, 
+        _ctx: &mut TxContext
     ): (Coin<CoinType>, FlashLoanReceipt) {
         // In reality, this calls Scallop's move module. 
         // For development/compilation, we mock the behavior.
@@ -27,10 +26,10 @@ module suiloop::scallop_interface {
     }
 
     public fun repay_flash_loan<CoinType>(
-        market: &mut Market, 
+        _market: &mut Market, 
         payment: Coin<CoinType>, 
         receipt: FlashLoanReceipt, 
-        ctx: &mut TxContext
+        _ctx: &mut TxContext
     ) {
         // In reality, this calls Scallop's repay function.
         let FlashLoanReceipt { loan_amount: _, to_repay } = receipt;

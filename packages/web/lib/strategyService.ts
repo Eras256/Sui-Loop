@@ -7,6 +7,7 @@ export interface ActiveStrategy {
     emoji: string;
     status: string;
     yield: string;
+    asset?: 'SUI' | 'USDC';  // vault asset type
     tx_digest?: string;
     created_at?: string;
     config?: any;
@@ -78,6 +79,7 @@ export const StrategyService = {
                         emoji: row.config?.emoji || '🤖',
                         status: row.status,
                         yield: row.config?.yield || '0%',
+                        asset: (row.config?.asset as 'SUI' | 'USDC') || 'SUI',
                         tx_digest: row.config?.txDigest,
                         created_at: row.created_at,
                         config: row.config
@@ -139,6 +141,7 @@ export const StrategyService = {
                             displayName: strategy.name,
                             emoji: strategy.emoji,
                             yield: strategy.yield,
+                            asset: strategy.asset || 'SUI',
                             txDigest: strategy.tx_digest,
                             ...strategy.config
                         }
@@ -165,6 +168,7 @@ export const StrategyService = {
                         displayName: strategy.name,
                         emoji: strategy.emoji,
                         yield: strategy.yield,
+                        asset: strategy.asset || 'SUI',
                         txDigest: strategy.tx_digest,
                         ...strategy.config
                     }

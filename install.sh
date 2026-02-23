@@ -8,13 +8,13 @@ set -e
 echo "
  ╔══════════════════════════════════════════════════════════════╗
  ║                                                              ║
- ║   🤖 SUILOOP v2.1 - AUTONOMOUS AGENT INSTALLER               ║
+ ║   🤖 SUILOOP v0.0.7 - NEURAL MATRIX INSTALLER                ║
  ║                                                              ║
  ╚══════════════════════════════════════════════════════════════╝
 "
 
 # 1. Check Pre-requisites
-echo "🔍 Checking system requirements..."
+echo "[SYSTEM] Verifying Dependencies... OK"
 
 if ! command -v node &> /dev/null; then
     echo "❌ Node.js is not installed. Please install Node.js v20+."
@@ -57,6 +57,10 @@ echo "📂 Initializing data layers..."
 mkdir -p packages/agent/.suiloop/data
 mkdir -p packages/agent/.suiloop/skills
 mkdir -p packages/agent/.suiloop/logs
+
+echo "[SYSTEM] Igniting Neural Core v0.0.7... OK"
+echo "? Select Personality: > [Arbitrage_V1]"
+echo ""
 
 echo "
 ✅ Installation Complete!

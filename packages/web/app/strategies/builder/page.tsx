@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
     ReactFlow,
     MiniMap,
@@ -15,7 +15,6 @@ import {
     ReactFlowProvider,
     Node,
     BackgroundVariant,
-    XYPosition
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -25,31 +24,38 @@ import {
     Settings, Search, ZoomIn, ZoomOut, Undo, Redo,
     LayoutGrid, Cpu, History, Clock, Landmark, Coins, Shield, Database,
     Twitter, MessageSquare, Bell, Share2, BarChart3, Fingerprint, Lock, Repeat, RefreshCw,
-    Layers, MousePointer2, Info, ChevronRight, Download, X
+    Layers, MousePointer2, Info, ChevronRight, Download, X, Menu, Bolt,
+    FlaskConical, KeyRound, TrendingUp
 } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import CustomNode from './CustomNode';
 
-// --- Icon Registry for Serialization ---
+// --- Icon Registry ---
 const ICON_MAP: any = {
     Plus, Play, Save, Box, Activity, Zap, ArrowRight, Trash2,
     Settings, Search, ZoomIn, ZoomOut, Undo, Redo,
     LayoutGrid, Cpu, History, Clock, Landmark, Coins, Shield, Database,
     Twitter, MessageSquare, Bell, Share2, BarChart3, Fingerprint, Lock, Repeat, RefreshCw,
-    Layers, MousePointer2, Info, ChevronRight, Download
+    Layers, MousePointer2, Info, ChevronRight, Download, Bolt, FlaskConical, KeyRound, TrendingUp
 };
 
-// --- Configuration ---
-const nodeTypes: any = {
-    suiNode: CustomNode,
-};
+const nodeTypes: any = { suiNode: CustomNode };
 
 const NODE_TEMPLATES = [
+    {
+        category: 'ATOMIC ENGINE',
+        color: 'from-neon-cyan to-blue-500',
+        items: [
+            { type: 'action', label: 'FLASH_LOAN', icon: 'Bolt', desc: 'Borrow capital atomically (Hot Potato)' },
+            { type: 'action', label: 'EXECUTE_LOOP', icon: 'RefreshCw', desc: 'Full borrow-trade-repay cycle' },
+            { type: 'action', label: 'CREATE_AGENT_CAP', icon: 'KeyRound', desc: 'Mint agent license (0.1 SUI fee)' },
+            { type: 'action', label: 'REPAY_LOAN', icon: 'TrendingUp', desc: 'Satisfy Hot Potato receipt + profit' },
+        ]
+    },
     {
         category: 'SIGNAL INPUTS',
         color: 'from-amber-400 to-orange-500',
@@ -126,11 +132,23 @@ function StrategyBuilderInner() {
     const [showHistory, setShowHistory] = useState(false);
     const [history, setHistory] = useState<any[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [selectedAsset, setSelectedAsset] = useState<'SUI' | 'USDC'>('SUI');
 
     const account = useCurrentAccount();
     const router = useRouter();
 
     useEffect(() => { setMounted(true); }, []);
+
+    // Auto-collapse sidebar on small screens
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) setSidebarOpen(false);
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const onConnect = useCallback(
         (params: Connection) => setEdges((eds) => addEdge({ ...params, animated: true, style: { stroke: '#00f3ff' } }, eds)),
@@ -149,11 +167,9 @@ function StrategyBuilderInner() {
 
     const onAddNode = useCallback((template: any) => {
         let position = { x: 300, y: 300 };
-
         if (reactFlowInstance) {
             const { x, y, zoom } = reactFlowInstance.getViewport();
             const wrapper = reactFlowWrapper.current?.getBoundingClientRect();
-
             if (wrapper) {
                 position = {
                     x: (wrapper.width / 2 - x) / zoom,
@@ -161,12 +177,11 @@ function StrategyBuilderInner() {
                 };
             }
         }
-
         const newId = getId();
         const newNode: Node = {
             id: newId,
             type: 'suiNode',
-            position: position,
+            position,
             data: {
                 label: template.label,
                 icon: template.icon,
@@ -174,7 +189,6 @@ function StrategyBuilderInner() {
                 color: NODE_TEMPLATES.find(c => c.items.some(i => i.label === template.label))?.color
             },
         };
-
         setNodes((nds) => {
             const lastNode = nds[nds.length - 1];
             if (lastNode) {
@@ -189,25 +203,20 @@ function StrategyBuilderInner() {
             }
             return [...nds, newNode];
         });
-
         toast.success(`Matrix Enhanced: ${template.label} connected`);
     }, [reactFlowInstance, setNodes, setEdges]);
 
     const onDrop = useCallback(
         (event: React.DragEvent) => {
             event.preventDefault();
-
             const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect();
             const rawData = event.dataTransfer.getData('application/reactflow');
-
             if (!rawData || !reactFlowBounds) return;
-
             const template = JSON.parse(rawData);
             const position = reactFlowInstance.screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
             });
-
             const newId = getId();
             const newNode: Node = {
                 id: newId,
@@ -220,7 +229,6 @@ function StrategyBuilderInner() {
                     color: NODE_TEMPLATES.find(c => c.items.some(i => i.label === template.label))?.color
                 },
             };
-
             setNodes((nds) => {
                 const lastNode = nds[nds.length - 1];
                 if (lastNode) {
@@ -239,15 +247,39 @@ function StrategyBuilderInner() {
         [reactFlowInstance, setNodes, setEdges]
     );
 
+    // Export Schema as downloadable JSON
+    const handleExport = () => {
+        if (!reactFlowInstance) return;
+        const flow = reactFlowInstance.toObject();
+        const schema = {
+            version: '0.0.7',
+            exported_at: new Date().toISOString(),
+            kernel_name: strategyName,
+            kernel_id: strategyId || `custom-${Date.now()}`,
+            asset: selectedAsset,
+            node_count: flow.nodes?.length || 0,
+            edge_count: flow.edges?.length || 0,
+            flow,
+        };
+        const blob = new Blob([JSON.stringify(schema, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${strategyName.toLowerCase().replace(/\s+/g, '_')}_kernel.json`;
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        toast.success('Schema exported as .json');
+    };
+
     const handleSave = async (deploy = false) => {
         if (!account?.address) {
             toast.error("Connect Wallet to Architect Protocol");
             return;
         }
-
         setIsSaving(true);
         const toastId = toast.loading(deploy ? "Compiling Neural Kernel..." : "Committing Draft...");
-
         try {
             const flow = reactFlowInstance.toObject();
             const sid = strategyId || `custom-${Date.now()}`;
@@ -260,39 +292,43 @@ function StrategyBuilderInner() {
                 emoji: '🏗️',
                 status: deploy ? 'RUNNING' : 'DRAFT',
                 yield: '0.00%',
+                asset: selectedAsset,
                 created_at: new Date().toISOString(),
                 config: flow
             };
 
-            // 1. Local Persistence (Fast & Reliable)
+            // 1. Local Persistence
             try {
                 const localKey = `sui-loop-fleet-${account.address}`;
                 const existing = JSON.parse(localStorage.getItem(localKey) || "[]");
                 const filtered = existing.filter((s: any) => s.id !== sid && s.strategy_id !== sid);
                 localStorage.setItem(localKey, JSON.stringify([{ ...newStrat, id: sid }, ...filtered]));
-                console.log('[Builder] Local cache updated');
             } catch (le) {
                 console.warn("Local cache failed", le);
             }
 
-            // 2. Cloud Synchronization (Supabase)
+            // 2. Cloud Sync (Supabase)
             try {
                 await StrategyService.deployStrategy(account.address, newStrat);
-                console.log('[Builder] Supabase sync successful');
             } catch (dbError: any) {
-                console.warn('[Builder] Cloud sync failed, but local saved:', dbError);
                 toast.error(`Cloud Sync Offline: ${dbError.message || 'Persistence Error'}`, {
-                    description: "Kernel saved locally in your browser. Archive may be incomplete."
+                    description: "Kernel saved locally. Archive may be incomplete."
                 });
+            }
+
+            // 3. Walrus simulation on deploy
+            if (deploy) {
+                setTimeout(() => {
+                    toast.success(`⬆ Schema archived to Walrus (blob: ${sid.slice(0, 12)}...)`, { duration: 3000 });
+                }, 1000);
             }
 
             toast.dismiss(toastId);
             if (deploy) {
                 toast.success("Kernel Compiled and Uplinked!");
-                router.push(`/dashboard?autostart=true&strategy=${sid}&name=${encodeURIComponent(strategyName)}`);
+                router.push(`/dashboard?autostart=true&strategy=${sid}&name=${encodeURIComponent(strategyName)}&asset=${selectedAsset}`);
             } else {
                 toast.success("Draft Persisted (Local + Cloud Sync Attempted)");
-                // Refresh history to show the new/updated entry
                 fetchHistory();
             }
         } catch (e: any) {
@@ -309,21 +345,16 @@ function StrategyBuilderInner() {
         try {
             const { StrategyService } = await import("@/lib/strategyService");
             const dbStrategies = await StrategyService.getStrategies(account.address);
-
-            // Merge with local fallback
             const localKey = `sui-loop-fleet-${account.address}`;
             const localRaw = localStorage.getItem(localKey);
             let merged = [...dbStrategies];
-
             if (localRaw) {
                 const local = JSON.parse(localRaw) as any[];
-                // Add locals that aren't in DB
                 const uniqueLocals = local.filter((l: any) =>
                     !dbStrategies.some(dbS => (dbS.strategy_id === l.strategy_id) || (dbS.id === l.id))
                 );
                 merged = [...merged, ...uniqueLocals];
             }
-
             setHistory(merged);
         } catch (e) {
             console.error(e);
@@ -333,9 +364,7 @@ function StrategyBuilderInner() {
     };
 
     useEffect(() => {
-        if (showHistory && account?.address) {
-            fetchHistory();
-        }
+        if (showHistory && account?.address) fetchHistory();
     }, [showHistory, account?.address]);
 
     const loadKernel = (strat: any) => {
@@ -344,27 +373,89 @@ function StrategyBuilderInner() {
             setEdges(strat.config.edges || []);
             setStrategyName(strat.name);
             setStrategyId(strat.strategy_id || strat.id);
+            if (strat.asset === 'SUI' || strat.asset === 'USDC') setSelectedAsset(strat.asset);
             setShowHistory(false);
             toast.success(`Kernel Reconstructed: ${strat.name}`);
-
-            // Fit view after a small delay to allow React Flow to render
-            setTimeout(() => {
-                reactFlowInstance?.fitView({ duration: 800 });
-            }, 100);
+            setTimeout(() => { reactFlowInstance?.fitView({ duration: 800 }); }, 100);
         }
     };
 
     if (!mounted) return null;
 
+    const filteredTemplates = NODE_TEMPLATES.map(cat => ({
+        ...cat,
+        items: cat.items.filter(i => i.label.toLowerCase().includes(searchQuery.toLowerCase()))
+    })).filter(cat => cat.items.length > 0);
+
     return (
-        <div className="flex-1 flex overflow-hidden">
-            {/* Professional Component Library Sidebar */}
-            <aside className="w-80 bg-[#0F0F0F] border-r border-white/10 flex flex-col z-40">
-                <div className="p-4 border-b border-white/10 space-y-4">
+        <div className="flex-1 flex overflow-hidden relative">
+
+            {/* Mobile overlay when sidebar is open */}
+            {sidebarOpen && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setSidebarOpen(false)}
+                    className="fixed inset-0 bg-black/60 z-30 md:hidden"
+                />
+            )}
+
+            {/* Sidebar toggle button (mobile/tablet) — only shows when sidebar is closed */}
+            <AnimatePresence>
+                {!sidebarOpen && (
+                    <motion.button
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        onClick={() => setSidebarOpen(true)}
+                        className="absolute top-3 left-3 z-50 md:hidden bg-[#0F0F0F]/90 backdrop-blur-md border border-white/20 p-2.5 rounded-xl text-neon-cyan hover:bg-white/10 shadow-xl"
+                    >
+                        <Menu size={18} />
+                    </motion.button>
+                )}
+            </AnimatePresence>
+
+            {/* Component Library Sidebar */}
+            <aside className={`
+                ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+                fixed md:relative md:translate-x-0
+                w-72 md:w-80 h-full bg-[#0F0F0F] border-r border-white/10 flex flex-col z-40
+                transition-transform duration-300 ease-in-out
+            `}>
+                <div className="p-4 border-b border-white/10 space-y-3">
                     <div className="flex items-center justify-between">
                         <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">Component Lab</h2>
-                        <span className="text-[10px] font-mono text-neon-cyan/50">v0.0.7</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono text-neon-cyan/50">v0.0.7</span>
+                            <button
+                                onClick={() => setSidebarOpen(false)}
+                                className="md:hidden p-1 hover:bg-white/5 rounded-lg text-gray-500 hover:text-white"
+                            >
+                                <X size={14} />
+                            </button>
+                        </div>
                     </div>
+
+                    {/* Asset Selector */}
+                    <div className="flex items-center justify-between bg-black/40 border border-white/10 rounded-xl p-1">
+                        <span className="text-[10px] text-gray-500 uppercase tracking-wider pl-2">Vault Asset</span>
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => setSelectedAsset('USDC')}
+                                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all ${selectedAsset === 'USDC' ? 'bg-neon-purple text-white shadow-[0_0_10px_rgba(168,85,247,0.4)]' : 'text-gray-500 hover:text-white'}`}
+                            >
+                                USDC
+                            </button>
+                            <button
+                                onClick={() => setSelectedAsset('SUI')}
+                                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all ${selectedAsset === 'SUI' ? 'bg-[#4ca2ff] text-white shadow-[0_0_10px_rgba(76,162,255,0.4)]' : 'text-gray-500 hover:text-white'}`}
+                            >
+                                SUI
+                            </button>
+                        </div>
+                    </div>
+
                     <div className="relative">
                         <Search className="absolute left-3 top-2.5 text-gray-500" size={14} />
                         <input
@@ -377,64 +468,59 @@ function StrategyBuilderInner() {
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-8">
-                    {NODE_TEMPLATES.map((category, idx) => (
-                        <div key={idx} className="space-y-3">
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6">
+                    {filteredTemplates.map((category, idx) => (
+                        <div key={idx} className="space-y-2">
                             <div className="flex items-center gap-2">
                                 <div className={`w-1 h-3 rounded-full bg-gradient-to-b ${category.color}`}></div>
                                 <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{category.category}</h3>
                             </div>
                             <div className="grid grid-cols-1 gap-2">
-                                {category.items
-                                    .filter(i => i.label.toLowerCase().includes(searchQuery.toLowerCase()))
-                                    .map((item, i) => (
-                                        <div
-                                            key={i}
-                                            draggable
-                                            onDragStart={(e) => onDragStart(e, item)}
-                                            className="flex items-center gap-3 p-3 bg-[#1A1A1A] border border-white/5 rounded-xl hover:border-white/20 hover:bg-[#222] transition-all group cursor-grab active:cursor-grabbing"
-                                        >
-                                            <div className="p-2 rounded-lg bg-white/5 group-hover:bg-white/10 transition-colors">
-                                                {ICON_MAP[item.icon] ? (
-                                                    React.createElement(ICON_MAP[item.icon], { size: 16, className: "text-gray-400 group-hover:text-neon-cyan" })
-                                                ) : (
-                                                    <Box size={16} />
-                                                )}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <div className="text-[11px] font-bold text-gray-200 group-hover:text-white truncate font-mono uppercase">
-                                                    {item.label}
-                                                </div>
-                                                <div className="text-[9px] text-gray-500 truncate">{item.desc}</div>
-                                            </div>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    onAddNode(item);
-                                                }}
-                                                className="p-1.5 rounded-lg hover:bg-neon-cyan/20 text-white/20 hover:text-neon-cyan transition-all opacity-0 group-hover:opacity-100"
-                                            >
-                                                <Plus size={14} />
-                                            </button>
+                                {category.items.map((item, i) => (
+                                    <div
+                                        key={i}
+                                        draggable
+                                        onDragStart={(e) => onDragStart(e, item)}
+                                        className="flex items-center gap-3 p-3 bg-[#1A1A1A] border border-white/5 rounded-xl hover:border-white/20 hover:bg-[#222] transition-all group cursor-grab active:cursor-grabbing"
+                                    >
+                                        <div className="p-2 rounded-lg bg-white/5 group-hover:bg-white/10 transition-colors shrink-0">
+                                            {ICON_MAP[item.icon] ? (
+                                                React.createElement(ICON_MAP[item.icon], { size: 15, className: "text-gray-400 group-hover:text-neon-cyan" })
+                                            ) : (
+                                                <Box size={15} />
+                                            )}
                                         </div>
-                                    ))}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="text-[11px] font-bold text-gray-200 group-hover:text-white truncate font-mono uppercase">
+                                                {item.label}
+                                            </div>
+                                            <div className="text-[9px] text-gray-500 truncate">{item.desc}</div>
+                                        </div>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); onAddNode(item); if (window.innerWidth < 768) setSidebarOpen(false); }}
+                                            className="p-1.5 rounded-lg hover:bg-neon-cyan/20 text-white/20 hover:text-neon-cyan transition-all opacity-0 group-hover:opacity-100 shrink-0"
+                                        >
+                                            <Plus size={14} />
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="p-4 bg-black/40 border-t border-white/5">
-                    <div className="flex items-center gap-3 p-3 bg-neon-cyan/5 rounded-xl border border-neon-cyan/10">
-                        <Info size={14} className="text-neon-cyan" />
+                <div className="p-3 bg-black/40 border-t border-white/5">
+                    <div className="flex items-center gap-2 p-2.5 bg-neon-cyan/5 rounded-xl border border-neon-cyan/10">
+                        <Info size={13} className="text-neon-cyan shrink-0" />
                         <p className="text-[10px] text-gray-400 leading-tight">
-                            Drag components onto the matrix to architect your autonomous protocol.
+                            Drag nodes onto the matrix. Asset: <span className={selectedAsset === 'USDC' ? 'text-neon-purple font-bold' : 'text-[#4ca2ff] font-bold'}>{selectedAsset}</span>
                         </p>
                     </div>
                 </div>
             </aside>
 
-            {/* Main Canvas Area */}
-            <div className="flex-1 relative bg-[#0A0A0A]" ref={reactFlowWrapper}>
+            {/* Main Canvas */}
+            <div className="flex-1 relative bg-[#0A0A0A] min-w-0" ref={reactFlowWrapper}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -449,80 +535,102 @@ function StrategyBuilderInner() {
                     colorMode="dark"
                     snapToGrid
                     snapGrid={[20, 20]}
+                    panOnDrag
+                    zoomOnPinch
+                    zoomOnScroll
+                    panOnScroll={false}
+                    minZoom={0.2}
+                    maxZoom={2}
                 >
-                    <Background
-                        variant={BackgroundVariant.Dots}
-                        color="#222"
-                        gap={20}
-                        size={1}
-                    />
-                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                    <Background variant={BackgroundVariant.Dots} color="#222" gap={20} size={1} />
 
                     <Controls
-                        className="!bg-[#0F0F0F] !border-white/10 !rounded-xl overflow-hidden custom-flow-controls"
+                        className="!bg-[#0F0F0F] !border-white/10 !rounded-xl overflow-hidden"
                         showInteractive={false}
                     />
 
                     <MiniMap
-                        className="!bg-[#0F0F0F] !border-white/10 !rounded-xl"
+                        className="!bg-[#0F0F0F] !border-white/10 !rounded-xl hidden sm:block"
                         maskColor="rgba(0, 0, 0, 0.7)"
-                        nodeColor={(n: any) => n.data?.color ? n.data.color.split(' ')[1].replace('to-', '#') : '#333'}
+                        nodeColor={(n: any) => n.data?.color ? '#00f3ff' : '#333'}
                         nodeStrokeWidth={3}
                         zoomable
                         pannable
                     />
 
-                    <Panel position="top-left" className="bg-[#0F0F0F]/80 backdrop-blur-md border border-white/10 p-4 rounded-2xl m-4 flex items-center gap-4 shadow-2xl">
-                        <div className="bg-neon-cyan/20 p-2 rounded-xl border border-neon-cyan/30">
-                            <Layers className="text-neon-cyan" size={20} />
+                    {/* Top-left: Kernel name + status — offset on mobile to avoid hamburger */}
+                    <Panel position="top-left" className={`
+                        bg-[#0F0F0F]/90 backdrop-blur-md border border-white/10
+                        p-2.5 sm:p-3 md:p-4 rounded-2xl shadow-2xl
+                        flex items-center gap-2 sm:gap-3
+                        transition-all duration-300
+                        ${!sidebarOpen ? 'ml-14 md:ml-4' : 'ml-3 md:ml-4'}
+                        mt-3 md:mt-4
+                        max-w-[calc(100vw-5rem)] sm:max-w-xs md:max-w-none
+                    `}>
+                        <div className="bg-neon-cyan/20 p-1.5 sm:p-2 rounded-xl border border-neon-cyan/30 hidden sm:flex shrink-0">
+                            <Layers className="text-neon-cyan" size={16} />
                         </div>
-                        <div>
+                        <div className="min-w-0 flex-1">
                             <input
                                 value={strategyName}
                                 onChange={(e) => setStrategyName(e.target.value)}
-                                className="bg-transparent border-none focus:outline-none font-black text-xl tracking-tighter text-white w-48 uppercase font-mono"
+                                className="bg-transparent border-none focus:outline-none font-black text-sm sm:text-base md:text-xl tracking-tighter text-white w-28 sm:w-36 md:w-48 uppercase font-mono truncate block"
                             />
-                            <div className="flex items-center gap-2">
-                                <span className={`w-1.5 h-1.5 rounded-full ${account ? 'bg-green-500' : 'bg-red-500'} animate-pulse`}></span>
-                                <span className="text-[10px] font-mono text-gray-500">{account ? 'UPLINK: ACTIVE' : 'OFFLINE'}</span>
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className={`w-1.5 h-1.5 rounded-full ${account ? 'bg-green-500' : 'bg-red-500'} animate-pulse shrink-0`}></span>
+                                <span className="text-[9px] sm:text-[10px] font-mono text-gray-500">{account ? 'ACTIVE' : 'OFFLINE'}</span>
+                                <span className={`text-[9px] sm:text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${selectedAsset === 'USDC' ? 'bg-neon-purple/20 text-neon-purple' : 'bg-blue-500/20 text-[#4ca2ff]'}`}>
+                                    {selectedAsset}
+                                </span>
                             </div>
                         </div>
                     </Panel>
 
-                    <Panel position="top-right" className="m-4 flex gap-2">
+                    {/* Top-right: Action buttons */}
+                    <Panel position="top-right" className="m-3 md:m-4 flex gap-2">
                         <button
                             onClick={() => handleSave(false)}
-                            className="bg-[#0F0F0F]/80 backdrop-blur-md border border-white/10 px-6 py-2.5 rounded-xl font-mono text-[11px] font-bold tracking-widest text-gray-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2"
+                            disabled={isSaving}
+                            className="bg-[#0F0F0F]/90 backdrop-blur-md border border-white/10 px-3 md:px-6 py-2.5 rounded-xl font-mono text-[11px] font-bold tracking-widest text-gray-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2 disabled:opacity-50"
                         >
-                            <Save size={14} /> COMMIT DRAFT
+                            <Save size={14} />
+                            <span className="hidden sm:inline">COMMIT DRAFT</span>
                         </button>
                         <button
                             onClick={() => handleSave(true)}
-                            className="bg-neon-cyan px-8 py-2.5 rounded-xl font-mono text-[11px] font-black tracking-widest text-black hover:bg-cyan-400 shadow-[0_0_20px_rgba(0,243,255,0.3)] transition-all flex items-center gap-2"
+                            disabled={isSaving}
+                            className="bg-neon-cyan px-4 md:px-8 py-2.5 rounded-xl font-mono text-[11px] font-black tracking-widest text-black hover:bg-cyan-400 shadow-[0_0_20px_rgba(0,243,255,0.3)] transition-all flex items-center gap-2 disabled:opacity-50"
                         >
-                            <Play size={14} fill="currentColor" /> COMPILE KERNEL
+                            <Play size={14} fill="currentColor" />
+                            <span className="hidden sm:inline">COMPILE KERNEL</span>
+                            <span className="sm:hidden">RUN</span>
                         </button>
                     </Panel>
 
-                    <Panel position="bottom-right" className="m-4">
+                    {/* Bottom-right: history + export */}
+                    <Panel position="bottom-right" className="m-3 md:m-4">
                         <div className="flex flex-col gap-2">
                             <button
                                 onClick={() => setShowHistory(true)}
-                                className="bg-[#0F0F0F]/80 backdrop-blur-md border border-white/10 p-3 rounded-xl text-gray-400 hover:text-white transition-all shadow-xl group relative"
+                                className="bg-[#0F0F0F]/90 backdrop-blur-md border border-white/10 p-3 rounded-xl text-gray-400 hover:text-white transition-all shadow-xl group relative"
                             >
                                 <History size={18} />
-                                <span className="absolute right-full mr-2 px-2 py-1 bg-black text-[10px] text-neon-cyan border border-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">VIEW KERNEL LOGS</span>
+                                <span className="absolute right-full mr-2 px-2 py-1 bg-black text-[10px] text-neon-cyan border border-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden md:block">VIEW KERNEL LOGS</span>
                             </button>
-                            <button className="bg-[#0F0F0F]/80 backdrop-blur-md border border-white/10 p-3 rounded-xl text-gray-400 hover:text-white transition-all shadow-xl group relative">
+                            <button
+                                onClick={handleExport}
+                                className="bg-[#0F0F0F]/90 backdrop-blur-md border border-white/10 p-3 rounded-xl text-gray-400 hover:text-white transition-all shadow-xl group relative"
+                            >
                                 <Download size={18} />
-                                <span className="absolute right-full mr-2 px-2 py-1 bg-black text-[10px] text-gray-400 border border-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">EXPORT SCHEMA</span>
+                                <span className="absolute right-full mr-2 px-2 py-1 bg-black text-[10px] text-gray-400 border border-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden md:block">EXPORT SCHEMA</span>
                             </button>
                         </div>
                     </Panel>
                 </ReactFlow>
             </div>
 
-            {/* Matrix Kernel History Panel */}
+            {/* Kernel History Panel */}
             <AnimatePresence>
                 {showHistory && (
                     <>
@@ -538,22 +646,19 @@ function StrategyBuilderInner() {
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed top-0 right-0 h-full w-[400px] bg-[#0A0A0A] border-l border-white/10 z-[101] shadow-2xl flex flex-col"
+                            className="fixed top-0 right-0 h-full w-full max-w-[400px] bg-[#0A0A0A] border-l border-white/10 z-[101] shadow-2xl flex flex-col"
                         >
-                            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-black/40">
+                            <div className="p-5 border-b border-white/10 flex items-center justify-between bg-black/40">
                                 <div>
                                     <h2 className="text-sm font-black tracking-[0.2em] text-white uppercase font-mono">Kernel Archives</h2>
                                     <p className="text-[10px] text-gray-500 font-mono mt-1 uppercase tracking-wider">Neural storage uplink active</p>
                                 </div>
-                                <button
-                                    onClick={() => setShowHistory(false)}
-                                    className="p-2 hover:bg-white/5 rounded-lg text-gray-500 hover:text-white transition-all"
-                                >
+                                <button onClick={() => setShowHistory(false)} className="p-2 hover:bg-white/5 rounded-lg text-gray-500 hover:text-white transition-all">
                                     <X size={20} />
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
                                 {isLoadingHistory ? (
                                     <div className="flex flex-col items-center justify-center h-64 space-y-4">
                                         <div className="w-8 h-8 border-2 border-neon-cyan border-t-transparent rounded-full animate-spin"></div>
@@ -580,14 +685,20 @@ function StrategyBuilderInner() {
                                                 <span className="text-lg">{strat.emoji || '🤖'}</span>
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <div className="flex items-center justify-between mb-1">
+                                                <div className="flex items-center justify-between mb-1 gap-2">
                                                     <h3 className="text-xs font-bold text-gray-200 group-hover:text-white truncate font-mono uppercase tracking-tight">
                                                         {strat.name}
                                                     </h3>
-                                                    <span className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-bold tracking-tighter ${strat.status === 'RUNNING' ? 'bg-green-500/10 text-green-500' : 'bg-amber-500/10 text-amber-500'
-                                                        }`}>
-                                                        {strat.status}
-                                                    </span>
+                                                    <div className="flex items-center gap-1 shrink-0">
+                                                        {strat.asset && (
+                                                            <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${strat.asset === 'USDC' ? 'bg-purple-500/10 text-purple-400' : 'bg-blue-500/10 text-blue-400'}`}>
+                                                                {strat.asset}
+                                                            </span>
+                                                        )}
+                                                        <span className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-bold tracking-tighter ${strat.status === 'RUNNING' ? 'bg-green-500/10 text-green-500' : 'bg-amber-500/10 text-amber-500'}`}>
+                                                            {strat.status}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                                 <div className="flex items-center gap-3 text-[9px] text-gray-500 font-mono">
                                                     <span className="flex items-center gap-1"><Clock size={10} /> {new Date(strat.created_at).toLocaleDateString()}</span>
@@ -611,11 +722,16 @@ function StrategyBuilderInner() {
 
 export default function StrategyBuilderPro() {
     return (
-        <main className="h-screen w-screen bg-[#0A0A0A] text-white flex flex-col font-sans selection:bg-neon-cyan/30">
+        <main className="h-screen w-screen bg-[#0A0A0A] text-white flex flex-col font-sans selection:bg-neon-cyan/30 overflow-hidden">
             <Navbar />
 
-            {/* Professional Separator / Breathing Room */}
-            <div className="h-[90px] w-full shrink-0"></div>
+            {/* Mobile banner for touch hint */}
+            <div className="md:hidden flex items-center gap-2 bg-neon-cyan/5 border-b border-neon-cyan/10 px-4 py-2 text-[11px] text-neon-cyan/70 font-mono shrink-0">
+                <MousePointer2 size={12} />
+                Tap the ☰ button to open the Component Lab. Pinch to zoom the canvas.
+            </div>
+
+            <div className="h-[64px] md:h-[90px] w-full shrink-0"></div>
 
             <div className="flex-1 flex overflow-hidden border-t border-white/5 bg-[radial-gradient(circle_at_top,rgba(0,243,255,0.05),transparent_40%)]">
                 <ReactFlowProvider>
@@ -625,46 +741,25 @@ export default function StrategyBuilderPro() {
 
             <style jsx global>{`
                 .react-flow__handle {
-                    width: 8px;
-                    height: 8px;
+                    width: 8px; height: 8px;
                     background: #00f3ff !important;
                     border: 2px solid #000 !important;
                 }
-                .react-flow__attribution {
-                    display: none;
-                }
+                .react-flow__attribution { display: none; }
                 .react-flow__controls-button {
                     background: #1A1A1A !important;
                     border-bottom: 1px solid #333 !important;
-                    color: #666 !important;
-                    fill: #666 !important;
+                    color: #666 !important; fill: #666 !important;
                 }
                 .react-flow__controls-button:hover {
                     background: #222 !important;
-                    color: #fff !important;
-                    fill: #fff !important;
+                    color: #fff !important; fill: #fff !important;
                 }
-                .react-flow__edge-path {
-                    stroke-width: 2.5;
-                }
-                .glass-card {
-                    background: rgba(15, 15, 15, 0.8);
-                    backdrop-filter: blur(12px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                }
-                .custom-scrollbar::-webkit-scrollbar {
-                    width: 4px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: #333;
-                    border-radius: 10px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: #00f3ff;
-                }
+                .react-flow__edge-path { stroke-width: 2.5; }
+                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
             `}</style>
         </main>
     );

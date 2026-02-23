@@ -1,6 +1,6 @@
 [package]
 name = "suiloop-desktop"
-version = "0.1.0"
+version = "0.0.7"
 description = "SuiLoop Companion App"
 authors = ["you"]
 edition = "2021"

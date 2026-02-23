@@ -153,6 +153,7 @@ export default function StrategiesPage() {
     const account = useCurrentAccount();
     const router = useRouter();
     const [deployingId, setDeployingId] = useState<string | null>(null);
+    const [selectedAssets, setSelectedAssets] = useState<Record<string, 'SUI' | 'USDC'>>({});
     const [strategies, setStrategies] = useState(BASE_STRATEGIES.map(s => ({
         ...s, apy: `${s.baseApy}%`, tvl: "Loading..."
     })));
@@ -259,8 +260,9 @@ export default function StrategiesPage() {
             toast.dismiss(toastId);
             toast.success("Strategy Template Loaded", { duration: 1000 });
 
-            // 2. Redirect to Dashboard with Auto-Start and name for immediate display
-            router.push(`/dashboard?autostart=true&strategy=${strategy.id}&name=${encodeURIComponent(strategy.name)}`);
+            // 2. Redirect to Dashboard with Auto-Start, name, and selected asset for immediate display
+            const targetAsset = selectedAssets[strategy.id] || 'SUI';
+            router.push(`/dashboard?autostart=true&strategy=${strategy.id}&name=${encodeURIComponent(strategy.name)}&asset=${targetAsset}`);
 
         } catch (e) {
             console.error(e);
@@ -288,7 +290,8 @@ export default function StrategiesPage() {
                         PROTOCOL <span className="text-gradient">ARSENAL</span>
                     </h1>
                     <p className="text-gray-400 max-w-2xl text-lg">
-                        Deploy autonomous kernels directly to the Sui Network. Clone institutional-grade logic for your own runtime.
+                        Deploy autonomous kernels to the Sui Network targeting <span className="text-[#4ca2ff] font-bold">SUI</span> or <span className="text-neon-purple font-bold">USDC</span> vaults.
+                        Clone institutional-grade logic or architect your own in the Builder.
                     </p>
                 </div>
 
@@ -316,14 +319,27 @@ export default function StrategiesPage() {
 
                             <div className="flex justify-between items-start mb-2">
                                 <h3 className="text-xl font-bold tracking-tight">{strat.name}</h3>
-                                <div className={`text-xs px-2 py-1 rounded font-bold font-mono uppercase ${strat.risk === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+                                <div className={`text-xs px-2 py-1 rounded font-bold font-mono uppercase ${strat.risk === 'Very Low' ? 'bg-emerald-500/20 text-emerald-400' :
+                                        strat.risk === 'Low' ? 'bg-green-500/20 text-green-400' :
+                                            strat.risk === 'Medium' ? 'bg-amber-500/20 text-amber-400' :
+                                                'bg-red-500/20 text-red-400'
+                                    }`}>
                                     {strat.risk} Risk
                                 </div>
                             </div>
 
-                            <p className="text-sm text-gray-400 mb-6 flex-1 leading-relaxed">
+                            <p className="text-sm text-gray-400 mb-3 flex-1 leading-relaxed">
                                 {strat.description}
                             </p>
+
+                            {/* Tags */}
+                            <div className="flex flex-wrap gap-1.5 mb-5">
+                                {strat.tags.map(tag => (
+                                    <span key={tag} className="text-[9px] font-mono uppercase tracking-wide px-2 py-0.5 rounded bg-white/5 border border-white/10 text-gray-400">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
 
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 <div className="bg-white/5 rounded-lg p-3">
@@ -336,8 +352,28 @@ export default function StrategiesPage() {
                                 </div>
                             </div>
 
+                            <div className="flex justify-between items-center mb-4">
+                                <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">TARGET VAULT</span>
+                                <div className="flex items-center bg-black/40 border border-white/10 rounded-lg p-1">
+                                    <button
+                                        onClick={() => setSelectedAssets({ ...selectedAssets, [strat.id]: 'USDC' })}
+                                        className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${(selectedAssets[strat.id] || 'SUI') === 'USDC' ? 'bg-neon-purple text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
+                                    >
+                                        USDC
+                                    </button>
+                                    <button
+                                        onClick={() => setSelectedAssets({ ...selectedAssets, [strat.id]: 'SUI' })}
+                                        className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${(selectedAssets[strat.id] || 'SUI') === 'SUI' ? 'bg-[#4ca2ff] text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
+                                    >
+                                        SUI
+                                    </button>
+                                </div>
+                            </div>
+
                             <div className="flex gap-2 mt-auto">
-                                <button className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 group-hover:bg-white/10 font-mono">
+                                <button
+                                    onClick={() => toast.info('Backtesting module coming soon — compile this kernel in the Builder to preview performance.', { duration: 3000 })}
+                                    className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 group-hover:bg-white/10 font-mono">
                                     <Copy size={16} /> BACKTEST
                                 </button>
                                 <button
@@ -355,12 +391,20 @@ export default function StrategiesPage() {
                     ))}
 
                     {/* "Create New" Card */}
-                    <Link href="/strategies/builder" className="border border-dashed border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-4 hover:bg-white/5 transition-all text-gray-400 hover:text-white cursor-pointer min-h-[400px]">
-                        <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-2">
-                            <Zap size={32} />
+                    <Link href="/strategies/builder" className="border border-dashed border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-4 hover:bg-white/5 hover:border-neon-cyan/30 transition-all text-gray-400 hover:text-white cursor-pointer min-h-[400px] group">
+                        <div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-neon-cyan/10 flex items-center justify-center mb-2 transition-colors border border-white/5 group-hover:border-neon-cyan/20">
+                            <Zap size={32} className="group-hover:text-neon-cyan transition-colors" />
                         </div>
-                        <h3 className="text-xl font-bold font-mono tracking-tight">ARCHITECT NEW PROTOCOL</h3>
-                        <p className="text-sm max-w-xs text-gray-400">Use our Drag-and-Drop builder to create custom logic for the ElizaOS runtime.</p>
+                        <h3 className="text-xl font-bold font-mono tracking-tight group-hover:text-neon-cyan transition-colors">ARCHITECT NEW PROTOCOL</h3>
+                        <p className="text-sm max-w-xs text-gray-400">
+                            Visual drag-and-drop Builder with 6 node categories:<br />
+                            <span className="text-neon-cyan font-mono text-[10px] uppercase">Atomic Engine · AI Intelligence · Swaps · Security · Social · Signals</span>
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                            <span className="text-[10px] font-mono bg-blue-500/10 text-[#4ca2ff] px-2 py-0.5 rounded">SUI</span>
+                            <span className="text-[10px] font-mono bg-neon-purple/10 text-neon-purple px-2 py-0.5 rounded">USDC</span>
+                            <span className="text-[10px] font-mono bg-white/5 text-gray-500 px-2 py-0.5 rounded">+ Export Schema</span>
+                        </div>
                     </Link>
                 </div>
             </div>

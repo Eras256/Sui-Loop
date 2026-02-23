@@ -12,12 +12,12 @@ module suiloop::cetus_interface {
     // --- Core Cetus Functions (Matching Mainnet Signatures) ---
 
     public fun swap<CoinA, CoinB>(
-        pool: &mut Pool<CoinA, CoinB>,
-        input: Coin<CoinA>,
-        amount_in: u64,
-        amount_out_min: u64,
-        a_to_b: bool,
-        ctx: &mut TxContext
+        _pool: &mut Pool<CoinA, CoinB>,
+        _input: Coin<CoinA>,
+        _amount_in: u64,
+        _amount_out_min: u64,
+        _a_to_b: bool,
+        _ctx: &mut TxContext
     ): Coin<CoinB> {
         // In reality, calls Cetus router.
         // For compilation, we mock the swap.
@@ -26,9 +26,9 @@ module suiloop::cetus_interface {
 
     // Helper to estimate output (off-chain usually, but useful for on-chain logic)
     public fun calculate_swap_result<CoinA, CoinB>(
-        pool: &Pool<CoinA, CoinB>, 
-        amount_in: u64, 
-        a_to_b: bool
+        _pool: &Pool<CoinA, CoinB>, 
+        _amount_in: u64, 
+        _a_to_b: bool
     ): u64 {
         0 // Placeholder
     }

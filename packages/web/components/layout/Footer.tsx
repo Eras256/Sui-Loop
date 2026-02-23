@@ -31,6 +31,8 @@ const TECH_BADGES = [
     { label: "Walrus Storage", color: "orange" },
     { label: "Move Verified", color: "green" },
     { label: "Supabase", color: "emerald" },
+    { label: "USDC", color: "violet" },
+    { label: "Pyth Network", color: "amber" },
 ];
 
 const COLOR_MAP: Record<string, string> = {
@@ -42,6 +44,8 @@ const COLOR_MAP: Record<string, string> = {
     orange: "bg-orange-500/10 text-orange-400 border-orange-500/20",
     green: "bg-green-500/10 text-green-400 border-green-500/20",
     emerald: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    violet: "bg-violet-500/10 text-violet-300 border-violet-500/20",
+    amber: "bg-amber-500/10 text-amber-400 border-amber-500/20",
 };
 
 export default function Footer() {
@@ -84,8 +88,8 @@ export default function Footer() {
                 {/* Brand Column */}
                 <div className="col-span-2 md:col-span-1 space-y-5">
                     <Link href="/" className="flex items-center gap-2.5 group w-fit">
-                        <div className="w-9 h-9 bg-gradient-to-br from-neon-purple to-neon-cyan rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(189,0,255,0.4)] group-hover:scale-110 transition-transform">
-                            <span className="text-white font-mono font-bold text-base">S</span>
+                        <div className="relative flex items-center justify-center w-9 h-9 group-hover:scale-110 transition-transform">
+                            <img src="/logo_transparent.png" alt="SuiLoop Logo" className="w-full h-full object-contain object-center scale-[1.3] drop-shadow-[0_0_10px_rgba(189,0,255,0.4)]" />
                         </div>
                         <div className="flex flex-col">
                             <span className="font-bold text-white tracking-tighter text-lg leading-none group-hover:text-neon-cyan transition-colors">SUILOOP</span>
@@ -209,9 +213,11 @@ export default function Footer() {
 
                     <div className="space-y-3">
                         {[
-                            { label: "Active Strategies", value: "3", color: "text-neon-cyan", dot: "bg-neon-cyan" },
+                            { label: "Active Strategies", value: "16+", color: "text-neon-cyan", dot: "bg-neon-cyan" },
                             { label: "Kernel Version", value: "v0.0.7", color: "text-neon-purple", dot: "bg-neon-purple" },
                             { label: "Network", value: "Sui Testnet", color: "text-green-400", dot: "bg-green-400" },
+                            { label: "Assets", value: "SUI + USDC", color: "text-blue-400", dot: "bg-blue-400" },
+                            { label: "Walrus Logs", value: "LIVE ◉", color: "text-pink-400", dot: "bg-pink-400" },
                             { label: "Uptime", value: "99.9%", color: "text-yellow-400", dot: "bg-yellow-400" },
                         ].map((stat) => (
                             <div key={stat.label} className="flex items-center justify-between py-2 border-b border-white/5">

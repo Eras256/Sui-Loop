@@ -178,6 +178,32 @@ const CORE_PLUGINS = [
         author: "SuiLoop Core",
         tags: ["snipe", "liquidity", "launch", "cetus"]
     },
+    {
+        id: "walrus-blackbox",
+        slug: "walrus-blackbox",
+        name: "Walrus Blackbox",
+        description: "Immutable decentralized forensic logging via Sui Walrus. Every trade, decision, and anomaly is cryptographically sealed and stored on-chain. Tamper-proof audit trail for full transparency.",
+        icon: Layers,
+        color: "from-pink-500 to-rose-600",
+        category: "Audit & Logs",
+        features: ["Walrus Blob Storage", "Immutable Audit Trail", "Forensic Replay", "WALRUS_BLACKBOX Node"],
+        version: "0.0.7",
+        author: "SuiLoop Core",
+        tags: ["walrus", "logs", "audit", "decentralized", "forensic"]
+    },
+    {
+        id: "usdc-vault-manager",
+        slug: "usdc-vault-manager",
+        name: "USDC Vault Manager",
+        description: "Full lifecycle management for USDC vaults on SuiLoop. Handles deposit, withdrawal, yield routing, and auto-rotation across Navi and Scallop USDC lending pools.",
+        icon: Waves,
+        color: "from-violet-500 to-indigo-600",
+        category: "Vault Ops",
+        features: ["USDC Vault Deploy", "Navi/Scallop Rotation", "Yield Auto-Route", "SUI/USDC Toggle"],
+        version: "0.0.7",
+        author: "SuiLoop Core",
+        tags: ["usdc", "vault", "multi-asset", "navi", "scallop"]
+    },
 ];
 
 export default function PluginsPage() {
@@ -262,6 +288,8 @@ export default function PluginsPage() {
                 'portfolio-rebalancer': [{ msg: 'PORTFOLIO REBALANCER: Fetching current allocation weights...', level: 'info' }, { msg: 'PORTFOLIO REBALANCER: Drift within threshold (1.2%). Auto-rebalance on standby.', level: 'success' }],
                 'mev-interceptor': [{ msg: 'MEV INTERCEPTOR: Mempool scanning initiated...', level: 'info' }, { msg: 'MEV INTERCEPTOR: 2 sandwich patterns blocked. Monitoring live.', level: 'warn' }],
                 'liquidity-sniper': [{ msg: 'LIQUIDITY SNIPER: Watching Cetus & Turbos for new pool launches...', level: 'info' }, { msg: 'LIQUIDITY SNIPER: Rug-pull filter loaded. Standing by for launch events.', level: 'success' }],
+                'walrus-blackbox': [{ msg: 'WALRUS BLACKBOX: Establishing uplink to Sui Walrus network...', level: 'info' }, { msg: 'WALRUS BLACKBOX: Blob storage active. Forensic logging armed. Tamper-proof.', level: 'success' }],
+                'usdc-vault-manager': [{ msg: 'USDC VAULT MANAGER: Scanning for existing USDC vaults...', level: 'info' }, { msg: 'USDC VAULT MANAGER: Navi & Scallop USDC pools indexed. Auto-rotation active.', level: 'success' }],
             };
 
             const bootLogs = PLUGIN_BOOT_LOGS[selectedPlugin.slug];
@@ -328,8 +356,8 @@ export default function PluginsPage() {
                             transition={{ delay: 0.2 }}
                             className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
                         >
-                            Upgrade your agents with advanced cognitive capabilities. <br />
-                            Seamlessly integrate web browsing, social sentiment, and global knowledge.
+                            Upgrade your agents with advanced cognitive capabilities.<br />
+                            From atomic DeFi execution and Walrus forensic logging to social intelligence and MEV capture.
                         </motion.p>
 
                         {/* Plugin Count */}
@@ -337,13 +365,19 @@ export default function PluginsPage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="mt-6 flex items-center justify-center gap-4"
+                            className="mt-6 flex flex-wrap items-center justify-center gap-3"
                         >
                             <span className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm font-mono text-gray-400">
                                 {CORE_PLUGINS.length} plugins available
                             </span>
                             <span className="px-4 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full text-sm font-mono text-green-400">
                                 ✓ All Move-verified
+                            </span>
+                            <span className="px-4 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-sm font-mono text-[#4ca2ff]">
+                                ✓ SUI + USDC compatible
+                            </span>
+                            <span className="px-4 py-1.5 bg-pink-500/10 border border-pink-500/20 rounded-full text-sm font-mono text-pink-400">
+                                ✓ Walrus logging
                             </span>
                         </motion.div>
                     </div>
@@ -397,7 +431,7 @@ export default function PluginsPage() {
                                     {/* Action */}
                                     {installedSkills[plugin.slug] ? (
                                         <div className="flex gap-2">
-                                            <Link href="/dashboard" className="flex-1">
+                                            <Link href="/agents" className="flex-1">
                                                 <button className="w-full py-4 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/20 transition-all flex items-center justify-center gap-2 font-bold">
                                                     <span className="relative flex h-2 w-2">
                                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>

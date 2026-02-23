@@ -1060,38 +1060,43 @@ function startSystem() {
 
     server.listen(port, () => {
         console.log(`
-    ╔═══════════════════════════════════════════════════════════════════════════════╗
-    ║                                                                              ║
-    ║     ███████╗██╗   ██╗██╗██╗      ██████╗  ██████╗ ██████╗                    ║
-    ║     ██╔════╝██║   ██║██║██║     ██╔═══██╗██╔═══██╗██╔══██╗                   ║
-    ║     ███████╗██║   ██║██║██║     ██║   ██║██║   ██║██████╔╝                   ║
-    ║     ╚════██║██║   ██║██║██║     ██║   ██║██║   ██║██╔═══╝                    ║
-    ║     ███████║╚██████╔╝██║███████╗╚██████╔╝╚██████╔╝██║                        ║
-    ║     ╚══════╝ ╚═════╝ ╚═╝╚══════╝ ╚═════╝  ╚═════╝ ╚═╝                        ║
-    ║                                                                              ║
-    ║                    🤖 AUTONOMOUS AGENT API v2.0                              ║
-    ║                                                                              ║
-    ╠══════════════════════════════════════════════════════════════════════════════╣
-    ║                                                                              ║
-    ║  🌐 HTTP API:      http://localhost:${port}                                    ║
-    ║  🔌 WebSocket:     ws://localhost:${port}/ws/signals                           ║
-    ║                                                                              ║
-    ║  📡 Features:                                                                ║
-    ║     • API Key & JWT Authentication                                           ║
-    ║     • Rate Limiting (60 req/min standard)                                    ║
-    ║     • Webhook Notifications                                                  ║
-    ║     • Real-time Signal Subscriptions                                         ║
-    ║     • Autonomous Market Scanner                                              ║
-    ║                                                                              ║
-    ║  📚 Endpoints:                                                               ║
-    ║     GET  /health              - Health check                                 ║
-    ║     POST /api/auth/keys       - Generate API key                             ║
-    ║     POST /api/execute         - Execute strategy                             ║
-    ║     POST /api/webhooks        - Register webhook                             ║
-    ║     POST /api/subscriptions   - Subscribe to signals                         ║
-    ║     POST /api/loop/start      - Start autonomous loop                        ║
-    ║                                                                              ║
-    ╚══════════════════════════════════════════════════════════════════════════════╝
+    ╔══════════════════════════════════════════════════════════════════════════════════╗
+    ║                                                                                ║
+    ║   ███████╗██╗   ██╗██╗██╗      ██████╗  ██████╗ ██████╗                        ║
+    ║   ██╔════╝██║   ██║██║██║     ██╔═══██╗██╔═══██╗██╔══██╗                       ║
+    ║   ███████╗██║   ██║██║██║     ██║   ██║██║   ██║██████╔╝                       ║
+    ║   ╚════██║██║   ██║██║██║     ██║   ██║██║   ██║██╔═══╝                        ║
+    ║   ███████║╚██████╔╝██║███████╗╚██████╔╝╚██████╔╝██║                            ║
+    ║   ╚══════╝ ╚═════╝ ╚═╝╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  v0.0.7                    ║
+    ║                                                                                ║
+    ║             🤖 AUTONOMOUS AGENT API v2.0 — Sui Testnet                         ║
+    ║                                                                                ║
+    ╠════════════════════════════════════════════════════════════════════════════════╣
+    ║                                                                                ║
+    ║  🌐 HTTP API:      http://localhost:${port}                                      ║
+    ║  🔌 WebSocket:     ws://localhost:${port}/ws/signals                             ║
+    ║                                                                                ║
+    ║  ⚡ Protocol Features:                                                          ║
+    ║     • Hot Potato Flash Loans (atomic_engine::execute_loop)                     ║
+    ║     • SUI + USDC Multi-Asset Vaults (OwnerCap / AgentCap)                     ║
+    ║     • ElizaOS AI Decision Layer (NLP + Kelly Criterion)                        ║
+    ║     • DeepBook V3 CLOB Execution (Maker Rebates)                               ║
+    ║     • Walrus Decentralized Blackbox Logging (Forensic Audit)                  ║
+    ║     • Builder Strategy API (16+ pre-built kernels)                             ║
+    ║     • API Key & JWT Auth + Rate Limiting (60 req/min)                          ║
+    ║     • Webhook Notifications & WebSocket Signal Feeds                           ║
+    ║                                                                                ║
+    ║  📚 Key Endpoints:                                                              ║
+    ║     GET  /health                  - Heartbeat check                            ║
+    ║     POST /api/auth/keys           - Generate API key                           ║
+    ║     POST /api/execute-demo        - Public demo execution (no auth)            ║
+    ║     POST /api/execute             - Execute strategy (auth required)           ║
+    ║     POST /api/webhooks            - Register webhook                           ║
+    ║     POST /api/subscriptions       - Subscribe to signals                       ║
+    ║     POST /api/loop/start          - Start autonomous market scanner            ║
+    ║     GET  /api/market              - Live market state                          ║
+    ║                                                                                ║
+    ╚══════════════════════════════════════════════════════════════════════════════════╝
         `);
 
         // Broadcast initial status

@@ -14,6 +14,7 @@ interface MarketState {
     lastUpdate: Date;
     deepBookLiquidity: number;
     scallopApy: { supply: number; borrow: number };
+    naviUsdcApy: { supply: number; borrow: number };
     cetusPoolDepth: number;
 }
 
@@ -34,6 +35,7 @@ let marketState: MarketState = {
     lastUpdate: new Date(),
     deepBookLiquidity: 1000000,
     scallopApy: { supply: 5.2, borrow: 8.5 },
+    naviUsdcApy: { supply: 6.8, borrow: 10.2 },
     cetusPoolDepth: 500000
 };
 
@@ -210,10 +212,16 @@ async function updateMarketState(gasPrice: number): Promise<void> {
     const liquidityChange = (Math.random() - 0.5) * 0.02;
     marketState.deepBookLiquidity = Math.max(100000, marketState.deepBookLiquidity * (1 + liquidityChange));
 
-    // Update APY (would fetch from Scallop in production)
+    // Update APY — SUI (Scallop) would fetch from Scallop in production
     marketState.scallopApy = {
         supply: 5.0 + Math.random() * 2,
         borrow: 7.5 + Math.random() * 3
+    };
+
+    // Update APY — USDC (Navi) would fetch from Navi API in production
+    marketState.naviUsdcApy = {
+        supply: 6.0 + Math.random() * 2.5,
+        borrow: 9.0 + Math.random() * 3
     };
 
     marketState.lastUpdate = new Date();
@@ -249,28 +257,48 @@ async function checkArbitrageOpportunities(): Promise<void> {
 }
 
 /**
- * Check for flash loan opportunities
+ * Check for flash loan opportunities — SUI (Scallop) and USDC (Navi)
  */
 async function checkFlashLoanOpportunities(): Promise<void> {
-    // Calculate potential flash loan profit
-    const apySpread = marketState.scallopApy.borrow - marketState.scallopApy.supply;
-
-    if (apySpread > 2) {
-        const confidence = Math.min(90, 40 + apySpread * 10);
-
+    // --- SUI: Scallop spread ---
+    const suiSpread = marketState.scallopApy.borrow - marketState.scallopApy.supply;
+    if (suiSpread > 2) {
+        const confidence = Math.min(90, 40 + suiSpread * 10);
         if (confidence >= config.minConfidence) {
             emitSignal('flash_loan_opportunity', 'SUI', {
-                expectedProfit: apySpread * 10,
-                profitPercentage: apySpread / 10,
+                expectedProfit: suiSpread * 10,
+                profitPercentage: suiSpread / 10,
                 confidence,
                 timeToLive: 60,
-                urgency: apySpread > 3 ? 'high' : 'medium',
+                urgency: suiSpread > 3 ? 'high' : 'medium',
                 details: {
                     supplyApy: marketState.scallopApy.supply,
                     borrowApy: marketState.scallopApy.borrow,
-                    spread: apySpread,
+                    spread: suiSpread,
                     availableLiquidity: marketState.deepBookLiquidity,
                     protocol: 'Scallop'
+                }
+            });
+        }
+    }
+
+    // --- USDC: Navi spread ---
+    const usdcSpread = marketState.naviUsdcApy.borrow - marketState.naviUsdcApy.supply;
+    if (usdcSpread > 2) {
+        const confidence = Math.min(90, 40 + usdcSpread * 10);
+        if (confidence >= config.minConfidence) {
+            emitSignal('flash_loan_opportunity', 'USDC', {
+                expectedProfit: usdcSpread * 10,
+                profitPercentage: usdcSpread / 10,
+                confidence,
+                timeToLive: 60,
+                urgency: usdcSpread > 3 ? 'high' : 'medium',
+                details: {
+                    supplyApy: marketState.naviUsdcApy.supply,
+                    borrowApy: marketState.naviUsdcApy.borrow,
+                    spread: usdcSpread,
+                    availableLiquidity: marketState.deepBookLiquidity,
+                    protocol: 'Navi'
                 }
             });
         }
@@ -392,7 +420,11 @@ function generateRecommendations(): string[] {
     }
 
     if (marketState.scallopApy.supply > 6) {
-        recommendations.push('Consider deploying idle capital to Scallop');
+        recommendations.push('SUI Supply APY >6% — consider deploying idle SUI to Scallop');
+    }
+
+    if (marketState.naviUsdcApy.supply > 7) {
+        recommendations.push('USDC Supply APY >7% on Navi — consider deploying USDC vault');
     }
 
     return recommendations;

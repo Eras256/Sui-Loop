@@ -121,10 +121,24 @@ export default function ManifestoPage() {
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-3">
+                                    <Cpu className="text-neon-cyan mt-1" />
+                                    <div>
+                                        <strong className="text-white block">Visual Strategy Builder</strong>
+                                        <span className="text-gray-500 text-sm">6 node categories (Atomic Engine · AI Intelligence · Swaps · Security · Social · Signals). Full SUI &amp; USDC vault targeting with Export Schema.</span>
+                                    </div>
+                                </li>
+                                <li className="flex items-start gap-3">
                                     <Network className="text-neon-cyan mt-1" />
                                     <div>
                                         <strong className="text-white block">SuiLoop SDK</strong>
                                         <span className="text-gray-500 text-sm">Combat-tested safety rails. Pre-built risk guards so your agent operates with institutional certainty.</span>
+                                    </div>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <Database className="text-violet-400 mt-1" />
+                                    <div>
+                                        <strong className="text-white block">USDC Vault Manager</strong>
+                                        <span className="text-gray-500 text-sm">Full lifecycle management for USDC vaults — deposit, yield routing, and auto-rotation across Navi and Scallop USDC lending pools.</span>
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-3">

@@ -211,19 +211,20 @@ export function revokeApiKey(keyPartial: string, userId: string): boolean {
 
 // Export for testing - create a default admin key on startup
 export function initializeDefaultKeys() {
-    if (process.env.ADMIN_API_KEY) {
-        const hashedKey = hashApiKey(process.env.ADMIN_API_KEY);
+    const adminKey = process.env.ADMIN_API_KEY || process.env.SUILOOP_API_KEY;
+    if (adminKey) {
+        const hashedKey = hashApiKey(adminKey);
         API_KEYS_DB.set(hashedKey, {
             key: 'admin-key',
             hashedKey,
             userId: 'admin',
-            name: 'Admin Key',
+            name: 'Admin / Root Key',
             permissions: ['admin', 'execute', 'subscribe', 'manage'],
             createdAt: new Date(),
             lastUsed: null,
             rateLimit: 1000,
             isActive: true
         });
-        console.log('✅ Admin API key initialized');
+        console.log('✅ Root API key initialized');
     }
 }

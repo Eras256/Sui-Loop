@@ -11,12 +11,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const program = new Command();
-const AGENT_URL = process.env.AGENT_URL || 'http://localhost:3000';
+const AGENT_URL = process.env.AGENT_URL || 'http://localhost:3001';
 
 program
     .name('suiloop')
-    .description('SuiLoop CLI - The Command Center for your DeFi Agent')
-    .version('0.2.0');
+    .description('SuiLoop CLI — Command Center for your Atomic DeFi Agent')
+    .version('0.0.7');
 
 // ============================================================================
 // AGENT MANAGEMENT (Create)
@@ -206,6 +206,120 @@ program
         }
     });
 
+// ============================================================================
+// MARKET DATA
+// ============================================================================
+
+program
+    .command('market')
+    .description('Fetch live market state: SUI price, gas, APYs, DeepBook liquidity')
+    .option('-k, --key <key>', 'API Key')
+    .action(async (options) => {
+        const apiKey = options.key || process.env.SUILOOP_API_KEY || '';
+        const spinner = ora('Fetching live market data...').start();
+        try {
+            const { data } = await axios.get(`${AGENT_URL}/api/market`, {
+                headers: { 'x-api-key': apiKey }
+            });
+            spinner.stop();
+            console.log(chalk.bold('\n📊 SuiLoop Live Market State'));
+            console.log(chalk.gray('─'.repeat(38)));
+            console.log(`  SUI Price:         ${chalk.cyan('$' + (data.suiPrice || 'N/A'))}`);
+            console.log(`  Gas:               ${chalk.yellow(data.gasPrice + ' MIST')}`);
+            console.log(`  DeepBook Liq:      ${chalk.green('$' + (data.deepBookLiquidity || 0).toLocaleString())}`);
+            console.log(`  Scallop SUI APY:   ${chalk.magenta((data.scallopApy?.supply || 'N/A') + '% supply / ' + (data.scallopApy?.borrow || 'N/A') + '% borrow')}`);
+            console.log(`  Navi USDC APY:     ${chalk.blue((data.naviUsdcApy?.supply || 'N/A') + '% supply / ' + (data.naviUsdcApy?.borrow || 'N/A') + '% borrow')}`);
+            console.log(`  Last Update:       ${new Date(data.lastUpdate).toLocaleTimeString()}`);
+            console.log('');
+        } catch (error: any) {
+            spinner.fail(chalk.red('Market data unavailable — is the agent running?'));
+        }
+    });
+
+// ============================================================================
+// AUTONOMOUS LOOP CONTROL
+// ============================================================================
+
+program
+    .command('loop <action>')
+    .description('Control the autonomous market scanner (start | stop | status)')
+    .option('-k, --key <key>', 'API Key')
+    .option('--min-profit <n>', 'Minimum profit % threshold', '0.1')
+    .option('--max-gas <n>', 'Maximum gas price in MIST', '3000')
+    .action(async (action: string, options) => {
+        const apiKey = options.key || process.env.SUILOOP_API_KEY || '';
+        const headers = { 'x-api-key': apiKey };
+
+        if (!['start', 'stop', 'status'].includes(action)) {
+            console.log(chalk.red(`Unknown action: '${action}'. Use start | stop | status`));
+            return;
+        }
+
+        const spinner = ora(`${action === 'start' ? '🟢 Starting' : action === 'stop' ? '🔴 Stopping' : '🟡 Fetching'} autonomous loop...`).start();
+
+        try {
+            if (action === 'status') {
+                const { data } = await axios.get(`${AGENT_URL}/api/loop/status`, { headers });
+                spinner.stop();
+                const running = data.isRunning;
+                console.log(`\n  Loop Status: ${running ? chalk.green('RUNNING ⚡') : chalk.gray('STOPPED ⏹️')}`);
+                console.log(`  Total Scans: ${data.scanCount || 0}`);
+                console.log(`  Signals Emitted: ${data.signalsEmitted || 0}`);
+                console.log('');
+            } else if (action === 'start') {
+                const { data } = await axios.post(`${AGENT_URL}/api/loop/start`, {
+                    config: {
+                        minProfitPercentage: parseFloat(options.minProfit),
+                        maxGasPrice: parseInt(options.maxGas)
+                    }
+                }, { headers });
+                spinner.succeed(chalk.green(`🟢 Loop started! Min profit: ${options.minProfit}% | Max gas: ${options.maxGas} MIST`));
+            } else {
+                await axios.post(`${AGENT_URL}/api/loop/stop`, {}, { headers });
+                spinner.succeed(chalk.yellow('🔴 Loop stopped.'));
+            }
+        } catch (error: any) {
+            spinner.fail(chalk.red(`Loop ${action} failed: ${error.message}`));
+        }
+    });
+
+// ============================================================================
+// STRATEGY EXECUTION
+// ============================================================================
+
+program
+    .command('execute')
+    .description('Execute a strategy on-chain')
+    .option('-k, --key <key>', 'API Key')
+    .option('-s, --strategy <id>', 'Strategy ID', 'atomic-flash-loan')
+    .option('-a, --asset <asset>', 'Asset: SUI or USDC', 'SUI')
+    .option('--amount <n>', 'Amount to loop', '0.1')
+    .action(async (options) => {
+        const apiKey = options.key || process.env.SUILOOP_API_KEY || '';
+        if (!apiKey) {
+            console.log(chalk.red('No API key. Set SUILOOP_API_KEY or use --key'));
+            return;
+        }
+        const spinner = ora(`⚡ Executing ${options.strategy} on ${options.asset}...`).start();
+        try {
+            const { data } = await axios.post(
+                `${AGENT_URL}/api/execute`,
+                { strategy: options.strategy, asset: options.asset, params: { amount: parseFloat(options.amount) } },
+                { headers: { 'x-api-key': apiKey }, timeout: 60000 }
+            );
+            if (data.success) {
+                spinner.succeed(chalk.green(`🎉 Execution SUCCESS`));
+                if (data.txHash) console.log(`  TX Hash: ${chalk.cyan(data.txHash)}`);
+                if (data.suiscanUrl) console.log(`  Suiscan: ${chalk.underline(data.suiscanUrl)}`);
+                if (data.profit) console.log(`  Profit:  ${chalk.green(data.profit + ' MIST')}`);
+            } else {
+                spinner.fail(chalk.yellow(`⚠️  Execution incomplete: ${data.error || 'Unknown'}`))
+            }
+        } catch (error: any) {
+            spinner.fail(chalk.red(`Execution failed: ${error.response?.data?.error || error.message}`));
+        }
+    });
+
 function formatUptime(seconds: number): string {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -214,3 +328,4 @@ function formatUptime(seconds: number): string {
 }
 
 program.parse(process.argv);
+

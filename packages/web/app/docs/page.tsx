@@ -140,12 +140,13 @@ function OverviewSection() {
     return (
         <div className="space-y-12">
             {/* Hero Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 {[
                     { label: 'Testnet Version', value: 'v0.0.7', color: 'text-neon-cyan' },
                     { label: 'Unit Tests', value: '12/12 ✓', color: 'text-green-400' },
-                    { label: 'Neural Plugins', value: '11 Active', color: 'text-purple-400' },
+                    { label: 'Neural Plugins', value: '13+ Active', color: 'text-purple-400' },
                     { label: 'Flash Loan Fee', value: '0.3%', color: 'text-amber-400' },
+                    { label: 'Assets', value: 'SUI + USDC', color: 'text-blue-400' },
                 ].map((stat) => (
                     <div key={stat.label} className="bg-white/5 border border-white/10 rounded-xl p-4">
                         <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{stat.label}</div>
@@ -221,9 +222,9 @@ function OverviewSection() {
                     {[
                         { icon: Workflow, title: 'Visual Strategy Builder', desc: 'Drag-and-drop node editor for custom strategies', color: 'text-purple-400' },
                         { icon: BookOpen, title: 'Operations Manual', desc: 'Step-by-step guide for protocol operators', color: 'text-neon-cyan' },
-                        { icon: Layers, title: 'Strategy Marketplace', desc: '15 pre-built strategies ready to deploy', color: 'text-blue-400' },
+                        { icon: Layers, title: 'Strategy Marketplace', desc: '16+ pre-built strategies. SUI & USDC asset selector on each card.', color: 'text-blue-400' },
                         { icon: TrendingUp, title: 'Dashboard Command Center', desc: 'Real-time metrics, Active Fleet, execution logs', color: 'text-green-400' },
-                        { icon: Lock, title: 'Wallet Persistence', desc: 'Auto-connect across sessions', color: 'text-amber-400' },
+                        { icon: Lock, title: 'Multi-Asset Vaults', desc: 'Deploy SUI or USDC vaults — per-strategy asset selection', color: 'text-amber-400' },
                         { icon: HardDrive, title: 'Walrus & Supabase', desc: 'Hybrid decentralized storage for forensic logs', color: 'text-pink-400' },
                     ].map((feature) => (
                         <div key={feature.title} className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors">
@@ -294,29 +295,38 @@ function ArchitectureSection() {
                 <h2 className="text-2xl font-bold mb-6">System Architecture</h2>
                 <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-6 font-mono text-sm overflow-x-auto">
                     <pre className="text-gray-300 whitespace-pre">
-                        {`┌─────────────────────────────────────────────────────────────────────┐
-│                         USER INTERFACE                               │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
-│  │  Dashboard  │  │ Marketplace │  │  Analytics  │  │   Builder   │ │
-│  │  (Deploy)   │  │  (Select)   │  │  (Charts)   │  │  (Drag/Drop)│ │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘ │
-└─────────┼────────────────┼────────────────┼────────────────┼────────┘
-          │                │                │                │
-          ▼                ▼                ▼                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                      @mysten/dapp-kit                               │
-│     (Wallet Connection, Auto-Reconnect, Transaction Signing)        │
-└────────────────────────────┬────────────────────────────────────────┘
-                             │
-          ┌──────────────────┼──────────────────┐
-          ▼                  ▼                  ▼
-┌─────────────────┐  ┌──────────────┐  ┌──────────────────┐
-│    SUPABASE     │  │  LOCALSTORAGE │ │   SUI TESTNET    │
-│  (Persistence)  │  │   (Cache)     │ │  (Blockchain)    │
-│  - strategies   │  │  - drafts     │ │  - atomic_engine │
-│  - profiles     │  │  - fleet      │ │  - MockPool      │
-│  - agent_logs   │  │               │ │                  │
-└─────────────────┘  └──────────────┘  └──────────────────┘`}
+                        {`┌─────────────────────────────────────────────────────────────────────────┐
+│                           USER INTERFACE                                 │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌────────┐ │
+│  │ Dashboard │  │ Strategies│  │ Analytics │  │  Builder  │  │ Agents │ │
+│  │ SUI/USDC  │  │ Arsenal   │  │ (Charts)  │  │ Drag/Drop │  │  CMD   │ │
+│  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘  └────┬───┘ │
+└────────┼──────────────┼──────────────┼──────────────┼──────────────┼────┘
+         │              │              │              │              │
+         ▼              ▼              ▼              ▼              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        @mysten/dapp-kit                                 │
+│       (Wallet Connection, Auto-Reconnect, Transaction Signing)          │
+└───────────────────────────────┬─────────────────────────────────────────┘
+                                │
+          ┌─────────────────────┼──────────────────────────┐
+          ▼                     ▼                          ▼
+┌──────────────────┐  ┌──────────────────┐  ┌─────────────────────────┐
+│    SUPABASE      │  │   LOCALSTORAGE   │  │     SUI TESTNET         │
+│  (Persistence)   │  │    (Cache)       │  │  (Blockchain)           │
+│  - strategies    │  │  - drafts        │  │  - atomic_engine        │
+│  - profiles      │  │  - fleet         │  │  - MockPool<SUI,SUI>    │
+│  - agent_logs    │  │                  │  │  - Vault<SUI|USDC>      │
+└──────────────────┘  └──────────────────┘  └─────────────────────────┘
+         │
+         ▼
+┌──────────────────┐
+│  WALRUS NETWORK  │
+│  (Decentralized) │
+│  - audit logs    │
+│  - content-addr  │
+│  - tamper-proof  │
+└──────────────────┘`}
                     </pre>
                 </div>
             </section>
@@ -342,7 +352,7 @@ function ArchitectureSection() {
                             title: 'Persistence Layer',
                             icon: Layers,
                             color: 'border-amber-500',
-                            items: ['Supabase for cloud storage', 'LocalStorage for client cache', 'Hybrid sync with deduplication']
+                            items: ['Supabase for cloud strategy & log storage', 'LocalStorage for client-side cache', 'Walrus Decentralized Blob Storage for immutable audit logs', 'Hybrid sync with deduplication across all layers']
                         },
                         {
                             title: 'User Interface (Web)',
@@ -576,16 +586,20 @@ function AgentSection() {
                     <pre className="text-gray-400">
                         {`packages/agent/src/
 ├── actions/
-│   ├── executeAtomicLeverage.ts    # Main transaction action
+│   ├── executeAtomicLeverage.ts    # Flash loan PTB builder (SUI + USDC)
+│   ├── executeMainnetStrategy.ts   # Per-vault strategy executor
+│   └── executeBuilderStrategy.ts   # Custom kernel executor (Builder)
 ├── services/
 │   ├── loopHub.ts                  # Central agent orchestration
 │   ├── skillManager.ts             # Dynamic capability loader
+│   ├── subscriptionService.ts      # Walrus audit log uploader
 │   ├── llmService.ts               # Titan Champion brain integration
 │   ├── browserService.ts           # Web scraping & deep research
 │   ├── twitterService.ts           # Social sentiment analysis
 │   └── knowledgeService.ts         # Market context engine
 ├── providers/
 │   └── suiProvider.ts              # Blockchain interface
+├── server.ts                       # Express REST API + Webhooks
 └── run.ts                          # Autonomous loop runner`}
                     </pre>
                 </div>
@@ -622,18 +636,24 @@ function AgentSection() {
                     <span className="text-sm font-mono text-gray-400">Usage</span>
                 </div>
                 <pre className="p-4 text-sm font-mono text-gray-300">
-                    {`# Run agent with default 0.1 SUI
+                    {`# Run agent (SUI vault — default 0.1 SUI)
 pnpm --filter @suiloop/agent dev
 
-# Run with custom amount
+# Run with custom SUI amount
 pnpm --filter @suiloop/agent dev "Loop 0.5 SUI please"
 
-# Expected output:
+# Run agent on USDC vault
+pnpm --filter @suiloop/agent dev "Loop 10 USDC"
+
+# Expected output (any asset):
 🚀 SUILOOP AGENT v0.0.7
 🤖 Agent Wallet: 0x673686ac6a1a...
+🔍 Scanning pools for liquidity...
+🧱 Constructing Atomic Loop Transaction...
 📝 Signing transaction...
 ✅ Transaction Successful: 5X6TDFkYvjvCb2LS...
-🔗 View on Suiscan: https://suiscan.xyz/testnet/tx/...`}
+🔗 View on Suiscan: https://suiscan.xyz/testnet/tx/...
+⬆  Forensic log uploaded to Walrus (blob: Qm3x...)`}
                 </pre>
             </section>
         </div>
@@ -650,19 +670,22 @@ function BuilderSection() {
                 </h2>
                 <p className="text-gray-400 mb-8 leading-relaxed">
                     The Architect is a visual, node-based programming environment that allows you to construct complex financial logic without writing Move code.
-                    It compiles your visual nodes into a <strong className="text-white">Strategy Kernel</strong> that can be deployed atomically.
+                    It compiles your visual nodes into a <strong className="text-white">Strategy Kernel</strong> that can be deployed atomically against a SUI or USDC vault.
                 </p>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
                     <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors">
                         <h3 className="font-bold text-white mb-4 flex items-center gap-2">
                             <Layers className="w-5 h-5 text-neon-cyan" />
-                            Visual Logic Nodes
+                            6 Node Categories
                         </h3>
                         <ul className="space-y-2 text-sm text-gray-400">
-                            <li>• <strong>Signal Inputs</strong>: Price thresholds, CRON ticks, Mempool scans</li>
-                            <li>• <strong>Logic Gates</strong>: Balance checks, Risk guards, Conditionals</li>
-                            <li>• <strong>DeFi Actions</strong>: Navi supply/borrow, DeepBook orders, Flash loans</li>
+                            <li>• <strong className="text-neon-cyan">Atomic Engine</strong>: FLASH_LOAN, EXECUTE_LOOP, CREATE_AGENT_CAP, REPAY_LOAN</li>
+                            <li>• <strong>Signal Inputs</strong>: Price thresholds, CRON ticks, Mempool scans, Whale alerts</li>
+                            <li>• <strong>AI Intelligence</strong>: Eliza sentiment, Kelly Criterion, Market Regime</li>
+                            <li>• <strong>Trading & Swaps</strong>: Cetus CLMM, Turbos, DeepBook limit orders</li>
+                            <li>• <strong>Security & Vault</strong>: Vault deposit/withdraw, Enclave Guard, Walrus Blackbox</li>
+                            <li>• <strong>Social Messaging</strong>: Twitter relay, Discord alarm, Telegram push</li>
                         </ul>
                     </div>
                     <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors">
@@ -670,28 +693,54 @@ function BuilderSection() {
                             <Zap className="w-5 h-5 text-amber-500" />
                             Atomic Compilation
                         </h3>
-                        <p className="text-sm text-gray-400">
-                            When you click "Compile Kernel", your logic is validated and optimized into a single Programmable Transaction Block (PTB).
-                            This ensures that either all actions succeed, or the entire transaction fails, protecting your capital.
+                        <p className="text-sm text-gray-400 mb-3">
+                            When you click <strong className="text-white">"Compile Kernel"</strong>, your logic is validated and bundled into a single Programmable Transaction Block (PTB).
+                            Either all actions succeed, or the entire transaction fails — protecting your capital with Move&apos;s Hot Potato pattern.
                         </p>
+                        <ul className="space-y-1 text-sm text-gray-400">
+                            <li className="flex items-center gap-2"><span className="text-neon-cyan">⬆</span> Kernel schema archived to <strong className="text-white">Walrus</strong> after deploy</li>
+                            <li className="flex items-center gap-2"><span className="text-[#4ca2ff]">💾</span> <strong className="text-white">Export Schema</strong> button downloads the flow as JSON</li>
+                            <li className="flex items-center gap-2"><span className="text-neon-purple">🪙</span> <strong className="text-white">SUI / USDC</strong> asset selector sets vault type before deploy</li>
+                        </ul>
                     </div>
+                </div>
+
+                {/* Node category color reference */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                    {[
+                        { label: 'ATOMIC ENGINE', color: 'from-cyan-400 to-blue-500' },
+                        { label: 'SIGNAL INPUTS', color: 'from-amber-400 to-orange-500' },
+                        { label: 'AI INTELLIGENCE', color: 'from-purple-500 to-indigo-600' },
+                        { label: 'TRADING & SWAPS', color: 'from-blue-400 to-cyan-500' },
+                        { label: 'SECURITY & VAULT', color: 'from-emerald-500 to-green-600' },
+                        { label: 'SOCIAL ALERTS', color: 'from-pink-500 to-rose-600' },
+                    ].map(c => (
+                        <div key={c.label} className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
+                            <div className={`w-1 h-8 rounded-full bg-gradient-to-b ${c.color} shrink-0`} />
+                            <span className="text-[9px] font-mono text-gray-400 uppercase leading-tight">{c.label}</span>
+                        </div>
+                    ))}
                 </div>
             </section>
 
             <section className="bg-neon-purple/5 border border-neon-purple/20 rounded-2xl p-8">
                 <h3 className="text-xl font-bold mb-4">Tactical Advantages</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
                     <div>
                         <div className="text-neon-purple font-bold mb-1">0% Code</div>
                         <p className="text-xs text-gray-500">Pure visual architecture for rapid prototyping.</p>
                     </div>
                     <div>
                         <div className="text-neon-purple font-bold mb-1">100% Move</div>
-                        <p className="text-xs text-gray-500">Under the hood, it generates optimized Move vectors.</p>
+                        <p className="text-xs text-gray-500">Under the hood, it generates optimized Move PTB vectors.</p>
                     </div>
                     <div>
                         <div className="text-neon-purple font-bold mb-1">Live Simulation</div>
                         <p className="text-xs text-gray-500">Verify logic integrity before mainnet release.</p>
+                    </div>
+                    <div>
+                        <div className="text-neon-purple font-bold mb-1">SUI + USDC</div>
+                        <p className="text-xs text-gray-500">Select vault asset before compiling the kernel.</p>
                     </div>
                 </div>
             </section>
@@ -727,12 +776,14 @@ function FrontendSection() {
                     {[
                         { path: '/', name: 'Landing Page', desc: 'Hero, features, live terminal, Builder highlight', lines: 330 },
                         { path: '/how-to-use', name: 'Operations Manual', desc: 'Step-by-step guide for new operators', lines: 180 },
-                        { path: '/dashboard', name: 'Dashboard', desc: 'Command center, Active Fleet, execution logs', lines: 2073 },
+                        { path: '/dashboard', name: 'Dashboard', desc: 'Multi-asset Command Center (SUI/USDC), Active Fleet, execution logs', lines: 2384 },
+                        { path: '/strategies', name: 'Protocol Arsenal', desc: '15 institutional kernels, per-strategy asset selector (SUI/USDC)', lines: 400 },
+                        { path: '/strategies/builder', name: 'Visual Builder', desc: 'Drag-and-drop node editor for custom kernel strategies', lines: 572 },
                         { path: '/marketplace', name: 'Marketplace', desc: 'Pre-built strategies with multi-agent deploy', lines: 835 },
+                        { path: '/agents', name: 'Operations Command Center', desc: 'API keys, live Walrus audit feed, dynamic RPC telemetry', lines: 280 },
                         { path: '/plugins', name: 'Neural Extensions', desc: 'Core plugins: Research, Sentiment, Knowledge', lines: 272 },
-                        { path: '/strategies/builder', name: 'Visual Builder', desc: 'Drag-and-drop node editor for custom strategies', lines: 572 },
                         { path: '/analytics', name: 'Analytics', desc: 'Performance charts and metrics', lines: 200 },
-                        { path: '/docs', name: 'Documentation', desc: 'Technical documentation (this page)', lines: 1172 },
+                        { path: '/docs', name: 'Documentation', desc: 'Technical documentation (this page)', lines: 1173 },
                     ].map((page) => (
                         <div key={page.path} className="bg-white/5 border border-white/10 rounded-lg p-4 flex items-center justify-between">
                             <div className="flex items-center gap-4">
@@ -902,10 +953,15 @@ pnpm build`}
             {/* Contract Interaction */}
             <section>
                 <h2 className="text-2xl font-bold mb-6">Contract Interaction (CLI)</h2>
+                <p className="text-sm text-gray-500 mb-4">
+                    ⚠️ The deployed testnet <code className="text-amber-400">POOL_ID</code> (<code className="text-amber-400">0xb10cc9e5...</code>) is typed as <code className="text-white">MockPool&lt;SUI, SUI&gt;</code>.
+                    Use <code className="text-[#4ca2ff]">0x2::sui::SUI</code> type-args for the testnet pool. Deploy a new pool for USDC.
+                </p>
                 <div className="space-y-4">
                     <div className="bg-[#0A0A0A] border border-white/10 rounded-xl overflow-hidden">
-                        <div className="px-4 py-2 bg-white/5 border-b border-white/10">
-                            <span className="text-sm font-mono text-gray-400">Add Liquidity</span>
+                        <div className="px-4 py-2 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                            <span className="text-sm font-mono text-gray-400">Add Liquidity (SUI Pool — Testnet)</span>
+                            <span className="text-xs text-[#4ca2ff] font-mono">SUI</span>
                         </div>
                         <pre className="p-4 text-xs font-mono text-gray-300 overflow-x-auto">
                             {`sui client call \\
@@ -913,14 +969,32 @@ pnpm build`}
   --module atomic_engine \\
   --function add_liquidity \\
   --type-args 0x2::sui::SUI 0x2::sui::SUI \\
-  --args 0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165 <COIN_ID> \\
+  --args 0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165 <SUI_COIN_ID> \\
   --gas-budget 50000000`}
                         </pre>
                     </div>
 
                     <div className="bg-[#0A0A0A] border border-white/10 rounded-xl overflow-hidden">
-                        <div className="px-4 py-2 bg-white/5 border-b border-white/10">
-                            <span className="text-sm font-mono text-gray-400">Execute Flash Loan Loop</span>
+                        <div className="px-4 py-2 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                            <span className="text-sm font-mono text-gray-400">Add Liquidity (USDC Pool — Custom Deployment)</span>
+                            <span className="text-xs text-neon-purple font-mono">USDC</span>
+                        </div>
+                        <pre className="p-4 text-xs font-mono text-gray-300 overflow-x-auto">
+                            {`sui client call \\
+  --package 0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb \\
+  --module atomic_engine \\
+  --function add_liquidity \\
+  --type-args 0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC \\
+              0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC \\
+  --args <USDC_POOL_ID> <USDC_COIN_ID> \\
+  --gas-budget 50000000`}
+                        </pre>
+                    </div>
+
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-xl overflow-hidden">
+                        <div className="px-4 py-2 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                            <span className="text-sm font-mono text-gray-400">Execute Flash Loan Loop (SUI Testnet Pool)</span>
+                            <span className="text-xs text-[#4ca2ff] font-mono">SUI</span>
                         </div>
                         <pre className="p-4 text-xs font-mono text-gray-300 overflow-x-auto">
                             {`sui client ptb --gas-budget 50000000 \\
@@ -1166,6 +1240,131 @@ function IdeasSection() {
                         {'}'})
                     </div>
                 </div>
+            </div>
+
+            {/* Idea 5 */}
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-blue-500/50 transition-colors group">
+                <div className="flex items-start justify-between mb-6">
+                    <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                        <TrendingUp size={32} />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Medium</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">USDC Yield Maximizer</h3>
+                <p className="text-gray-400 mb-6 min-h-[60px]">
+                    Deploy USDC into a SuiLoop vault, then use the agent to auto-rotate capital between Scallop, Navi, and Cetus — always chasing the highest lending rate. Earn delta-neutral stablecoin yield automatically.
+                </p>
+                <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-blue-400/80">
+                    <span className="text-gray-500"># Use TypeScript SDK — USDC vault</span><br />
+                    const best = await findBestRate(['scallop', 'navi', 'cetus']);<br />
+                    await loop.deposit(vault, &apos;USDC&apos;, 100);<br />
+                    await loop.supply(best.protocol, amount);
+                </div>
+            </div>
+
+            {/* Idea 6 */}
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-rose-500/50 transition-colors group">
+                <div className="flex items-start justify-between mb-6">
+                    <div className="p-3 bg-rose-500/10 rounded-xl text-rose-400">
+                        <Zap size={32} />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Hard</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">Liquidation Sniper Bot</h3>
+                <p className="text-gray-400 mb-6 min-h-[60px]">
+                    Monitor every undercollateralized position on Navi and Scallop. The moment health factor drops below 1.0, flash-loan the repayment from SuiLoop and claim the liquidation bonus — all in a single atomic PTB.
+                </p>
+                <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-rose-400/80">
+                    <span className="text-gray-500">// Monitor + strike in one block</span><br />
+                    onHealthAlert(async (pos) =&gt; {'{'}<br />
+                    &nbsp;&nbsp;const loan = await loop.flashLoan(pos.debt);<br />
+                    &nbsp;&nbsp;await navi.liquidate(pos.id, loan);<br />
+                    {'}'})
+                </div>
+            </div>
+
+            {/* Idea 7 */}
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-amber-500/50 transition-colors group">
+                <div className="flex items-start justify-between mb-6">
+                    <div className="p-3 bg-amber-500/10 rounded-xl text-amber-400">
+                        <Globe size={32} />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Easy</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">Onchain Payroll Protocol</h3>
+                <p className="text-gray-400 mb-6 min-h-[60px]">
+                    A DAO treasury deploys USDC into a SuiLoop vault. The yield generated weekly is automatically streamed as payroll to contributors&apos; wallets on a schedule — the treasury principal remains untouched forever.
+                </p>
+                <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-amber-400/80">
+                    <span className="text-gray-500"># Cron via Vercel + SuiLoop API</span><br />
+                    every_friday = vault.yield_since(last_week)<br />
+                    for member in dao.members:<br />
+                    &nbsp;&nbsp;loop.transfer(member.wallet, share)
+                </div>
+            </div>
+
+            {/* Idea 8 */}
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-violet-500/50 transition-colors group">
+                <div className="flex items-start justify-between mb-6">
+                    <div className="p-3 bg-violet-500/10 rounded-xl text-violet-400">
+                        <Shield size={32} />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Hard</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">On-Chain Insurance Fund</h3>
+                <p className="text-gray-400 mb-6 min-h-[60px]">
+                    Users pay a small USDC premium weekly. The pool sits in a SuiLoop vault generating yield. When a covered protocol is exploited (detected via oracle), the agent autonomously pays out claims from the yield reserve first, then principal if needed.
+                </p>
+                <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-violet-400/80">
+                    <span className="text-gray-500">// Oracle-triggered payout</span><br />
+                    onExploitDetected(async (protocol) =&gt; {'{'}<br />
+                    &nbsp;&nbsp;const reserve = await vault.yieldBalance();<br />
+                    &nbsp;&nbsp;await loop.payout(claimants, reserve);<br />
+                    {'}'})
+                </div>
+            </div>
+
+            {/* Idea 9 */}
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-teal-500/50 transition-colors group">
+                <div className="flex items-start justify-between mb-6">
+                    <div className="p-3 bg-teal-500/10 rounded-xl text-teal-400">
+                        <Code size={32} />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Medium</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">Eliza Social Sentiment Trader</h3>
+                <p className="text-gray-400 mb-6 min-h-[60px]">
+                    An ElizaOS agent scans X/Twitter, Telegram, and Discord 24/7 for Sui ecosystem project mentions. When a verified influencer posts bullish content, the agent opens a position via SuiLoop flash loan within the same block.
+                </p>
+                <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-teal-400/80">
+                    <span className="text-gray-500">// Eliza plugin integration</span><br />
+                    agent.on(&apos;BULLISH_SIGNAL&apos;, async (signal) =&gt; {'{'}<br />
+                    &nbsp;&nbsp;if (signal.confidence &gt; 0.85) {'{'}<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;await loop.execute(&apos;momentum-buy&apos;, signal);<br />
+                    &nbsp;&nbsp;{'}'}<br />
+                    {'}'})
+                </div>
+            </div>
+
+            {/* Idea 10 */}
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 hover:border-cyan-500/50 transition-colors group">
+                <div className="flex items-start justify-between mb-6">
+                    <div className="p-3 bg-cyan-500/10 rounded-xl text-neon-cyan">
+                        <Database size={32} />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-white/5 text-xs font-mono text-gray-400">Difficulty: Easy</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">Proof-of-Transparency Hedge Fund</h3>
+                <p className="text-gray-400 mb-6 min-h-[60px]">
+                    A fund where every trade decision is signed by the agent and uploaded immutably to Walrus. Investors can verify the entire decision history on-chain at any time. Zero black boxes — full cryptographic accountability.
+                </p>
+                <div className="bg-black/50 rounded-lg p-4 font-mono text-sm text-neon-cyan/80">
+                    <span className="text-gray-500">// Every decision = Walrus blob</span><br />
+                    const blobId = await walrus.upload(tradeDecision);<br />
+                    await sui.tx.emitEvent({'{'} blobId, digest {'}'});<br />
+                    <span className="text-gray-500">// Investors verify anytime</span>
+                </div>
+
             </div>
         </div>
     );

@@ -668,6 +668,69 @@ export class LoopHubClient extends EventEmitter {
                 isFeatured: true,
                 publishedAt: new Date('2026-02-03'),
                 updatedAt: new Date('2026-02-03')
+            },
+            {
+                id: 'walrus-blackbox-logger',
+                name: 'Walrus Blackbox Logger',
+                slug: 'walrus-blackbox-logger',
+                version: '0.0.7',
+                description: 'Immutable decentralized forensic logging via Sui Walrus. Every agent decision is cryptographically sealed and stored on-chain. Tamper-proof audit trail with forensic replay. Used by the WALRUS_BLACKBOX Builder node.',
+                author: 'SuiLoop Core',
+                category: 'utility',
+                tags: ['walrus', 'logs', 'audit', 'decentralized', 'forensic'],
+                permissions: ['network:fetch', 'filesystem:write'],
+                actions: [
+                    {
+                        name: 'logExecution',
+                        description: 'Archive a strategy execution log to Walrus blackbox',
+                        handler: 'logStrategyExecution',
+                        parameters: {
+                            strategy_id: { type: 'string', description: 'Strategy identifier', required: true },
+                            txHash: { type: 'string', description: 'On-chain transaction hash', required: true },
+                            asset: { type: 'string', description: 'SUI or USDC', required: true }
+                        }
+                    }
+                ],
+                downloads: 3100,
+                rating: 4.7,
+                reviewCount: 52,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-01-15'),
+                updatedAt: new Date('2026-02-10')
+            },
+            {
+                id: 'usdc-vault-manager',
+                name: 'USDC Vault Manager',
+                slug: 'usdc-vault-manager',
+                version: '0.0.7',
+                description: 'Full lifecycle management for USDC vaults on SuiLoop. Handles deposit, withdrawal, yield routing, and auto-rotation across Navi and Scallop USDC lending pools. Supports both SUI and USDC vault types.',
+                author: 'SuiLoop Core',
+                category: 'trading',
+                tags: ['usdc', 'vault', 'multi-asset', 'navi', 'scallop'],
+                permissions: ['blockchain:read', 'blockchain:write'],
+                actions: [
+                    {
+                        name: 'depositUsdc',
+                        description: 'Deposit USDC into the vault enclave',
+                        handler: 'vaultDeposit',
+                        parameters: {
+                            amount: { type: 'number', description: 'Amount in USDC (6 decimals)', required: true }
+                        }
+                    },
+                    {
+                        name: 'rotateYield',
+                        description: 'Auto-rotate vault capital to highest APY protocol (Navi/Scallop)',
+                        handler: 'rotateYield'
+                    }
+                ],
+                downloads: 4200,
+                rating: 4.6,
+                reviewCount: 71,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-01-20'),
+                updatedAt: new Date('2026-02-15')
             }
         ];
 

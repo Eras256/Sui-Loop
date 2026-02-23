@@ -26,6 +26,7 @@ pnpm-debug.log*
 
 # System
 .DS_Store
+Thumbs.db
 
 # Move
 Move.lock
@@ -42,5 +43,22 @@ sui-test-validator
 sui-data-ingestion
 sui-bridge-cli
 move-analyzer
+
+# SuiLoop runtime data
+.suiloop/
+*.blobId
+
+# Rust / Tauri build
+packages/desktop/src-tauri/target/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+dist/
+
+# Vercel
 .vercel
 .env*.local

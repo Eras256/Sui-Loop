@@ -7,7 +7,7 @@ module suiloop::atomic_engine {
     use suiloop::cetus_interface;
 
     // === Errors ===
-    const E_REPAY_AMOUNT_INVALID: u64 = 0;
+
     const E_INSUFFICIENT_PROFIT: u64 = 1;
     const E_INSUFFICIENT_FEE: u64 = 2;
     const E_POOL_INSUFFICIENT_LIQUIDITY: u64 = 3;
@@ -84,11 +84,20 @@ module suiloop::atomic_engine {
         flash_loan_fee_bps: u64
     }
 
+    // === Accessors ===
+    public fun pool_liquidity<Base, Quote>(pool: &MockPool<Base, Quote>): u64 {
+        pool.base_balance.value()
+    }
+
+    public fun flash_loan_fee<Base, Quote>(pool: &MockPool<Base, Quote>): u64 {
+        pool.flash_loan_fee_bps
+    }
+
     // === Vault Management ===
 
     /// Creates a new Vault and transfers ownership to the caller.
     /// The Vault is shared (accessible by ID), and the OwnerCap is sent to the user.
-    public entry fun create_vault<Asset>(ctx: &mut TxContext) {
+    public fun create_vault<Asset>(ctx: &mut TxContext) {
         let vault_uid = object::new(ctx);
         let vault_id = object::uid_to_inner(&vault_uid);
         let sender = ctx.sender();
@@ -168,7 +177,7 @@ module suiloop::atomic_engine {
 
     /// Revoke Agent Permission (Burn AgentCap).
     /// Can be called by the Owner to stop specific agents.
-    public entry fun destroy_agent_cap(
+    public fun destroy_agent_cap(
         cap: AgentCap
     ) {
         let AgentCap { id, vault_id: _ } = cap;
@@ -178,12 +187,12 @@ module suiloop::atomic_engine {
     // === Execution Logic ===
 
     /// V2: Zero Risk Execution (Vault + Hot Potato)
-    public entry fun execute_strategy_secure<Base, Quote>(
+    public fun execute_strategy_secure<Base, Quote>(
         vault: &mut Vault<Base>,
         agent_cap: &AgentCap,
         pool: &mut MockPool<Base, Quote>,
         borrow_amount: u64,
-        min_profit: u64,
+        _min_profit: u64,
         ctx: &mut TxContext
     ) {
         // 1. Verify Agent Permission
@@ -213,7 +222,7 @@ module suiloop::atomic_engine {
     }
 
     /// V1: Classic Wallet Execution (Legacy)
-    public entry fun execute_loop<Base, Quote>(
+    public fun execute_loop<Base, Quote>(
         pool: &mut MockPool<Base, Quote>,
         user_funds: Coin<Base>, 
         borrow_amount: u64,
@@ -252,7 +261,7 @@ module suiloop::atomic_engine {
 
     /// V3: Mainnet Ready Execution (Scallop + Cetus)
     /// Integrates real DeFi protocols via interfaces.
-    public entry fun execute_strategy_mainnet<Base, Quote>(
+    public fun execute_strategy_mainnet<Base, Quote>(
         vault: &mut Vault<Base>,
         agent_cap: &AgentCap,
         market: &mut scallop_interface::Market,
@@ -266,7 +275,7 @@ module suiloop::atomic_engine {
         assert!(object::id(vault) == agent_cap.vault_id, E_UNAUTHORIZED);
 
         // 2. Borrow Flash Loan from Scallop
-        let (mut loan_coin, receipt) = scallop_interface::borrow_flash_loan<Base>(market, borrow_amount, ctx);
+        let (mut loan_coin, _receipt) = scallop_interface::borrow_flash_loan<Base>(market, borrow_amount, ctx);
 
         // 3. Execute Swap on Cetus (Arbitrage Logic)
         // In a real arbitrage loop, we would swap Base -> Quote -> Base.
@@ -368,7 +377,7 @@ module suiloop::atomic_engine {
 
     // === Pool Setup ===
 
-    public entry fun create_pool<Base, Quote>(ctx: &mut TxContext) {
+    public fun create_pool<Base, Quote>(ctx: &mut TxContext) {
         let pool = MockPool<Base, Quote> {
             id: object::new(ctx),
             base_balance: balance::zero(),
@@ -378,7 +387,7 @@ module suiloop::atomic_engine {
         transfer::public_share_object(pool);
     }
 
-    public entry fun add_liquidity<Base, Quote>(
+    public fun add_liquidity<Base, Quote>(
         pool: &mut MockPool<Base, Quote>,
         base_coin: Coin<Base>,
         _ctx: &mut TxContext

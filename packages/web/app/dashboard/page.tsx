@@ -116,6 +116,11 @@ function DashboardContent() {
         };
     };
     const [showAutoStartModal, setShowAutoStartModal] = useState(false);
+    const [baseAsset, setBaseAsset] = useState<"SUI" | "USDC">("USDC");
+    const getCoinType = () => baseAsset === "SUI"
+        ? "0x2::sui::SUI"
+        : "0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC";
+
     const [selectedStrategy, setSelectedStrategy] = useState<any>(null); // State for Details Modal
     const [expandConsole, setExpandConsole] = useState(false);
 
@@ -157,10 +162,13 @@ function DashboardContent() {
         const fetchBalance = async () => {
             try {
                 const { suiClient } = await import("@/lib/suiClient");
-                const balance = await suiClient.getBalance({ owner: account.address });
-                const total = Number(BigInt(balance.totalBalance)) / 1_000_000_000;
+                const decimals = baseAsset === "SUI" ? 1_000_000_000 : 1_000_000;
+                const coinType = baseAsset === "SUI"
+                    ? "0x2::sui::SUI"
+                    : "0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC";
+                const balance = await suiClient.getBalance({ owner: account.address, coinType });
+                const total = Number(BigInt(balance.totalBalance)) / decimals;
                 setWalletBalance(total);
-                console.log(`[Dashboard] Account ${account.address.slice(0, 6)}... balance sync: ${total} SUI`);
             } catch (e) {
                 console.warn("Soft Error: Wallet Fetch Failed", e);
             }
@@ -169,7 +177,7 @@ function DashboardContent() {
         fetchBalance();
         const interval = setInterval(fetchBalance, 10000); // Poll every 10s
         return () => clearInterval(interval);
-    }, [account]);
+    }, [account, baseAsset]);
 
     // Fetch Vault Balance specifically
     useEffect(() => {
@@ -189,7 +197,8 @@ function DashboardContent() {
                 if (object.data?.content && 'fields' in object.data.content) {
                     const fields = object.data.content.fields as any;
                     const balanceValue = fields.balance || "0";
-                    setVaultBalance(parseInt(balanceValue) / 1_000_000_000);
+                    const decimals = baseAsset === "SUI" ? 1_000_000_000 : 1_000_000;
+                    setVaultBalance(parseInt(balanceValue) / decimals);
                 }
             } catch (e) {
                 console.warn("Soft Error: Vault Balance Scan Failed", e);
@@ -199,7 +208,7 @@ function DashboardContent() {
         fetchVaultBalance();
         const interval = setInterval(fetchVaultBalance, 10000);
         return () => clearInterval(interval);
-    }, [vaultId]);
+    }, [vaultId, baseAsset]);
 
     // Fetch Real Protocol Data
     useEffect(() => {
@@ -259,7 +268,7 @@ function DashboardContent() {
                 'portfolio-rebalancer': { slug: 'portfolio-rebalancer', name: 'Portfolio Rebalancer', version: '0.0.7', category: 'portfolio', isGlobal: false },
                 'mev-interceptor': { slug: 'mev-interceptor', name: 'MEV Interceptor', version: '0.0.7', category: 'mev', isGlobal: false },
                 'liquidity-sniper': { slug: 'liquidity-sniper', name: 'Liquidity Sniper', version: '0.0.7', category: 'sniping', isGlobal: false },
-                // Marketplace Skills — 8 new
+                // Marketplace Skills — 10 new
                 'navi-lending-bot': { slug: 'navi-lending-bot', name: 'Navi Lending Bot', version: '1.1.0', category: 'trading', isGlobal: false },
                 'deepbook-market-maker': { slug: 'deepbook-market-maker', name: 'DeepBook Market Maker', version: '0.9.2', category: 'trading', isGlobal: false },
                 'stop-loss-guardian': { slug: 'stop-loss-guardian', name: 'Stop-Loss Guardian', version: '2.2.0', category: 'utility', isGlobal: false },
@@ -268,6 +277,8 @@ function DashboardContent() {
                 'cross-dex-aggregator': { slug: 'cross-dex-aggregator', name: 'Cross-DEX Aggregator', version: '3.1.0', category: 'trading', isGlobal: true },
                 'pnl-reporter': { slug: 'pnl-reporter', name: 'P&L Real-Time Reporter', version: '1.4.0', category: 'analysis', isGlobal: false },
                 'webhook-trigger': { slug: 'webhook-trigger', name: 'Webhook Event Trigger', version: '2.0.0', category: 'integration', isGlobal: false },
+                'walrus-blackbox-logger': { slug: 'walrus-blackbox-logger', name: 'Walrus Blackbox Logger', version: '0.0.7', category: 'utility', isGlobal: true },
+                'usdc-vault-manager': { slug: 'usdc-vault-manager', name: 'USDC Vault Manager', version: '0.0.7', category: 'trading', isGlobal: false },
             };
 
             // Read from localStorage PER-AGENT (where Marketplace + Plugins pages persist installs)
@@ -411,13 +422,18 @@ function DashboardContent() {
 
     // Auto-deploy logic for Navbar CTA
     useEffect(() => {
+        const assetParam = searchParams.get('asset');
+        if (assetParam === 'SUI' || assetParam === 'USDC') {
+            setBaseAsset(assetParam);
+        }
+
         if (searchParams.get('autostart') === 'true' && account) {
             // Preserve name param if it exists
             const nameParam = strategyNameParam ? `&name=${encodeURIComponent(strategyNameParam)}` : '';
             router.replace(`/dashboard?strategy=${strategyId}${nameParam}`);
             setShowAutoStartModal(true);
         }
-    }, [searchParams, account, router, strategyId]);
+    }, [searchParams, account, router, strategyId, strategyNameParam]);
 
     useEffect(() => {
         if (account?.address) {
@@ -558,16 +574,22 @@ function DashboardContent() {
 
         try {
             // 0. Check Balance
-            console.log(`[Deploy] Wallet: ${walletBalance} SUI, Required: ${REQUIRED_BALANCE} SUI`);
-            if (walletBalance < REQUIRED_BALANCE) {
-                toast.error(`Insufficient Balance: You need at least ${REQUIRED_BALANCE} SUI for license fee + gas`, {
-                    description: `Detected: ${walletBalance.toFixed(4)} SUI. Re-syncing balance...`
-                });
+            // Check Native SUI Balance for Transaction Gas + Fee Requirements
+            // We just do a pure SUI balance check because standard deployment costs ~0.2 SUI minimum 
+            let requiredSuiAmount = REQUIRED_BALANCE;
+            if (baseAsset !== "SUI") {
+                requiredSuiAmount = 0.2; // They need SUI to pay the fee and gas, the baseAsset requires gas too
+            }
 
-                // Force an immediate re-sync
-                import("@/lib/suiClient").then(async ({ suiClient }) => {
-                    const balance = await suiClient.getBalance({ owner: account.address });
-                    setWalletBalance(Number(BigInt(balance.totalBalance)) / 1_000_000_000);
+            const nativeBalance = await import("@/lib/suiClient").then(async ({ suiClient }) => {
+                const balance = await suiClient.getBalance({ owner: account.address });
+                return Number(BigInt(balance.totalBalance)) / 1_000_000_000;
+            });
+
+            console.log(`[Deploy] Wallet Native: ${nativeBalance} SUI, Required: ${requiredSuiAmount} SUI`);
+            if (nativeBalance < requiredSuiAmount) {
+                toast.error(`Insufficient Balance: You need at least ${requiredSuiAmount} SUI for license fee + gas`, {
+                    description: `Detected: ${nativeBalance.toFixed(4)} SUI.`
                 });
                 return;
             }
@@ -598,15 +620,35 @@ function DashboardContent() {
             // 1. Prepare Coin for Fee
             const [feeCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(REQUIRED_FEE)]);
 
-            // 2. Prepare Coin for Execution Funds
-            const [userFundsCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(USER_FUNDS_AMOUNT)]);
+            // 3. Prepare Coin for Execution Funds
+            const userFundsValue = baseAsset === "SUI" ? 500000 : 500; // 0.0005 SUI or 0.0005 USDC
+            let userFundsCoin;
+            if (baseAsset === "SUI") {
+                [userFundsCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(userFundsValue)]);
+            } else {
+                const coinType = getCoinType();
+                const coins = await suiClient.getCoins({
+                    owner: account.address,
+                    coinType,
+                });
+                if (coins.data.length === 0) {
+                    toast.dismiss(toastId);
+                    toast.error(`No ${baseAsset} found in your wallet for execution funds.`);
+                    return;
+                }
+                const [primaryCoin, ...restCoins] = coins.data.map(c => tx.object(c.coinObjectId));
+                if (restCoins.length > 0) {
+                    tx.mergeCoins(primaryCoin, restCoins);
+                }
+                [userFundsCoin] = tx.splitCoins(primaryCoin, [tx.pure.u64(userFundsValue)]);
+            }
 
-            // 3. Create Agent Cap (Testnet Mode: 0.1 SUI OK)
+            // 4. Create Agent Cap (Testnet Mode: 0.1 SUI OK)
             // On the new contract (0x6736...), the fee is now 0.1 SUI, so we can create real capabilities!
             if (useAgentCap && ownerCapId) {
                 const agentCap = tx.moveCall({
                     target: `${PACKAGE_ID}::atomic_engine::create_agent_cap`,
-                    typeArguments: ["0x2::sui::SUI"],
+                    typeArguments: [getCoinType()],
                     arguments: [
                         tx.object(vaultId!),
                         tx.object(ownerCapId),
@@ -620,16 +662,22 @@ function DashboardContent() {
             }
 
             // 4. Exec Loop — use live sharedObjectRef if available to prevent stale-version errors
-            tx.moveCall({
-                target: `${PACKAGE_ID}::atomic_engine::execute_loop`,
-                typeArguments: ["0x2::sui::SUI", "0x2::sui::SUI"],
-                arguments: [
-                    poolRef ? tx.sharedObjectRef(poolRef) : tx.object(POOL_ID),
-                    userFundsCoin,
-                    tx.pure.u64(BORROW_AMOUNT),
-                    tx.pure.u64(MIN_PROFIT),
-                ]
-            });
+            // NOTE: The testnet POOL_ID is currently specifically MockPool<SUI, SUI>.
+            // We can only mock-execute the loop for SUI for demo purposes.
+            if (baseAsset === "SUI") {
+                tx.moveCall({
+                    target: `${PACKAGE_ID}::atomic_engine::execute_loop`,
+                    typeArguments: [getCoinType(), getCoinType()],
+                    arguments: [
+                        poolRef ? tx.sharedObjectRef(poolRef) : tx.object(POOL_ID),
+                        userFundsCoin,
+                        tx.pure.u64(BORROW_AMOUNT),
+                        tx.pure.u64(MIN_PROFIT),
+                    ]
+                });
+            } else {
+                tx.transferObjects([userFundsCoin], account.address);
+            }
 
             const result = await signAndExecuteTransaction({ transaction: tx as any });
 
@@ -1043,7 +1091,7 @@ function DashboardContent() {
     // Load Vault & OwnerCap from LocalStorage on mount
     useEffect(() => {
         if (account?.address) {
-            const savedData = localStorage.getItem(`sui-loop-vault-${account.address}`);
+            const savedData = localStorage.getItem(`sui-loop-vault-${baseAsset}-${account.address}`);
             if (savedData) {
                 try {
                     const vaultData = JSON.parse(savedData);
@@ -1065,7 +1113,7 @@ function DashboardContent() {
                 setOwnerCapId(null);
             }
         }
-    }, [account]);
+    }, [account, baseAsset]);
 
     const handleDeposit = () => {
         if (!vaultId) return;
@@ -1092,7 +1140,7 @@ function DashboardContent() {
                                 step="0.1"
                                 autoFocus
                             />
-                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-gray-500 font-bold">SUI</span>
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-gray-500 font-bold">{baseAsset}</span>
                         </div>
                     </div>
                 ),
@@ -1125,14 +1173,41 @@ function DashboardContent() {
             const tx = new Transaction();
             tx.setSender(account.address);
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
-            const amountMist = BigInt(Math.floor(parseFloat(amount) * 1_000_000_000));
+            const decimals = baseAsset === "SUI" ? 1_000_000_000 : 1_000_000;
+            const amountMist = BigInt(Math.floor(parseFloat(amount) * decimals));
 
-            const [coin] = tx.splitCoins(tx.gas, [amountMist]);
+            let coinToDeposit;
+
+            if (baseAsset === "SUI") {
+                [coinToDeposit] = tx.splitCoins(tx.gas, [amountMist]);
+            } else {
+                const coinType = getCoinType();
+                const coins = await suiClient.getCoins({
+                    owner: account.address,
+                    coinType,
+                });
+                if (coins.data.length === 0) {
+                    toast.dismiss(toastId);
+                    toast.error(`No ${baseAsset} found in your wallet to deposit.`);
+                    return;
+                }
+                const totalBalance = coins.data.reduce((acc, c) => acc + BigInt(c.balance), BigInt(0));
+                if (totalBalance < amountMist) {
+                    toast.dismiss(toastId);
+                    toast.error(`Insufficient ${baseAsset} balance. Have: ${(Number(totalBalance) / decimals).toFixed(4)}, Need: ${amount}`);
+                    return;
+                }
+                const [primaryCoin, ...restCoins] = coins.data.map(c => tx.object(c.coinObjectId));
+                if (restCoins.length > 0) {
+                    tx.mergeCoins(primaryCoin, restCoins);
+                }
+                [coinToDeposit] = tx.splitCoins(primaryCoin, [amountMist]);
+            }
 
             tx.moveCall({
                 target: `${PACKAGE_ID}::atomic_engine::deposit`,
-                typeArguments: ["0x2::sui::SUI"],
-                arguments: [tx.object(vaultId), coin]
+                typeArguments: [getCoinType()],
+                arguments: [tx.object(vaultId), coinToDeposit]
             });
 
             const result = await signAndExecuteTransaction({ transaction: tx as any });
@@ -1178,7 +1253,7 @@ function DashboardContent() {
                                 step="0.1"
                                 autoFocus
                             />
-                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-gray-500 font-bold">SUI</span>
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-gray-500 font-bold">{baseAsset}</span>
                         </div>
                     </div>
                 ),
@@ -1211,11 +1286,12 @@ function DashboardContent() {
             const tx = new Transaction();
             tx.setSender(account.address);
             const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
-            const amountMist = BigInt(Math.floor(parseFloat(amount) * 1_000_000_000));
+            const decimals = baseAsset === "SUI" ? 1_000_000_000 : 1_000_000;
+            const amountMist = BigInt(Math.floor(parseFloat(amount) * decimals));
 
             const [returnedCoin] = tx.moveCall({
                 target: `${PACKAGE_ID}::atomic_engine::withdraw`,
-                typeArguments: ["0x2::sui::SUI"],
+                typeArguments: [getCoinType()],
                 arguments: [tx.object(vaultId), tx.object(ownerCapId), tx.pure.u64(amountMist)]
             });
 
@@ -1245,7 +1321,7 @@ function DashboardContent() {
             title: "Initialize Secure Vault?",
             description: (
                 <div className="space-y-3">
-                    <p className="text-xs text-gray-400">Deploying a non-custodial <span className="text-neon-cyan">SUI Vault</span> on-chain.</p>
+                    <p className="text-xs text-gray-400">Deploying a non-custodial <span className="text-neon-cyan">{baseAsset} Vault</span> on-chain.</p>
                     <div className="bg-neon-cyan/5 border border-neon-cyan/20 p-3 rounded-xl text-left">
                         <p className="text-[10px] text-gray-400 leading-relaxed font-mono">
                             • Generates unique <span className="text-white">OwnerCap</span><br />
@@ -1285,7 +1361,7 @@ function DashboardContent() {
         // Call create_vault from atomic_engine module
         tx.moveCall({
             target: `${PACKAGE_ID}::atomic_engine::create_vault`,
-            typeArguments: ["0x2::sui::SUI"], // Creating a SUI Vault by default
+            typeArguments: [getCoinType()],
             arguments: []
         });
 
@@ -1329,7 +1405,7 @@ function DashboardContent() {
                 };
 
                 // Persist to LocalStorage
-                localStorage.setItem(`sui-loop-vault-${account.address}`, JSON.stringify(vaultData));
+                localStorage.setItem(`sui-loop-vault-${baseAsset}-${account.address}`, JSON.stringify(vaultData));
                 setVaultId((vaultObject as any).objectId);
                 setOwnerCapId((ownerCapObject as any).objectId);
 
@@ -1355,7 +1431,7 @@ function DashboardContent() {
         if (!account || !vaultId) return;
 
         // Load vault data from localStorage
-        const savedData = localStorage.getItem(`sui-loop-vault-${account.address}`);
+        const savedData = localStorage.getItem(`sui-loop-vault-${baseAsset}-${account.address}`);
         if (!savedData) {
             toast.error("Cannot find vault data");
             return;
@@ -1385,7 +1461,7 @@ function DashboardContent() {
                 confirmText: "LOCAL RESET",
                 type: 'info',
                 onConfirm: () => {
-                    localStorage.removeItem(`sui-loop-vault-${account.address}`);
+                    localStorage.removeItem(`sui-loop-vault-${baseAsset}-${account.address}`);
                     setVaultId(null);
                     setConfirmConfig(prev => ({ ...prev, isOpen: false }));
                     toast.info("Vault Disconnected (Format Updated)", {
@@ -1452,7 +1528,7 @@ function DashboardContent() {
             // Call destroy_vault
             const [returnedCoin] = tx.moveCall({
                 target: `${PACKAGE_ID}::atomic_engine::destroy_vault`,
-                typeArguments: ["0x2::sui::SUI"],
+                typeArguments: [getCoinType()],
                 arguments: [
                     tx.object(vaultData.vaultId),
                     tx.object(vaultData.ownerCapId)
@@ -1464,7 +1540,7 @@ function DashboardContent() {
 
             const result = await signAndExecuteTransaction({ transaction: tx as any });
             toast.dismiss(toastId);
-            localStorage.removeItem(`sui-loop-vault-${account.address}`);
+            localStorage.removeItem(`sui-loop-vault-${baseAsset}-${account.address}`);
             setVaultId(null);
             toast.success("Vault Destroyed & Funds Recovered!", {
                 description: "Your vault has been destroyed on-chain.",
@@ -1698,7 +1774,15 @@ function DashboardContent() {
                                             </div>
                                             <div className="text-right">
                                                 <p className="text-[9px] text-gray-500 uppercase mb-0.5">Protocol</p>
-                                                <p className="text-xs text-white font-mono">Scallop / Cetus</p>
+                                                <p className="text-xs text-white font-mono">
+                                                    {selectedStrategy?.strategy_id?.includes('lending') || selectedStrategy?.strategy_id?.includes('loop') ? 'Navi / Scallop' :
+                                                        selectedStrategy?.strategy_id?.includes('cetus') ? 'Cetus CLMM' :
+                                                            selectedStrategy?.strategy_id?.includes('bluefin') ? 'Bluefin Perps' :
+                                                                selectedStrategy?.strategy_id?.includes('deepbook') ? 'DeepBook V3' :
+                                                                    selectedStrategy?.strategy_id?.includes('bridge') ? 'Wormhole' :
+                                                                        selectedStrategy?.strategy_id?.includes('mev') ? 'Atomic Engine' :
+                                                                            'Scallop / Cetus'}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -1916,24 +2000,31 @@ function DashboardContent() {
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
                     <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Secure Vault TVL</h3>
                     <div className="text-xl font-mono text-white font-bold">
-                        {vaultBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">SUI</span>
+                        {vaultBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">{baseAsset}</span>
                     </div>
                     <div className="text-[10px] text-gray-500 mt-1 flex items-center gap-1.5 font-sans">
                         <div className="w-1 h-1 rounded-full bg-neon-cyan" />
-                        WALLET: {walletBalance.toFixed(3)} SUI
+                        WALLET: {walletBalance.toFixed(3)} {baseAsset}
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Market Alpha (APY)</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+                        Market Alpha ({baseAsset} APY)
+                    </h3>
                     <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
-                        {scallopData ? scallopData.supplyApy.toFixed(2) : '0.00'}%
+                        {baseAsset === 'USDC'
+                            ? (naviData ? naviData.supplyApy.toFixed(2) : '0.00')
+                            : (scallopData ? scallopData.supplyApy.toFixed(2) : '0.00')}%
                         <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 rounded animate-pulse">LIVE</span>
+                    </div>
+                    <div className="text-[10px] text-gray-500 mt-1 font-mono">
+                        {baseAsset === 'USDC' ? 'Navi USDC Pool' : 'Scallop SUI Supply'}
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
                     <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Projected Yield (24H)</h3>
                     <div className="text-xl font-mono text-white font-bold">
-                        +{(vaultBalance * ((scallopData?.supplyApy || 0) / 100 / 365)).toFixed(4)} <span className="text-xs text-gray-500">SUI</span>
+                        +{(vaultBalance * ((scallopData?.supplyApy || 0) / 100 / 365)).toFixed(4)} <span className="text-xs text-gray-500">{baseAsset}</span>
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
@@ -1958,20 +2049,36 @@ function DashboardContent() {
                             <div className="flex items-center gap-5">
                                 <div className="w-16 h-16 bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-white/10 flex items-center justify-center relative group">
                                     <Shield className={`${vaultId ? 'text-neon-cyan' : 'text-gray-600'} transition-colors`} size={32} />
-                                    {activeStrategies.length > 0 && (
+                                    {activeStrategies.length > 0 && vaultId && (
                                         <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 border-2 border-[#0f0a1f] rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
                                     )}
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                        Main Trading Vault
-                                        {vaultId && <span className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-2 py-0.5 rounded-full border border-neon-cyan/20">ACTIVE</span>}
-                                    </h3>
-                                    <p className="text-xs text-gray-500 font-mono">
-                                        {vaultId ? `ID: ${vaultId.slice(0, 6)}...${vaultId.slice(-4)}` : 'Vault ID: Not Created'} • {vaultBalance.toFixed(2)} SUI Locked
+                                    <div className="flex items-center gap-3">
+                                        <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                            Main Trading Vault
+                                            {vaultId && <span className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-2 py-0.5 rounded-full border border-neon-cyan/20">ACTIVE</span>}
+                                        </h3>
+                                        <div className="flex items-center bg-black/40 border border-white/10 rounded-lg p-1">
+                                            <button
+                                                onClick={() => setBaseAsset('USDC')}
+                                                className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${baseAsset === 'USDC' ? 'bg-neon-purple text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
+                                            >
+                                                USDC
+                                            </button>
+                                            <button
+                                                onClick={() => setBaseAsset('SUI')}
+                                                className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${baseAsset === 'SUI' ? 'bg-[#4ca2ff] text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
+                                            >
+                                                SUI
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-gray-500 font-mono mt-1">
+                                        {vaultId ? `ID: ${vaultId.slice(0, 6)}...${vaultId.slice(-4)}` : 'Vault ID: Not Created'} • {vaultBalance.toFixed(2)} {baseAsset} Locked
                                     </p>
                                     <div className="flex items-center gap-2 pt-1">
-                                        {activeStrategies.length > 0 ? (
+                                        {activeStrategies.length > 0 && vaultId ? (
                                             <span className="text-[10px] font-bold text-green-400 flex items-center gap-1.5 bg-green-500/5 px-2 py-1 rounded-lg border border-green-500/10">
                                                 <RefreshCw size={10} className="animate-spin-slow" />
                                                 AGENT ACCESS: GRANTED 🔓

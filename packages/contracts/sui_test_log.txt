@@ -1,0 +1,246 @@
+[NOTE] Dependencies on Sui, MoveStdlib, Bridge, DeepBook, and SuiSystem are automatically added, but this feature is disabled for your package because you have explicitly included dependencies on Sui. Consider removing these dependencies from `Move.toml`.
+INCLUDING DEPENDENCY DeepBook
+INCLUDING DEPENDENCY MoveStdlib
+INCLUDING DEPENDENCY Sui
+BUILDING suiloop
+[0m[1m[38;5;11mwarning[W09001][0m[1m: unused alias[0m
+  [0m[34m┌─[0m ./tests/atomic_tests.move:3:36
+  [0m[34m│[0m
+[0m[34m3[0m [0m[34m│[0m     use sui::test_scenario::{Self, [0m[33mScenario[0m};
+  [0m[34m│[0m                                    [0m[33m^^^^^^^^[0m [0m[33mUnused 'use' of alias 'Scenario'. Consider removing it[0m
+  [0m[34m│[0m
+  [0m[34m=[0m This warning can be suppressed with '#[allow(unused_use)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09001][0m[1m: unused alias[0m
+  [0m[34m┌─[0m ./tests/atomic_tests.move:6:50
+  [0m[34m│[0m
+[0m[34m6[0m [0m[34m│[0m     use suiloop::atomic_engine::{Self, MockPool, [0m[33mLoopReceipt[0m};
+  [0m[34m│[0m                                                  [0m[33m^^^^^^^^^^^[0m [0m[33mUnused 'use' of alias 'LoopReceipt'. Consider removing it[0m
+  [0m[34m│[0m
+  [0m[34m=[0m This warning can be suppressed with '#[allow(unused_use)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;9merror[E03003][0m[1m: unbound module member[0m
+   [0m[34m┌─[0m ./tests/atomic_tests.move:26:21
+   [0m[34m│[0m
+[0m[34m26[0m [0m[34m│[0m             assert!([0m[31matomic_engine::pool_liquidity[0m(&pool) == 0, 0);
+   [0m[34m│[0m                     [0m[31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [0m[31mInvalid module access. Unbound function 'pool_liquidity' in module 'suiloop::atomic_engine'[0m
+
+[0m[1m[38;5;9merror[E03003][0m[1m: unbound module member[0m
+   [0m[34m┌─[0m ./tests/atomic_tests.move:27:21
+   [0m[34m│[0m
+[0m[34m27[0m [0m[34m│[0m             assert!([0m[31matomic_engine::flash_loan_fee[0m(&pool) == 30, 1); // 0.3%
+   [0m[34m│[0m                     [0m[31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [0m[31mInvalid module access. Unbound function 'flash_loan_fee' in module 'suiloop::atomic_engine'[0m
+
+[0m[1m[38;5;9merror[E03003][0m[1m: unbound module member[0m
+   [0m[34m┌─[0m ./tests/atomic_tests.move:57:21
+   [0m[34m│[0m
+[0m[34m57[0m [0m[34m│[0m             assert!([0m[31matomic_engine::pool_liquidity[0m(&pool) == 1000_000_000_000, 0);
+   [0m[34m│[0m                     [0m[31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m [0m[31mInvalid module access. Unbound function 'pool_liquidity' in module 'suiloop::atomic_engine'[0m
+
+[0m[1m[38;5;11mwarning[W09001][0m[1m: unused alias[0m
+  [0m[34m┌─[0m ./sources/interfaces/scallop_interface.move:3:23
+  [0m[34m│[0m
+[0m[34m3[0m [0m[34m│[0m     use sui::balance::[0m[33mBalance[0m;
+  [0m[34m│[0m                       [0m[33m^^^^^^^[0m [0m[33mUnused 'use' of alias 'Balance'. Consider removing it[0m
+  [0m[34m│[0m
+  [0m[34m=[0m This warning can be suppressed with '#[allow(unused_use)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/scallop_interface.move:20:9
+   [0m[34m│[0m
+[0m[34m20[0m [0m[34m│[0m         [0m[33mmarket[0m: &mut Market, 
+   [0m[34m│[0m         [0m[33m^^^^^^[0m [0m[33mUnused parameter 'market'. Consider removing or prefixing with an underscore: '_market'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/scallop_interface.move:21:9
+   [0m[34m│[0m
+[0m[34m21[0m [0m[34m│[0m         [0m[33mamount[0m: u64, 
+   [0m[34m│[0m         [0m[33m^^^^^^[0m [0m[33mUnused parameter 'amount'. Consider removing or prefixing with an underscore: '_amount'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/scallop_interface.move:22:9
+   [0m[34m│[0m
+[0m[34m22[0m [0m[34m│[0m         [0m[33mctx[0m: &mut TxContext
+   [0m[34m│[0m         [0m[33m^^^[0m [0m[33mUnused parameter 'ctx'. Consider removing or prefixing with an underscore: '_ctx'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/scallop_interface.move:30:9
+   [0m[34m│[0m
+[0m[34m30[0m [0m[34m│[0m         [0m[33mmarket[0m: &mut Market, 
+   [0m[34m│[0m         [0m[33m^^^^^^[0m [0m[33mUnused parameter 'market'. Consider removing or prefixing with an underscore: '_market'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/scallop_interface.move:33:9
+   [0m[34m│[0m
+[0m[34m33[0m [0m[34m│[0m         [0m[33mctx[0m: &mut TxContext
+   [0m[34m│[0m         [0m[33m^^^[0m [0m[33mUnused parameter 'ctx'. Consider removing or prefixing with an underscore: '_ctx'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09011][0m[1m: unused constant[0m
+   [0m[34m┌─[0m ./sources/atomic_engine.move:10:11
+   [0m[34m│[0m
+[0m[34m10[0m [0m[34m│[0m     const [0m[33mE_REPAY_AMOUNT_INVALID[0m: u64 = 0;
+   [0m[34m│[0m           [0m[33m^^^^^^^^^^^^^^^^^^^^^^[0m [0m[33mThe constant 'E_REPAY_AMOUNT_INVALID' is never used. Consider removing it.[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_const)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[Lint W99010][0m[1m: unnecessary `entry` on a `public` function[0m
+   [0m[34m┌─[0m ./sources/atomic_engine.move:91:12
+   [0m[34m│[0m
+[0m[34m91[0m [0m[34m│[0m     public [0m[33mentry[0m fun create_vault<Asset>(ctx: &mut TxContext) {
+   [0m[34m│[0m            [0m[33m^^^^^[0m [0m[33m`entry` on `public` functions limits composability as it adds restrictions, e.g. the type of each return value must have `drop`. `entry` on `public` is only meaningful in niche scenarios.[0m
+   [0m[34m│[0m
+   [0m[34m=[0m `public` functions can be called from PTBs. `entry` can be used to allow non-`public` functions to be called from PTBs, but it adds restrictions on the usage of input arguments and on the type of return values. Unless this `public` function interacts with an intricate set of other `entry` functions, the `entry` modifier should be removed.
+   [0m[34m=[0m This warning can be suppressed with '#[allow(lint(public_entry))]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[Lint W99010][0m[1m: unnecessary `entry` on a `public` function[0m
+    [0m[34m┌─[0m ./sources/atomic_engine.move:171:12
+    [0m[34m│[0m
+[0m[34m171[0m [0m[34m│[0m     public [0m[33mentry[0m fun destroy_agent_cap(
+    [0m[34m│[0m            [0m[33m^^^^^[0m [0m[33m`entry` on `public` functions limits composability as it adds restrictions, e.g. the type of each return value must have `drop`. `entry` on `public` is only meaningful in niche scenarios.[0m
+    [0m[34m│[0m
+    [0m[34m=[0m `public` functions can be called from PTBs. `entry` can be used to allow non-`public` functions to be called from PTBs, but it adds restrictions on the usage of input arguments and on the type of return values. Unless this `public` function interacts with an intricate set of other `entry` functions, the `entry` modifier should be removed.
+    [0m[34m=[0m This warning can be suppressed with '#[allow(lint(public_entry))]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[Lint W99010][0m[1m: unnecessary `entry` on a `public` function[0m
+    [0m[34m┌─[0m ./sources/atomic_engine.move:181:12
+    [0m[34m│[0m
+[0m[34m181[0m [0m[34m│[0m     public [0m[33mentry[0m fun execute_strategy_secure<Base, Quote>(
+    [0m[34m│[0m            [0m[33m^^^^^[0m [0m[33m`entry` on `public` functions limits composability as it adds restrictions, e.g. the type of each return value must have `drop`. `entry` on `public` is only meaningful in niche scenarios.[0m
+    [0m[34m│[0m
+    [0m[34m=[0m `public` functions can be called from PTBs. `entry` can be used to allow non-`public` functions to be called from PTBs, but it adds restrictions on the usage of input arguments and on the type of return values. Unless this `public` function interacts with an intricate set of other `entry` functions, the `entry` modifier should be removed.
+    [0m[34m=[0m This warning can be suppressed with '#[allow(lint(public_entry))]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+    [0m[34m┌─[0m ./sources/atomic_engine.move:186:9
+    [0m[34m│[0m
+[0m[34m186[0m [0m[34m│[0m         [0m[33mmin_profit[0m: u64,
+    [0m[34m│[0m         [0m[33m^^^^^^^^^^[0m [0m[33mUnused parameter 'min_profit'. Consider removing or prefixing with an underscore: '_min_profit'[0m
+    [0m[34m│[0m
+    [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[Lint W99010][0m[1m: unnecessary `entry` on a `public` function[0m
+    [0m[34m┌─[0m ./sources/atomic_engine.move:216:12
+    [0m[34m│[0m
+[0m[34m216[0m [0m[34m│[0m     public [0m[33mentry[0m fun execute_loop<Base, Quote>(
+    [0m[34m│[0m            [0m[33m^^^^^[0m [0m[33m`entry` on `public` functions limits composability as it adds restrictions, e.g. the type of each return value must have `drop`. `entry` on `public` is only meaningful in niche scenarios.[0m
+    [0m[34m│[0m
+    [0m[34m=[0m `public` functions can be called from PTBs. `entry` can be used to allow non-`public` functions to be called from PTBs, but it adds restrictions on the usage of input arguments and on the type of return values. Unless this `public` function interacts with an intricate set of other `entry` functions, the `entry` modifier should be removed.
+    [0m[34m=[0m This warning can be suppressed with '#[allow(lint(public_entry))]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[Lint W99010][0m[1m: unnecessary `entry` on a `public` function[0m
+    [0m[34m┌─[0m ./sources/atomic_engine.move:255:12
+    [0m[34m│[0m
+[0m[34m255[0m [0m[34m│[0m     public [0m[33mentry[0m fun execute_strategy_mainnet<Base, Quote>(
+    [0m[34m│[0m            [0m[33m^^^^^[0m [0m[33m`entry` on `public` functions limits composability as it adds restrictions, e.g. the type of each return value must have `drop`. `entry` on `public` is only meaningful in niche scenarios.[0m
+    [0m[34m│[0m
+    [0m[34m=[0m `public` functions can be called from PTBs. `entry` can be used to allow non-`public` functions to be called from PTBs, but it adds restrictions on the usage of input arguments and on the type of return values. Unless this `public` function interacts with an intricate set of other `entry` functions, the `entry` modifier should be removed.
+    [0m[34m=[0m This warning can be suppressed with '#[allow(lint(public_entry))]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+    [0m[34m┌─[0m ./sources/atomic_engine.move:269:29
+    [0m[34m│[0m
+[0m[34m269[0m [0m[34m│[0m         let (mut loan_coin, [0m[33mreceipt[0m) = scallop_interface::borrow_flash_loan<Base>(market, borrow_amount, ctx);
+    [0m[34m│[0m                             [0m[33m^^^^^^^[0m [0m[33mUnused local variable 'receipt'. Consider removing or prefixing with an underscore: '_receipt'[0m
+    [0m[34m│[0m
+    [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[Lint W99010][0m[1m: unnecessary `entry` on a `public` function[0m
+    [0m[34m┌─[0m ./sources/atomic_engine.move:371:12
+    [0m[34m│[0m
+[0m[34m371[0m [0m[34m│[0m     public [0m[33mentry[0m fun create_pool<Base, Quote>(ctx: &mut TxContext) {
+    [0m[34m│[0m            [0m[33m^^^^^[0m [0m[33m`entry` on `public` functions limits composability as it adds restrictions, e.g. the type of each return value must have `drop`. `entry` on `public` is only meaningful in niche scenarios.[0m
+    [0m[34m│[0m
+    [0m[34m=[0m `public` functions can be called from PTBs. `entry` can be used to allow non-`public` functions to be called from PTBs, but it adds restrictions on the usage of input arguments and on the type of return values. Unless this `public` function interacts with an intricate set of other `entry` functions, the `entry` modifier should be removed.
+    [0m[34m=[0m This warning can be suppressed with '#[allow(lint(public_entry))]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[Lint W99010][0m[1m: unnecessary `entry` on a `public` function[0m
+    [0m[34m┌─[0m ./sources/atomic_engine.move:381:12
+    [0m[34m│[0m
+[0m[34m381[0m [0m[34m│[0m     public [0m[33mentry[0m fun add_liquidity<Base, Quote>(
+    [0m[34m│[0m            [0m[33m^^^^^[0m [0m[33m`entry` on `public` functions limits composability as it adds restrictions, e.g. the type of each return value must have `drop`. `entry` on `public` is only meaningful in niche scenarios.[0m
+    [0m[34m│[0m
+    [0m[34m=[0m `public` functions can be called from PTBs. `entry` can be used to allow non-`public` functions to be called from PTBs, but it adds restrictions on the usage of input arguments and on the type of return values. Unless this `public` function interacts with an intricate set of other `entry` functions, the `entry` modifier should be removed.
+    [0m[34m=[0m This warning can be suppressed with '#[allow(lint(public_entry))]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:15:9
+   [0m[34m│[0m
+[0m[34m15[0m [0m[34m│[0m         [0m[33mpool[0m: &mut Pool<CoinA, CoinB>,
+   [0m[34m│[0m         [0m[33m^^^^[0m [0m[33mUnused parameter 'pool'. Consider removing or prefixing with an underscore: '_pool'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:16:9
+   [0m[34m│[0m
+[0m[34m16[0m [0m[34m│[0m         [0m[33minput[0m: Coin<CoinA>,
+   [0m[34m│[0m         [0m[33m^^^^^[0m [0m[33mUnused parameter 'input'. Consider removing or prefixing with an underscore: '_input'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:17:9
+   [0m[34m│[0m
+[0m[34m17[0m [0m[34m│[0m         [0m[33mamount_in[0m: u64,
+   [0m[34m│[0m         [0m[33m^^^^^^^^^[0m [0m[33mUnused parameter 'amount_in'. Consider removing or prefixing with an underscore: '_amount_in'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:18:9
+   [0m[34m│[0m
+[0m[34m18[0m [0m[34m│[0m         [0m[33mamount_out_min[0m: u64,
+   [0m[34m│[0m         [0m[33m^^^^^^^^^^^^^^[0m [0m[33mUnused parameter 'amount_out_min'. Consider removing or prefixing with an underscore: '_amount_out_min'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:19:9
+   [0m[34m│[0m
+[0m[34m19[0m [0m[34m│[0m         [0m[33ma_to_b[0m: bool,
+   [0m[34m│[0m         [0m[33m^^^^^^[0m [0m[33mUnused parameter 'a_to_b'. Consider removing or prefixing with an underscore: '_a_to_b'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:20:9
+   [0m[34m│[0m
+[0m[34m20[0m [0m[34m│[0m         [0m[33mctx[0m: &mut TxContext
+   [0m[34m│[0m         [0m[33m^^^[0m [0m[33mUnused parameter 'ctx'. Consider removing or prefixing with an underscore: '_ctx'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:29:9
+   [0m[34m│[0m
+[0m[34m29[0m [0m[34m│[0m         [0m[33mpool[0m: &Pool<CoinA, CoinB>, 
+   [0m[34m│[0m         [0m[33m^^^^[0m [0m[33mUnused parameter 'pool'. Consider removing or prefixing with an underscore: '_pool'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:30:9
+   [0m[34m│[0m
+[0m[34m30[0m [0m[34m│[0m         [0m[33mamount_in[0m: u64, 
+   [0m[34m│[0m         [0m[33m^^^^^^^^^[0m [0m[33mUnused parameter 'amount_in'. Consider removing or prefixing with an underscore: '_amount_in'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+[0m[1m[38;5;11mwarning[W09002][0m[1m: unused variable[0m
+   [0m[34m┌─[0m ./sources/interfaces/cetus_interface.move:31:9
+   [0m[34m│[0m
+[0m[34m31[0m [0m[34m│[0m         [0m[33ma_to_b[0m: bool
+   [0m[34m│[0m         [0m[33m^^^^^^[0m [0m[33mUnused parameter 'a_to_b'. Consider removing or prefixing with an underscore: '_a_to_b'[0m
+   [0m[34m│[0m
+   [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+

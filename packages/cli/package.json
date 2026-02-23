@@ -1,6 +1,6 @@
 {
     "name": "suiloop",
-    "version": "0.1.0",
+    "version": "0.0.7",
     "description": "CLI tool to scaffold SuiLoop Autonomous Agents instantly",
     "type": "module",
     "bin": {
@@ -25,7 +25,6 @@
         "ora": "^7.0.1"
     },
     "devDependencies": {
-        "@suiloop/sdk": "workspace:*",
         "@types/fs-extra": "^11.0.4",
         "@types/inquirer": "^9.0.7",
         "@types/node": "^20.10.0",

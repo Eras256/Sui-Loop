@@ -381,16 +381,46 @@ export default function MarketplacePage() {
                         reviewCount: 115,
                         isVerified: true,
                         isFeatured: false
+                    },
+                    {
+                        id: 'walrus-blackbox-logger',
+                        name: 'Walrus Blackbox Logger',
+                        slug: 'walrus-blackbox-logger',
+                        version: '0.0.7',
+                        description: 'Immutable decentralized forensic logging via Sui Walrus. Every agent decision is cryptographically sealed and stored on-chain. Tamper-proof audit trail with forensic replay.',
+                        author: 'SuiLoop Team',
+                        category: 'utility',
+                        tags: ['walrus', 'logs', 'audit', 'decentralized', 'forensic'],
+                        downloads: 3100,
+                        rating: 4.7,
+                        reviewCount: 52,
+                        isVerified: true,
+                        isFeatured: true
+                    },
+                    {
+                        id: 'usdc-vault-manager',
+                        name: 'USDC Vault Manager',
+                        slug: 'usdc-vault-manager',
+                        version: '0.0.7',
+                        description: 'Full lifecycle management for USDC vaults. Handles deposit, withdrawal, yield routing, and auto-rotation across Navi and Scallop USDC lending pools.',
+                        author: 'SuiLoop Team',
+                        category: 'trading',
+                        tags: ['usdc', 'vault', 'multi-asset', 'navi', 'scallop'],
+                        downloads: 4200,
+                        rating: 4.6,
+                        reviewCount: 71,
+                        isVerified: true,
+                        isFeatured: false
                     }
                 ];
 
                 const mockCategories: Category[] = [
                     { id: 'trading', name: 'Trading', count: 8, icon: '📈' },
-                    { id: 'analysis', name: 'Analysis', count: 5, icon: '🔍' },
+                    { id: 'analysis', name: 'Analysis', count: 4, icon: '🔍' },
                     { id: 'notification', name: 'Notifications', count: 1, icon: '🔔' },
                     { id: 'integration', name: 'Integrations', count: 2, icon: '🔗' },
                     { id: 'data', name: 'Data', count: 2, icon: '📊' },
-                    { id: 'utility', name: 'Utilities', count: 3, icon: '🛠️' }
+                    { id: 'utility', name: 'Utilities', count: 4, icon: '🛠️' }
                 ];
 
                 setSkills(mockSkills);
@@ -516,6 +546,8 @@ export default function MarketplacePage() {
                     'cross-dex-aggregator': [{ msg: 'SKILL: Cross-DEX Aggregator indexing Cetus, Turbos, Kriya, DeepBook...', level: 'info' }, { msg: 'SKILL: 4 DEXes indexed. Best-route execution enabled.', level: 'success' }],
                     'pnl-reporter': [{ msg: 'SKILL: P&L Reporter calculating realized/unrealized positions...', level: 'info' }, { msg: 'SKILL: Daily P&L report scheduled. Delivery target: Telegram.', level: 'success' }],
                     'webhook-trigger': [{ msg: 'SKILL: Webhook Trigger generating secure endpoint key...', level: 'info' }, { msg: 'SKILL: Webhook live at /api/hook/{agentId}. Ready for TradingView.', level: 'success' }],
+                    'walrus-blackbox-logger': [{ msg: 'SKILL: Walrus Blackbox establishing uplink to Sui Walrus network...', level: 'info' }, { msg: 'SKILL: Blob storage active. Forensic logging armed. Tamper-proof seal enabled.', level: 'success' }],
+                    'usdc-vault-manager': [{ msg: 'SKILL: USDC Vault Manager scanning for existing USDC vaults...', level: 'info' }, { msg: 'SKILL: Navi & Scallop USDC pools indexed. Auto-rotation active.', level: 'success' }],
                 };
 
                 const bootLogs = SKILL_BOOT_LOGS[skill.slug];
@@ -528,10 +560,10 @@ export default function MarketplacePage() {
                 }
 
                 toast.success(`${skill.name} installed successfully!`, {
-                    description: "The skill is now available in your agent and ready to use. Check the Ops Unit for logs.",
+                    description: "The skill is now available in your agent and ready to use. Check the Agents Console for logs.",
                     action: {
                         label: "View Logs",
-                        onClick: () => window.location.href = "/dashboard"
+                        onClick: () => window.location.href = "/agents"
                     }
                 });
             } else {
@@ -688,7 +720,7 @@ export default function MarketplacePage() {
 
                                         {installedSkills[skill.id] || installedSkills[skill.slug] ? (
                                             <div className="flex gap-2 z-20 relative">
-                                                <Link href="/dashboard">
+                                                <Link href="/agents">
                                                     <button
                                                         onClick={(e) => e.stopPropagation()}
                                                         className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg hover:bg-green-500/20 text-sm font-medium transition-colors border border-green-500/20"
@@ -868,7 +900,7 @@ export default function MarketplacePage() {
 
                                             {installedSkills[skill.id] || installedSkills[skill.slug] ? (
                                                 <div className="flex gap-2">
-                                                    <Link href="/dashboard">
+                                                    <Link href="/agents">
                                                         <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg text-sm font-medium border border-green-500/20 hover:bg-green-500/20 transition-all cursor-pointer">
                                                             <span className="relative flex h-2 w-2">
                                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -942,13 +974,22 @@ export default function MarketplacePage() {
                             Create and publish skills for the SuiLoop community.
                             Share your trading strategies, integrations, and automation tools.
                         </p>
-                        <Link
-                            href="/docs"
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 text-white rounded-xl font-medium hover:bg-purple-600 transition-colors"
-                        >
-                            Read the Developer Docs
-                            <ChevronRight className="w-4 h-4" />
-                        </Link>
+                        <div className="flex flex-wrap justify-center gap-3">
+                            <Link
+                                href="/docs"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 text-white rounded-xl font-medium hover:bg-purple-600 transition-colors"
+                            >
+                                Read the Developer Docs
+                                <ChevronRight className="w-4 h-4" />
+                            </Link>
+                            <Link
+                                href="/strategies/builder"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 text-white border border-white/10 rounded-xl font-medium hover:bg-white/10 transition-colors"
+                            >
+                                Open Strategy Builder
+                                <ChevronRight className="w-4 h-4" />
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>

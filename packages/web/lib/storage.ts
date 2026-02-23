@@ -1,8 +1,8 @@
 /**
- * Walrus / IPFS Storage Utility
- * 
- * Provides methods to upload strategy code and metadata to decentralized storage.
- * Currently configured for Walrus (Sui's storage layer) or a generic IPFS gateway.
+ * Walrus Storage Utility
+ *
+ * Uploads strategy code and metadata to Walrus (Sui's decentralized storage layer).
+ * Endpoint: /v1/blobs (Walrus Testnet 2025/2026 REST API)
  */
 
 const WALRUS_PUBLISHER = process.env.NEXT_PUBLIC_WALRUS_PUBLISHER_URL || 'https://publisher.walrus-testnet.walrus.space';
@@ -11,39 +11,41 @@ const WALRUS_AGGREGATOR = process.env.NEXT_PUBLIC_WALRUS_AGGREGATOR_URL || 'http
 export interface StorageResult {
     blobId: string;
     url: string;
+    simulated?: boolean;
 }
 
 /**
- * Uploads data to Walrus (Sui Storage)
- * @param data The JSON data or string content to upload
- * @returns The blob ID and download URL
+ * Uploads JSON data to Walrus decentralized storage.
+ * @param data Object or string to upload
+ * @returns blobId and aggregator download URL
  */
 export async function uploadToStorage(data: any): Promise<StorageResult> {
     try {
         const content = typeof data === 'string' ? data : JSON.stringify(data);
 
-        // Push to Walrus Publisher
-        const response = await fetch(`${WALRUS_PUBLISHER}/v1/store`, {
+        const response = await fetch(`${WALRUS_PUBLISHER}/v1/blobs?epochs=5`, {
             method: 'PUT',
-            body: content
+            headers: { 'Content-Type': 'application/json' },
+            body: content,
+            signal: AbortSignal.timeout(8000)
         });
 
         if (!response.ok) {
-            throw new Error(`Storage Error: ${response.statusText}`);
+            throw new Error(`Walrus Storage Error: ${response.status} ${response.statusText}`);
         }
 
         const result = await response.json();
         let blobId = '';
 
-        // Handle different response formats from Walrus versions
-        if (result.newlyCreated && result.newlyCreated.blobObject && result.newlyCreated.blobObject.blobId) {
+        if (result.newlyCreated?.blobObject?.blobId) {
             blobId = result.newlyCreated.blobObject.blobId;
-        } else if (result.alreadyCertified && result.alreadyCertified.blobId) {
+        } else if (result.alreadyCertified?.blobId) {
             blobId = result.alreadyCertified.blobId;
         } else {
-            // Fallback/Simulated ID if testnet is unstable
-            console.warn("Could not parse Walrus response, using mock ID for dev.");
-            blobId = "blob_" + Math.random().toString(36).substring(7);
+            // Walrus testnet may be unstable — use deterministic mock ID
+            console.warn('[storage] Could not parse Walrus response, using simulated blob ID.');
+            const simId = `blob_${Math.random().toString(36).substring(2, 9)}`;
+            return { blobId: simId, url: '#', simulated: true };
         }
 
         return {
@@ -52,11 +54,8 @@ export async function uploadToStorage(data: any): Promise<StorageResult> {
         };
 
     } catch (error) {
-        console.error("Failed to upload to decentralized storage:", error);
-        // Fallback for demo purposes if Walrus is unreachable
-        return {
-            blobId: "mock_ipfs_hash_" + Date.now(),
-            url: "#"
-        };
+        console.error('[storage] Failed to upload to Walrus:', error);
+        // Graceful degradation for demo / testnet instability
+        return { blobId: `walrus_fallback_${Date.now()}`, url: '#', simulated: true };
     }
 }

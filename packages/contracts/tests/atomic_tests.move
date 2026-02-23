@@ -1,9 +1,9 @@
 #[test_only]
 module suiloop::atomic_tests {
-    use sui::test_scenario::{Self, Scenario};
+    use sui::test_scenario;
     use sui::coin::{Self, Coin};
     use sui::sui::SUI;
-    use suiloop::atomic_engine::{Self, MockPool, LoopReceipt};
+    use suiloop::atomic_engine::{Self, MockPool};
 
     // Test coin types
     public struct USDC has drop {}
