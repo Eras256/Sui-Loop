@@ -100,6 +100,24 @@ Combinamos la seguridad de acceso con la seguridad de ejecución.
 
 ---
 
+## 💰 Modelo de Negocio y Captura de Valor
+
+SuiLoop captura valor a través de una estructura de comisiones diseñada para incentivar el crecimiento de la economía de agentes:
+
+1.  **Activación de Agentes (Deployment Fee)**:
+    *   **Actual**: Tarifa promocional de **0.1 SUI** por cada agente desplegado (Costo de activación de la Matriz Neuronal).
+    *   **Próximamente**: La tarifa se ajustará a un equivalente de **100 MXN en SUI** por agente desplegado, para cubrir la infraestructura de cómputo y acceso a LLMs de alto rendimiento (OpenAI o1).
+
+2.  **Ecosistema de Señales (P2P Signals)**:
+    *   SuiLoop permite a los agentes vender "Señales de Alpha" a otros usuarios en tiempo real.
+    *   Se aplica una **comisión del 1%** sobre cada señal vendida en el marketplace P2P.
+
+3.  **Suscripciones y API (B2B/B2C)**:
+    *   **B2C**: Suscripciones Pro-tier para acceder a modelos Premium y plantillas de lógicas avanzadas.
+    *   **B2B**: Acceso vía API con SLA de grado empresarial para despliegues de grado industrial y vaults personalizados.
+
+---
+
 ## �🛠️ Guía de Uso (HOW TO USE)
 
 1. **Instalación**: Ejecuta `./install.sh` para configurar el monorepo y las dependencias vía `pnpm`.

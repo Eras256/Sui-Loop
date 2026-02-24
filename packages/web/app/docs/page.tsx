@@ -7,7 +7,7 @@ import {
     ArrowLeft, Book, Code, Shield, Layers, Cpu, Database, Zap,
     GitBranch, FileCode, Rocket, CheckCircle, AlertTriangle,
     Terminal, Globe, Lock, TrendingUp, ChevronRight, ExternalLink,
-    Play, Settings, Users, Workflow, Key, Lightbulb, HardDrive, FileCheck, BookOpen
+    Play, Settings, Users, User, Landmark, Workflow, Key, Lightbulb, HardDrive, FileCheck, BookOpen
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import ApiKeyManager from "@/components/docs/ApiKeyManager";
@@ -227,12 +227,77 @@ function OverviewSection() {
                         { icon: Lock, title: 'Multi-Asset Vaults', desc: 'Deploy SUI or USDC vaults — per-strategy asset selection', color: 'text-amber-400' },
                         { icon: HardDrive, title: 'Walrus & Supabase', desc: 'Hybrid decentralized storage for forensic logs', color: 'text-pink-400' },
                     ].map((feature) => (
-                        <div key={feature.title} className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors">
-                            <feature.icon className={`w-6 h-6 ${feature.color} mb-3`} />
+                        <div key={feature.title} className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-all group">
+                            <feature.icon className={`w-6 h-6 ${feature.color} mb-3 group-hover:scale-110 transition-transform`} />
                             <h3 className="font-bold text-white mb-1">{feature.title}</h3>
                             <p className="text-sm text-gray-400">{feature.desc}</p>
                         </div>
                     ))}
+                </div>
+            </section>
+
+            {/* Business Model / Capture Value */}
+            <section className="relative overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[300px] bg-neon-purple/5 blur-[100px] -z-10" />
+                <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <TrendingUp className="text-neon-cyan" />
+                    Business Model & Value Capture
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* B2C / Retail */}
+                    <div className="glass-panel p-8 rounded-2xl border-t-2 border-neon-purple/50 bg-white/5 hover:bg-white/10 transition-all">
+                        <div className="w-12 h-12 rounded-full bg-neon-purple/10 flex items-center justify-center mb-6">
+                            <User className="text-neon-purple" size={24} />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-3">B2C / Retail</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                            Pro-tier subscriptions for access to premium AI models (OpenAI o1) and advanced strategy templates.
+                        </p>
+                        <div className="pt-4 border-t border-white/5">
+                            <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-2 font-bold font-mono">Deployment Fee</div>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-black text-white">0.1 SUI</span>
+                                <span className="text-xs text-gray-500 line-through tracking-tighter">Coming: ~100 MXN</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* B2B / Institucional */}
+                    <div className="glass-panel p-8 rounded-2xl border-t-2 border-neon-cyan/50 bg-white/5 hover:bg-white/10 transition-all">
+                        <div className="w-12 h-12 rounded-full bg-neon-cyan/10 flex items-center justify-center mb-6">
+                            <Landmark className="text-neon-cyan" size={24} />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-3">B2B / Institutional</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                            Full API access with guaranteed SLAs for industrial-scale backend deployments and custom vault management.
+                        </p>
+                        <div className="pt-4 border-t border-white/5">
+                            <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-2 font-bold font-mono">Infrastructure</div>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-black text-white">Custom</span>
+                                <span className="text-xs text-gray-500 font-mono tracking-tighter">Quota Based</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Developer Ecosystem */}
+                    <div className="glass-panel p-8 rounded-2xl border-t-2 border-green-500/50 bg-white/5 hover:bg-white/10 transition-all">
+                        <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center mb-6">
+                            <Zap className="text-green-400" size={24} />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-3">Developer Ecosystem</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                            Micro protocol fees on strategies sold/rented within the Neural Marketplace, supporting the Walrus audit trail.
+                        </p>
+                        <div className="pt-4 border-t border-white/5">
+                            <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-2 font-bold font-mono">P2P Signal Fee</div>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-black text-green-400">1.0%</span>
+                                <span className="text-xs text-gray-500 font-mono tracking-tighter">Per Signal</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

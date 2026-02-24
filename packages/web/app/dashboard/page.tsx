@@ -216,10 +216,8 @@ function DashboardContent() {
                 });
 
                 if (object.error) {
-                    // Object deleted or not found
-                    setVaultId(null);
-                    setOwnerCapId(null);
-                    localStorage.removeItem(`sui-loop-vault-${baseAsset}-${account?.address}`);
+                    // Object not found yet? Don't wipe immediately as it could be indexing lag
+                    console.warn(`[Vault] Could not fetch vault ${vaultId}:`, object.error);
                     return;
                 }
 
@@ -228,13 +226,8 @@ function DashboardContent() {
                     const isCorrectContext = object.data.content.type.includes(PACKAGE_ID);
 
                     if (!isCorrectContext) {
-                        console.warn("Legacy Vault Detected. Forcing Local State Reset.");
-                        setVaultId(null);
-                        setOwnerCapId(null);
-                        if (account?.address) {
-                            localStorage.removeItem(`sui-loop-vault-${baseAsset}-${account.address}`);
-                        }
-                        return;
+                        console.warn("[Vault] Context Mismatch: Vault belongs to a different package version. Proceeding anyway.");
+                        // Removed automatic setVaultId(null) to prevent production disappearance
                     }
                 }
 
@@ -958,7 +951,7 @@ function DashboardContent() {
                 const tx = new Transaction();
                 tx.setSender(account.address);
 
-                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
+                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
 
                 tx.moveCall({
                     target: `${PACKAGE_ID}::atomic_engine::destroy_agent_cap`,
@@ -1266,7 +1259,7 @@ function DashboardContent() {
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
             const decimals = baseAsset === "SUI" ? 1_000_000_000 : 1_000_000;
             const amountMist = BigInt(Math.floor(parseFloat(amount) * decimals));
 
@@ -1380,7 +1373,7 @@ function DashboardContent() {
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
             const decimals = baseAsset === "SUI" ? 1_000_000_000 : 1_000_000;
             const amountMist = BigInt(Math.floor(parseFloat(amount) * decimals));
 
@@ -1451,7 +1444,7 @@ function DashboardContent() {
         const tx = new Transaction();
         tx.setSender(account.address);
 
-        const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
+        const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
 
         // Call create_vault from atomic_engine module
         tx.moveCall({
@@ -1619,7 +1612,7 @@ function DashboardContent() {
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
 
             // Call destroy_vault
             const [returnedCoin] = tx.moveCall({

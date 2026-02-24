@@ -65,3 +65,11 @@ dist/
 
 # Private prompts
 NIRIUM_PROMPT.md
+
+# Sensitive keys and keystores (CRITICAL)
+*.key
+*keystore.json
+addresses.json
+addr_list.txt
+*_agents.txt
+traffic.log

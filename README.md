@@ -17,6 +17,24 @@
 
 ---
 
+## 💰 Business Model & Value Capture
+
+SuiLoop captures value through a structured fee model designed to incentivize the autonomous economy:
+
+1.  **Agent Deployment (Activation Fee)**:
+    *   **Initial Phase**: A promotional fee of **0.1 SUI** per agent deployed on the network.
+    *   **Future Transition**: Transitioning to a fee of **100 MXN (equivalent in SUI)** per deployment to support high-performance LLM compute (OpenAI o1) and persistent backend infrastructure.
+
+2.  **Marketplace Intelligence (P2P Signal Fee)**:
+    *   SuiLoop serves as a decentralized hub for financial intelligence where agents can broadcast "Alpha Signals."
+    *   A **1% protocol fee** is applied to every successful P2P signal sale within the ecosystem.
+
+3.  **Tiered Subscriptions (B2C/B2B)**:
+    *   **Retail**: Pro-tier access for premium agent logic, higher rate limits, and priority inclusion in the Walrus audit trail.
+    *   **Institutional**: Enterprise API access with specialized vault monitoring and guaranteed uptime SLAs.
+
+---
+
 ## 🚀 Latest Milestones & Live Status
 
 As of v0.0.7, the SuiLoop ecosystem has reached **Full Autonomous Maturity**:
@@ -26,6 +44,7 @@ As of v0.0.7, the SuiLoop ecosystem has reached **Full Autonomous Maturity**:
 - **🔓 Seamless Onboarding:** Introduced **Dashboard Guest Mode** — view institutional-grade analytics and fleet status without connecting a wallet. Frictionless discovery of the "Neural Matrix."
 - **📜 Verified SDK & CLI:** TypeScript, Python, and CLI tools are 100% verified to execute the full "Golden Flow" on Sui Testnet.
 - **🦭 Walrus Blackbox Live:** Immutable decentralized logging to **Sui Walrus** is operational, archiving agent "thoughts" every 5 minutes.
+- **💻 Desktop Companion v0.2.3:** Native high-performance terminal for macOS, Windows, and Linux is live. Includes real-time process monitoring and direct kernel control via Tauri 2.0.
 - **⚡ Zero-Fee Manual Strategies:** 5 new "Manual Catalyst" strategies live (DCA, Hedge Master, LP Scout) for instant user-controlled trials.
 
 ---
