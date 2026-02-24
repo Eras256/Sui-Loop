@@ -434,6 +434,15 @@ function ContractsSection() {
                                 <td className="py-4 px-4 text-gray-400">Immutable Move Logic (Hot Potato)</td>
                             </tr>
                             <tr className="border-b border-white/5 hover:bg-white/5">
+                                <td className="py-4 px-4 text-white font-bold">Agent Registry</td>
+                                <td className="py-4 px-4 text-neon-purple break-all">
+                                    <a href="https://suiscan.xyz/testnet/object/0xcbb6d114644b9573c76c1eee3f94ad4b8874273e7691f5c46d24add925b47e30" target="_blank" className="hover:underline">
+                                        0xcbb6d114644b9573c76c1eee3f94ad4b8874273e7691f5c46d24add925b47e30
+                                    </a>
+                                </td>
+                                <td className="py-4 px-4 text-gray-400">Reputation & Signal Neural Network</td>
+                            </tr>
+                            <tr className="border-b border-white/5 hover:bg-white/5">
                                 <td className="py-4 px-4 text-white font-bold">MockPool</td>
                                 <td className="py-4 px-4 text-amber-500 break-all">
                                     <a href="https://suiscan.xyz/testnet/object/0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf" target="_blank" className="hover:underline">
@@ -778,13 +787,13 @@ function FrontendSection() {
                         { path: '/', name: 'Landing Page', desc: 'Hero, features, live terminal, Builder highlight', lines: 330 },
                         { path: '/how-to-use', name: 'Operations Manual', desc: 'Step-by-step guide for new operators', lines: 180 },
                         { path: '/dashboard', name: 'Dashboard', desc: 'Multi-asset Command Center (SUI/USDC), Active Fleet, execution logs', lines: 2384 },
+                        { path: '/leaderboard', name: 'Neural Leaderboard', desc: 'Real-time performance ranking, ELO updates, and Live Signal Feed', lines: 580 },
                         { path: '/strategies', name: 'Protocol Arsenal', desc: '15 institutional kernels, per-strategy asset selector (SUI/USDC)', lines: 400 },
                         { path: '/strategies/builder', name: 'Visual Builder', desc: 'Drag-and-drop node editor for custom kernel strategies', lines: 572 },
                         { path: '/marketplace', name: 'Marketplace', desc: 'Pre-built strategies with multi-agent deploy', lines: 835 },
                         { path: '/agents', name: 'Operations Command Center', desc: 'API keys, live Walrus audit feed, dynamic RPC telemetry', lines: 280 },
                         { path: '/plugins', name: 'Neural Extensions', desc: 'Core plugins: Research, Sentiment, Knowledge', lines: 272 },
-                        { path: '/analytics', name: 'Analytics', desc: 'Performance charts and metrics', lines: 200 },
-                        { path: '/docs', name: 'Documentation', desc: 'Technical documentation (this page)', lines: 1173 },
+                        { path: '/docs', name: 'Documentation', desc: 'Technical documentation (this page)', lines: 1400 },
                     ].map((page) => (
                         <div key={page.path} className="bg-white/5 border border-white/10 rounded-lg p-4 flex items-center justify-between">
                             <div className="flex items-center gap-4">

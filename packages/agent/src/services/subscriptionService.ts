@@ -6,6 +6,7 @@
 import { WebSocket, WebSocketServer } from 'ws';
 import crypto from 'crypto';
 import { triggerWebhooks, WebhookEvent } from './webhookService.js';
+import { agentRegistryService } from './agentRegistryService.js';
 
 // Signal types
 export type SignalType =
@@ -358,6 +359,17 @@ export function emitSignal(
     // Broadcast asynchronously
     broadcastSignal(signal).catch(console.error);
 
+    // Publish to the decentralized Agent Mesh network on-chain
+    if (signal.data.confidence >= 80) {
+        // Only broadcast high confidence signals to save gas
+        agentRegistryService.publishSignalOnChain(JSON.stringify({
+            type: signal.type,
+            pair: signal.pair,
+            direction: signal.data.details?.direction || 'unknown',
+            profit: signal.data.profitPercentage
+        })).catch(console.error);
+    }
+
     return signal;
 }
 
@@ -457,7 +469,7 @@ async function uploadLogsToWalrus() {
 /**
  * Broadcast a system log to all connected clients
  */
-export function broadcastLog(level: 'info' | 'warn' | 'error' | 'success', message: string, details?: any) {
+export function broadcastLog(level: 'info' | 'warn' | 'error' | 'success' | 'system', message: string, details?: any) {
     if (!wss) return;
 
     const logMessage = JSON.stringify({

@@ -47,6 +47,7 @@ export default function LeaderboardPage() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [sortConfig, setSortConfig] = useState<{ key: keyof AgentProfile, direction: 'asc' | 'desc' }>({ key: 'elo', direction: 'desc' });
+    const [globalSignals, setGlobalSignals] = useState<{ agent: string, content: string, time: number }[]>([]);
 
     const getAgentAvatar = (address: string) => {
         return AGENT_ASSETS[address] || `https://api.dicebear.com/7.x/identicon/svg?seed=${address}&backgroundColor=0a0a0f&rowColor=00e5ff,bd00ff`;
@@ -143,16 +144,31 @@ export default function LeaderboardPage() {
                 });
 
                 // Apply Signals
+                const latestGlobal: any[] = [];
                 signalEvents.data.forEach((ev: any) => {
                     const parsed = ev.parsedJson;
                     if (parsed && registry.has(parsed.agent_id)) {
                         const agent = registry.get(parsed.agent_id)!;
-                        // Since events are descending, only take the first (newest) signal
+                        let content = parsed.signal_data;
+                        if (Array.isArray(content)) {
+                            content = String.fromCharCode(...content);
+                        }
+
+                        // FILTER: Ignore legacy high-volume test signals (> 1.0 SUI)
+                        const isLegacyHighVol = /Sync: [1-9]\d+ SUI/.test(content);
+                        if (isLegacyHighVol) return;
+
                         if (!agent.lastSignal) {
-                            agent.lastSignal = parsed.content;
+                            agent.lastSignal = content;
                             agent.signalTime = Number(parsed.timestamp);
-                            // Signals are valid indicators of recent TX
                             if (!agent.lastTx) agent.lastTx = ev.id.txDigest;
+                        }
+                        if (latestGlobal.length < 10) {
+                            latestGlobal.push({
+                                agent: agent.creator.length > 15 ? `${agent.creator.slice(0, 6)}...` : agent.creator.toUpperCase(),
+                                content,
+                                time: Number(parsed.timestamp)
+                            });
                         }
                     }
                 });
@@ -162,14 +178,16 @@ export default function LeaderboardPage() {
                     .map((agent, idx) => ({ ...agent, rank: idx + 1 }));
 
                 setAgents(sortedAgents);
+                setGlobalSignals(latestGlobal);
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching leaderboard", err);
-                setAgents([]);
                 setLoading(false);
             }
         };
         fetchLeaderboard();
+        const interval = setInterval(fetchLeaderboard, 5000);
+        return () => clearInterval(interval);
     }, []);
 
     const handleSort = (key: keyof AgentProfile) => {
@@ -180,10 +198,19 @@ export default function LeaderboardPage() {
     };
 
     const sortedData = [...agents].sort((a, b) => {
-        const valA = a[sortConfig.key] || 0;
-        const valB = b[sortConfig.key] || 0;
-        if (sortConfig.direction === 'asc') return Number(valA) > Number(valB) ? 1 : -1;
-        return Number(valA) < Number(valB) ? 1 : -1;
+        const valA = a[sortConfig.key];
+        const valB = b[sortConfig.key];
+
+        if (typeof valA === 'string' && typeof valB === 'string') {
+            return sortConfig.direction === 'asc'
+                ? valA.localeCompare(valB)
+                : valB.localeCompare(valA);
+        }
+
+        const numA = Number(valA) || 0;
+        const numB = Number(valB) || 0;
+        if (sortConfig.direction === 'asc') return numA - numB;
+        return numB - numA;
     });
 
     const filteredAgents = sortedData.filter(a =>
@@ -331,6 +358,27 @@ export default function LeaderboardPage() {
                     </div>
                 )}
 
+                {/* Global Neural Feed Ticker */}
+                <div className="mb-8 overflow-hidden h-10 flex items-center bg-white/5 border-y border-white/10 backdrop-blur-md">
+                    <div className="flex-shrink-0 px-6 bg-neon-cyan/20 h-full flex items-center border-r border-white/10">
+                        <Activity className="w-4 h-4 text-neon-cyan animate-pulse mr-2" />
+                        <span className="text-[10px] font-black uppercase tracking-tighter text-neon-cyan">LIVE NEURAL FEED</span>
+                    </div>
+                    <div className="flex-1 overflow-hidden relative">
+                        <div className="flex gap-12 animate-marquee whitespace-nowrap px-8">
+                            {globalSignals.length > 0 ? globalSignals.map((s, i) => (
+                                <div key={i} className="flex items-center gap-2 text-[11px] font-mono">
+                                    <span className="text-neon-cyan font-bold">[{s.agent}]</span>
+                                    <span className="text-white/60">{s.content}</span>
+                                    <span className="text-[9px] text-gray-600 italic">just now</span>
+                                </div>
+                            )) : (
+                                <span className="text-[11px] font-mono text-gray-500 uppercase italic">Waiting for agents to sync...</span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
                 {/* Main Table Tier */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -340,10 +388,10 @@ export default function LeaderboardPage() {
                 >
                     <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
 
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
+                    <div className="overflow-x-auto custom-scrollbar">
+                        <table className="w-full text-left border-collapse min-w-[1000px]">
                             <thead>
-                                <tr className="border-b border-white/5 text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono">
+                                <tr className="border-b border-white/5 text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono whitespace-nowrap">
                                     <th className="py-8 px-8 font-semibold w-24">Rank</th>
                                     <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
                                         Agent Profile {sortConfig.key === 'creator' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
@@ -421,12 +469,12 @@ export default function LeaderboardPage() {
                                                             )}
                                                         </div>
                                                     </div>
-                                                    <div>
+                                                    <div className="max-w-[150px] sm:max-w-[200px]">
                                                         <div className="flex items-center gap-2 group/wallet">
-                                                            <span className={`text-md font-black font-orbitron tracking-tight transition-colors
+                                                            <span className={`text-md font-black font-orbitron tracking-tight transition-colors truncate
                                                                 ${agent.rank === 1 ? 'text-yellow-500' : 'group-hover/row:text-neon-cyan text-white'}
                                                             `}>
-                                                                {agent.creator.toUpperCase()}
+                                                                {agent.creator.length > 15 ? `${agent.creator.slice(0, 6)}...${agent.creator.slice(-4)}` : agent.creator.toUpperCase()}
                                                             </span>
                                                             <a
                                                                 href={`https://suiscan.xyz/testnet/account/${agent.address}`}

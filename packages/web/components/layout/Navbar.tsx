@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { Home, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package, Cpu } from "lucide-react";
+import { Home, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package, Cpu, Trophy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -58,12 +58,13 @@ export default function Navbar() {
         { name: "HOME", href: "/", icon: Home },
         { name: "DASHBOARD", href: "/dashboard", icon: LayoutDashboard },
         { name: "ANALYTICS", href: "/analytics", icon: BarChart2 },
-        { name: "STRATEGIES", href: "/strategies", icon: Zap },
+        { name: "NEURAL OPS", href: "/strategies", icon: Zap },
         { name: "MARKETPLACE", href: "/marketplace", icon: Package },
         { name: "PLUGINS", href: "/plugins", icon: Cpu },
         { name: "BUILDER", href: "/strategies/builder", icon: Compass },
-        { name: "AGENTS", href: "/agents", icon: Bot },
+        { name: "SENTINELS", href: "/agents", icon: Bot },
         { name: "DOCS", href: "/docs", icon: FileText },
+        { name: "LEADERBOARD", href: "/leaderboard", icon: Trophy },
     ];
 
     const closeMobileMenu = useCallback(() => {
@@ -94,20 +95,20 @@ export default function Navbar() {
                                 <img src="/logo_transparent.png" alt="SuiLoop Logo" className="w-full h-full object-contain object-center scale-[1.3] drop-shadow-[0_0_10px_rgba(189,0,255,0.4)]" />
                             </div>
                             {/* Logo text - Optimized visibility */}
-                            <div className="hidden min-[1150px]:flex flex-col">
-                                <span className="font-bold text-white tracking-tighter leading-none text-xs xl:text-lg group-hover:text-neon-cyan transition-colors">
+                            <div className="hidden sm:flex flex-col">
+                                <span className="font-bold text-white tracking-tighter leading-none text-[10px] xl:text-lg group-hover:text-neon-cyan transition-colors">
                                     SUILOOP
                                 </span>
-                                <span className="hidden 2xl:block text-[9px] text-gray-500 font-mono tracking-widest leading-none">
-                                    PROTOCOL
+                                <span className="hidden min-[1280px]:block text-[9px] text-gray-500 font-mono tracking-widest leading-none">
+                                    NEURAL MATRIX
                                 </span>
                             </div>
                         </Link>
                     </div>
 
                     {/* Center: Desktop Navigation - visible on laptop (lg) and up */}
-                    <div className="hidden lg:flex items-center gap-1 xl:gap-3 flex-1 justify-center mx-2 xl:mx-6">
-                        <div className="flex items-center gap-1 p-1 bg-white/[0.03] border border-white/5 rounded-full backdrop-blur-md">
+                    <div className="hidden lg:flex items-center gap-0.5 flex-1 justify-center mx-1 xl:mx-2">
+                        <div className="flex items-center gap-0.5 p-0.5 bg-white/[0.03] border border-white/5 rounded-full backdrop-blur-md">
                             {navLinks.map((link) => {
                                 const isActive = pathname === link.href;
                                 const Icon = link.icon;
@@ -116,8 +117,8 @@ export default function Navbar() {
                                         key={link.name}
                                         href={link.href}
                                         className={`
-                                            relative px-3 xl:px-4 py-2 rounded-full text-[10px] xl:text-xs font-bold 
-                                            transition-colors duration-300 flex items-center gap-2 whitespace-nowrap group
+                                            relative px-1.5 xl:px-2.5 py-1.5 rounded-full text-[8.5px] xl:text-[10px] font-bold 
+                                            transition-colors duration-300 flex items-center gap-1 xl:gap-1.5 whitespace-nowrap group
                                             ${isActive ? "text-white" : "text-gray-400 hover:text-white"}
                                         `}
                                     >
@@ -131,13 +132,13 @@ export default function Navbar() {
                                         )}
 
                                         <Icon className={`
-                                            relative z-10 w-3.5 h-3.5 xl:w-4 xl:h-4 transition-transform group-hover:scale-110
+                                            relative z-10 w-3 h-3 xl:w-3.5 xl:h-3.5 transition-transform group-hover:scale-110
                                             ${isActive ? "text-neon-cyan" : "text-gray-500"}
                                         `} />
 
                                         <span className={`
                                             relative z-10
-                                            ${isActive ? "inline" : "hidden min-[1650px]:inline"}
+                                            ${isActive ? "inline" : "inline"}
                                         `}>
                                             {link.name}
                                         </span>
@@ -166,8 +167,8 @@ export default function Navbar() {
                         {/* Agent Status Indicator - lg+ */}
                         {mounted && (
                             <div className={`hidden min-[1400px]:flex items-center gap-1 xl:gap-2 px-1.5 xl:px-3 py-1.5 rounded-full border transition-all ${account
-                                    ? 'bg-green-500/10 border-green-500/20'
-                                    : 'bg-white/5 border-white/10'
+                                ? 'bg-green-500/10 border-green-500/20'
+                                : 'bg-white/5 border-white/10'
                                 }`}>
                                 <span className="relative flex h-1 w-1 xl:h-1.5 xl:w-1.5">
                                     <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? 'bg-green-400' : 'bg-gray-400'}`}></span>
@@ -184,14 +185,6 @@ export default function Navbar() {
                             <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-4 xl:!px-5 !py-2 !rounded-full !text-[11px] xl:!text-xs !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !whitespace-nowrap" />
                         </div>
 
-                        {/* CTA Button - Hidden on mobile/tablet, shown on lg+ as icon, full on xl */}
-                        <Link
-                            href="/strategies"
-                            className="hidden min-[1300px]:flex items-center gap-1 bg-neon-cyan text-black px-2 xl:px-3 py-2 rounded-full font-mono text-[9px] xl:text-[10px] font-bold hover:bg-white transition-all shadow-[0_0_15px_rgba(0,243,255,0.4)] hover:shadow-[0_0_25px_rgba(255,255,255,0.6)] whitespace-nowrap"
-                        >
-                            <Rocket className="w-3 h-3 xl:w-3.5 xl:h-3.5" />
-                            <span className="hidden min-[1550px]:inline">STRATEGIES</span>
-                        </Link>
 
                         {/* Mobile Menu Toggle - Visible on lg and below */}
                         <button
@@ -318,7 +311,7 @@ export default function Navbar() {
                                     className="min-h-[52px] p-4 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-bold border border-white/20 flex items-center justify-center gap-3 hover:opacity-90 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(0,243,255,0.3)]"
                                 >
                                     <Zap size={20} className="text-black" />
-                                    <span className="text-sm sm:text-base">INITIALIZE VECTOR</span>
+                                    <span className="text-sm sm:text-base">MATRIX UPLINK</span>
                                     <Rocket size={18} className="text-black" />
                                 </Link>
                             </motion.div>

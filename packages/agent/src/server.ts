@@ -1052,11 +1052,18 @@ app.post('/api/admin/rate-limits/clear', authMiddleware, requirePermission('admi
 // Initialize WebSocket server (Moved inside startSystem)
 // initializeSubscriptionServer(server);
 
+import { agentRegistryService } from './services/agentRegistryService.js';
+
 function startSystem() {
     initializeServices();
     // Initialize systems
     initializeDefaultKeys();
     initializeSubscriptionServer(server);
+
+    // Subscribe to on-chain P2P signals
+    agentRegistryService.subscribeToNetworkSignals((signal) => {
+        console.log(`📡 [AGENT MESH] On-chain signal received from ${signal.agentId.slice(0, 6)}: ${signal.signal}`);
+    });
 
     server.listen(port, () => {
         console.log(`

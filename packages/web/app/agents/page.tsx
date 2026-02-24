@@ -7,6 +7,7 @@ import { Terminal, Activity, Signal, Shield, Radio, Code, Zap, Copy, Database, C
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { supabase } from "@/lib/supabase";
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 
 type WalrusStatus = 'connecting' | 'live' | 'error';
 type SystemStatus = 'OPERATIONAL' | 'DEGRADED' | 'OFFLINE';
@@ -137,6 +138,51 @@ export default function AgentsPage() {
     const USDC_TYPE = '0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC';
     const SUI_TYPE = '0x2::sui::SUI';
     const selectedCoinType = sdkAsset === 'USDC' ? USDC_TYPE : SUI_TYPE;
+
+    // Fetch On-Chain Signals (Neural Feed)
+    useEffect(() => {
+        const fetchSignals = async () => {
+            try {
+                const client = new SuiClient({ url: getFullnodeUrl('testnet') });
+                const PACKAGE_ID = "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
+
+                const signalEvents = await client.queryEvents({
+                    query: { MoveEventType: `${PACKAGE_ID}::agent_registry::SignalPublished` },
+                    limit: 20,
+                    order: 'descending'
+                });
+
+                const newSignals = signalEvents.data.map((ev: any) => {
+                    const parsed = ev.parsedJson;
+                    let content = parsed.signal_data;
+                    if (Array.isArray(content)) {
+                        content = String.fromCharCode(...content);
+                    }
+                    return {
+                        id: ev.id.txDigest,
+                        level: 'system',
+                        message: `📡 ON-CHAIN: ${content}`,
+                        timestamp: Number(parsed.timestamp),
+                        isChain: true
+                    };
+                });
+
+                setLogs(prev => {
+                    const filteredPrev = prev.filter(l => !l.isChain);
+                    const combined = [...filteredPrev, ...newSignals].sort((a, b) =>
+                        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+                    );
+                    return combined.slice(-100);
+                });
+            } catch (err) {
+                console.error("Failed to fetch chain signals", err);
+            }
+        };
+
+        fetchSignals();
+        const interval = setInterval(fetchSignals, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <main className="min-h-screen bg-black text-white selection:bg-neon-cyan/30 overflow-hidden relative">

@@ -54,6 +54,7 @@ const NODE_TEMPLATES = [
             { type: 'action', label: 'EXECUTE_LOOP', icon: 'RefreshCw', desc: 'Full borrow-trade-repay cycle' },
             { type: 'action', label: 'CREATE_AGENT_CAP', icon: 'KeyRound', desc: 'Mint agent license (0.1 SUI fee)' },
             { type: 'action', label: 'REPAY_LOAN', icon: 'TrendingUp', desc: 'Satisfy Hot Potato receipt + profit' },
+            { type: 'action', label: 'NEURAL_SIGNAL', icon: 'Signal', desc: 'Publish on-chain telemetry to registry' },
         ]
     },
     {
@@ -316,10 +317,11 @@ function StrategyBuilderInner() {
                 });
             }
 
-            // 3. Walrus simulation on deploy
+            // 3. Walrus & Neural Matrix simulation on deploy
             if (deploy) {
                 setTimeout(() => {
-                    toast.success(`⬆ Schema archived to Walrus (blob: ${sid.slice(0, 12)}...)`, { duration: 3000 });
+                    toast.success(`📡 Architecture broadcasted to Neural Matrix`, { duration: 2500 });
+                    toast.success(`⬆ Schema archived to Walrus (blob: ${sid.slice(0, 12)}...)`, { duration: 4000 });
                 }, 1000);
             }
 

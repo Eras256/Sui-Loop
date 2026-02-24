@@ -15,7 +15,7 @@ const BASE_STRATEGIES = [
         name: "SUI-USDC Kinetic Vector",
         description: "High-frequency triangular arbitrage secured by Move atomic PTBs. Executes only when spread > 0.4% with Hot Potato safety.",
         risk: "Low",
-        tags: ["Stable", "Blue Chip"],
+        tags: ["Stable", "Blue Chip", "Neural Feed Enabled"],
         color: "from-blue-500 to-cyan-500",
         baseApy: 14.2
     },
@@ -42,7 +42,7 @@ const BASE_STRATEGIES = [
         name: "Eliza Sentiment Engine",
         description: "AI-driven strategy that scans X/Twitter for bullish sentiment signals on SUI ecosystem tokens.",
         risk: "Medium",
-        tags: ["AI Agent", "Social"],
+        tags: ["AI Agent", "Social", "Neural Matrix Sync"],
         color: "from-orange-500 to-red-500",
         baseApy: 45.2
     },
@@ -258,7 +258,10 @@ export default function StrategiesPage() {
             });
 
             toast.dismiss(toastId);
-            toast.success("Strategy Template Loaded", { duration: 1000 });
+            toast.success("Strategy Template Compiled", {
+                description: "Kernel architecture broadcasted to Neural Matrix",
+                duration: 2000
+            });
 
             // 2. Redirect to Dashboard with Auto-Start, name, and selected asset for immediate display
             const targetAsset = selectedAssets[strategy.id] || 'SUI';
@@ -320,9 +323,9 @@ export default function StrategiesPage() {
                             <div className="flex justify-between items-start mb-2">
                                 <h3 className="text-xl font-bold tracking-tight">{strat.name}</h3>
                                 <div className={`text-xs px-2 py-1 rounded font-bold font-mono uppercase ${strat.risk === 'Very Low' ? 'bg-emerald-500/20 text-emerald-400' :
-                                        strat.risk === 'Low' ? 'bg-green-500/20 text-green-400' :
-                                            strat.risk === 'Medium' ? 'bg-amber-500/20 text-amber-400' :
-                                                'bg-red-500/20 text-red-400'
+                                    strat.risk === 'Low' ? 'bg-green-500/20 text-green-400' :
+                                        strat.risk === 'Medium' ? 'bg-amber-500/20 text-amber-400' :
+                                            'bg-red-500/20 text-red-400'
                                     }`}>
                                     {strat.risk} Risk
                                 </div>

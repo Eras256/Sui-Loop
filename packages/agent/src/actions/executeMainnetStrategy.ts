@@ -1,4 +1,4 @@
-import { Action, IAgentRuntime, Memory } from "@elizaos/core";
+import { Action, IAgentRuntime, Memory, State, HandlerCallback } from "@elizaos/core";
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
@@ -14,9 +14,9 @@ export const executeMainnetStrategy: Action = {
     handler: async (
         runtime: IAgentRuntime,
         message: Memory,
-        state: any,
-        options: any,
-        callback: any
+        state?: State,
+        options?: any,
+        callback?: HandlerCallback
     ) => {
         try {
             const content = message.content as any;
@@ -112,7 +112,7 @@ export const executeMainnetStrategy: Action = {
                 target: `${packageId}::atomic_engine::execute_loop`,
                 typeArguments: [
                     '0x2::sui::SUI',
-                    '0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC'
+                    '0x2::sui::SUI'
                 ],
                 arguments: [
                     tx.object(poolId),

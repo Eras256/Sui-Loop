@@ -140,7 +140,7 @@ export default function AnalyticsPage() {
                 <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                     <div>
                         <div className="flex items-center gap-3 mb-2">
-                            <h1 className="text-4xl font-bold text-white tracking-tight">INTELLIGENCE OPS</h1>
+                            <h1 className="text-4xl font-bold text-white tracking-tight">NEURAL INTELLIGENCE OPS</h1>
                             <span className="px-2 py-0.5 bg-neon-cyan/10 text-neon-cyan text-[10px] font-mono rounded border border-neon-cyan/20">
                                 v0.0.7
                             </span>
@@ -201,9 +201,9 @@ export default function AnalyticsPage() {
                         color="blue-500"
                     />
                     <StatCard
-                        title="Benchmark Rate (SUI)"
-                        value={`${scallopData?.supplyApy.toFixed(2) || '0.00'}%`}
-                        change="+0.45% (24h)"
+                        title="Neural Reputation"
+                        value="742 ELO"
+                        change="+12 pts (24h)"
                         icon={Activity}
                         color="neon-purple"
                     />
@@ -215,7 +215,7 @@ export default function AnalyticsPage() {
                     <div className="lg:col-span-2 glass-panel border border-white/10 rounded-2xl p-6">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-xl font-bold flex items-center gap-2 tracking-tight">
-                                PERFORMANCE VECTOR
+                                NEURAL PERFORMANCE VECTOR
                                 <span className="text-xs font-normal text-gray-500 bg-white/5 px-2 py-0.5 rounded font-mono">[PROJECTION]</span>
                             </h3>
                             <div className="flex gap-1.5">
@@ -265,13 +265,13 @@ export default function AnalyticsPage() {
                                     { name: "Navi USDC Lending", vol: "STABLE", apy: "9.40%", asset: 'USDC' },
                                     { name: "Cetus SUI/USDC CLMM", vol: "VOLATILE", apy: "45.2%", asset: 'SUI' },
                                     { name: "DeepBook V3 Limit", vol: "LOW RISK", apy: "8.5%", asset: 'SUI' },
-                                    { name: "Walrus Audit Log", vol: "LIVE", apy: "100%", asset: 'LOG' },
+                                    { name: "Neural Matrix Feed", vol: "LIVE", apy: "ACTIVE", asset: 'LOG' },
                                 ].map((pool, i) => (
                                     <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5 hover:border-neon-cyan/30 transition-colors cursor-pointer group">
                                         <div className="flex items-center gap-2">
                                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded font-mono ${pool.asset === 'USDC' ? 'bg-neon-purple/20 text-neon-purple' :
-                                                    pool.asset === 'LOG' ? 'bg-pink-500/20 text-pink-400' :
-                                                        'bg-blue-500/20 text-[#4ca2ff]'
+                                                pool.asset === 'LOG' ? 'bg-pink-500/20 text-pink-400' :
+                                                    'bg-blue-500/20 text-[#4ca2ff]'
                                                 }`}>{pool.asset}</span>
                                             <span className="font-mono text-sm text-gray-300 group-hover:text-white transition-colors">{pool.name}</span>
                                         </div>
@@ -298,7 +298,7 @@ export default function AnalyticsPage() {
                                     <div className="h-full bg-neon-purple w-full rounded-full shadow-[0_0_10px_#bd00ff]" />
                                 </div>
                                 <div className="mt-3 text-[10px] font-mono text-gray-500 flex items-center gap-1">
-                                    <span className="text-pink-400">◉</span> Walrus forensic log: ARMED
+                                    <span className="text-pink-400">◉</span> Neural Forensic Log (Walrus): ARMED
                                 </div>
                             </div>
                         </div>

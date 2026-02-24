@@ -1,0 +1,34 @@
+[
+  {
+    "alias": "exciting-euclase",
+    "suiAddress": "0x3375661d59379545d2e412a56890483d4d22c7027d91df6571c012276e175d29",
+    "publicBase64Key": "AIiYg/CZEFh9iiZ94/gjy1hPmW7ciVJqceNwUs3Tvw5l",
+    "keyScheme": "ed25519",
+    "flag": 0,
+    "peerId": "889883f09910587d8a267de3f823cb584f996edc89526a71e37052cdd3bf0e65"
+  },
+  {
+    "alias": "romantic-hiddenite",
+    "suiAddress": "0x8bd468b0e5941e75484e95191d99ff6234b2ab24e3b91650715b6df8cf8e4eba",
+    "publicBase64Key": "AEm6CHW62Ma+hRvfND1A2sKRxiRTahr/EGn+IHwisKoQ",
+    "keyScheme": "ed25519",
+    "flag": 0,
+    "peerId": "49ba0875bad8c6be851bdf343d40dac291c624536a1aff1069fe207c22b0aa10"
+  },
+  {
+    "alias": "gracious-spodumene",
+    "suiAddress": "0x8ce5e3a1cc5b8be074c9820659b6dcae18210f350f46fcb10e32bc6327ad5884",
+    "publicBase64Key": "AEzsJDYT1TthqC+RtkF0Pfjql6YX676ZuwEBTMgOyU7t",
+    "keyScheme": "ed25519",
+    "flag": 0,
+    "peerId": "4cec243613d53b61a82f91b641743df8ea97a617ebbe99bb01014cc80ec94eed"
+  },
+  {
+    "alias": "angry-amethyst",
+    "suiAddress": "0xa9bf0eb96e8c47d36f2aa68889996feebe7757e3ce5c74b327e6f07025bb6dc8",
+    "publicBase64Key": "ADVyC9+7bffg+JaOHIRCMSqHTi4Lebe9nHrMVQ1fy+3C",
+    "keyScheme": "ed25519",
+    "flag": 0,
+    "peerId": "35720bdfbb6df7e0f8968e1c8442312a874e2e0b79b7bd9c7acc550d5fcbedc2"
+  }
+]

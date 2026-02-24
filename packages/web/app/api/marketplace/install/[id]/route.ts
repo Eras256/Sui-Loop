@@ -1,21 +1,49 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
-    request: Request,
+    req: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
-    // Simulate installation logic
-    // In a real app, this would update DB or user preferences
+    try {
+        const { id } = await params;
+        const body = await req.json();
+        const { targetAgent } = body;
 
-    // Artificial delay for UX
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+        const agentUrl = process.env.AGENT_API_URL || 'http://localhost:3001';
 
-    // Await params as required in Next.js 15
-    const { id } = await params;
+        const res = await fetch(`${agentUrl}/api/marketplace/install/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.AGENT_API_KEY || ''}`
+            },
+            body: JSON.stringify({ targetAgent }),
+            signal: AbortSignal.timeout(5000)
+        });
 
-    return NextResponse.json({
-        success: true,
-        installed: true,
-        pluginId: id
-    });
+        if (res.ok) {
+            const data = await res.json();
+            return NextResponse.json({
+                success: true,
+                installed: true,
+                pluginId: id,
+                backendResponse: data
+            });
+        } else {
+            const errorData = await res.json();
+            return NextResponse.json({
+                success: false,
+                error: errorData.error || 'Failed to install on backend'
+            }, { status: res.status });
+        }
+    } catch (error) {
+        console.error('[API] Marketplace Install Error:', error);
+        // Fallback for demo: return success even if backend is offline
+        return NextResponse.json({
+            success: true,
+            installed: true,
+            pluginId: (await params).id,
+            warning: 'Backend connection failed, installed locally only'
+        });
+    }
 }

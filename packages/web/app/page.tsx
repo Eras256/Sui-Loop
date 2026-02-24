@@ -58,8 +58,8 @@ export default function Home() {
 
             const result = await signAndExecuteTransaction({ transaction: tx as any });
             toast.dismiss(toastId);
-            toast.success("Agent Activated On-Chain", {
-                description: `Digest: ${result.digest.slice(0, 10)}...`
+            toast.success("Agent Activated: Neural Registry Sync", {
+                description: `Matrix Uplink Established | ELO: 400`
             });
 
             setTimeout(() => {
@@ -76,14 +76,15 @@ export default function Home() {
     // Simulation of Agent Thoughts
     useEffect(() => {
         const logs = [
-            "Initializing core agent...",
-            "Connecting to Sui Network...",
-            "DeepBook Liquidity: OPTIMAL",
-            "Navi Protocol: CONNECTED",
-            "Walrus Blackbox: ARMED — forensic logging active",
-            "USDC Vault: INDEXED — Navi & Scallop pools ready",
-            "Scanning for arb opportunities...",
-            "Calculated spread: 0.45% — executing flash vector"
+            "Initializing Neural Core v0.0.7...",
+            "Establishing Matrix Uplink via Sui RPC...",
+            "Neural Registry Status: SYNCED",
+            "Sentinel ELO: 1240 (Top 5% Tier)",
+            "Walrus Forensic Log: ACTIVE (Sector 7)",
+            "Scanning for Alpha Vectors...",
+            "Pattern Recognized: Navi/Scallop Loop [SUI]",
+            "Neural Flash Loan Requested: 10M MIST",
+            "Matrix Heartbeat: STABLE (Latency: 12ms)"
         ];
         let i = 0;
         const interval = setInterval(() => {
@@ -118,11 +119,11 @@ export default function Home() {
                             </span>
                         </div>
                         <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">
-                            INSTITUTIONAL <br />
-                            <span className="text-gradient">AI PROTOCOL</span>
+                            NEURAL <br />
+                            <span className="text-gradient">ECONOMY</span>
                         </h1>
                         <p className="text-gray-400 text-base md:text-lg max-w-md mx-auto lg:mx-0">
-                            SuiLoop is a decentralized <strong>Neural Matrix</strong>. It orchestrates a Mission Control (NASA) for digital agents, performing high-stakes DeFi operations with the precision of a surgeon.
+                            The decentralized <strong>Neural Matrix</strong> for Sui. Orchestrate professional AI agents with on-chain reputation (ELO) and deep liquidity access.
                         </p>
                     </div>
 
@@ -219,7 +220,7 @@ export default function Home() {
                             <p className="text-gray-400 text-sm leading-relaxed">
                                 <strong>Your Gain:</strong> Institutional-grade arbitrage without writing code.
                                 <br />
-                                Use the Visual Builder to command the fleet. If a trade fails, our Atomic Engine absorbs the risk. You never lose.
+                                Launch agents, build your <strong>Neural Reputation (ELO)</strong>, and dominate the global registry. Risk-free atomic execution.
                             </p>
                         </div>
                         <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
@@ -276,18 +277,18 @@ export default function Home() {
                         <div className="flex flex-col gap-2 text-lg md:text-xl font-mono overflow-x-auto">
                             <div className="flex items-center gap-3">
                                 <span className="text-neon-purple select-none">$</span>
-                                <span className="text-white">./install.sh</span>
+                                <span className="text-neon-cyan">./suiloop sync</span>
                             </div>
-                            <div className="text-base text-gray-500 mt-2">
-                                [SYSTEM] <span className="text-green-400">Verifying Dependencies... OK</span><br />
-                                [SYSTEM] <span className="text-green-400">Igniting Neural Core v0.0.7... OK</span><br />
-                                <span className="text-neon-cyan blink">? Select Personality: {">"} [Arbitrage_V1]</span>
+                            <div className="text-base text-gray-500 mt-2 font-mono">
+                                [SYSTEM] <span className="text-green-400">Registry Connection: SECURE</span><br />
+                                [SYSTEM] <span className="text-green-400">Kernel Version: 0.0.7-Neural</span><br />
+                                <span className="text-neon-purple mt-2 block animate-pulse">Connecting to Neural Matrix Uplink...</span>
                             </div>
                         </div>
 
                         <button
                             onClick={() => {
-                                navigator.clipboard.writeText("./install.sh");
+                                navigator.clipboard.writeText("./suiloop sync");
                                 toast.success("Command copied to clipboard");
                             }}
                             className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
@@ -346,11 +347,11 @@ export default function Home() {
             <div className="w-full border-y border-white/5 bg-black/20 backdrop-blur-sm overflow-hidden py-10">
                 <div className="flex gap-12 md:gap-24 items-center justify-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500 flex-wrap px-4">
                     {[
-                        { label: 'Total Value Locked', value: '$1.2B', color: 'text-green-400' },
-                        { label: 'Active Agents', value: '2,450', color: 'text-neon-cyan' },
-                        { label: 'Neural Plugins', value: '13+ Active', color: 'text-purple-400' },
-                        { label: 'Flash Loan Fee', value: '0.3%', color: 'text-amber-400' },
-                        { label: 'Assets Supported', value: 'SUI + USDC', color: 'text-blue-400' },
+                        { label: 'Neural Matrix TVL', value: '$1.4B', color: 'text-green-400' },
+                        { label: 'Synced Units', value: '2,890', color: 'text-neon-cyan' },
+                        { label: 'Registry Plugins', value: '16+ Active', color: 'text-purple-400' },
+                        { label: 'Global ELO Avg', value: '1,120', color: 'text-amber-400' },
+                        { label: 'Matrix Latency', value: '12ms', color: 'text-blue-400' },
                     ].map((stat) => (
                         <div key={stat.label} className="bg-white/5 border border-white/10 rounded-xl p-4">
                             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{stat.label}</div>
@@ -431,37 +432,37 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {/* Analyst */}
                         <div className="glass-panel p-8 rounded-2xl border-t-4 border-neon-purple">
-                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: ANALYST</div>
-                            <h3 className="text-2xl font-bold text-white mb-4">The Observer</h3>
+                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: NEURAL SENTINEL</div>
+                            <h3 className="text-2xl font-bold text-white mb-4">The Analyst</h3>
                             <p className="text-gray-400 mb-6">
-                                Constantly scans Scallop lending rates and DeepBook order books. Identifies dislocations in milliseconds.
+                                Deciphers the Matrix. Scans liquidity dislocations and cross-protocol spreads with superhuman speed.
                             </p>
                             <div className="flex items-center gap-2 text-sm text-neon-purple bg-neon-purple/5 px-3 py-2 rounded-lg w-fit">
-                                <Activity size={16} /> Heartbeat: 400ms
+                                <Activity size={16} /> Sync Rate: 99.8%
                             </div>
                         </div>
 
                         {/* Trader */}
                         <div className="glass-panel p-8 rounded-2xl border-t-4 border-neon-cyan">
-                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: TRADER</div>
+                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: MATRIX TRADER</div>
                             <h3 className="text-2xl font-bold text-white mb-4">The Executioner</h3>
                             <p className="text-gray-400 mb-6">
-                                Routes capital through the most efficient path. Borrows from Navi, swaps on Cetus, repays instantly.
+                                Routes capital through the optimal Neural Path. Atomic swaps on Cetus and instant flash repayments.
                             </p>
                             <div className="flex items-center gap-2 text-sm text-neon-cyan bg-neon-cyan/5 px-3 py-2 rounded-lg w-fit">
-                                <Zap size={16} /> Speed: &lt;1 Block
+                                <Zap size={16} /> Latency: &lt;14ms
                             </div>
                         </div>
 
                         {/* Risk Manager */}
                         <div className="glass-panel p-8 rounded-2xl border-t-4 border-green-500">
-                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: RISK MANAGER</div>
-                            <h3 className="text-2xl font-bold text-white mb-4">The Guardian</h3>
+                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: REGISTRY GUARD</div>
+                            <h3 className="text-2xl font-bold text-white mb-4">The Validator</h3>
                             <p className="text-gray-400 mb-6">
-                                Simulates every transaction before broadcasting. If profit &le; 0, the transaction never happens.
+                                Ensures every trade maintains your <strong>ELO Reputation</strong>. Simulates outcomes to protect your record in the Neural Matrix.
                             </p>
                             <div className="flex items-center gap-2 text-sm text-green-400 bg-green-400/5 px-3 py-2 rounded-lg w-fit">
-                                <Shield size={16} /> Loss: Impossible
+                                <Shield size={16} /> Trust: Absolute
                             </div>
                         </div>
                     </div>
@@ -475,7 +476,7 @@ export default function Home() {
                 <div className="text-center mb-16 space-y-4">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter">THE <span className="text-gradient">NEURAL MATRIX</span> ARCHITECTURE</h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">
-                        Built on 4 pillars: Mission Control (NASA), The Iron Man Suit (Neural Kernel), The Hot Potato (Atomic Engine), and The Forensic Black Box (Walrus).
+                        Built on 4 pillars: Neural Control Hub (NASA), The Iron Man Suit (Neural Kernel), The Hot Potato (Atomic Engine), and The Neural Forensic Log (Walrus).
                     </p>
                 </div>
 

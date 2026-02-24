@@ -9,8 +9,8 @@ import Footer from "@/components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "SuiLoop | Institutional AI Intelligence Protocol",
-    description: "The first Atomic Intelligence Protocol on Sui. Orchestrate mission-critical DeFi operations with autonomous agents powered by ElizaOS and DeepBook V3 flash vectors.",
+    title: "SuiLoop | Neural Economy & Matrix Intelligence",
+    description: "The decentralized Neural Matrix for Sui. Orchestrate professional AI agents with on-chain reputation (ELO) and deep liquidity access.",
     openGraph: {
         images: [{ url: "/logo-seo.jpg" }],
     },

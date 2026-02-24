@@ -1,7 +1,7 @@
 
 import { requestSuiFromFaucetV1, getFaucetHost } from '@mysten/sui/faucet';
 
-const recipient = '0x8bd468b0e5941e75484e95191d99ff6234b2ab24e3b91650715b6df8cf8e4eba';
+const recipient = '0x3375661d59379545d2e412a56890483d4d22c7027d91df6571c012276e175d29';
 
 async function main() {
     console.log('Requesting SUI from faucet for:', recipient);

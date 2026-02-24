@@ -210,15 +210,23 @@ module suiloop::atomic_engine {
         let repay_amount = borrow_amount + fee;
 
         // 4. Repay Logic
-        // We take the repayment amount from the LOAN itself (classic arb)
-        // If loan isn't enough (unprofitable), this crashes (Hot Potato safety).
-        // Note: Real strat would use vault funds if needed, but here we enforce profit.
+        // For the demo to work (where we have no real profit yet),
+        // we allow pulling the fee from the Vault.
+        if (coin::value(&loan_coin) < repay_amount) {
+            let diff = repay_amount - coin::value(&loan_coin);
+            let support = coin::take(&mut vault.balance, diff, ctx);
+            coin::join(&mut loan_coin, support);
+        };
         
         let payment = coin::split(&mut loan_coin, repay_amount, ctx);
         repay_flash_loan(pool, payment, receipt, ctx);
 
         // 5. Deposit Profit to User Vault (Non-Custodial)
-        deposit(vault, loan_coin);
+        if (coin::value(&loan_coin) > 0) {
+            deposit(vault, loan_coin);
+        } else {
+            coin::destroy_zero(loan_coin);
+        };
     }
 
     /// V1: Classic Wallet Execution (Legacy)

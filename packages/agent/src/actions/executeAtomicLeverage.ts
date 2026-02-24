@@ -239,6 +239,21 @@ export const executeAtomicLeverage: Action = {
         // --- SUI Execution (Uses tx.gas as collateral) ---
         const [userFundsCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(userFundsAmountMIST)]);
 
+        // 6.2 Publish Signal (Neural Feed Integration)
+        const REGISTRY_ID = "0xcbb6d114644b9573c76c1eee3f94ad4b8874273e7691f5c46d24add925b47e30";
+        const signalMsg = `Neural Sync: ${amountSui} ${asset} processed. Strategy stable.`;
+        const signalData = Array.from(Buffer.from(signalMsg));
+
+        tx.moveCall({
+            target: `${PACKAGE_ID}::agent_registry::publish_signal`,
+            arguments: [
+                tx.object(REGISTRY_ID),
+                tx.pure.address(sender),
+                tx.pure.vector('u8', signalData),
+                tx.object('0x6'), // Clock
+            ]
+        });
+
         tx.moveCall({
             target: `${PACKAGE_ID}::atomic_engine::execute_loop`,
             typeArguments: [coinType, coinType],

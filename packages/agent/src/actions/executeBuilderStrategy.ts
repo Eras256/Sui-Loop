@@ -29,6 +29,7 @@ const NODE_DISPATCHERS: Record<string, string> = {
     TWITTER_RELAY: '🐦 [Social] Posting automated status to Twitter/X...',
     DISCORD_ALARM: '💬 [Social] Sending urgent notification to Discord...',
     TELEGRAM_PUSH: '📨 [Social] Pushing execution log to Telegram...',
+    NEURAL_SIGNAL: '📡 [Neural] Publishing on-chain signal to Agent Registry...',
 };
 
 export const executeBuilderStrategy: Action = {

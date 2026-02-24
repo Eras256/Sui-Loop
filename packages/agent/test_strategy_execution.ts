@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import { executeMainnetStrategy } from './src/actions/executeMainnetStrategy.js';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { fromBase64 } from '@mysten/sui/utils';
+import { HandlerCallback, Memory } from "@elizaos/core";
 
 dotenv.config({ path: 'packages/agent/.env' });
 console.log("Loading .env from packages/agent/.env");
@@ -35,8 +36,9 @@ async function runTest() {
     };
 
     // Mock Callback
-    const callback = async (response: any) => {
+    const callback: HandlerCallback = async (response: any): Promise<Memory[]> => {
         console.log(`[🤖 Agent]: ${response.text}`);
+        return [];
     };
 
     try {

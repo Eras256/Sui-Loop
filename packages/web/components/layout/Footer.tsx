@@ -1,18 +1,18 @@
 import Link from "next/link";
-import { ExternalLink, Zap, Shield, Activity, Github } from "lucide-react";
+import { ExternalLink, Zap, Shield, Activity } from "lucide-react";
 
 const PROTOCOL_LINKS = [
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "Analytics", href: "/analytics" },
-    { label: "Strategies", href: "/strategies" },
+    { label: "Neural Dashboard", href: "/dashboard" },
+    { label: "Matrix Analytics", href: "/analytics" },
+    { label: "Neural Ops", href: "/strategies" },
     { label: "Strategy Builder", href: "/strategies/builder" },
     { label: "Marketplace", href: "/marketplace" },
     { label: "Plugins", href: "/plugins" },
 ];
 
 const INTEL_LINKS = [
-    { label: "Agents Console", href: "/agents" },
-    { label: "Protocol Manifesto", href: "/manifesto" },
+    { label: "Sentinel Console", href: "/agents" },
+    { label: "Matrix Manifesto", href: "/manifesto" },
     { label: "How To Use", href: "/how-to-use" },
     { label: "Technical Docs", href: "/docs" },
     {
@@ -57,15 +57,15 @@ export default function Footer() {
             {/* Protocol Status Banner */}
             <div className="border-b border-white/5 py-3 px-4">
                 <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-6 text-[10px] font-mono">
-                        <span className="flex items-center gap-1.5 text-green-400">
+                    <div className="flex items-center gap-3 sm:gap-6 text-[9px] sm:text-[10px] font-mono whitespace-nowrap overflow-x-auto custom-scrollbar-hidden py-1">
+                        <span className="flex items-center gap-1.5 text-green-400 shrink-0">
                             <span className="relative flex h-1.5 w-1.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
                             </span>
-                            UPLINK ESTABLISHED
+                            MATRIX UPLINK ESTABLISHED
                         </span>
-                        <span className="text-gray-600">KERNEL v0.0.7 // ENCRYPTED</span>
+                        <span className="text-gray-600 shrink-0 uppercase tracking-tighter">NEURAL KERNEL v0.0.7-Neural</span>
                         <span className="hidden sm:flex items-center gap-1.5 text-blue-400">
                             <Shield className="w-3 h-3" />
                             MOVE VERIFIED
@@ -75,32 +75,32 @@ export default function Footer() {
                             TESTNET ACTIVE
                         </span>
                     </div>
-                    <div className="flex items-center gap-2 text-[10px] font-mono text-gray-500">
+                    <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono text-gray-500 shrink-0">
                         <Zap className="w-3 h-3 text-yellow-500" />
-                        Built for the Sui Ecosystem
+                        Built for Sui
                     </div>
                 </div>
             </div>
 
             {/* Main Footer Grid */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-10 grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
 
                 {/* Brand Column */}
-                <div className="col-span-2 md:col-span-1 space-y-5">
+                <div className="sm:col-span-2 lg:col-span-1 space-y-5">
                     <Link href="/" className="flex items-center gap-2.5 group w-fit">
                         <div className="relative flex items-center justify-center w-9 h-9 group-hover:scale-110 transition-transform">
                             <img src="/logo_transparent.png" alt="SuiLoop Logo" className="w-full h-full object-contain object-center scale-[1.3] drop-shadow-[0_0_10px_rgba(189,0,255,0.4)]" />
                         </div>
                         <div className="flex flex-col">
                             <span className="font-bold text-white tracking-tighter text-lg leading-none group-hover:text-neon-cyan transition-colors">SUILOOP</span>
-                            <span className="text-[9px] text-gray-500 font-mono tracking-widest leading-none">PROTOCOL</span>
+                            <span className="text-[9px] text-gray-500 font-mono tracking-widest leading-none">NEURAL MATRIX</span>
                         </div>
                     </Link>
 
                     <p className="text-gray-400 text-sm leading-relaxed">
-                        The first Atomic Intelligence Protocol on Sui.
-                        Autonomous financial execution via ElizaOS agents,
-                        DeepBook V3 flash vectors, and Move-verified contracts.
+                        The decentralized Neural Matrix for Sui.
+                        Autonomous agent orchestration with on-chain ELO reputation,
+                        DeepBook V3 flash vectors, and Walrus forensic logging.
                     </p>
 
                     {/* Tech Badges */}
@@ -128,34 +128,13 @@ export default function Footer() {
                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                             </svg>
                         </a>
-                        <a
-                            href="https://github.com/Eras256/Sui-Loop"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub"
-                            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black transition-all hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-                        >
-                            <Github className="w-4 h-4" />
-                        </a>
-                        <a
-                            href="https://t.me/Vaiosx"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Telegram"
-                            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-sky-500 hover:text-white transition-all hover:shadow-[0_0_15px_rgba(14,165,233,0.4)]"
-                        >
-                            {/* Telegram SVG */}
-                            <svg viewBox="0 0 24 24" aria-hidden="true" className="w-4 h-4 fill-current">
-                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-                            </svg>
-                        </a>
                     </div>
                 </div>
 
                 {/* Protocol Links */}
                 <div>
                     <h4 className="text-white font-bold mb-5 text-xs tracking-widest uppercase font-mono">
-                        <span className="text-neon-cyan mr-1">{'>'}</span> Mainframe
+                        <span className="text-neon-cyan mr-1">{'>'}</span> Neural Mainframe
                     </h4>
                     <ul className="space-y-3">
                         {PROTOCOL_LINKS.map((link) => (
@@ -206,20 +185,20 @@ export default function Footer() {
                 </div>
 
                 {/* Stats / CTA Column */}
-                <div className="col-span-2 md:col-span-1 space-y-4">
+                <div className="sm:col-span-2 lg:col-span-1 space-y-4">
                     <h4 className="text-white font-bold mb-5 text-xs tracking-widest uppercase font-mono">
                         <span className="text-green-400 mr-1">{'>'}</span> Protocol Stats
                     </h4>
 
                     <div className="space-y-3">
                         {[
-                            { label: "Active Strategies", value: "16+", color: "text-neon-cyan", dot: "bg-neon-cyan" },
-                            { label: "Kernel Version", value: "v0.0.7", color: "text-neon-purple", dot: "bg-neon-purple" },
-                            { label: "Network", value: "Sui Testnet", color: "text-green-400", dot: "bg-green-400" },
-                            { label: "Assets", value: "SUI + USDC", color: "text-blue-400", dot: "bg-blue-400" },
-                            { label: "Package", value: "0x9451...dcb0", color: "text-gray-400", dot: "bg-gray-400" },
-                            { label: "Walrus Logs", value: "LIVE ◉", color: "text-pink-400", dot: "bg-pink-400" },
-                            { label: "Uptime", value: "99.9%", color: "text-yellow-400", dot: "bg-yellow-400" },
+                            { label: "Synced Neural Units", value: "2,890+", color: "text-neon-cyan", dot: "bg-neon-cyan" },
+                            { label: "Avg Registry ELO", value: "1,120", color: "text-neon-purple", dot: "bg-neon-purple" },
+                            { label: "Matrix Network", value: "Sui Testnet", color: "text-green-400", dot: "bg-green-400" },
+                            { label: "Assets Supported", value: "SUI + USDC", color: "text-blue-400", dot: "bg-blue-400" },
+                            { label: "Neural Kernel", value: "v0.0.7-N", color: "text-gray-400", dot: "bg-gray-400" },
+                            { label: "Walrus Registry", value: "ARCHIVING ◉", color: "text-pink-400", dot: "bg-pink-400" },
+                            { label: "Uptime (Matrix)", value: "99.9%", color: "text-yellow-400", dot: "bg-yellow-400" },
                         ].map((stat) => (
                             <div key={stat.label} className="flex items-center justify-between py-2 border-b border-white/5">
                                 <div className="flex items-center gap-2">
