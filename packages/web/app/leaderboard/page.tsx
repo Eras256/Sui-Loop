@@ -20,6 +20,8 @@ type AgentProfile = {
     volume: number;
     rank: number;
     lastTx?: string;
+    lastSignal?: string;
+    signalTime?: number;
 };
 
 const AGENT_ASSETS: Record<string, string> = {
@@ -44,6 +46,7 @@ export default function LeaderboardPage() {
     const [agents, setAgents] = useState<AgentProfile[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [sortConfig, setSortConfig] = useState<{ key: keyof AgentProfile, direction: 'asc' | 'desc' }>({ key: 'elo', direction: 'desc' });
 
     const getAgentAvatar = (address: string) => {
         return AGENT_ASSETS[address] || `https://api.dicebear.com/7.x/identicon/svg?seed=${address}&backgroundColor=0a0a0f&rowColor=00e5ff,bd00ff`;
@@ -72,6 +75,13 @@ export default function LeaderboardPage() {
                 const execEvents = await client.queryEvents({
                     query: { MoveEventType: `${PACKAGE_ID}::atomic_engine::LoopExecuted` },
                     limit: 1000
+                }).catch(() => ({ data: [] }));
+
+                // Fetch SignalPublished events (The "Neural Feed")
+                const signalEvents = await client.queryEvents({
+                    query: { MoveEventType: `${PACKAGE_ID}::agent_registry::SignalPublished` },
+                    limit: 200,
+                    order: 'descending'
                 }).catch(() => ({ data: [] }));
 
                 // Compute exact state per agent
@@ -128,9 +138,22 @@ export default function LeaderboardPage() {
                     if (parsed && registry.has(parsed.user)) {
                         const agent = registry.get(parsed.user)!;
                         agent.volume += (Number(parsed.borrowed_amount) / 1000000000);
-                        // Update lastTx if loop is more recent than reputation update
-                        // (Rough heuristic: if they executed a loop, it's a recent TX)
                         if (!agent.lastTx) agent.lastTx = ev.id.txDigest;
+                    }
+                });
+
+                // Apply Signals
+                signalEvents.data.forEach((ev: any) => {
+                    const parsed = ev.parsedJson;
+                    if (parsed && registry.has(parsed.agent_id)) {
+                        const agent = registry.get(parsed.agent_id)!;
+                        // Since events are descending, only take the first (newest) signal
+                        if (!agent.lastSignal) {
+                            agent.lastSignal = parsed.content;
+                            agent.signalTime = Number(parsed.timestamp);
+                            // Signals are valid indicators of recent TX
+                            if (!agent.lastTx) agent.lastTx = ev.id.txDigest;
+                        }
                     }
                 });
 
@@ -149,7 +172,21 @@ export default function LeaderboardPage() {
         fetchLeaderboard();
     }, []);
 
-    const filteredAgents = agents.filter(a =>
+    const handleSort = (key: keyof AgentProfile) => {
+        setSortConfig(prev => ({
+            key,
+            direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc'
+        }));
+    };
+
+    const sortedData = [...agents].sort((a, b) => {
+        const valA = a[sortConfig.key] || 0;
+        const valB = b[sortConfig.key] || 0;
+        if (sortConfig.direction === 'asc') return Number(valA) > Number(valB) ? 1 : -1;
+        return Number(valA) < Number(valB) ? 1 : -1;
+    });
+
+    const filteredAgents = sortedData.filter(a =>
         a.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
         a.creator.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -203,7 +240,7 @@ export default function LeaderboardPage() {
                         <div className="flex gap-2">
                             <div className="flex flex-col items-center justify-center h-full px-6 py-3 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
                                 <span className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Global TVL</span>
-                                <span className="text-xl font-bold font-mono text-neon-cyan">${(agents.reduce((acc, a) => acc + a.volume, 0) / 10).toFixed(1)}k</span>
+                                <span className="text-xl font-bold font-mono text-neon-cyan">${(agents.reduce((acc, a) => acc + a.volume, 0)).toFixed(1)} SUI</span>
                             </div>
                         </div>
                     </div>
@@ -282,16 +319,10 @@ export default function LeaderboardPage() {
                                             {agent.address.slice(0, 6)}...{agent.address.slice(-4)} <ExternalLink className="w-3 h-3" />
                                         </a>
                                     </div>
-                                    {agent.lastTx && (
-                                        <div className="flex items-center justify-between text-xs">
-                                            <span className="text-gray-500 font-mono">LAST ACTION</span>
-                                            <a
-                                                href={`https://suiscan.xyz/testnet/tx/${agent.lastTx}`}
-                                                target="_blank"
-                                                className="text-white/60 hover:text-white transition-colors flex items-center gap-1 font-mono"
-                                            >
-                                                {agent.lastTx.slice(0, 10)}... <ArrowUpRight className="w-3 h-3" />
-                                            </a>
+                                    {agent.lastSignal && (
+                                        <div className="flex flex-col gap-1 px-4 py-2 mt-4 rounded-2xl bg-neon-cyan/5 border border-neon-cyan/20 animate-pulse">
+                                            <span className="text-[9px] text-neon-cyan/60 font-mono tracking-tighter uppercase">Last Signal</span>
+                                            <span className="text-[11px] text-neon-cyan font-mono leading-tight">{agent.lastSignal}</span>
                                         </div>
                                     )}
                                 </div>
@@ -314,11 +345,19 @@ export default function LeaderboardPage() {
                             <thead>
                                 <tr className="border-b border-white/5 text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono">
                                     <th className="py-8 px-8 font-semibold w-24">Rank</th>
-                                    <th className="py-8 px-6 font-semibold">Agent Profile</th>
-                                    <th className="py-8 px-6 font-semibold">Performance</th>
-                                    <th className="py-8 px-6 font-semibold">Trust Score</th>
-                                    <th className="py-8 px-6 font-semibold">Last Interaction</th>
-                                    <th className="py-8 px-8 font-semibold text-right">Volume</th>
+                                    <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
+                                        Agent Profile {sortConfig.key === 'creator' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
+                                    </th>
+                                    <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
+                                        Performance {sortConfig.key === 'winRate' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
+                                    </th>
+                                    <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
+                                        Trust Score {sortConfig.key === 'elo' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
+                                    </th>
+                                    <th className="py-8 px-6 font-semibold">Neural Feed</th>
+                                    <th className="py-8 px-8 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
+                                        Volume {sortConfig.key === 'volume' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -432,22 +471,31 @@ export default function LeaderboardPage() {
                                                 </div>
                                             </td>
 
-                                            {/* Last Interaction */}
+                                            {/* Neural Feed */}
                                             <td className="py-8 px-6">
-                                                {agent.lastTx ? (
-                                                    <a
-                                                        href={`https://suiscan.xyz/testnet/tx/${agent.lastTx}`}
-                                                        target="_blank"
-                                                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 hover:border-neon-cyan/30 hover:bg-neon-cyan/5 transition-all group/tx"
-                                                    >
-                                                        <span className="text-[10px] font-mono text-gray-400 group-hover/tx:text-neon-cyan transition-colors">
-                                                            {agent.lastTx.slice(0, 12)}...
-                                                        </span>
-                                                        <ArrowUpRight className="w-3 h-3 opacity-0 group-hover/tx:opacity-100 transition-all text-neon-cyan" />
-                                                    </a>
-                                                ) : (
-                                                    <span className="text-[10px] font-mono text-gray-700">NO RECENT TX</span>
-                                                )}
+                                                <div className="flex flex-col gap-1 max-w-[200px]">
+                                                    {agent.lastSignal ? (
+                                                        <>
+                                                            <div className="flex items-center gap-1.5">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse shadow-[0_0_8px_rgba(0,229,255,1)]" />
+                                                                <span className="text-[10px] text-neon-cyan font-mono truncate uppercase tracking-tighter">
+                                                                    {agent.lastSignal}
+                                                                </span>
+                                                            </div>
+                                                            {agent.lastTx && (
+                                                                <a
+                                                                    href={`https://suiscan.xyz/testnet/tx/${agent.lastTx}`}
+                                                                    target="_blank"
+                                                                    className="text-[9px] text-gray-600 font-mono hover:text-white transition-colors mt-0.5 flex items-center gap-1"
+                                                                >
+                                                                    TX: {agent.lastTx.slice(0, 10)}... <ArrowUpRight className="w-2.5 h-2.5" />
+                                                                </a>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <span className="text-[10px] font-mono text-gray-700">STANDBY MODE</span>
+                                                    )}
+                                                </div>
                                             </td>
 
                                             {/* Volume */}
