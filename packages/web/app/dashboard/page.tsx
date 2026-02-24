@@ -81,6 +81,17 @@ function DashboardContent() {
     const suiClient = useSuiClient();
     const { mutateAsync: signTransaction } = useSignTransaction();
 
+    // Helper: Require wallet for operations
+    const requireAuth = () => {
+        if (!account) {
+            toast.error("Wallet Required", {
+                description: "Please connect your Sui wallet to perform this operation.",
+            });
+            return false;
+        }
+        return true;
+    };
+
     // Helper: Sign transaction with wallet, then execute via suiClient directly.
     // This completely bypasses the wallet's built-in gas sponsorship mechanism,
     // which causes "Insufficient sponsored budget for Gas Fee" errors.
@@ -374,6 +385,7 @@ function DashboardContent() {
     }, [selectedStrategy]);
 
     const handleUninstallSkill = async (slug: string) => {
+        if (!requireAuth()) return;
         if (!selectedStrategy?.id) return;
 
         const toastId = toast.loading(`Uninstalling ${slug}...`);
@@ -606,10 +618,7 @@ function DashboardContent() {
     }, [activeStrategies, isInitialized, account]);
 
     const handleDeploy = () => {
-        if (!account) {
-            toast.error("Please connect your Sui Wallet first");
-            return;
-        }
+        if (!requireAuth()) return;
 
         // Check duplicates
         if (activeStrategies.find(s => s.strategy_id === strategyId)) {
@@ -890,6 +899,7 @@ function DashboardContent() {
     };
 
     const stopStrategy = (dbId: string) => {
+        if (!requireAuth()) return;
         const foundStrategy = activeStrategies.find(s => s.id === dbId || s.strategy_id === dbId);
         if (!foundStrategy) return;
 
@@ -1199,6 +1209,7 @@ function DashboardContent() {
     }, [account, baseAsset]);
 
     const handleDeposit = () => {
+        if (!requireAuth()) return;
         if (!vaultId) return;
 
         // Helper to update modal state
@@ -1310,6 +1321,7 @@ function DashboardContent() {
     };
 
     const handleWithdraw = () => {
+        if (!requireAuth()) return;
         if (!vaultId || !ownerCapId) {
             toast.error("OwnerCap not found. Only the vault owner can withdraw.");
             return;
@@ -1397,7 +1409,7 @@ function DashboardContent() {
     };
 
     const handleCreateVault = () => {
-        if (!account) return;
+        if (!requireAuth()) return;
 
         setConfirmConfig({
             isOpen: true,
@@ -1584,6 +1596,7 @@ function DashboardContent() {
             confirmText: "CONFIRM TERMINAL",
             type: 'danger',
             onConfirm: async () => {
+                if (!requireAuth()) return;
                 setConfirmConfig(prev => ({ ...prev, isOpen: false }));
                 await executeVaultDestruction(vaultData);
             }
@@ -1641,7 +1654,7 @@ function DashboardContent() {
     };
 
     const handleRevokeAgent = async (agentCapId?: string) => {
-        if (!account) return;
+        if (!requireAuth()) return;
 
         toast.error("Revoke Agent requires the AgentCap object ID. Feature coming soon!", {
             description: "For now, stop agents using the toggle or Clear All button.",
@@ -1665,40 +1678,7 @@ function DashboardContent() {
         // });
     };
 
-    // --- ACCESS GUARD: Require Wallet Connection ---
-    if (!account) {
-        return (
-            <div className="min-h-screen flex items-center justify-center relative overflow-hidden p-4">
-                {/* Background Elements */}
-                <div className="absolute top-[-20%] right-[-20%] w-[600px] h-[600px] bg-neon-purple/10 rounded-full blur-[120px]"></div>
-                <div className="absolute bottom-[-20%] left-[-20%] w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-[120px]"></div>
-
-                <div className="text-center space-y-6 z-10 glass-panel p-8 md:p-12 rounded-2xl max-w-md w-full border border-white/10 shadow-2xl relative">
-                    <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 relative">
-                        <div className="absolute inset-0 bg-red-500/20 rounded-full animate-ping opacity-20"></div>
-                        <Shield className="text-gray-500" size={48} suppressHydrationWarning aria-hidden="true" />
-                    </div>
-
-                    <div className="space-y-2">
-                        <h2 className="text-3xl font-bold tracking-tighter text-white">NEURAL ENCLAVE LOCKED</h2>
-                        <p className="text-gray-400 text-sm font-light leading-relaxed max-w-sm mx-auto">
-                            Encrypted Neural Feed. Biometric signature required via <strong>zkLogin</strong> to decrypt your agent's ELO status and active strategies.
-                        </p>
-                    </div>
-
-                    <div className="flex justify-center pt-6 pb-2">
-                        <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-8 !py-3 !rounded-lg !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !w-full !justify-center" />
-                    </div>
-
-                    <div className="pt-6 border-t border-white/5">
-                        <Link href="/" className="text-xs text-gray-500 hover:text-white transition-colors flex items-center justify-center gap-2 group">
-                            <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Home
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    // Dashboard is now visible to guests. Operations will check for account.
 
     return (
         <div className="min-h-screen pt-36 pb-12 px-4 md:px-8 relative overflow-hidden">
