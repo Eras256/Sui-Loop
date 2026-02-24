@@ -61,10 +61,10 @@ Built in **Sui Move**, the on-chain layer enforces trustless execution:
 #### On-Chain Deployment (Testnet)
 | Contract | Address |
 |---|---|
-| Atomic Engine Package | `0x4cc674a7c3e5260fca6b4888de3dbae10d3bbde8f59876ba3553b2a41909e1e8` |
-| Agent Registry | `0xbea03ada1b06571463f385ceb8cd97b356ea7161ca902093c50209724431d65e` |
-| Strategy Marketplace | `0x4b0d27bebdfcf5a16de2ea0df7dad8bc86990367667adab3b488546de35a8a31` |
-| MockPool (SUI/SUI) | `0xf3fb0169fa56f257b613c7efe66d982143cdfb0a4ca91d5a3e394be1d066c868` |
+| Atomic Engine Package | `0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0` |
+| Agent Registry | `0xcbb6d114644b9573c76c1eee3f94ad4b8874273e7691f5c46d24add925b47e30` |
+| Strategy Marketplace | `0xa807a548a0e11d15126a5ee84d73f79614b9e79561e5a55e68a26e2f9dbd6945` |
+| MockPool (SUI/SUI) | `0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf` |
 
 ---
 
