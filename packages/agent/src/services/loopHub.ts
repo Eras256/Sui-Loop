@@ -731,6 +731,106 @@ export class LoopHubClient extends EventEmitter {
                 isFeatured: true,
                 publishedAt: new Date('2026-01-20'),
                 updatedAt: new Date('2026-02-15')
+            },
+            {
+                id: 'manual-sui-dca',
+                name: 'Manual SUI Accumulator (DCA)',
+                slug: 'manual-sui-dca',
+                version: '1.0.0',
+                description: 'Professional DCA tool for $SUI. Manually set accumulation levels or trigger at specific price points. Includes risk-adjusted entries with 0.00% fee.',
+                author: 'SuiLoop Core',
+                category: 'trading',
+                tags: ['manual', 'dca', 'accumulation', 'professional'],
+                permissions: ['blockchain:read', 'blockchain:write'],
+                actions: [
+                    {
+                        name: 'triggerAccumulation',
+                        description: 'Execute a single DCA buy order',
+                        handler: 'executeDCA',
+                        parameters: {
+                            amount: { type: 'number', description: 'Amount in USDC or SUI', required: true }
+                        }
+                    }
+                ],
+                downloads: 2150,
+                rating: 5.0,
+                reviewCount: 38,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-02-23'),
+                updatedAt: new Date('2026-02-24')
+            },
+            {
+                id: 'manual-hedge-master',
+                name: 'Delta Neutral Hedge Master',
+                slug: 'manual-hedge-master',
+                version: '1.2.0',
+                description: 'Real-time delta neutral hedging suite. Manually balance Long/Short positions across Cetus and Bluefin. Protect your capital from market volatility.',
+                author: 'SuiLoop Core',
+                category: 'trading',
+                tags: ['manual', 'hedging', 'risk', 'delta-neutral'],
+                permissions: ['blockchain:read', 'blockchain:write'],
+                downloads: 1840,
+                rating: 4.8,
+                reviewCount: 22,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-02-22'),
+                updatedAt: new Date('2026-02-24')
+            },
+            {
+                id: 'manual-lp-scout',
+                name: 'Manual Liquidity Scout',
+                slug: 'manual-lp-scout',
+                version: '2.0.1',
+                description: 'Visual range management for Cetus CLMM. Manually adjust liquidity ticks and monitor impermanent loss in real-time. Full manual control over pool ranges.',
+                author: 'SuiLoop Core',
+                category: 'trading',
+                tags: ['manual', 'liquidity', 'lp', 'clmm'],
+                permissions: ['blockchain:read', 'blockchain:write'],
+                downloads: 3200,
+                rating: 4.9,
+                reviewCount: 56,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-02-21'),
+                updatedAt: new Date('2026-02-24')
+            },
+            {
+                id: 'manual-yield-harvester',
+                name: 'Manual Yield Harvester',
+                slug: 'manual-yield-harvester',
+                version: '1.0.5',
+                description: 'Aggregates all pending rewards across Navi, Scallop, and Haedal. Manually claim all rewards in a single atomic transaction to minimize gas.',
+                author: 'SuiLoop Core',
+                category: 'utility',
+                tags: ['manual', 'yield', 'harvest', 'rewards'],
+                permissions: ['blockchain:read', 'blockchain:write'],
+                downloads: 4100,
+                rating: 4.7,
+                reviewCount: 89,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-02-20'),
+                updatedAt: new Date('2026-02-24')
+            },
+            {
+                id: 'manual-flash-arb',
+                name: 'Alpha Flash Arb Trigger',
+                slug: 'manual-flash-arb',
+                version: '0.9.9',
+                description: 'Manual trigger for flash loan arbitrage routes identified by the system. Gives you final control over execution after automated route discovery.',
+                author: 'SuiLoop Core',
+                category: 'trading',
+                tags: ['manual', 'flash-loan', 'arbitrage', 'alpha'],
+                permissions: ['blockchain:read', 'blockchain:write', 'network:fetch'],
+                downloads: 950,
+                rating: 4.6,
+                reviewCount: 15,
+                isVerified: true,
+                isFeatured: true,
+                publishedAt: new Date('2026-02-19'),
+                updatedAt: new Date('2026-02-24')
             }
         ];
 

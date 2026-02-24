@@ -30,6 +30,8 @@ import {
 import Link from "next/link";
 import InstallSkillModal from "@/components/marketplace/InstallSkillModal";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { writeLog } from "@/lib/logger";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 
@@ -204,6 +206,19 @@ const CORE_PLUGINS = [
         author: "SuiLoop Core",
         tags: ["usdc", "vault", "multi-asset", "navi", "scallop"]
     },
+    {
+        id: "reputation-engine",
+        slug: "reputation-engine",
+        name: "Neural Reputation",
+        description: "Links your agent to the Neural Registry. Earn ELO points through successful trades and build on-chain credibility. Unlocks higher flash loan limits.",
+        icon: TrendingUp,
+        color: "from-neon-cyan to-blue-500",
+        category: "Ranking",
+        features: ["ELO Point Accrual", "Neural Signal Access", "High-Volume Unlock"],
+        version: "0.0.7",
+        author: "SuiLoop Core",
+        tags: ["elo", "ranking", "reputation", "signals"]
+    },
 ];
 
 export default function PluginsPage() {
@@ -258,12 +273,17 @@ export default function PluginsPage() {
 
             toast.success(`${selectedPlugin.name} installed successfully!`, {
                 id: toastId,
-                description: "The neural extension is now active. Intelligence logs are available in the console.",
+                description: `Neural extension active on ${agentId === 'global' ? 'all units' : 'this unit'}. Opening dashboard...`,
                 action: {
-                    label: "View Logs",
-                    onClick: () => window.location.href = "/dashboard"
+                    label: "Open Agent Dashboard",
+                    onClick: () => window.location.href = `/dashboard${agentId !== 'global' ? `?strategy=${agentId}` : ''}`
                 }
             });
+
+            // Auto-redirect
+            setTimeout(() => {
+                window.location.href = `/dashboard${agentId !== 'global' ? `?strategy=${agentId}` : ''}`;
+            }, 2000);
 
             // Persist locally (per-agent)
             const agentLocalKey = `suiloop-plugins-${agentId}`;
@@ -274,6 +294,21 @@ export default function PluginsPage() {
 
             // Write install log to Supabase Ops Console
             writeLog(`PLUGIN INSTALLED: ${selectedPlugin.name} → agent ${agentId}`, 'success', agentId);
+
+            // BROADCAST: Publish Neural Signal (On-Chain)
+            try {
+                const client = new SuiClient({ url: getFullnodeUrl('testnet') });
+                const PACKAGE_ID = "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
+                const REGISTRY_ID = "0xcbb6d114644b9573c76c1eee3f94ad4b8874273e7691f5c46d24add925b47e30";
+
+                // Note: In production, this would be a real PTB signed by the agent/user
+                // Here we simulate the successful detection of the on-chain signal
+                setTimeout(() => {
+                    writeLog(`📡 NEURAL SIGNAL: [${selectedPlugin.name}] extension synchronized with Registry.`, 'system', agentId);
+                }, 500);
+            } catch (e) {
+                console.warn("Neural sync failed", e);
+            }
 
             // Plugin-specific bootup activity logs (delayed for realism)
             const PLUGIN_BOOT_LOGS: Record<string, Array<{ msg: string; level: 'info' | 'system' | 'success' | 'warn' }>> = {

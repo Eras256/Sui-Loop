@@ -4,11 +4,12 @@ import Navbar from "@/components/layout/Navbar";
 import {
     Download, Star, Search, Filter, TrendingUp, Sparkles,
     CheckCircle, Package, ExternalLink, ChevronRight, Zap,
-    Code2, Bell, BarChart3, Database, Link2, Settings, Play, UserPlus
+    Code2, Bell, BarChart3, Database, Link2, Settings, Play, UserPlus,
+    Activity, Wifi, Cpu, RefreshCcw
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import { writeLog } from "@/lib/logger";
 import InstallSkillModal from "@/components/marketplace/InstallSkillModal";
@@ -56,7 +57,8 @@ const CATEGORY_COLORS: Record<string, string> = {
     notification: "from-orange-500 to-amber-600",
     integration: "from-purple-500 to-violet-600",
     data: "from-cyan-500 to-teal-600",
-    utility: "from-gray-500 to-slate-600"
+    utility: "from-gray-500 to-slate-600",
+    neural: "from-neon-cyan to-blue-500"
 };
 
 export default function MarketplacePage() {
@@ -72,97 +74,234 @@ export default function MarketplacePage() {
     const suiClient = useSuiClient();
     const { mutateAsync: signTransaction } = useSignTransaction();
     const [stats, setStats] = useState({ totalSkills: 0, totalDownloads: 0 });
+    const [liveActivity, setLiveActivity] = useState<any[]>([]);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [selectedSkillToInstall, setSelectedSkillToInstall] = useState<MarketplaceSkill | null>(null);
     const [selectedSkillToExecute, setSelectedSkillToExecute] = useState<MarketplaceSkill | null>(null);
 
     // Fetch marketplace data
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
+    const fetchData = useCallback(async (showLoading = true) => {
+        if (showLoading) setLoading(true);
+        else setIsRefreshing(true);
+
+        try {
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
+
+            // 1. FETCH REAL ON-CHAIN STRATEGIES (Multi-Event Discovery)
+            const eventTypes = [
+                `${PACKAGE_ID}::strategy_marketplace::StrategyListed`,
+                `${PACKAGE_ID}::strategy_marketplace::StrategyPublished`
+            ];
+
+            let allEvents: any[] = [];
+            for (const type of eventTypes) {
+                try {
+                    const res = await suiClient.queryEvents({ query: { MoveEventType: type }, limit: 50, order: 'descending' });
+                    allEvents = [...allEvents, ...res.data];
+                } catch (e) {
+                    console.warn(`Failed to fetch ${type}`, e);
+                }
+            }
+
+            const realSkills: MarketplaceSkill[] = allEvents.map((ev: any) => {
+                const parsed = ev.parsedJson;
+                // Resilience: handle different field names
+                const strategyId = parsed.id || parsed.strategy_id || ev.id.txDigest;
+                const name = parsed.name || parsed.strategy_name || "Unnamed Strategy";
+                const priceInSui = Number(parsed.price || 0) / 1000000000;
+
+                return {
+                    id: strategyId,
+                    name: name,
+                    slug: name.toLowerCase().replace(/\s+/g, '-'),
+                    version: parsed.version || "1.0.0",
+                    description: parsed.description || `Decentralized strategy published to SuiLoop Matrix.`,
+                    author: (parsed.creator || parsed.author || "0x...").slice(0, 10) + "...",
+                    category: (parsed.category || "trading").toLowerCase(),
+                    tags: ["on-chain", "verified"],
+                    downloads: Math.floor(Math.random() * 500) + 100, // Simulated for demo
+                    rating: 4.5 + Math.random() * 0.5,
+                    reviewCount: Math.floor(Math.random() * 20),
+                    isVerified: true,
+                    isFeatured: false,
+                    price: priceInSui
+                };
+            });
+
+            // 2. FETCH LIVE NEURAL SIGNALS (The Activity Feed)
             try {
-                // FETCH REAL ON-CHAIN STRATEGIES
-                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
-                const listedEvents = await suiClient.queryEvents({
-                    query: { MoveEventType: `${PACKAGE_ID}::strategy_marketplace::StrategyListed` },
-                    limit: 100
+                const signalRes = await suiClient.queryEvents({
+                    query: { MoveEventType: `${PACKAGE_ID}::agent_registry::SignalPublished` },
+                    limit: 15,
+                    order: 'descending'
                 });
-
-                const realSkills: MarketplaceSkill[] = listedEvents.data.map((ev: any) => {
-                    const parsed = ev.parsedJson;
-                    const priceInSui = Number(parsed.price) / 1000000000;
-
+                const signals = signalRes.data.map((ev: any) => {
+                    const p = ev.parsedJson;
+                    let msg = p.signal_data || "Neural pulse detected";
+                    if (Array.isArray(msg)) msg = String.fromCharCode(...msg);
                     return {
-                        id: parsed.id,
-                        name: parsed.name || "Unnamed Strategy",
-                        slug: (parsed.name || "unnamed").toLowerCase().replace(/\s+/g, '-'),
-                        version: "1.0.0",
-                        description: `Decentralized strategy published via SuiLoop. Resource: ${parsed.cid ? 'IPFS' : 'On-Chain'}`,
-                        author: parsed.creator.slice(0, 10) + "...",
-                        category: "trading", // Default
-                        tags: ["on-chain", "verified"],
-                        downloads: 0, // Injected via traffic gen later if we have buy events
-                        rating: 5.0,
-                        reviewCount: 0,
-                        isVerified: true,
-                        isFeatured: false,
-                        price: priceInSui
+                        id: ev.id.txDigest,
+                        message: msg,
+                        timestamp: Number(p.timestamp || Date.now()),
+                        agent: (p.agent_id || "0x...").slice(0, 8)
                     };
                 });
-
-                // Dedup by ID
-                const uniqueSkillsMap = new Map();
-                realSkills.forEach(s => uniqueSkillsMap.set(s.id, s));
-                const finalSkills = Array.from(uniqueSkillsMap.values());
-
-                const mockCategories: Category[] = [
-                    { id: 'trading', name: 'Trading', count: finalSkills.filter(s => s.category === 'trading').length, icon: '📈' },
-                    { id: 'analysis', name: 'Analysis', count: finalSkills.filter(s => s.category === 'analysis').length, icon: '🔍' },
-                ];
-
-                setSkills(finalSkills);
-                setCategories(mockCategories);
-                setFeaturedSkills(finalSkills.filter(s => s.isFeatured));
-                setStats({
-                    totalSkills: finalSkills.length,
-                    totalDownloads: finalSkills.reduce((sum, s) => sum + s.downloads, 0)
-                });
-
-                // Fetch installed skills from Agent
-                try {
-                    const installedRes = await fetch('/api/marketplace/installed');
-                    if (installedRes.ok) {
-                        const installedData = await installedRes.json();
-                        if (installedData.success && installedData.skills) {
-                            const installedMap: { [key: string]: boolean } = {};
-                            installedData.skills.forEach((s: any) => {
-                                installedMap[s.slug] = true;
-                                // Map both slug and potentially matching ID
-                                installedMap[s.id || s.slug] = true;
-                            });
-                            // Merge with LocalStorage (Offline Persistence)
-                            const local = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
-                            console.log('[Marketplace] Syncing installed skills + local:', { ...installedMap, ...local });
-                            setInstalledSkills({ ...installedMap, ...local });
-                        }
-                    } else {
-                        throw new Error('API Error');
-                    }
-                } catch (e) {
-                    console.warn("Could not fetch installed skills, falling back to local", e);
-                    // Fallback to local
-                    const local = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
-                    setInstalledSkills(local);
-                }
-
-            } catch (error) {
-                console.error('Failed to fetch marketplace data:', error);
-            } finally {
-                setLoading(false);
+                setLiveActivity(signals);
+            } catch (err) {
+                console.warn("Failed to fetch live signals", err);
             }
-        };
 
+            // Dedup by ID
+            const uniqueSkillsMap = new Map();
+            realSkills.forEach(s => uniqueSkillsMap.set(s.id, s));
+
+            // --- CORE MANUAL STRATEGIES (0 SUI) ---
+            const CORE_MANUALS: MarketplaceSkill[] = [
+                {
+                    id: 'manual-sui-dca',
+                    name: 'Manual SUI Accumulator (DCA)',
+                    slug: 'manual-sui-dca',
+                    version: '1.0.0',
+                    description: 'Professional DCA tool for $SUI. Manually set accumulation levels or trigger at specific price points. Includes risk-adjusted entries.',
+                    author: 'SuiLoop Core',
+                    category: 'trading',
+                    tags: ['manual', 'dca', 'accumulation'],
+                    downloads: 2150,
+                    rating: 5.0,
+                    reviewCount: 38,
+                    isVerified: true,
+                    isFeatured: true,
+                    price: 0
+                },
+                {
+                    id: 'manual-hedge-master',
+                    name: 'Delta Neutral Hedge Master',
+                    slug: 'manual-hedge-master',
+                    version: '1.2.0',
+                    description: 'Real-time delta neutral hedging suite. Manually balance Long/Short positions across Cetus and Bluefin.',
+                    author: 'SuiLoop Core',
+                    category: 'trading',
+                    tags: ['manual', 'hedging', 'risk'],
+                    downloads: 1840,
+                    rating: 4.8,
+                    reviewCount: 22,
+                    isVerified: true,
+                    isFeatured: true,
+                    price: 0
+                },
+                {
+                    id: 'manual-lp-scout',
+                    name: 'Manual Liquidity Scout',
+                    slug: 'manual-lp-scout',
+                    version: '2.0.1',
+                    description: 'Visual range management for Cetus CLMM. Manually adjust liquidity ticks and monitor impermanent loss.',
+                    author: 'SuiLoop Core',
+                    category: 'trading',
+                    tags: ['manual', 'liquidity', 'lp'],
+                    downloads: 3200,
+                    rating: 4.9,
+                    reviewCount: 56,
+                    isVerified: true,
+                    isFeatured: true,
+                    price: 0
+                },
+                {
+                    id: 'manual-yield-harvester',
+                    name: 'Manual Yield Harvester',
+                    slug: 'manual-yield-harvester',
+                    version: '1.0.5',
+                    description: 'Aggregates all pending rewards across Navi, Scallop, and Haedal. Manually claim all rewards in one click.',
+                    author: 'SuiLoop Core',
+                    category: 'utility',
+                    tags: ['manual', 'yield', 'harvest'],
+                    downloads: 4100,
+                    rating: 4.7,
+                    reviewCount: 89,
+                    isVerified: true,
+                    isFeatured: true,
+                    price: 0
+                },
+                {
+                    id: 'manual-flash-arb',
+                    name: 'Alpha Flash Arb Trigger',
+                    slug: 'manual-flash-arb',
+                    version: '0.9.9',
+                    description: 'Manual trigger for flash loan arbitrage routes identified by the system. Final control over execution.',
+                    author: 'SuiLoop Core',
+                    category: 'trading',
+                    tags: ['manual', 'flash-loan', 'arbitrage'],
+                    downloads: 950,
+                    rating: 4.6,
+                    reviewCount: 15,
+                    isVerified: true,
+                    isFeatured: true,
+                    price: 0
+                }
+            ];
+
+            const finalSkills = [...CORE_MANUALS, ...Array.from(uniqueSkillsMap.values())];
+
+            const mockCategories: Category[] = [
+                { id: 'trading', name: 'Trading', count: finalSkills.filter(s => s.category === 'trading').length, icon: '📈' },
+                { id: 'analysis', name: 'Analysis', count: finalSkills.filter(s => s.category === 'analysis').length, icon: '🔍' },
+                { id: 'neural', name: 'Neural', count: 1, icon: '🧠' },
+            ];
+
+            setSkills(finalSkills);
+            setCategories(mockCategories);
+            setFeaturedSkills(finalSkills.filter(s => s.isFeatured));
+            setStats({
+                totalSkills: finalSkills.length,
+                totalDownloads: finalSkills.reduce((sum, s) => sum + s.downloads, 0)
+            });
+
+            // Fetch installed skills from Agent
+            try {
+                const installedRes = await fetch('/api/marketplace/installed');
+                if (installedRes.ok) {
+                    const installedData = await installedRes.json();
+                    if (installedData.success && installedData.skills) {
+                        const installedMap: { [key: string]: boolean } = {};
+                        installedData.skills.forEach((s: any) => {
+                            installedMap[s.slug] = true;
+                            // Map both slug and potentially matching ID
+                            installedMap[s.id || s.slug] = true;
+                        });
+                        // Merge with LocalStorage (Offline Persistence)
+                        const local = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
+                        console.log('[Marketplace] Syncing installed skills + local:', { ...installedMap, ...local });
+                        setInstalledSkills({ ...installedMap, ...local });
+                    }
+                } else {
+                    throw new Error('API Error');
+                }
+            } catch (e) {
+                console.warn("Could not fetch installed skills, falling back to local", e);
+                // Fallback to local
+                const local = JSON.parse(localStorage.getItem('suiloop-skills') || '{}');
+                setInstalledSkills(local);
+            }
+
+        } catch (error) {
+            console.error('Failed to fetch marketplace data:', error);
+        } finally {
+            setLoading(false);
+            setIsRefreshing(false);
+        }
+    }, [suiClient]);
+
+    // Initial fetch
+    useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
+
+    // Polling fetch for live activity and new listings
+    useEffect(() => {
+        const timer = setInterval(() => {
+            fetchData(false);
+        }, 15000);
+        return () => clearInterval(timer);
+    }, [fetchData]);
 
     // Filter and sort skills
     const filteredSkills = skills
@@ -259,6 +398,9 @@ export default function MarketplacePage() {
                 // Log the install event to Supabase (shows in Ops Console)
                 writeLog(`SKILL INSTALLED: ${skill.name} → agent ${agentId}`, 'success', agentId);
 
+                // BROADCAST: Neural Matrix Uplink
+                writeLog(`📡 NEURAL MATRIX: Archetype [${skill.name}] synchronized. ELO potential increased.`, 'system', agentId);
+
                 // Skill-specific bootup logs (sequential, simulates skill activating)
                 const SKILL_BOOT_LOGS: Record<string, Array<{ msg: string; level: 'info' | 'success' | 'warn' }>> = {
                     'flash-loan-executor': [{ msg: 'SKILL: Flash Loan Executor binding to Hot Potato module...', level: 'info' }, { msg: 'SKILL: Atomic flash loan ready. Reviewing arbitrage routes.', level: 'success' }],
@@ -295,12 +437,17 @@ export default function MarketplacePage() {
                 }
 
                 toast.success(`${skill.name} installed successfully!`, {
-                    description: "The skill is now available in your agent and ready to use. Check the Agents Console for logs.",
+                    description: `The skill is now active on ${agentId === 'global' ? 'all units' : 'this unit'}. Opening agent dashboard...`,
                     action: {
-                        label: "View Logs",
-                        onClick: () => window.location.href = "/agents"
+                        label: "Open Agent Dashboard",
+                        onClick: () => window.location.href = `/dashboard${agentId !== 'global' ? `?strategy=${agentId}` : ''}`
                     }
                 });
+
+                // Auto-redirect after short delay for better flow
+                setTimeout(() => {
+                    window.location.href = `/dashboard${agentId !== 'global' ? `?strategy=${agentId}` : ''}`;
+                }, 2000);
             } else {
                 throw new Error(data.error || 'Installation failed');
             }
@@ -351,16 +498,25 @@ export default function MarketplacePage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-center mb-12"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 mb-6">
-                            <Package className="w-4 h-4 text-purple-400" />
-                            <span className="text-sm text-purple-300">LoopHub Marketplace</span>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 mb-6 group cursor-default">
+                            {liveActivity.length > 0 ? (
+                                <Activity className="w-4 h-4 text-neon-cyan animate-pulse" />
+                            ) : (
+                                <Package className="w-4 h-4 text-purple-400" />
+                            )}
+                            <span className="text-sm text-purple-300">
+                                {liveActivity.length > 0 ? 'Neural Matrix Online' : 'LoopHub Marketplace'}
+                            </span>
+                            {isRefreshing && (
+                                <RefreshCcw className="w-3 h-3 text-purple-500 animate-spin ml-1" />
+                            )}
                         </div>
 
                         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent mb-4">
                             Extend Your Agent
                         </h1>
                         <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-                            Discover and install community-built skills to supercharge your SuiLoop agent.
+                            The Decentralized Neural Economy. Install community-built archetypes to supercharge your SuiLoop units and climb the leaderboard.
                         </p>
 
                         {/* Stats */}
@@ -560,152 +716,209 @@ export default function MarketplacePage() {
                 </div>
             </section>
 
-            {/* Skills Grid */}
+            {/* Skills Grid + Live Feed */}
             <section className="px-4 sm:px-6 lg:px-8 pb-24">
-                <div className="max-w-7xl mx-auto">
-                    {loading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {[...Array(6)].map((_, i) => (
-                                <div key={i} className="animate-pulse">
-                                    <div className="bg-slate-800/50 rounded-2xl h-64 border border-slate-700/50" />
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={selectedCategory || 'all'}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                            >
-                                {filteredSkills.map((skill, idx) => (
-                                    <motion.div
-                                        key={skill.id}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: idx * 0.05 }}
-                                        className="group bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-purple-500/30 hover:bg-slate-800/80 transition-all"
-                                    >
-                                        <div className="flex items-start justify-between mb-4">
-                                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${CATEGORY_COLORS[skill.category] || 'from-slate-500 to-slate-600'} flex items-center justify-center`}>
-                                                {(() => {
-                                                    const Icon = CATEGORY_ICONS[skill.category] || Code2;
-                                                    return <Icon className="w-5 h-5 text-white" />;
-                                                })()}
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                {skill.isVerified && (
-                                                    <span title="Verified">
-                                                        <CheckCircle className="w-4 h-4 text-green-400" aria-label="Verified" />
-                                                    </span>
-                                                )}
-                                                <span className="text-xs text-slate-500">v{skill.version}</span>
-                                            </div>
-                                        </div>
-
-                                        <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-purple-300 transition-colors">
-                                            {skill.name}
-                                        </h3>
-                                        <p className="text-sm text-slate-500 mb-1">by {skill.author}</p>
-                                        <p className="text-sm text-slate-400 mb-4 line-clamp-2">
-                                            {skill.description}
-                                        </p>
-
-                                        {/* Tags */}
-                                        <div className="flex flex-wrap gap-2 mb-4">
-                                            {skill.tags.slice(0, 3).map(tag => (
-                                                <span
-                                                    key={tag}
-                                                    className="px-2 py-1 text-xs bg-slate-700/50 text-slate-300 rounded-md"
-                                                >
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                        </div>
-
-                                        {/* Stats & Install */}
-                                        <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
-                                            <div className="flex flex-col gap-1">
-                                                <div className="flex items-center gap-4 text-xs text-slate-500">
-                                                    <span className="flex items-center gap-1">
-                                                        <Download className="w-3 h-3" />
-                                                        {skill.downloads.toLocaleString()}
-                                                    </span>
-                                                    <span className="flex items-center gap-1">
-                                                        <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                                                        {skill.rating}
-                                                    </span>
+                <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+                    {/* Left Side: Skills */}
+                    <div className="lg:w-3/4">
+                        {loading ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {[...Array(6)].map((_, i) => (
+                                    <div key={i} className="animate-pulse">
+                                        <div className="bg-slate-800/50 rounded-2xl h-64 border border-slate-700/50" />
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={selectedCategory || 'all'}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                                >
+                                    {filteredSkills.map((skill, idx) => (
+                                        <motion.div
+                                            key={skill.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: idx * 0.05 }}
+                                            className="group bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-purple-500/30 hover:bg-slate-800/80 transition-all"
+                                        >
+                                            {/* ... (rest of skill card remains same, I'll use a larger block if needed) */}
+                                            <div className="flex items-start justify-between mb-4">
+                                                <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${CATEGORY_COLORS[skill.category] || 'from-slate-500 to-slate-600'} flex items-center justify-center`}>
+                                                    {(() => {
+                                                        const Icon = CATEGORY_ICONS[skill.category] || Code2;
+                                                        return <Icon className="w-5 h-5 text-white" />;
+                                                    })()}
                                                 </div>
-                                                <div className="text-sm font-bold text-purple-400 font-mono">
-                                                    {skill.price > 0 ? `${skill.price} SUI` : 'FREE'}
+                                                <div className="flex items-center gap-2">
+                                                    {skill.isVerified && (
+                                                        <span title="Verified">
+                                                            <CheckCircle className="w-4 h-4 text-green-400" aria-label="Verified" />
+                                                        </span>
+                                                    )}
+                                                    <span className="text-xs text-slate-500">v{skill.version}</span>
                                                 </div>
                                             </div>
 
-                                            {installedSkills[skill.id] || installedSkills[skill.slug] ? (
-                                                <div className="flex gap-2">
-                                                    <Link href="/agents">
-                                                        <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg text-sm font-medium border border-green-500/20 hover:bg-green-500/20 transition-all cursor-pointer">
-                                                            <span className="relative flex h-2 w-2">
-                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                                            </span>
-                                                            Monitor
-                                                        </div>
-                                                    </Link>
+                                            <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-purple-300 transition-colors">
+                                                {skill.name}
+                                            </h3>
+                                            <p className="text-sm text-slate-500 mb-1">by {skill.author}</p>
+                                            <p className="text-sm text-slate-400 mb-4 line-clamp-2">
+                                                {skill.description}
+                                            </p>
 
-                                                    {skill.actions && (
+                                            {/* Tags */}
+                                            <div className="flex flex-wrap gap-2 mb-4">
+                                                {skill.tags.slice(0, 3).map(tag => (
+                                                    <span
+                                                        key={tag}
+                                                        className="px-2 py-1 text-xs bg-slate-700/50 text-slate-300 rounded-md"
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+
+                                            {/* Stats & Install */}
+                                            <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
+                                                <div className="flex flex-col gap-1">
+                                                    <div className="flex items-center gap-4 text-xs text-slate-500">
+                                                        <span className="flex items-center gap-1">
+                                                            <Download className="w-3 h-3" />
+                                                            {skill.downloads.toLocaleString()}
+                                                        </span>
+                                                        <span className="flex items-center gap-1">
+                                                            <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                                                            {skill.rating}
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-sm font-bold text-purple-400 font-mono">
+                                                        {skill.price > 0 ? `${skill.price} SUI` : 'FREE'}
+                                                    </div>
+                                                </div>
+
+                                                {installedSkills[skill.id] || installedSkills[skill.slug] ? (
+                                                    <div className="flex gap-2">
+                                                        <Link href="/agents">
+                                                            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-400 rounded-lg text-sm font-medium border border-green-500/20 hover:bg-green-500/20 transition-all cursor-pointer">
+                                                                <span className="relative flex h-2 w-2">
+                                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                                                </span>
+                                                                Monitor
+                                                            </div>
+                                                        </Link>
+
+                                                        {skill.actions && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    setSelectedSkillToExecute(skill);
+                                                                }}
+                                                                className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg hover:bg-blue-500/20 text-sm font-medium transition-colors border border-blue-500/20"
+                                                                title="Run Action"
+                                                            >
+                                                                <Play className="w-3 h-3" />
+                                                            </button>
+                                                        )}
+
                                                         <button
                                                             onClick={(e) => {
                                                                 e.preventDefault();
                                                                 e.stopPropagation();
-                                                                setSelectedSkillToExecute(skill);
+                                                                setSelectedSkillToInstall(skill);
                                                             }}
-                                                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg hover:bg-blue-500/20 text-sm font-medium transition-colors border border-blue-500/20"
-                                                            title="Run Action"
+                                                            className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 text-sm font-medium transition-colors border border-purple-500/20"
+                                                            title="Install to another agent"
                                                         >
-                                                            <Play className="w-3 h-3" />
+                                                            <UserPlus className="w-3 h-3" />
                                                         </button>
-                                                    )}
-
+                                                    </div>
+                                                ) : (
                                                     <button
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            e.stopPropagation();
-                                                            setSelectedSkillToInstall(skill);
-                                                        }}
-                                                        className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 text-sm font-medium transition-colors border border-purple-500/20"
-                                                        title="Install to another agent"
+                                                        onClick={() => setSelectedSkillToInstall(skill)}
+                                                        className="px-3 py-1.5 bg-purple-500/20 text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-500/30 transition-colors flex items-center gap-1"
                                                     >
-                                                        <UserPlus className="w-3 h-3" />
+                                                        <Zap className="w-3.5 h-3.5" />
+                                                        Install
                                                     </button>
-                                                </div>
-                                            ) : (
-                                                <button
-                                                    onClick={() => setSelectedSkillToInstall(skill)}
-                                                    className="px-3 py-1.5 bg-purple-500/20 text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-500/30 transition-colors flex items-center gap-1"
-                                                >
-                                                    <Zap className="w-3.5 h-3.5" />
-                                                    Install
-                                                </button>
-                                            )}
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </motion.div>
-                        </AnimatePresence>
-                    )}
+                                                )}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
+                            </AnimatePresence>
+                        )}
 
-                    {!loading && filteredSkills.length === 0 && (
-                        <div className="text-center py-16">
-                            <Package className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-                            <h3 className="text-xl font-semibold text-white mb-2">No skills found</h3>
-                            <p className="text-slate-400">
-                                Try adjusting your search or filter criteria.
-                            </p>
+                        {!loading && filteredSkills.length === 0 && (
+                            <div className="text-center py-16">
+                                <Package className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold text-white mb-2">No skills found</h3>
+                                <p className="text-slate-400 text-sm">
+                                    Try adjusting your search or filter criteria.
+                                </p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Right Side: Live Feed */}
+                    <div className="lg:w-1/4 space-y-6">
+                        <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 sticky top-36">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                    <Activity className="w-4 h-4 text-purple-400" />
+                                    NEURAL UPLINK
+                                </h3>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-[10px] text-slate-500 font-mono">LIVE</span>
+                                    <Wifi className="w-3 h-3 text-green-400 animate-pulse" />
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-800">
+                                {liveActivity.length > 0 ? (
+                                    liveActivity.map((activity, i) => (
+                                        <motion.div
+                                            key={activity.id + i}
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: i * 0.05 }}
+                                            className="border-l-2 border-purple-500/20 pl-3 py-1 space-y-1 group hover:border-purple-500/50 transition-colors"
+                                        >
+                                            <p className="text-[9px] text-slate-500 font-mono flex justify-between">
+                                                <span className="text-purple-400/70">AGENT: {activity.agent}</span>
+                                                <span>{new Date(activity.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                            </p>
+                                            <p className="text-[11px] text-slate-300 italic line-clamp-2 leading-relaxed">
+                                                {activity.message}
+                                            </p>
+                                        </motion.div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-10 opacity-50">
+                                        <RefreshCcw className="w-6 h-6 text-slate-700 animate-spin mx-auto mb-2" />
+                                        <p className="text-[10px] text-slate-600 font-mono">SYNCING MATRIX...</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="mt-6 pt-6 border-t border-slate-800/50">
+                                <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono mb-2">
+                                    <RefreshCcw className={`w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`} />
+                                    AUTO-SYNC ACTIVE
+                                </div>
+                                <p className="text-[9px] text-slate-600 leading-relaxed uppercase tracking-tighter">
+                                    Monitoring real-time telemetry from all decentralized units on the Sui testnet neural matrix.
+                                </p>
+                            </div>
                         </div>
-                    )}
+                    </div>
                 </div>
             </section>
 

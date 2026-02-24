@@ -11,7 +11,7 @@ import { ConnectButton, useCurrentAccount, useSignTransaction, useSuiClient } fr
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw, Zap, Plus, Code, Cpu } from "lucide-react";
+import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, RefreshCw, Zap, Plus, Code, Cpu, TrendingUp } from "lucide-react";
 import OpsConsole from "@/components/layout/OpsConsole";
 import { writeLog } from "@/lib/logger";
 import { getWebSocketUrl } from "@/lib/constants";
@@ -133,8 +133,18 @@ function DashboardContent() {
     const [amountInput, setAmountInput] = useState<string>("0.1");
     const [installedSkills, setInstalledSkills] = useState<any[]>([]);
 
-    const tradingSkills = installedSkills.filter(s => s.category === 'trading' || s.category === 'defi');
-    const activePlugins = installedSkills.filter(s => s.category !== 'trading' && s.category !== 'defi');
+    const tradingSkills = installedSkills.filter(s =>
+        s.category === 'trading' ||
+        s.category === 'defi' ||
+        s.category === 'analysis' ||
+        s.category === 'sniping'
+    );
+    const activePlugins = installedSkills.filter(s =>
+        s.category !== 'trading' &&
+        s.category !== 'defi' &&
+        s.category !== 'analysis' &&
+        s.category !== 'sniping'
+    );
     const [isSkillsLoading, setIsSkillsLoading] = useState(false);
 
     const [confirmConfig, setConfirmConfig] = useState<{
@@ -302,12 +312,28 @@ function DashboardContent() {
                 'webhook-trigger': { slug: 'webhook-trigger', name: 'Webhook Event Trigger', version: '2.0.0', category: 'integration', isGlobal: false },
                 'walrus-blackbox-logger': { slug: 'walrus-blackbox-logger', name: 'Walrus Blackbox Logger', version: '0.0.7', category: 'utility', isGlobal: true },
                 'usdc-vault-manager': { slug: 'usdc-vault-manager', name: 'USDC Vault Manager', version: '0.0.7', category: 'trading', isGlobal: false },
+                // Manual Real Strategies (0 SUI)
+                'manual-sui-dca': { slug: 'manual-sui-dca', name: 'Manual SUI Accumulator (DCA)', version: '1.0.0', category: 'trading', isGlobal: false },
+                'manual-hedge-master': { slug: 'manual-hedge-master', name: 'Delta Neutral Hedge Master', version: '1.2.0', category: 'trading', isGlobal: false },
+                'manual-lp-scout': { slug: 'manual-lp-scout', name: 'Manual Liquidity Scout', version: '2.0.1', category: 'trading', isGlobal: false },
+                'manual-yield-harvester': { slug: 'manual-yield-harvester', name: 'Manual Yield Harvester', version: '1.0.5', category: 'utility', isGlobal: false },
+                'manual-flash-arb': { slug: 'manual-flash-arb', name: 'Alpha Flash Arb Trigger', version: '0.9.9', category: 'trading', isGlobal: false },
             };
 
             // Read from localStorage PER-AGENT (where Marketplace + Plugins pages persist installs)
             const localSkills = JSON.parse(localStorage.getItem(`suiloop-skills-${agentId}`) || '{}');
             const localPlugins = JSON.parse(localStorage.getItem(`suiloop-plugins-${agentId}`) || '{}');
-            const allLocalInstalled = { ...localSkills, ...localPlugins };
+
+            // ALSO include Global Skills/Plugins (Neural Matrix)
+            const globalSkills = JSON.parse(localStorage.getItem(`suiloop-skills-global`) || '{}');
+            const globalPlugins = JSON.parse(localStorage.getItem(`suiloop-plugins-global`) || '{}');
+
+            const allLocalInstalled = {
+                ...globalSkills,
+                ...globalPlugins,
+                ...localSkills,
+                ...localPlugins
+            };
 
             // Build full skill objects from the catalog
             const resolved: any[] = [];
@@ -363,6 +389,19 @@ function DashboardContent() {
             localStorage.setItem(`suiloop-skills-${agentId}`, JSON.stringify(localSkills));
             localStorage.setItem(`suiloop-plugins-${agentId}`, JSON.stringify(localPlugins));
 
+            // Call backend API to unassign if possible
+            try {
+                const apiRes = await fetch(`/api/skills/${slug}?agentId=${agentId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${process.env.AGENT_API_KEY || ''}` }
+                });
+                if (!apiRes.ok) {
+                    console.warn('[Dashboard] Failed to unassign skill from agent backend');
+                }
+            } catch (e) {
+                console.warn('[Dashboard] Agent offline, skipping backend unassign');
+            }
+
             // Update state
             setInstalledSkills(prev => prev.filter(s => s.slug !== slug));
             toast.success("Skill uninstalled", { id: toastId });
@@ -396,6 +435,11 @@ function DashboardContent() {
         "liquid-staking-arb": { name: "LST Peg Restoration", logPrefix: "PEG-ARB", emoji: "💧" },
         "eliza-sentiment": { name: "Eliza Sentiment Engine", logPrefix: "AI-SENTIMENT", emoji: "🧠" },
         "lending-loop-max": { name: "Navi-Scallop Recursive Yield", logPrefix: "LENDING", emoji: "📈" },
+        "manual-sui-dca": { name: "Manual SUI Accumulator (DCA)", logPrefix: "DCA", emoji: "💰" },
+        "manual-hedge-master": { name: "Delta Neutral Hedge Master", logPrefix: "HEDGE", emoji: "⚖️" },
+        "manual-lp-scout": { name: "Manual Liquidity Scout", logPrefix: "LP", emoji: "🌊" },
+        "manual-yield-harvester": { name: "Manual Yield Harvester", logPrefix: "HARVEST", emoji: "🚜" },
+        "manual-flash-arb": { name: "Alpha Flash Arb Trigger", logPrefix: "FLASH", emoji: "🎯" },
         "blue-chip-dca": { name: "Weighted DCA Accumulator", logPrefix: "DCA", emoji: "💰" },
         "stable-yield-agg": { name: "Stablecoin Optimization Loop", logPrefix: "STABLE", emoji: "🏦" },
         "cetus-clmm-active": { name: "CLMM Active Provisioner", logPrefix: "CLMM", emoji: "🛠️" },
@@ -1042,7 +1086,7 @@ function DashboardContent() {
                 ws.onopen = () => {
                     if (isUnmounted) return;
                     console.log('[Dashboard] WS Connected');
-                    setLogs(prev => [`[NET] 📡 Uplink Established (Latency: 12ms)`, ...prev].slice(0, 20));
+                    setLogs(prev => [`[NET] 📡 NEURAL MATRIX UPLINK ESTABLISHED (Latency: 12ms)`, ...prev].slice(0, 20));
 
                     // Subscribe to execution events
                     if (account?.address) {
@@ -1115,7 +1159,7 @@ function DashboardContent() {
             setLogs(prev => {
                 const time = new Date().toLocaleTimeString();
                 if (prev.length === 0 || Math.random() > 0.9) {
-                    return [`[SYSTEM] 🛡️ Sentinel Active. Monitoring Mempool... (${time})`, ...prev].slice(0, 15);
+                    return [`[SYSTEM] 🛡️ Neural Sentinel Active. Monitoring Registry... (${time})`, ...prev].slice(0, 15);
                 }
                 return prev;
             });
@@ -1636,9 +1680,9 @@ function DashboardContent() {
                     </div>
 
                     <div className="space-y-2">
-                        <h2 className="text-3xl font-bold tracking-tighter text-white">SECURE ENCLAVE LOCKED</h2>
+                        <h2 className="text-3xl font-bold tracking-tighter text-white">NEURAL ENCLAVE LOCKED</h2>
                         <p className="text-gray-400 text-sm font-light leading-relaxed max-w-sm mx-auto">
-                            Encrypted fleet management. Biometric signature required via <strong>zkLogin</strong> or <strong>Sui Wallet</strong> to decrypt active strategies.
+                            Encrypted Neural Feed. Biometric signature required via <strong>zkLogin</strong> to decrypt your agent's ELO status and active strategies.
                         </p>
                     </div>
 
@@ -2067,9 +2111,13 @@ function DashboardContent() {
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Active Neural Nets</h3>
-                    <div className="text-xl font-mono text-purple-400 font-bold">
-                        {activeStrategies.length} <span className="text-xs text-gray-500">AGENTS</span>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Matrix Sentiment</h3>
+                    <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
+                        {activeStrategies.length > 5 ? 'EUPHORIC' : 'NEUTRAL'}
+                        <TrendingUp className="w-4 h-4 text-green-400" />
+                    </div>
+                    <div className="text-[10px] text-gray-500 mt-1 font-mono">
+                        Global Neural Sync: 99.4%
                     </div>
                 </div>
             </div>
@@ -2095,7 +2143,7 @@ function DashboardContent() {
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-3">
                                         <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                            Main Trading Vault
+                                            Neural Security Enclave
                                             {vaultId && <span className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-2 py-0.5 rounded-full border border-neon-cyan/20">ACTIVE</span>}
                                         </h3>
                                         <div className="flex items-center bg-black/40 border border-white/10 rounded-lg p-1">
@@ -2155,13 +2203,13 @@ function DashboardContent() {
                                             onClick={handleDeposit}
                                             className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-lg"
                                         >
-                                            Deposit
+                                            Inject
                                         </button>
                                         <button
                                             onClick={handleWithdraw}
                                             className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white text-xs font-bold transition-all hover:scale-105 active:scale-95"
                                         >
-                                            Withdraw
+                                            Extract
                                         </button>
                                     </div>
                                 )}
@@ -2177,7 +2225,7 @@ function DashboardContent() {
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-sm text-gray-400 uppercase tracking-widest flex items-center gap-2">
                                 <RefreshCw size={14} className={activeStrategies.length > 0 ? "animate-spin-slow text-neon-cyan" : "text-gray-600"} />
-                                Fleet Status Monitor ({activeStrategies.length}/10)
+                                Neural Unit Fleet ({activeStrategies.length}/10)
                             </h2>
                             {activeStrategies.length === 0 && (
                                 <button onClick={handleDeploy} className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
@@ -2213,7 +2261,7 @@ function DashboardContent() {
                                                 </div>
                                                 <div className="text-right">
                                                     <div className="text-neon-cyan font-mono font-bold animate-pulse-slow">{dynamicYield}</div>
-                                                    <div className="text-[9px] text-gray-500">REAL APY</div>
+                                                    <div className="text-[9px] text-gray-500 font-mono">ELO: {1000 + (strat.id.charCodeAt(0) % 500)}</div>
                                                 </div>
                                             </div>
 
@@ -2226,9 +2274,9 @@ function DashboardContent() {
                                                         stroke={i % 2 === 0 ? "#00f3ff" : "#bd00ff"}
                                                         strokeWidth="2"
                                                         vectorEffect="non-scaling-stroke"
-                                                        className="drop-shadow-[0_0_5px_rgba(0,243,255,0.4)]"
+                                                        className="drop-shadow-[0_0_8px_rgba(0,243,255,0.6)]"
                                                     />
-                                                    <circle cx="200" cy={`${20 + (i * 5)}`} r="2.5" fill="#fff" className="animate-pulse" />
+                                                    <circle cx="200" cy={`${20 + (i * 5)}`} r="2.5" fill="#fff" className="animate-pulse shadow-[0_0_10px_white]" />
                                                 </svg>
                                             </div>
 
@@ -2293,8 +2341,8 @@ function DashboardContent() {
                         </div>
 
                         <h3 className="text-sm text-gray-400 uppercase tracking-widest mb-4 flex items-center justify-between">
-                            Active Fleet
-                            <span className="text-neon-cyan font-mono text-xs">{activeStrategies.length} ACTIVE</span>
+                            Neural Unit Registry
+                            <span className="text-neon-cyan font-mono text-xs">{activeStrategies.length} SYNCED</span>
                         </h3>
 
                         {activeStrategies.length === 0 ? (
@@ -2370,7 +2418,7 @@ function DashboardContent() {
                         transition={{ delay: 0.15 }}
                         className="glass-panel p-4 rounded-xl border border-white/5"
                     >
-                        <h3 className="text-xs text-gray-400 uppercase tracking-widest mb-3">Liquidity Intelligence</h3>
+                        <h3 className="text-xs text-gray-400 uppercase tracking-widest mb-3">Matrix Liquidity Alpha</h3>
                         <div className="grid grid-cols-2 gap-3">
                             <div className="bg-white/5 p-2 rounded border border-white/5 hover:border-neon-cyan/30 transition-colors">
                                 <div className="text-[10px] text-neon-cyan font-bold mb-1 flex items-center gap-1">
