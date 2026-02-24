@@ -21,10 +21,12 @@
 
 As of v0.0.7, the SuiLoop ecosystem has reached **Full Autonomous Maturity**:
 
-- **🏙️ The Autonomous City:** A verified fleet of **15+ autonomous agents** (TITAN, ELIZA, WHALE, KRAKEN, etc.) is live and operating 24/7. These agents generate constant on-chain volume, publish neural signals, and maintain protocol reputation.
-- **🛠️ Verified SDK & CLI:** Both the **TypeScript SDK**, **Python SDK**, and **SuiLoop CLI** have been 100% verified to execute the full "Golden Flow" on Sui Testnet — from health checks and market analysis to atomic flash loan execution.
-- **🦭 Walrus Blackbox Live:** Immutable decentralized logging to **Sui Walrus** is fully operational. Every 5 minutes, agent activities are archived as blobs, creating a tamper-proof audit trail of the protocol's "Neural Matrix."
-- **⚡ Execution Success:** Real-time on-chain execution for `flash-loan-executor` is verified with average profits of ~0.097 SUI per loop.
+- **🏙️ The Autonomous City:** A verified fleet of **15+ autonomous agents** (TITAN, ELIZA, WHALE, KRAKEN, etc.) is live and operating 24/7.
+- **🧠 Neural Uplink Marketplace:** Real-time discovery of on-chain signals. The marketplace now features a **Live Neural Feed** that syncs every 15s with autonomous agent activity.
+- **🔓 Seamless Onboarding:** Introduced **Dashboard Guest Mode** — view institutional-grade analytics and fleet status without connecting a wallet. Frictionless discovery of the "Neural Matrix."
+- **📜 Verified SDK & CLI:** TypeScript, Python, and CLI tools are 100% verified to execute the full "Golden Flow" on Sui Testnet.
+- **🦭 Walrus Blackbox Live:** Immutable decentralized logging to **Sui Walrus** is operational, archiving agent "thoughts" every 5 minutes.
+- **⚡ Zero-Fee Manual Strategies:** 5 new "Manual Catalyst" strategies live (DCA, Hedge Master, LP Scout) for instant user-controlled trials.
 
 ---
 
@@ -63,7 +65,7 @@ Built in **Sui Move**, the on-chain layer enforces trustless execution:
 |---|---|
 | Atomic Engine Package | `0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0` |
 | Agent Registry | `0xcbb6d114644b9573c76c1eee3f94ad4b8874273e7691f5c46d24add925b47e30` |
-| Strategy Marketplace | `0xa807a548a0e11d15126a5ee84d73f79614b9e79561e5a55e68a26e2f9dbd6945` |
+| Strategy Marketplace | `0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0` |
 | MockPool (SUI/SUI) | `0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf` |
 
 ---
@@ -139,10 +141,10 @@ A hyper-advanced **Next.js 15** application with React 19, Tailwind CSS, Framer 
 | Page | Route | Description |
 |---|---|---|
 | **Landing** | `/` | Hero + 3D Orb + Feature Grid + Live Terminal + SDK Quick Start + Download CTA |
-| **Dashboard** | `/dashboard` | Mission-critical control panel — wallet balances, vault management, strategy deployment, real-time WebSocket terminal, loop controls, installed skills (2400+ lines) |
-| **Strategies** | `/strategies` | Catalog of 10+ pre-built strategy templates with live APY display and deploy buttons |
-| **Strategy Builder** | `/strategies/builder` | Visual drag-and-drop strategy builder using ReactFlow — 6 node categories, custom nodes, export as JSON, deploy on-chain |
-| **Marketplace** | `/marketplace` | Skill marketplace — search, filter by category, install/uninstall skills via agent API |
+| **Dashboard** | `/dashboard` | Mission-critical control panel. Now includes **Guest Mode** (view without wallet) and automated redirection after agent deployment. |
+| **Strategies** | `/strategies` | Catalog of 10+ pre-built templates + **5 Manual Strategies** (0 SUI fee). |
+| **Strategy Builder** | `/strategies/builder` | Visual No-Code builder using ReactFlow. |
+| **Marketplace** | `/marketplace` | The decentralized store for skills. Features a real-time **Neural Uplink Sidebar** for ecosystem signals. |
 | **Plugins** | `/plugins` | Core plugin manager with 12+ built-in plugins (Deep Research, Flash Loans, Whale Tracker, MEV Guard, etc.) |
 | **Agents** | `/agents` | Fleet monitor — system status indicators, API key manager, Walrus blackbox status, live Supabase logs |
 | **Analytics** | `/analytics` | Portfolio analytics — Recharts area charts, stat cards, time range selector (24H/7D/30D) |
@@ -277,7 +279,7 @@ Copy `.env.example` to `.env.local` and configure:
 ```env
 # Sui Network
 NEXT_PUBLIC_SUI_NETWORK=testnet
-NEXT_PUBLIC_PACKAGE_ID=0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043
+NEXT_PUBLIC_PACKAGE_ID=0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0
 NEXT_PUBLIC_POOL_ID=0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0
 NEXT_PUBLIC_API_URL=http://localhost:3001
 
