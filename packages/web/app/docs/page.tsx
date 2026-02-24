@@ -80,7 +80,7 @@ function DocsContent() {
                                 <GitBranch className="w-4 h-4" />
                                 GitHub
                             </a>
-                            <a href="https://suiscan.xyz/testnet/object/0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb" target="_blank" className="px-4 py-2 bg-neon-cyan/10 border border-neon-cyan/30 rounded-lg text-sm font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-colors flex items-center gap-2">
+                            <a href="https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0" target="_blank" className="px-4 py-2 bg-neon-cyan/10 border border-neon-cyan/30 rounded-lg text-sm font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-colors flex items-center gap-2">
                                 <ExternalLink className="w-4 h-4" />
                                 Suiscan
                             </a>
@@ -280,7 +280,7 @@ function OverviewSection() {
                     </table>
                 </div>
                 <div className="mt-4 text-sm text-gray-400">
-                    <strong>Agent Wallet:</strong> <code className="text-neon-cyan">0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb</code>
+                    <strong>Agent Wallet:</strong> <code className="text-neon-cyan">0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0</code>
                 </div>
             </section>
         </div>
@@ -427,8 +427,8 @@ function ContractsSection() {
                             <tr className="border-b border-white/5 hover:bg-white/5">
                                 <td className="py-4 px-4 text-white font-bold">Package</td>
                                 <td className="py-4 px-4 text-neon-cyan break-all">
-                                    <a href="https://suiscan.xyz/testnet/object/0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb" target="_blank" className="hover:underline">
-                                        0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb
+                                    <a href="https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0" target="_blank" className="hover:underline">
+                                        0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0
                                     </a>
                                 </td>
                                 <td className="py-4 px-4 text-gray-400">Immutable Move Logic (Hot Potato)</td>
@@ -436,8 +436,8 @@ function ContractsSection() {
                             <tr className="border-b border-white/5 hover:bg-white/5">
                                 <td className="py-4 px-4 text-white font-bold">MockPool</td>
                                 <td className="py-4 px-4 text-amber-500 break-all">
-                                    <a href="https://suiscan.xyz/testnet/object/0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165" target="_blank" className="hover:underline">
-                                        0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165
+                                    <a href="https://suiscan.xyz/testnet/object/0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf" target="_blank" className="hover:underline">
+                                        0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf
                                     </a>
                                 </td>
                                 <td className="py-4 px-4 text-gray-400">Shared Liquidity Object (SUI/SUI)</td>
@@ -509,7 +509,8 @@ public struct MockPool<phantom Base, phantom Quote> has key, store {
                                 { fn: 'add_liquidity', sig: 'entry fun add_liquidity<B,Q>(pool, coin, ctx)', desc: 'Adds liquidity to pool' },
                                 { fn: 'borrow_flash_loan', sig: 'fun borrow_flash_loan<B,Q>(pool, amount, ctx): (Coin<B>, LoopReceipt)', desc: 'Returns loan + Hot Potato' },
                                 { fn: 'repay_flash_loan', sig: 'fun repay_flash_loan<B,Q>(pool, payment, receipt, ctx)', desc: 'Destroys receipt, verifies payment' },
-                                { fn: 'execute_loop', sig: 'entry fun execute_loop<B,Q>(pool, user_funds, borrow_amt, min_profit, ctx)', desc: 'Full atomic cycle' },
+                                { fn: 'execute_strategy_secure', sig: 'entry fun execute_strategy_secure<B,Q>(vault, agent_cap, pool, borrow_amt, min_profit, ctx)', desc: 'Vault-controlled secure cycle' },
+                                { fn: 'execute_loop', sig: 'entry fun execute_loop<B,Q>(pool, user_funds, borrow_amt, min_profit, ctx)', desc: 'Full atomic cycle (Legacy)' },
                             ].map((item) => (
                                 <tr key={item.fn} className="border-b border-white/5 hover:bg-white/5">
                                     <td className="py-3 px-4 text-neon-cyan">{item.fn}</td>
@@ -904,8 +905,8 @@ function ApiSection() {
                             <span className="text-sm font-mono text-gray-400">packages/web/.env.local</span>
                         </div>
                         <pre className="p-4 text-sm font-mono text-gray-300">
-                            {`NEXT_PUBLIC_PACKAGE_ID=0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb
-NEXT_PUBLIC_POOL_ID=0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165
+                            {`NEXT_PUBLIC_PACKAGE_ID=0x4cc674a7c3e5260fca6b4888de3dbae10d3bbde8f59876ba3553b2a41909e1e8
+NEXT_PUBLIC_POOL_ID=0xf3fb0169fa56f257b613c7efe66d982143cdfb0a4ca91d5a3e394be1d066c868
 NEXT_PUBLIC_SUI_NETWORK=testnet
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key`}
@@ -965,11 +966,11 @@ pnpm build`}
                         </div>
                         <pre className="p-4 text-xs font-mono text-gray-300 overflow-x-auto">
                             {`sui client call \\
-  --package 0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb \\
+  --package 0x4cc674a7c3e5260fca6b4888de3dbae10d3bbde8f59876ba3553b2a41909e1e8 \\
   --module atomic_engine \\
   --function add_liquidity \\
   --type-args 0x2::sui::SUI 0x2::sui::SUI \\
-  --args 0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165 <SUI_COIN_ID> \\
+  --args 0xf3fb0169fa56f257b613c7efe66d982143cdfb0a4ca91d5a3e394be1d066c868 <SUI_COIN_ID> \\
   --gas-budget 50000000`}
                         </pre>
                     </div>
@@ -981,7 +982,7 @@ pnpm build`}
                         </div>
                         <pre className="p-4 text-xs font-mono text-gray-300 overflow-x-auto">
                             {`sui client call \\
-  --package 0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb \\
+  --package 0x4cc674a7c3e5260fca6b4888de3dbae10d3bbde8f59876ba3553b2a41909e1e8 \\
   --module atomic_engine \\
   --function add_liquidity \\
   --type-args 0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC \\
@@ -1000,10 +1001,11 @@ pnpm build`}
                             {`sui client ptb --gas-budget 50000000 \\
   --split-coins gas "[10000000]" \\
   --assign user_funds \\
-  --move-call 0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb::atomic_engine::execute_loop \\
+  --move-call 0x4cc674a7c3e5260fca6b4888de3dbae10d3bbde8f59876ba3553b2a41909e1e8::atomic_engine::execute_strategy_secure \\
     "<0x2::sui::SUI, 0x2::sui::SUI>" \\
-    @0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165 \\
-    user_funds \\
+    @0xVAULT_ID \\
+    @0xAGENT_CAP_ID \\
+    @0xf3fb0169fa56f257b613c7efe66d982143cdfb0a4ca91d5a3e394be1d066c868 \\
     100000000 \\
     0`}
                         </pre>

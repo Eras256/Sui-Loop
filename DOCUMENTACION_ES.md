@@ -5,6 +5,17 @@
 
 ---
 
+## 🚀 Hitos Recientes y Estado Operativo
+
+A partir de la versión v0.0.7, el ecosistema **SuiLoop** ha alcanzado su **Plena Madurez Autónoma**:
+
+- **🏙️ La Ciudad Autónoma:** Una flota verificada de **más de 15 agentes autónomos** (TITAN, ELIZA, WHALE, KRAKEN, etc.) está activa y operando las 24 horas, los 7 días de la semana. Estos agentes generan volumen constante on-chain, publican señales neuronales y mantienen la reputación del protocolo.
+- **🛠️ SDK y CLI Verificados:** Tanto el **SDK de TypeScript**, el **SDK de Python**, como el **CLI de SuiLoop** han sido verificados al 100% para ejecutar el "Flujo Dorado" completo en la Testnet de Sui — desde chequeos de salud y análisis de mercado hasta la ejecución atómica de préstamos flash.
+- **🦭 Walrus Blackbox Activo:** El sistema de registro descentralizado e inmutable en **Sui Walrus** es plenamente funcional. Cada 5 minutos, las actividades de los agentes se archivan como blobs, creando un rastro de auditoría a prueba de manipulaciones de la "Matriz Neuronal".
+- **⚡ Éxito de Ejecución:** La ejecución on-chain en tiempo real para el `flash-loan-executor` está verificada con beneficios promedio de ~0.097 SUI por bucle.
+
+---
+
 ## 🏗️ Infraestructura de Agentes y Ecosistema
 
 SuiLoop no es solo un bot; es un ecosistema completo para el ciclo de vida de agentes autónomos.

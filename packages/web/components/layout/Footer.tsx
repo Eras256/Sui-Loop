@@ -17,7 +17,7 @@ const INTEL_LINKS = [
     { label: "Technical Docs", href: "/docs" },
     {
         label: "Kernel Source",
-        href: "https://suiscan.xyz/testnet/object/0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb",
+        href: "https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0",
         external: true,
     },
 ];
@@ -217,6 +217,7 @@ export default function Footer() {
                             { label: "Kernel Version", value: "v0.0.7", color: "text-neon-purple", dot: "bg-neon-purple" },
                             { label: "Network", value: "Sui Testnet", color: "text-green-400", dot: "bg-green-400" },
                             { label: "Assets", value: "SUI + USDC", color: "text-blue-400", dot: "bg-blue-400" },
+                            { label: "Package", value: "0x9451...dcb0", color: "text-gray-400", dot: "bg-gray-400" },
                             { label: "Walrus Logs", value: "LIVE ◉", color: "text-pink-400", dot: "bg-pink-400" },
                             { label: "Uptime", value: "99.9%", color: "text-yellow-400", dot: "bg-yellow-400" },
                         ].map((stat) => (
@@ -259,12 +260,12 @@ export default function Footer() {
                     <div className="flex items-center gap-4">
                         <span className="text-gray-700">All transactions are atomic &amp; Move-verified.</span>
                         <a
-                            href="https://suiscan.xyz/testnet/object/0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb"
+                            href="https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-1 hover:text-neon-cyan transition-colors"
                         >
-                            Contract <ExternalLink className="w-2.5 h-2.5" />
+                            Package: 0x9451...dcb0 <ExternalLink className="w-2.5 h-2.5" />
                         </a>
                     </div>
                 </div>

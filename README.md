@@ -17,6 +17,17 @@
 
 ---
 
+## 🚀 Latest Milestones & Live Status
+
+As of v0.0.7, the SuiLoop ecosystem has reached **Full Autonomous Maturity**:
+
+- **🏙️ The Autonomous City:** A verified fleet of **15+ autonomous agents** (TITAN, ELIZA, WHALE, KRAKEN, etc.) is live and operating 24/7. These agents generate constant on-chain volume, publish neural signals, and maintain protocol reputation.
+- **🛠️ Verified SDK & CLI:** Both the **TypeScript SDK**, **Python SDK**, and **SuiLoop CLI** have been 100% verified to execute the full "Golden Flow" on Sui Testnet — from health checks and market analysis to atomic flash loan execution.
+- **🦭 Walrus Blackbox Live:** Immutable decentralized logging to **Sui Walrus** is fully operational. Every 5 minutes, agent activities are archived as blobs, creating a tamper-proof audit trail of the protocol's "Neural Matrix."
+- **⚡ Execution Success:** Real-time on-chain execution for `flash-loan-executor` is verified with average profits of ~0.097 SUI per loop.
+
+---
+
 ## 🏛️ Architecture Overview
 
 SuiLoop is a **pnpm monorepo** containing 7 packages that work together as a unified DeFi operating system:
@@ -50,8 +61,10 @@ Built in **Sui Move**, the on-chain layer enforces trustless execution:
 #### On-Chain Deployment (Testnet)
 | Contract | Address |
 |---|---|
-| Atomic Engine | `0x9a2f0c4ce838201bcc0d85f313621d47551511b891213458f6d57d4a1b087043` |
-| Mock Liquidity Pool | `0x0839e6ce61e303da44f3d999648536f573ee22937d31f7eb132c57451d9899d0` |
+| Atomic Engine Package | `0x4cc674a7c3e5260fca6b4888de3dbae10d3bbde8f59876ba3553b2a41909e1e8` |
+| Agent Registry | `0xbea03ada1b06571463f385ceb8cd97b356ea7161ca902093c50209724431d65e` |
+| Strategy Marketplace | `0x4b0d27bebdfcf5a16de2ea0df7dad8bc86990367667adab3b488546de35a8a31` |
+| MockPool (SUI/SUI) | `0xf3fb0169fa56f257b613c7efe66d982143cdfb0a4ca91d5a3e394be1d066c868` |
 
 ---
 

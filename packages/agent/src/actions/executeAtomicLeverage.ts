@@ -30,8 +30,8 @@ const NETWORK = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || "testnet";
 const SUI_DECIMALS = 1_000_000_000;
 
 // Default Contract IDs (v0.0.7)
-const DEFAULT_PACKAGE_ID = "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
-const DEFAULT_POOL_ID = "0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165";
+const DEFAULT_PACKAGE_ID = "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
+const DEFAULT_POOL_ID = "0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf";
 
 /**
  * Parse amount from user message

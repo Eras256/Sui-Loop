@@ -194,6 +194,29 @@ function DashboardContent() {
                     options: { showContent: true }
                 });
 
+                if (object.error) {
+                    // Object deleted or not found
+                    setVaultId(null);
+                    setOwnerCapId(null);
+                    localStorage.removeItem(`sui-loop-vault-${baseAsset}-${account?.address}`);
+                    return;
+                }
+
+                if (object.data?.content && 'type' in object.data.content) {
+                    const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
+                    const isCorrectContext = object.data.content.type.includes(PACKAGE_ID);
+
+                    if (!isCorrectContext) {
+                        console.warn("Legacy Vault Detected. Forcing Local State Reset.");
+                        setVaultId(null);
+                        setOwnerCapId(null);
+                        if (account?.address) {
+                            localStorage.removeItem(`sui-loop-vault-${baseAsset}-${account.address}`);
+                        }
+                        return;
+                    }
+                }
+
                 if (object.data?.content && 'fields' in object.data.content) {
                     const fields = object.data.content.fields as any;
                     const balanceValue = fields.balance || "0";
@@ -594,8 +617,8 @@ function DashboardContent() {
                 return;
             }
 
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
-            const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID || "0xb10cc9e5da0af57c94651bb5396cf76c62c2cef0fec05b5bfe7f07b7ecfa6165";
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
+            const POOL_ID = process.env.NEXT_PUBLIC_POOL_ID || "0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf";
 
             const BORROW_AMOUNT = "100000000"; // 0.1 SUI
             const USER_FUNDS_AMOUNT = "500000"; // 0.0005 SUI
@@ -643,9 +666,9 @@ function DashboardContent() {
                 [userFundsCoin] = tx.splitCoins(primaryCoin, [tx.pure.u64(userFundsValue)]);
             }
 
-            // 4. Create Agent Cap (Testnet Mode: 0.1 SUI OK)
-            // On the new contract (0x6736...), the fee is now 0.1 SUI, so we can create real capabilities!
+            // 4. Execution Flow
             if (useAgentCap && ownerCapId) {
+                // V2: Secure Execution (Vault-based)
                 const agentCap = tx.moveCall({
                     target: `${PACKAGE_ID}::atomic_engine::create_agent_cap`,
                     typeArguments: [getCoinType()],
@@ -655,28 +678,44 @@ function DashboardContent() {
                         feeCoin
                     ]
                 });
-                // Transfer AgentCap to User
-                tx.transferObjects([agentCap], account.address);
-            } else {
-                tx.transferObjects([feeCoin], TREASURY_ADDR);
-            }
 
-            // 4. Exec Loop — use live sharedObjectRef if available to prevent stale-version errors
-            // NOTE: The testnet POOL_ID is currently specifically MockPool<SUI, SUI>.
-            // We can only mock-execute the loop for SUI for demo purposes.
-            if (baseAsset === "SUI") {
+                // Run strategy securely using the Vault + New Cap
                 tx.moveCall({
-                    target: `${PACKAGE_ID}::atomic_engine::execute_loop`,
+                    target: `${PACKAGE_ID}::atomic_engine::execute_strategy_secure`,
                     typeArguments: [getCoinType(), getCoinType()],
                     arguments: [
+                        tx.object(vaultId!),
+                        agentCap,
                         poolRef ? tx.sharedObjectRef(poolRef) : tx.object(POOL_ID),
-                        userFundsCoin,
                         tx.pure.u64(BORROW_AMOUNT),
                         tx.pure.u64(MIN_PROFIT),
                     ]
                 });
-            } else {
+
+                // Cleanup: Transfer the AgentCap license to the user
+                tx.transferObjects([agentCap], account.address);
+
+                // Return execution funds coin since V2 uses Vault balance directly
                 tx.transferObjects([userFundsCoin], account.address);
+            } else {
+                // V1: Legacy Execution (Wallet-based)
+                tx.transferObjects([feeCoin], TREASURY_ADDR);
+
+                if (baseAsset === "SUI") {
+                    tx.moveCall({
+                        target: `${PACKAGE_ID}::atomic_engine::execute_loop`,
+                        typeArguments: [getCoinType(), getCoinType()],
+                        arguments: [
+                            poolRef ? tx.sharedObjectRef(poolRef) : tx.object(POOL_ID),
+                            userFundsCoin,
+                            tx.pure.u64(BORROW_AMOUNT),
+                            tx.pure.u64(MIN_PROFIT),
+                        ]
+                    });
+                } else {
+                    // Protocol only supports SUI loops for now in demo
+                    tx.transferObjects([userFundsCoin], account.address);
+                }
             }
 
             const result = await signAndExecuteTransaction({ transaction: tx as any });
@@ -865,7 +904,7 @@ function DashboardContent() {
                 const tx = new Transaction();
                 tx.setSender(account.address);
 
-                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
 
                 tx.moveCall({
                     target: `${PACKAGE_ID}::atomic_engine::destroy_agent_cap`,
@@ -1172,7 +1211,7 @@ function DashboardContent() {
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
             const decimals = baseAsset === "SUI" ? 1_000_000_000 : 1_000_000;
             const amountMist = BigInt(Math.floor(parseFloat(amount) * decimals));
 
@@ -1285,7 +1324,7 @@ function DashboardContent() {
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
             const decimals = baseAsset === "SUI" ? 1_000_000_000 : 1_000_000;
             const amountMist = BigInt(Math.floor(parseFloat(amount) * decimals));
 
@@ -1356,7 +1395,7 @@ function DashboardContent() {
         const tx = new Transaction();
         tx.setSender(account.address);
 
-        const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+        const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
 
         // Call create_vault from atomic_engine module
         tx.moveCall({
@@ -1523,7 +1562,7 @@ function DashboardContent() {
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
-            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x673686ac6a1a259b1d39553e6cdb2fb2478a13db4bccd83ea6f7c079af89a7fb";
+            const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x4a47a06ae340cf7c6497b0468fe312f24fea0e66091afff5cfa32ad9bfc70d7d";
 
             // Call destroy_vault
             const [returnedCoin] = tx.moveCall({
