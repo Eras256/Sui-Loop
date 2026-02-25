@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuiLoop Initialization</title>
+    <title>SuiLoop — Agent Node Setup (Operator Only)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
@@ -114,8 +114,12 @@
         <div style="display:flex;justify-content:center;">
             <div class="logo"></div>
         </div>
-        <h1>Awaken Protocols</h1>
-        <p>Initialize your SuiLoop Agent parameters.</p>
+        <h1>Node Initialization</h1>
+        <p
+            style="font-size:11px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:10px;color:#fbbf24;text-align:left;line-height:1.6;">
+            ⚠️ <strong>OPERATOR SETUP ONLY.</strong> This screen is for the entity deploying an agent node. <strong>User
+                private keys are NEVER collected or stored.</strong> The key below is the bot's own hot wallet for
+            paying gas fees only — it cannot access user funds (enforced by the OwnerCap smart contract pattern).</p>
 
         <form id="setupForm">
             <div class="input-group">
@@ -124,8 +128,10 @@
             </div>
 
             <div class="input-group">
-                <label>SUI PRIVATE KEY (Testnet)</label>
+                <label>SUI HOT WALLET PRIVATE KEY (Agent Gas Payer)</label>
                 <input type="password" id="suiKey" placeholder="suiprivkey..." required>
+                <small style="color:#6b7280;font-size:10px;display:block;margin-top:4px;">This is the BOT's own key for
+                    gas payments. Not a user key. Generate: ./sui keytool generate ed25519</small>
             </div>
 
             <div class="input-group">
