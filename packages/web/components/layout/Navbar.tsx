@@ -165,21 +165,7 @@ export default function Navbar() {
 
                     {/* Right Side: Status + Wallet + CTA + Mobile Toggle */}
                     <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 shrink-0">
-                        {/* Agent Status Indicator - lg+ */}
-                        {mounted && (
-                            <div className={`hidden min-[1400px]:flex items-center gap-1 xl:gap-2 px-1.5 xl:px-3 py-1.5 rounded-full border transition-all ${account
-                                ? 'bg-green-500/10 border-green-500/20'
-                                : 'bg-white/5 border-white/10'
-                                }`}>
-                                <span className="relative flex h-1 w-1 xl:h-1.5 xl:w-1.5">
-                                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? 'bg-green-400' : 'bg-gray-400'}`}></span>
-                                    <span className={`relative inline-flex rounded-full h-1 w-1 xl:h-1.5 xl:w-1.5 ${account ? 'bg-green-500' : 'bg-gray-500'}`}></span>
-                                </span>
-                                <span className={`text-[8px] xl:text-[10px] font-mono font-bold whitespace-nowrap ${account ? 'text-green-400' : 'text-gray-500'}`}>
-                                    {account ? 'SUI TESTNET' : 'OFFLINE'}
-                                </span>
-                            </div>
-                        )}
+
 
                         {/* Language Switcher */}
                         <LanguageSwitcher />
