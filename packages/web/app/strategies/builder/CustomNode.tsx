@@ -9,6 +9,7 @@ import {
     Twitter, MessageSquare, Bell, Share2, BarChart3, Fingerprint, Lock, Repeat, RefreshCw,
     Layers, MousePointer2, Info, ChevronRight, Download, Bolt, KeyRound, TrendingUp, FlaskConical
 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 const ICON_MAP: any = {
     Plus, Play, Save, Box, Activity, Zap, ArrowRight, Trash2,
@@ -28,9 +29,14 @@ export interface CustomNodeData {
     color?: string;
 }
 
-const CustomNode = ({ data, selected }: NodeProps) => {
+const CustomNode = ({ data: rawData, selected }: NodeProps) => {
+    const data = rawData as unknown as CustomNodeData;
+    const { t } = useLanguage();
     const Icon = typeof data.icon === 'string' ? ICON_MAP[data.icon] || Box : (data.icon as LucideIcon || Box);
     const gradColor = (data.color as string) || 'from-gray-500 to-gray-700';
+
+    const nodeName = t(`builder.nodes.${data.label}.name`);
+    const translatedLabel = data.label === 'INIT_KERNEL' ? t('builder.initKernel') : (nodeName !== `builder.nodes.${data.label}.name` ? nodeName : data.label);
 
     return (
         <div className={`
@@ -58,11 +64,11 @@ const CustomNode = ({ data, selected }: NodeProps) => {
                     </div>
                     <div className="flex-1 overflow-hidden min-w-0">
                         <h4 className="text-[10px] sm:text-xs font-bold text-gray-100 truncate leading-tight mb-0.5 sm:mb-1 uppercase tracking-tight font-mono">
-                            {String(data.label)}
+                            {String(translatedLabel)}
                         </h4>
                         <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
                             <span className="text-[8px] sm:text-[10px] text-gray-500 font-mono uppercase bg-white/5 px-1 sm:px-1.5 py-0.5 rounded">
-                                {data.type as string}
+                                {t(`builder.nodeTypes.${data.type}`) || data.type}
                             </span>
                             {!!data.sublabel && (
                                 <span className="text-[8px] sm:text-[9px] text-neon-purple font-mono uppercase truncate opacity-70">

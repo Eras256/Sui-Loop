@@ -1,24 +1,27 @@
+'use client';
+
 import Link from "next/link";
 import { ExternalLink, Zap, Shield, Activity } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
-const PROTOCOL_LINKS = [
-    { label: "Neural Dashboard", href: "/dashboard" },
-    { label: "Matrix Analytics", href: "/analytics" },
-    { label: "Neural Ops", href: "/strategies" },
-    { label: "Strategy Builder", href: "/strategies/builder" },
-    { label: "Marketplace", href: "/marketplace" },
-    { label: "Plugins", href: "/plugins" },
+const PROTOCOL_LINK_KEYS = [
+    { key: "footer.links.dashboard", href: "/dashboard" },
+    { key: "footer.links.analytics", href: "/analytics" },
+    { key: "footer.links.strategies", href: "/strategies" },
+    { key: "footer.links.builder", href: "/strategies/builder" },
+    { key: "footer.links.marketplace", href: "/marketplace" },
+    { key: "footer.links.plugins", href: "/plugins" },
 ];
 
-const INTEL_LINKS = [
-    { label: "Sentinel Console", href: "/agents" },
-    { label: "Matrix Manifesto", href: "/manifesto" },
-    { label: "How To Use", href: "/how-to-use" },
-    { label: "Technical Docs", href: "/docs" },
-    { label: "Terms of Service", href: "/terms" },
-    { label: "Risk Disclosure", href: "/risk-disclosure" },
+const INTEL_LINK_KEYS = [
+    { key: "footer.links.agents", href: "/agents" },
+    { key: "footer.links.manifesto", href: "/manifesto" },
+    { key: "footer.links.howToUse", href: "/how-to-use" },
+    { key: "footer.links.docs", href: "/docs" },
+    { key: "footer.links.terms", href: "/terms" },
+    { key: "footer.links.risk", href: "/risk-disclosure" },
     {
-        label: "Kernel Source",
+        key: "footer.links.source",
         href: "https://suiscan.xyz/mainnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0",
         external: true,
     },
@@ -51,6 +54,8 @@ const COLOR_MAP: Record<string, string> = {
 };
 
 export default function Footer() {
+    const { t } = useLanguage();
+
     return (
         <footer className="w-full relative z-10 border-t border-white/5 bg-[#030303]">
             {/* Glow accent top */}
@@ -65,21 +70,21 @@ export default function Footer() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
                             </span>
-                            MATRIX UPLINK ESTABLISHED
+                            {t('footer.status.uplink')}
                         </span>
-                        <span className="text-gray-600 shrink-0 uppercase tracking-tighter">NEURAL KERNEL v0.0.7-Neural</span>
+                        <span className="text-gray-600 shrink-0 uppercase tracking-tighter">{t('footer.status.kernel')} v0.0.7-Neural</span>
                         <span className="hidden sm:flex items-center gap-1.5 text-blue-400">
                             <Shield className="w-3 h-3" />
-                            MOVE VERIFIED
+                            {t('footer.status.verified')}
                         </span>
                         <span className="hidden md:flex items-center gap-1.5 text-neon-cyan">
                             <Activity className="w-3 h-3" />
-                            TESTNET ACTIVE
+                            {t('footer.status.mainnet')}
                         </span>
                     </div>
                     <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono text-gray-500 shrink-0">
                         <Zap className="w-3 h-3 text-yellow-500" />
-                        Built for Sui
+                        {t('footer.status.builtFor')}
                     </div>
                 </div>
             </div>
@@ -100,9 +105,7 @@ export default function Footer() {
                     </Link>
 
                     <p className="text-gray-400 text-sm leading-relaxed">
-                        The decentralized Neural Matrix for Sui.
-                        Autonomous agent orchestration with on-chain ELO reputation,
-                        DeepBook V3 flash vectors, and Walrus forensic logging.
+                        {t('footer.tagline')}
                     </p>
 
                     {/* Tech Badges */}
@@ -136,17 +139,17 @@ export default function Footer() {
                 {/* Protocol Links */}
                 <div>
                     <h4 className="text-white font-bold mb-5 text-xs tracking-widest uppercase font-mono">
-                        <span className="text-neon-cyan mr-1">{'>'}</span> Neural Mainframe
+                        <span className="text-neon-cyan mr-1">{'>'}</span> {t('footer.mainframe')}
                     </h4>
                     <ul className="space-y-3">
-                        {PROTOCOL_LINKS.map((link) => (
+                        {PROTOCOL_LINK_KEYS.map((link) => (
                             <li key={link.href}>
                                 <Link
                                     href={link.href}
                                     className="text-sm text-gray-400 hover:text-neon-cyan transition-colors flex items-center gap-1.5 group"
                                 >
                                     <span className="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-neon-cyan transition-colors" />
-                                    {link.label}
+                                    {t(link.key)}
                                 </Link>
                             </li>
                         ))}
@@ -156,10 +159,10 @@ export default function Footer() {
                 {/* Intelligence Links */}
                 <div>
                     <h4 className="text-white font-bold mb-5 text-xs tracking-widest uppercase font-mono">
-                        <span className="text-neon-purple mr-1">{'>'}</span> Intelligence
+                        <span className="text-neon-purple mr-1">{'>'}</span> {t('footer.intelligence')}
                     </h4>
                     <ul className="space-y-3">
-                        {INTEL_LINKS.map((link) => (
+                        {INTEL_LINK_KEYS.map((link) => (
                             <li key={link.href}>
                                 {"external" in link && link.external ? (
                                     <a
@@ -169,7 +172,7 @@ export default function Footer() {
                                         className="text-sm text-gray-400 hover:text-neon-cyan transition-colors flex items-center gap-1.5 group"
                                     >
                                         <span className="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-neon-cyan transition-colors" />
-                                        {link.label}
+                                        {t(link.key)}
                                         <ExternalLink className="w-2.5 h-2.5 opacity-40 group-hover:opacity-80" />
                                     </a>
                                 ) : (
@@ -178,7 +181,7 @@ export default function Footer() {
                                         className="text-sm text-gray-400 hover:text-neon-cyan transition-colors flex items-center gap-1.5 group"
                                     >
                                         <span className="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-neon-cyan transition-colors" />
-                                        {link.label}
+                                        {t(link.key)}
                                     </Link>
                                 )}
                             </li>
@@ -189,18 +192,18 @@ export default function Footer() {
                 {/* Stats / CTA Column */}
                 <div className="sm:col-span-2 lg:col-span-1 space-y-4">
                     <h4 className="text-white font-bold mb-5 text-xs tracking-widest uppercase font-mono">
-                        <span className="text-green-400 mr-1">{'>'}</span> Protocol Stats
+                        <span className="text-green-400 mr-1">{'>'}</span> {t('footer.stats')}
                     </h4>
 
                     <div className="space-y-3">
                         {[
-                            { label: "Synced Neural Units", value: "2,890+", color: "text-neon-cyan", dot: "bg-neon-cyan" },
-                            { label: "Avg Registry ELO", value: "1,120", color: "text-neon-purple", dot: "bg-neon-purple" },
-                            { label: "Matrix Network", value: "Sui Testnet", color: "text-green-400", dot: "bg-green-400" },
-                            { label: "Assets Supported", value: "SUI + USDC", color: "text-blue-400", dot: "bg-blue-400" },
-                            { label: "Neural Kernel", value: "v0.0.7-N", color: "text-gray-400", dot: "bg-gray-400" },
-                            { label: "Walrus Registry", value: "ARCHIVING ◉", color: "text-pink-400", dot: "bg-pink-400" },
-                            { label: "Uptime (Matrix)", value: "99.9%", color: "text-yellow-400", dot: "bg-yellow-400" },
+                            { label: t('footer.statsLabels.synced'), value: "2,890+", color: "text-neon-cyan", dot: "bg-neon-cyan" },
+                            { label: t('footer.statsLabels.elo'), value: "1,120", color: "text-neon-purple", dot: "bg-neon-purple" },
+                            { label: t('footer.statsLabels.network'), value: "Sui Mainnet", color: "text-green-400", dot: "bg-green-400" },
+                            { label: t('footer.statsLabels.assets'), value: "SUI + USDC", color: "text-blue-400", dot: "bg-blue-400" },
+                            { label: t('footer.statsLabels.kernel'), value: "v0.0.7-N", color: "text-gray-400", dot: "bg-gray-400" },
+                            { label: t('footer.statsLabels.walrus'), value: "ARCHIVING ◉", color: "text-pink-400", dot: "bg-pink-400" },
+                            { label: t('footer.statsLabels.uptime'), value: "99.9%", color: "text-yellow-400", dot: "bg-yellow-400" },
                         ].map((stat) => (
                             <div key={stat.label} className="flex items-center justify-between py-2 border-b border-white/5">
                                 <div className="flex items-center gap-2">
@@ -218,7 +221,7 @@ export default function Footer() {
                         className="mt-4 flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-neon-cyan/10 to-neon-purple/10 border border-neon-cyan/20 rounded-xl text-xs font-bold text-neon-cyan font-mono hover:bg-neon-cyan/20 transition-all hover:shadow-[0_0_20px_rgba(0,243,255,0.2)] group"
                     >
                         <Zap className="w-3.5 h-3.5 group-hover:animate-pulse" />
-                        LAUNCH DASHBOARD
+                        {t('footer.launch')}
                     </Link>
                 </div>
             </div>
@@ -227,7 +230,7 @@ export default function Footer() {
             <div className="border-t border-white/5">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] text-gray-600 font-mono">
                     <div className="flex items-center gap-2">
-                        <span>© 2026 SuiLoop Protocol. MIT License. Open-Source Software.</span>
+                        <span>{t('footer.copyright')}</span>
                         <span className="text-gray-700">•</span>
                         <a
                             href="https://t.me/Vaiosx"
@@ -235,14 +238,14 @@ export default function Footer() {
                             rel="noopener noreferrer"
                             className="text-neon-cyan hover:text-white transition-colors"
                         >
-                            Architect: Vaiosx
+                            {t('footer.architect')}
                         </a>
                     </div>
                     <div className="flex items-center gap-4 flex-wrap justify-center">
-                        <Link href="/terms" className="hover:text-neon-cyan transition-colors">Terms of Service</Link>
-                        <Link href="/risk-disclosure" className="hover:text-neon-cyan transition-colors">Risk Disclosure</Link>
+                        <Link href="/terms" className="hover:text-neon-cyan transition-colors">{t('footer.links.terms')}</Link>
+                        <Link href="/risk-disclosure" className="hover:text-neon-cyan transition-colors">{t('footer.links.risk')}</Link>
                         <span className="text-gray-700 hidden sm:inline">•</span>
-                        <span className="text-gray-700 hidden sm:inline">Not a financial service. Non-custodial software only.</span>
+                        <span className="text-gray-700 hidden sm:inline">{t('footer.legal')}</span>
                     </div>
                 </div>
             </div>

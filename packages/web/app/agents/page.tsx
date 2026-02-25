@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { supabase } from "@/lib/supabase";
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 type WalrusStatus = 'connecting' | 'live' | 'error';
 type SystemStatus = 'OPERATIONAL' | 'DEGRADED' | 'OFFLINE';
@@ -18,6 +19,7 @@ export default function AgentsPage() {
     const [sdkAsset, setSdkAsset] = useState<'SUI' | 'USDC'>('SUI');
     const [logs, setLogs] = useState<any[]>([]);
     const logsEndRef = useRef<HTMLDivElement>(null);
+    const { t } = useLanguage();
 
     // Dynamic system telemetry
     const [rpcLatency, setRpcLatency] = useState<number | null>(null);
@@ -120,6 +122,7 @@ export default function AgentsPage() {
     }, [logs, activeTab]);
 
     const statusColor = (s: SystemStatus) => s === 'OPERATIONAL' ? 'bg-green-500/20 text-green-400' : s === 'DEGRADED' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400';
+    const statusLabel = (s: SystemStatus) => t(`agents.telemetry.status.${s.toLowerCase()}`);
 
     const WalrusIcon = () => {
         if (walrusStatus === 'connecting') return <Loader className="w-3 h-3 animate-spin text-blue-400" />;
@@ -133,7 +136,11 @@ export default function AgentsPage() {
             ? 'bg-green-500/20 text-green-400'
             : 'bg-red-500/20 text-red-400';
 
-    const walrusBadgeText = walrusStatus === 'connecting' ? 'CONNECTING...' : walrusStatus === 'live' ? `LIVE · ${walrusUploadCount} BLOBS` : 'ERROR';
+    const walrusBadgeText = walrusStatus === 'connecting'
+        ? t('agents.walrusAudit.status.connecting')
+        : walrusStatus === 'live'
+            ? t('agents.walrusAudit.status.live').replace('{count}', walrusUploadCount.toString())
+            : t('agents.walrusAudit.status.error');
 
     const USDC_TYPE = '0xa1ec7fc00a6f40db9693ad1415d0c193ad3906494428cf252621037bd7117e29::usdc::USDC';
     const SUI_TYPE = '0x2::sui::SUI';
@@ -161,7 +168,7 @@ export default function AgentsPage() {
                     return {
                         id: ev.id.txDigest,
                         level: 'system',
-                        message: `📡 ON-CHAIN: ${content}`,
+                        message: `${t('agents.logs.onChainPrefix')}${content}`,
                         timestamp: Number(parsed.timestamp),
                         isChain: true
                     };
@@ -205,7 +212,7 @@ export default function AgentsPage() {
                         className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono text-neon-cyan mb-4"
                     >
                         <Radio className="w-3 h-3 animate-pulse" />
-                        SYSTEM ONLINE: v0.0.7 // ENCRYPTED
+                        {t('agents.systemBadge')}
                     </motion.div>
 
                     <motion.h1
@@ -213,13 +220,10 @@ export default function AgentsPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 tracking-tight"
                     >
-                        OPERATIONS COMMAND CENTER
+                        {t('agents.title')}
                     </motion.h1>
                     <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                        Interface for deploying autonomous financial warheads.
-                        Generate credentials, monitor <span className="text-[#4ca2ff] font-bold">SUI</span> &amp; <span className="text-neon-purple font-bold">USDC</span> field units,
-                        and inject logic directly into the SuiLoop Neural Matrix.
-                        All activity immortalized via <span className="text-pink-400 font-bold">Walrus</span> forensic logging.
+                        {t('agents.subtitle')}
                     </p>
                 </div>
 
@@ -237,25 +241,25 @@ export default function AgentsPage() {
                             <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             <h3 className="text-sm font-mono text-gray-400 flex items-center gap-2 mb-4">
                                 <Activity className="w-4 h-4 text-neon-cyan" />
-                                ORBITAL UPLINK STATUS
+                                {t('agents.telemetry.title')}
                             </h3>
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm">Uplink Gateway</span>
-                                    <span className={`text-xs px-2 py-1 rounded ${statusColor(uplinkStatus)}`}>{uplinkStatus}</span>
+                                    <span className="text-sm">{t('agents.telemetry.uplinkGateway')}</span>
+                                    <span className={`text-xs px-2 py-1 rounded ${statusColor(uplinkStatus)}`}>{statusLabel(uplinkStatus)}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm">Targeting Engine</span>
-                                    <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">OPERATIONAL</span>
+                                    <span className="text-sm">{t('agents.telemetry.targetingEngine')}</span>
+                                    <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">{t('agents.telemetry.status.operational')}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm">Secure Enclave</span>
-                                    <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">SHIELD ACTIVE</span>
+                                    <span className="text-sm">{t('agents.telemetry.secureEnclave')}</span>
+                                    <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">{t('agents.telemetry.status.shieldActive')}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm flex items-center gap-1.5">
                                         <Database className="w-3 h-3 text-blue-400" />
-                                        Walrus Audit Log
+                                        {t('agents.telemetry.walrusAudit')}
                                     </span>
                                     <span className={`text-xs px-2 py-1 rounded flex items-center gap-1 ${walrusBadgeClass}`}>
                                         <WalrusIcon />
@@ -263,9 +267,9 @@ export default function AgentsPage() {
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center pt-1 border-t border-white/5">
-                                    <span className="text-sm">RPC Latency</span>
+                                    <span className="text-sm">{t('agents.telemetry.rpcLatency')}</span>
                                     <span className={`text-xs font-mono ${rpcLatency === null ? 'text-gray-600' : rpcLatency < 200 ? 'text-green-400' : rpcLatency < 500 ? 'text-yellow-400' : 'text-red-400'}`}>
-                                        {rpcLatency === null ? 'measuring...' : `${rpcLatency}ms`}
+                                        {rpcLatency === null ? t('agents.telemetry.measuring') : `${rpcLatency}ms`}
                                     </span>
                                 </div>
                             </div>
@@ -274,7 +278,7 @@ export default function AgentsPage() {
                         <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-6">
                             <h3 className="text-sm font-mono text-gray-400 flex items-center gap-2 mb-4">
                                 <Signal className="w-4 h-4 text-neon-purple" />
-                                DEPLOYED UNITS
+                                {t('agents.deployedUnits.title')}
                             </h3>
                             <div className="h-32 flex items-end justify-between gap-1 px-2">
                                 {logBarData.map((h, i) => (
@@ -288,7 +292,7 @@ export default function AgentsPage() {
                                 ))}
                             </div>
                             <div className="mt-2 text-xs text-center text-gray-500 font-mono">
-                                PACKET INTERCEPTION RATE (LIVE)
+                                {t('agents.deployedUnits.rateLabel')}
                             </div>
                         </div>
 
@@ -296,23 +300,23 @@ export default function AgentsPage() {
                         <div className="bg-[#0A0A0A] border border-blue-500/20 rounded-xl p-6">
                             <h3 className="text-sm font-mono text-blue-400 flex items-center gap-2 mb-3">
                                 <Database className="w-4 h-4" />
-                                WALRUS DECENTRALIZED AUDIT
+                                {t('agents.walrusAudit.title')}
                             </h3>
                             <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-                                Every agent execution is immortalized on Walrus, Sui&apos;s decentralized blob storage. Audit logs are content-addressed and tamper-proof.
+                                {t('agents.walrusAudit.description')}
                             </p>
                             <div className="space-y-2">
                                 <div className="flex justify-between text-xs">
-                                    <span className="text-gray-500">Blobs committed</span>
+                                    <span className="text-gray-500">{t('agents.walrusAudit.blobsCommitted')}</span>
                                     <span className="font-mono text-blue-400">{walrusUploadCount}</span>
                                 </div>
                                 <div className="flex justify-between text-xs">
-                                    <span className="text-gray-500">Storage network</span>
+                                    <span className="text-gray-500">{t('agents.walrusAudit.storageNetwork')}</span>
                                     <span className="font-mono text-blue-400">Walrus Testnet</span>
                                 </div>
                                 <div className="flex justify-between text-xs">
-                                    <span className="text-gray-500">Epochs retained</span>
-                                    <span className="font-mono text-green-400">∞ permanent</span>
+                                    <span className="text-gray-500">{t('agents.walrusAudit.epochsRetained')}</span>
+                                    <span className="font-mono text-green-400">{t('agents.walrusAudit.permanent')}</span>
                                 </div>
                             </div>
                         </div>
@@ -334,12 +338,12 @@ export default function AgentsPage() {
                         <div className="mt-8 bg-gradient-to-r from-neon-purple/10 to-neon-cyan/10 border border-white/10 rounded-xl p-6 mb-6">
                             <div className="flex items-center gap-3 mb-2">
                                 <Terminal className="w-5 h-5 text-white" />
-                                <h3 className="font-bold text-white">SuiLoop CLI</h3>
-                                <span className="bg-neon-cyan/20 text-neon-cyan text-[10px] px-2 py-0.5 rounded font-mono">NEW</span>
+                                <h3 className="font-bold text-white">{t('agents.cli.title')}</h3>
+                                <span className="bg-neon-cyan/20 text-neon-cyan text-[10px] px-2 py-0.5 rounded font-mono">{t('agents.cli.badge')}</span>
                             </div>
-                            <p className="text-xs text-gray-400 mb-3">Scaffold a combat-ready agent in seconds.</p>
+                            <p className="text-xs text-gray-400 mb-3">{t('agents.cli.description')}</p>
                             <div className="bg-black/50 border border-white/5 rounded px-3 py-2 flex justify-between items-center group cursor-pointer hover:border-white/20 transition-colors"
-                                onClick={() => { navigator.clipboard.writeText('npx suiloop create-unit'); toast.success('Copied!'); }}>
+                                onClick={() => { navigator.clipboard.writeText('npx suiloop create-unit'); toast.success(t('agents.toasts.copied')); }}>
                                 <code className="text-xs font-mono text-neon-cyan">npx suiloop create-unit</code>
                                 <Copy className="w-3 h-3 text-gray-500 group-hover:text-white transition-colors" />
                             </div>
@@ -348,13 +352,13 @@ export default function AgentsPage() {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center hover:bg-white/10 transition-colors cursor-pointer">
                                 <Code className="w-6 h-6 mx-auto mb-2 text-blue-400" />
-                                <div className="text-sm font-bold">Python SDK</div>
-                                <div className="text-xs text-green-400">v0.0.7 Ready</div>
+                                <div className="text-sm font-bold">{t('agents.sdk.python')}</div>
+                                <div className="text-xs text-green-400">{t('agents.sdk.ready')}</div>
                             </div>
                             <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center hover:bg-white/10 transition-colors cursor-pointer">
                                 <Zap className="w-6 h-6 mx-auto mb-2 text-yellow-400" />
-                                <div className="text-sm font-bold">Node.js SDK</div>
-                                <div className="text-xs text-green-400">v0.0.7 Ready</div>
+                                <div className="text-sm font-bold">{t('agents.sdk.nodejs')}</div>
+                                <div className="text-xs text-green-400">{t('agents.sdk.ready')}</div>
                             </div>
                         </div>
                     </motion.div>
@@ -370,17 +374,17 @@ export default function AgentsPage() {
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="text-sm font-mono text-gray-400 flex items-center gap-2">
                                     <Terminal className="w-4 h-4 text-neon-cyan" />
-                                    {activeTab === 'logs' ? 'LIVE NEURAL FEED' : 'DIRECT LINK PROTOCOL'}
+                                    {activeTab === 'logs' ? t('agents.sdk.neuralFeed') : t('agents.sdk.linkProtocol')}
                                 </h3>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => setActiveTab('logs')}
                                         className={`px-2 py-0.5 rounded text-[10px] font-bold transition-colors ${activeTab === 'logs' ? 'bg-neon-cyan/20 text-neon-cyan' : 'bg-white/5 text-gray-500'}`}
-                                    >LOGS</button>
+                                    >{t('agents.tabs.logs')}</button>
                                     <button
                                         onClick={() => setActiveTab('sdk')}
                                         className={`px-2 py-0.5 rounded text-[10px] font-bold transition-colors ${activeTab === 'sdk' ? 'bg-blue-500/20 text-blue-400' : 'bg-white/5 text-gray-500'}`}
-                                    >SDK</button>
+                                    >{t('agents.tabs.sdk')}</button>
                                 </div>
                             </div>
 
@@ -388,7 +392,7 @@ export default function AgentsPage() {
                                 <div className="bg-black rounded-lg p-4 font-mono text-xs text-gray-300 overflow-y-auto border border-white/5 shadow-inner flex-grow h-[300px] scrollbar-thin scrollbar-thumb-white/10">
                                     <div className="space-y-1">
                                         {logs.length === 0 && (
-                                            <div className="text-gray-600 italic">Waiting for signal Uplink...</div>
+                                            <div className="text-gray-600 italic">{t('agents.sdk.waitingSignal')}</div>
                                         )}
                                         {logs.map((log, i) => (
                                             <div key={i} className="break-all">
@@ -436,17 +440,17 @@ export default function AgentsPage() {
                                             <div className="space-y-1">
                                                 <div><span className="text-purple-400">import</span> {"{"} Agent {"}"} <span className="text-purple-400">from</span> <span className="text-green-400">&apos;@suiloop/sdk&apos;</span>;</div>
                                                 <div className="h-2" />
-                                                <div className="text-gray-500">{'// Coin type for vault'}</div>
+                                                <div className="text-gray-500">{t('agents.sdk.tsCommentCoin')}</div>
                                                 <div><span className="text-blue-400">const</span> COIN_TYPE = <span className="text-yellow-300">&apos;{selectedCoinType.slice(0, 30)}...&apos;</span>;</div>
                                                 <div className="h-2" />
-                                                <div className="text-gray-500">{'// Initialize Unit'}</div>
+                                                <div className="text-gray-500">{t('agents.sdk.tsCommentInit')}</div>
                                                 <div><span className="text-blue-400">const</span> bot = <span className="text-blue-400">new</span> Agent({"{"}</div>
                                                 <div className="pl-4">apiKey: <span className="text-yellow-300">&apos;sk_live_...&apos;</span>,</div>
                                                 <div className="pl-4">asset: <span className="text-yellow-300">&apos;{sdkAsset}&apos;</span>,</div>
                                                 <div className="pl-4">coinType: COIN_TYPE,</div>
                                                 <div>{"}"});</div>
                                                 <div className="h-2" />
-                                                <div className="text-gray-500">{'// Subscribe to signals'}</div>
+                                                <div className="text-gray-500">{t('agents.sdk.tsCommentSub')}</div>
                                                 <div>bot.subscribe((<span className="text-orange-300">signal</span>) ={">"} {"{"}</div>
                                                 <div className="pl-4"><span className="text-blue-400">if</span> (signal.asset === <span className="text-yellow-300">&apos;{sdkAsset}&apos;</span>) {"{"}</div>
                                                 <div className="pl-8">bot.execute(<span className="text-green-400">&apos;flash-loan-arb&apos;</span>, signal);</div>
@@ -457,17 +461,17 @@ export default function AgentsPage() {
                                             <div className="space-y-1">
                                                 <div><span className="text-purple-400">from</span> suiloop <span className="text-purple-400">import</span> Agent</div>
                                                 <div className="h-2" />
-                                                <div className="text-gray-500"># Coin type for vault</div>
+                                                <div className="text-gray-500">{t('agents.sdk.pyCommentCoin')}</div>
                                                 <div>COIN_TYPE = <span className="text-yellow-300">&quot;{selectedCoinType.slice(0, 24)}...&quot;</span></div>
                                                 <div className="h-2" />
-                                                <div className="text-gray-500"># Initialize Unit</div>
+                                                <div className="text-gray-500">{t('agents.sdk.pyCommentInit')}</div>
                                                 <div>bot = Agent(</div>
                                                 <div className="pl-4">api_key=<span className="text-yellow-300">&quot;sk_live_...&quot;</span>,</div>
                                                 <div className="pl-4">asset=<span className="text-yellow-300">&quot;{sdkAsset}&quot;</span>,</div>
                                                 <div className="pl-4">coin_type=COIN_TYPE</div>
                                                 <div>)</div>
                                                 <div className="h-2" />
-                                                <div className="text-gray-500"># Exec strategy</div>
+                                                <div className="text-gray-500">{t('agents.sdk.pyCommentExec')}</div>
                                                 <div><span className="text-purple-400">async for</span> signal <span className="text-purple-400">in</span> bot.listen():</div>
                                                 <div className="pl-4"><span className="text-blue-400">if</span> signal[<span className="text-green-400">&apos;asset&apos;</span>] == <span className="text-yellow-300">&quot;{sdkAsset}&quot;</span>:</div>
                                                 <div className="pl-8">bot.execute(<span className="text-green-400">&quot;flash-loan-arb&quot;</span>, signal)</div>
@@ -479,19 +483,18 @@ export default function AgentsPage() {
 
                             <p className="mt-4 text-xs text-gray-500">
                                 {activeTab === 'logs'
-                                    ? `Live feed via Supabase Realtime. ${walrusStatus === 'live' ? `All ${walrusUploadCount} logs mirrored to Walrus.` : 'Walrus sync connecting...'}`
-                                    : `Use the key above to authenticate. Showing ${sdkAsset} vault integration example.`}
+                                    ? t('agents.logs.liveFeedSupabase').replace('{walrusStatus}', walrusStatus === 'live' ? t('agents.logs.walrusMirrored').replace('{count}', walrusUploadCount.toString()) : t('agents.logs.walrusConnecting'))
+                                    : t('agents.logs.sdkKeyHint').replace('{asset}', sdkAsset)}
                             </p>
                         </div>
 
                         <div className="bg-gradient-to-br from-neon-purple/20 to-transparent border border-neon-purple/30 rounded-xl p-6">
                             <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                                 <Shield className="w-4 h-4 text-neon-purple" />
-                                Institutional Security
+                                {t('agents.security.title')}
                             </h3>
                             <p className="text-xs text-gray-300 leading-relaxed opacity-80">
-                                All agent interactions are secured by Move guarantees (OwnerCap) and signed nonces.
-                                Transactions are atomically executed in a single PTB. Forensic logs are permanently stored on Walrus decentralized storage for both SUI and USDC vaults.
+                                {t('agents.security.description')}
                             </p>
                             <button
                                 onClick={() => {
@@ -527,20 +530,20 @@ export default function AgentsPage() {
                                     });
 
                                     toast.promise(downloadPromise, {
-                                        loading: 'Decrypting Black Box Neural Signatures...',
-                                        success: 'Secure Logs Downloaded (sui-loop-audit.json)',
-                                        error: 'Access Denied'
+                                        loading: t('agents.toasts.decrypting'),
+                                        success: t('agents.toasts.downloadSuccess'),
+                                        error: t('agents.toasts.accessDenied')
                                     });
 
                                     setLogs(prev => [...prev, {
                                         level: 'system',
-                                        message: '⚠️ ENCRYPTED LOG DUMP REQUESTED BY OPERATOR',
+                                        message: t('agents.logs.encryptedRequested'),
                                         timestamp: new Date().toISOString()
                                     }]);
                                 }}
                                 className="mt-4 w-full py-2 bg-neon-purple/20 hover:bg-neon-purple/30 text-neon-purple border border-neon-purple/50 rounded-lg text-xs font-bold transition-all hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] active:scale-95"
                             >
-                                ACCESS BLACK BOX DATA
+                                {t('agents.security.btnAccess')}
                             </button>
                         </div>
                     </motion.div>

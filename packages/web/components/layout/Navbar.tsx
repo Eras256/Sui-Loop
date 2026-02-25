@@ -7,10 +7,12 @@ import { Home, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Z
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function Navbar() {
     const pathname = usePathname();
     const account = useCurrentAccount();
+    const { t } = useLanguage();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -56,16 +58,16 @@ export default function Navbar() {
     }, [mobileMenuOpen]);
 
     const navLinks = [
-        { name: "HOME", href: "/", icon: Home },
-        { name: "DASHBOARD", href: "/dashboard", icon: LayoutDashboard },
-        { name: "ANALYTICS", href: "/analytics", icon: BarChart2 },
-        { name: "NEURAL OPS", href: "/strategies", icon: Zap },
-        { name: "MARKETPLACE", href: "/marketplace", icon: Package },
-        { name: "PLUGINS", href: "/plugins", icon: Cpu },
-        { name: "BUILDER", href: "/strategies/builder", icon: Compass },
-        { name: "SENTINELS", href: "/agents", icon: Bot },
-        { name: "DOCS", href: "/docs", icon: FileText },
-        { name: "LEADERBOARD", href: "/leaderboard", icon: Trophy },
+        { name: t('nav.home'), href: "/", icon: Home },
+        { name: t('nav.dashboard'), href: "/dashboard", icon: LayoutDashboard },
+        { name: t('nav.analytics'), href: "/analytics", icon: BarChart2 },
+        { name: t('nav.neuralOps'), href: "/strategies", icon: Zap },
+        { name: t('nav.marketplace'), href: "/marketplace", icon: Package },
+        { name: t('nav.plugins'), href: "/plugins", icon: Cpu },
+        { name: t('nav.builder'), href: "/strategies/builder", icon: Compass },
+        { name: t('nav.agents'), href: "/agents", icon: Bot },
+        { name: t('nav.docs'), href: "/docs", icon: FileText },
+        { name: t('nav.leaderboard'), href: "/leaderboard", icon: Trophy },
     ];
 
     const closeMobileMenu = useCallback(() => {
@@ -227,7 +229,7 @@ export default function Navbar() {
                                             <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? 'bg-green-500' : 'bg-gray-500'}`}></span>
                                         </span>
                                         <span className="text-[10px] text-gray-400 font-mono">
-                                            {account ? `${account.address.slice(0, 6)}...${account.address.slice(-4)}` : 'WALLET NOT CONNECTED'}
+                                            {account ? `${account.address.slice(0, 6)}...${account.address.slice(-4)}` : t('nav.walletNotConnected')}
                                         </span>
                                     </div>
                                     {account && (
@@ -276,7 +278,7 @@ export default function Navbar() {
                                                 <div className="flex flex-col">
                                                     <span className="font-medium text-sm sm:text-base">{link.name}</span>
                                                     {isActive && (
-                                                        <span className="text-[10px] text-neon-cyan font-mono">CURRENT PAGE</span>
+                                                        <span className="text-[10px] text-neon-cyan font-mono">{t('nav.currentPage')}</span>
                                                     )}
                                                 </div>
                                             </Link>
@@ -300,7 +302,7 @@ export default function Navbar() {
                                     className="min-h-[52px] p-4 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-bold border border-white/20 flex items-center justify-center gap-3 hover:opacity-90 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(0,243,255,0.3)]"
                                 >
                                     <Zap size={20} className="text-black" />
-                                    <span className="text-sm sm:text-base">MATRIX UPLINK</span>
+                                    <span className="text-sm sm:text-base">{t('nav.matrixUplink')}</span>
                                     <Rocket size={18} className="text-black" />
                                 </Link>
                             </motion.div>
@@ -318,7 +320,7 @@ export default function Navbar() {
                                     className="min-h-[48px] p-4 rounded-xl bg-white/5 border border-neon-purple/30 text-neon-purple font-bold flex items-center justify-center gap-3 hover:bg-neon-purple/10 transition-all active:scale-[0.98]"
                                 >
                                     <Cpu size={18} />
-                                    <span className="text-sm sm:text-base">STRATEGY BUILDER</span>
+                                    <span className="text-sm sm:text-base">{t('nav.strategyBuilder')}</span>
                                 </Link>
                             </motion.div>
                         </motion.div>

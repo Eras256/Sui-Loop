@@ -1,132 +1,1546 @@
 {
-    "nav": {
-        "home": "首页",
-        "dashboard": "控制台",
+  "nav": {
+    "home": "首页",
+    "dashboard": "控制台",
+    "marketplace": "市场",
+    "strategies": "策略",
+    "agents": "代理",
+    "analytics": "分析",
+    "docs": "文档",
+    "leaderboard": "排行榜",
+    "plugins": "插件",
+    "launch": "启动应用",
+    "neuralOps": "神經操作員",
+    "builder": "構建器",
+    "walletNotConnected": "錢包未連接",
+    "currentPage": "當前頁面",
+    "matrixUplink": "矩陣上行",
+    "strategyBuilder": "策略構建器"
+  },
+  "footer": {
+    "tagline": "Sui 的去中心化神经矩阵。具备链上 ELO 声誉的自主代理编排、DeepBook V3 闪电向量和 Walrus 取证日志。",
+    "mainframe": "神经主机",
+    "intelligence": "智能",
+    "stats": "协议统计",
+    "links": {
+      "dashboard": "神经控制台",
+      "analytics": "矩阵分析",
+      "strategies": "神经操作",
+      "builder": "策略构建器",
+      "marketplace": "市场",
+      "plugins": "插件",
+      "agents": "哨兵控制台",
+      "manifesto": "矩阵宣言",
+      "howToUse": "使用方法",
+      "docs": "技术文档",
+      "terms": "服务条款",
+      "risk": "风险披露",
+      "source": "内核源码"
+    },
+    "copyright": "© 2026 SuiLoop 协议。MIT 许可证。开源软件。",
+    "architect": "架构师：Vaiosx",
+    "legal": "非金融服务。仅限非托管软件。",
+    "launch": "启动控制台",
+    "status": {
+      "uplink": "矩陣上行鏈路已建立",
+      "kernel": "神經內核",
+      "verified": "MOVE 已驗證",
+      "mainnet": "主網已激活",
+      "builtFor": "為 Sui 構建"
+    },
+    "statsLabels": {
+      "synced": "同步的神經單元",
+      "elo": "平均註冊 ELO",
+      "network": "矩陣網絡",
+      "assets": "支持的資產",
+      "kernel": "神經內核",
+      "walrus": "Walrus 註冊表",
+      "uptime": "運行時間 (矩陣)"
+    }
+  },
+  "legal": {
+    "banner": {
+      "title": "SuiLoop 是开源软件，不是金融服务。",
+      "body": "非托管。无 KYC。高风险 — 仅使用您能承受损失的资金。",
+      "terms": "服务条款",
+      "risk": "风险披露",
+      "cta": "我已了解"
+    }
+  },
+  "home": {
+    "hero": {
+      "badge": "自主 DeFi 协议 · Sui 网络",
+      "title1": "神经",
+      "title2": "DeFi 矩阵",
+      "description": "机构级自主 AI 代理，执行闪电贷、套利和收益策略 — 由 Sui Move 智能合约强制执行数学安全保证。",
+      "launch": "启动控制台",
+      "docs": "阅读文档"
+    },
+    "stats": {
+      "agents": "活跃代理",
+      "volume": "闪电量",
+      "uptime": "正常运行时间",
+      "apy": "平均 APY"
+    },
+    "features": {
+      "title": "为什么选择 SuiLoop？",
+      "nonCustodial": {
+        "title": "非托管金库",
+        "description": "您的资金保存在链上 Vault 对象中。代理可以执行策略，但只有您才能提款 — 由不可变的 Move 字节码强制执行。"
+      },
+      "flashLoans": {
+        "title": "热土豆闪电贷",
+        "description": "借入的资本必须在同一个可编程交易块中偿还，否则原子回滚。零债务风险，无需抵押。"
+      },
+      "agents": {
+        "title": "自主 AI 代理",
+        "description": "部署具名代理（TITAN、ELIZA、WHALE），具备链上 ELO 声誉。每个代理都有策略配置文件、风险承受度和可验证的业绩记录。"
+      },
+      "verified": {
+        "title": "Move Prover 验证",
+        "description": "智能合约通过 Move Prover 正式验证。偿付性不变量经过数学证明，而不仅仅是测试。"
+      }
+    },
+    "cta": {
+      "title": "准备好部署了吗？",
+      "description": "连接您的 Sui 钱包，几分钟内即可部署您的第一个自主代理。",
+      "button": "立即开始"
+    },
+    "sections": {
+      "poweredBy": "由顶级协议支持",
+      "interface": {
+        "title": "选择你的",
+        "subtitle": "界面",
+        "desc": "SuiLoop 为两个不同的物种设计。",
+        "human": {
+          "title": "人类操作员",
+          "gain": "你的优势：",
+          "desc1": "无需编写代码即可进行机构级套利。",
+          "desc2": "启动代理，建立你的 ",
+          "desc3": "神经声誉 (ELO)",
+          "desc4": "，主导全球注册表。无风险的原子执行。",
+          "cta": "进入控制中心"
+        },
+        "agent": {
+          "title": "自主 AI 代理",
+          "gain": "你的优势：",
+          "desc1": "终极物理躯体。",
+          "desc2": "通过简单的 SDK 访问闪电贷、DeepBook V3 流动性和 Walrus 内存。为 AI 在链上繁荣提供数学上安全的沙盒。",
+          "cta": "访问开发者中心"
+        }
+      },
+      "cta": {
+        "title": "准备好部署了吗？",
+        "browse": "浏览策略",
+        "builder": "打开构建器",
         "marketplace": "市场",
-        "strategies": "策略",
-        "agents": "代理",
-        "analytics": "分析",
-        "docs": "文档",
-        "leaderboard": "排行榜",
         "plugins": "插件",
-        "launch": "启动应用"
+        "docs": "阅读文档"
+      }
+    },
+    "ctaLinks": {
+      "title": "准备好部署了吗？",
+      "browse": "浏览策略",
+      "builder": "打开构建器",
+      "marketplace": "市场",
+      "plugins": "插件",
+      "docs": "阅读文档"
+    },
+    "quickStart": {
+      "title": "快速通道 (单行命令)",
+      "desc": "适用于 macOS、Windows 和 Linux。该命令自动安装依赖并设置 TypeScript/Python 环境。"
+    },
+    "companion": {
+      "title": "原生桌面终端",
+      "desc": "专业桌面环境。高频计算监控和直接进程控制的原生性能。",
+      "available": "v0.0.7 可用",
+      "download": "下载桌面客户端"
+    },
+    "marquee": {
+      "tvl": "神经矩阵锁仓量",
+      "synced": "已同步机体",
+      "plugins": "注册表插件",
+      "elo": "全球平均 ELO",
+      "latency": "矩阵延迟"
+    },
+    "executive": {
+      "title": "执行摘要",
+      "p1": "SuiLoop 是 Sui 区块链上的机构级 DeFi 协议，结合了",
+      "p1_hl1": "原子级杠杆执行",
+      "p1_mid": "与",
+      "p1_hl2": "自主的 AI 代理",
+      "p2": "该协议利用 Move 2024 的线性类型系统（烫手山芋模式），在编译器级别保证闪电贷的偿还。同时，ElizaOS 驱动着智能的链下代理，这些代理分析市场状况，并通过可编程交易块（PTB）编排链上交易。"
+    },
+    "progressive": {
+      "title": "渐进式自动化",
+      "desc": "SuiLoop 解决了 AI-Crypto 最大的困境：",
+      "desc_hl": "安全性 vs 自主性",
+      "copilot": {
+        "title": "副驾驶模式",
+        "l1": "用户签署每笔交易",
+        "l2": "人类级别的执行速度",
+        "l3": "非托管和无需信任",
+        "l4": "最适合关注安全的用户"
+      },
+      "autonomous": {
+        "title": "全自动模式",
+        "l1": "代理使用私钥签署交易",
+        "l2": "超人类的执行速度（毫秒级）",
+        "l3": "全自动化代理循环",
+        "l4": "最适合高频交易与 MEV 寻找者"
+      }
+    },
+    "workforce": {
+      "badge": "新的劳动力",
+      "title1": "雇佣一支",
+      "title2": "全天候战术小队",
+      "analyst": {
+        "role": "职责：神经哨兵",
+        "title": "分析师",
+        "desc": "破译矩阵世界。以超人类的速度扫描协议间的流动性失效和利差。",
+        "stat": "同步率：99.8%"
+      },
+      "executioner": {
+        "role": "职责：矩阵交易员",
+        "title": "执行者",
+        "desc": "通过最优神经路径引导资本。执行 Cetus 的原子互换并即时偿还闪电贷。",
+        "stat": "延迟：<14ms"
+      },
+      "validator": {
+        "role": "职责：注册表守卫",
+        "title": "验证者",
+        "desc": "确保每笔交易都维持你的 ELO 声誉。模拟执行结果以保护你在神经矩阵中的记录。",
+        "stat": "信任：绝对"
+      }
+    },
+    "architecture": {
+      "title": "神经矩阵",
+      "subtitle": "系统架构",
+      "suffix": "",
+      "p": "建立在 4 个支柱之上：神经控制中心 (NASA)、钢铁侠战衣 (神经内核)、烫手山芋 (原子引擎) 和神经取证日志 (Walrus)。",
+      "f1": {
+        "title": "视觉化策略构建器",
+        "desc": "用于自定义策略的拖放式节点编辑器"
+      },
+      "f2": {
+        "title": "操作手册",
+        "desc": "协议操作员的逐步指南"
+      },
+      "f3": {
+        "title": "策略市场",
+        "desc": "16+ 预置策略。每个策略都有 SUI 和 USDC 资产选择器。"
+      },
+      "f4": {
+        "title": "烫手山芋 (执行)",
+        "desc": "实施 10 秒“烫手山芋”模式。借入数百万闪电贷；如果套利失败，时间线将“回滚”。"
+      },
+      "f5": {
+        "title": "神经矩阵 (战衣)",
+        "desc": "DeFi 界的 J.A.R.V.I.S.。在飞行中（热切换）向飞行员头盔注入新的交易策略，无需停机。"
+      },
+      "f6": {
+        "title": "取证黑匣子 (Walrus)",
+        "desc": "去中心化飞行记录仪。每个决定都在 Walrus 协议上刻成数字基石。不可摧毁的路径证明。"
+      },
+      "f7": {
+        "title": "任务控制中心语音",
+        "desc": "通过语音无线电指挥代理。集成 STT/TTS 模块，实时接收战斗报告。"
+      },
+      "f8": {
+        "title": "自愈网关",
+        "desc": "通过 CLI 进行自动化诊断。监控网络健康和 Gas 级别，具备自动暂停功能。"
+      },
+      "f9": {
+        "title": "AI 故障转移核心 2.0",
+        "desc": "多供应商架构 (OpenAI -> Anthropic -> Bedrock) 确保 99.99% 的运行时间。"
+      }
+    },
+    "loop": {
+      "title": "核心",
+      "subtitle": "闭环 (LOOP)",
+      "p": "自主代理如何执行原子套利",
+      "s1": {
+        "title": "观察",
+        "desc": "代理扫描 Scallop APY、Navi 协议流动性和 Cetus 池的价格偏差。"
+      },
+      "s2": {
+        "title": "计算",
+        "desc": "计算最佳贷款额和跨协议的预期价差利润。"
+      },
+      "s3": {
+        "title": "构建",
+        "desc": "使用 Navi/Scallop 闪电贷和 DeepBook V3 路径构建 PTB。"
+      },
+      "s4": {
+        "title": "执行",
+        "desc": "提交至区块链。捕获利润或原子化安全回滚。"
+      }
+    },
+    "builderHighlight": {
+      "badge": "v0.0.7 新功能",
+      "title": "视觉化",
+      "subtitle": "策略构建器",
+      "desc": "使用直观的拖放式编辑器创建自定义交易策略。视觉化连接触发器、条件和动作 - 无需编码。",
+      "l1": "6 个节点类别：原子引擎 · AI · 互换 · 安全 · 社交 · 信号",
+      "l2": "每个策略的 SUI / USDC 资产选择器",
+      "l3": "一键钱包签名部署",
+      "l4": "导出架构以便共享或审计",
+      "cta": "打开构建器"
+    },
+    "devTools": {
+      "title": "在 SUILOOP 上",
+      "subtitle": "构建",
+      "desc": "为神经矩阵操作员和量化开发者提供的机构级工具。",
+      "cli": {
+        "title": "SuiLoop CLI",
+        "desc": "几秒钟内搭建起生产级自主代理。"
+      },
+      "ts": {
+        "title": "TypeScript SDK",
+        "desc": "用于 Web 集成和前端 dApp 的类型安全绑定。"
+      },
+      "py": {
+        "title": "Python SDK",
+        "desc": "用于算法交易和数据科学的异步客户端。"
+      },
+      "cta": "访问开发者中心"
+    },
+    "toasts": {
+      "copied": "命令已複製到剪貼板",
+      "activationSuccess": "代理已激活：神經註冊同步",
+      "activationDesc": "矩陣上行鏈路已建立 | ELO: 400",
+      "wrongNetwork": "檢測到錯誤網絡",
+      "wrongNetworkDesc": "此 dApp 在 Sui 測試網（Testnet）上運行。請切換您的錢包網絡。",
+      "walletRequired": "請先連接您的 Sui 錢包",
+      "txFailed": "交易失敗",
+      "txFailedDesc": "構建交易失敗"
+    }
+  },
+  "dashboard": {
+    "legalNotice": "法律聲明：",
+    "nonCustodial": "SuiLoop 是非託管協議。您需對自己的私鑰和安全負責。",
+    "walletRequired": "需要錢包",
+    "walletRequiredDesc": "請連接您的 Sui 錢包以執行此操作。",
+    "deployStrategy": "部署 {name}?",
+    "protocolFee": "協議費用",
+    "authorized": "已授權",
+    "suiTestnet": "SUI 測試網",
+    "deploymentDesc": "正在初始化自主邏輯門。部署包括安全保險庫同步。",
+    "cancel": "取消",
+    "confirm": "確認",
+    "dismiss": "關閉",
+    "running": "運行中",
+    "latestExecution": "最新執行",
+    "txHash": "交易哈希",
+    "pending": "等待中...",
+    "network": "網絡",
+    "protocol": "協議",
+    "installedPlugins": "已安裝插件",
+    "installedSkills": "已安裝技能",
+    "noPlugins": "本機未安裝插件。",
+    "noSkills": "本機未安裝技能。",
+    "securityContext": "安全上下文",
+    "agentCapId": "代理權限 ID",
+    "closeView": "關閉視圖",
+    "terminateAgent": "終止代理",
+    "secureVaultTvl": "安全保險庫鎖倉量 (TVL)",
+    "walletBalanceLabel": "錢包：",
+    "marketAlpha": "市場 Alpha",
+    "projectedYield": "預計收益 (24H)",
+    "matrixSentiment": "矩陣情緒",
+    "globalSync": "全球神經同步：",
+    "securityEnclave": "神經安全區域",
+    "active": "激活",
+    "vaultIdNotCreated": "保險庫 ID：未創建",
+    "locked": "已鎖定",
+    "agentAccessGranted": "代理訪問：已授權 🔓",
+    "agentAccessRevoked": "代理訪問：已撤銷 🔒",
+    "initializeVault": "+ 初始化保險庫",
+    "inject": "存入",
+    "extract": "提取",
+    "unitFleet": "神經單元艦隊",
+    "deployDefault": "部署默認循環",
+    "stop": "停止",
+    "noAgents": "目前沒有部署代理。",
+    "noAgentsDesc": "初始化您的安全保險庫並選擇策略以開始自動化交易。",
+    "unitRegistry": "神經單元註冊表",
+    "synced": "已同步",
+    "details": "詳情",
+    "deployMore": "部署更多代理",
+    "createYourAgent": "創建您的代理",
+    "liquidityAlpha": "矩陣流動性 Alpha",
+    "supply": "存款",
+    "borrow": "借款",
+    "initializing": "正在初始化儀表板...",
+    "metrics": {
+      "targetYield": "目標收益",
+      "profit24h": "24h 利润",
+      "uptime": "運行時間"
+    },
+    "strategies": {
+      "sui-usdc-loop": "SUI/USDC 動能循環",
+      "turbo-sniper": "模因波動狙擊手",
+      "liquid-staking-arb": "LST 錨定修復",
+      "eliza-sentiment": "Eliza 情緒引擎",
+      "lending-loop-max": "Navi-Scallop 遞歸收益",
+      "manual-sui-dca": "手動 SUI 累積器 (DCA)",
+      "manual-hedge-master": "Delta 中性對沖大師",
+      "manual-lp-scout": "手動流動性偵察員",
+      "manual-yield-harvester": "手動收益收割機",
+      "manual-flash-arb": "阿爾法閃電套利觸發器",
+      "blue-chip-dca": "加權 DCA 累積器",
+      "stable-yield-agg": "穩定幣優化循環",
+      "cetus-clmm-active": "CLMM 活躍供應者",
+      "bluefin-delta-neutral": "Delta 中性融資農民",
+      "mev-capture": "MEV 提取引擎",
+      "perp-funding-arb": "永續合約資金費率套利",
+      "pyth-oracle-sniper": "預言機延遲套利者",
+      "dual-yield-compounder": "雙代幣收益複利中心",
+      "liquidation-hunter": "清算向量",
+      "cross-chain-bridge-arb": "跨鏈價差捕捉"
+    },
+    "terminateTitle": "终止代理？",
+    "terminateDesc": "您即將斷開 {name} 的自主邏輯。",
+    "protocolWarning": "協議警告",
+    "protocolWarningBody": "• 活動倉位將被凍結\n• 需要鏈上簽名\n• 收益生成將立即停止",
+    "stopExecution": "停止執行",
+    "revokingLicense": "正在撤銷鏈上代理許可...",
+    "stoppingLocally": "正在本地停止代理...",
+    "licenseRevoked": "鏈上代理許可已撤銷",
+    "stopSignalSigned": "代理停止信號已簽名",
+    "stopConfirmed": "本地停止已通過鏈上簽名確認。",
+    "viewTx": "查看交易",
+    "logs": {
+      "agentDeployed": "{emoji} 代理已部署 {cap}",
+      "capCreated": "(許可已創建)",
+      "oneOffMode": "| 一次性模式",
+      "agentDeployedDetail": "{emoji} 代理已部署: {name} {detail} | 交易: {tx}..."
+    },
+    "bootLogs": {
+      "sui-usdc-loop": [
+        "套利：正在 DeepBook V3 上掃描 SUI/USDC 價差...",
+        "套利：檢測到價差窗口 (0.47%)。正在執行閃電向量。"
+      ],
+      "turbo-sniper": [
+        "狙擊：正在監控 Cetus 內存池以尋找新的 Meme 代幣發行...",
+        "狙擊：檢測到高流速代幣。正在入場。"
+      ],
+      "liquid-staking-arb": [
+        "錨定套利：正在讀取 afSUI/vSUI 錨定偏差...",
+        "錨定套利：檢測到 0.3% 的偏差。正在通過 LST 兌換恢復錨定。"
+      ],
+      "eliza-sentiment": [
+        "AI 情緒：ElizaOS 代理正在初始化 X/Twitter Feed 掃描器...",
+        "AI 情緒：檢測到看漲信號 — $SUI 正在趨勢中。正在做多。"
+      ],
+      "lending-loop-max": [
+        "借貸：正在綁定 Navi + Scallop 遞歸抵押倉位...",
+        "借貸：遞歸收益策略已激活 — 有效 APY 為基礎收益的 3.2 倍。"
+      ],
+      "blue-chip-dca": [
+        "DCA：TWAP 計劃已加載 — 每 4 小時一次。正在監控 SUI 價格...",
+        "DCA：首個買入訂單已排隊。累積模式已激活。"
+      ],
+      "stable-yield-agg": [
+        "穩定幣：正在掃描 Scallop、Navi、Cetus 的 USDC/USDT 利率...",
+        "穩定幣：正在將資金轉移到 Cetus 池 (最高利率：19.8%)。"
+      ],
+      "cetus-clmm-active": [
+        "CLMM：正在讀取 SUI/USDC 池的集中流動性範圍...",
+        "CLMM：倉位在範圍內 [$0.94-$1.06]。費用正在累積。"
+      ],
+      "bluefin-delta-neutral": [
+        "DELTA：同時開立現貨多單 + 永續空單...",
+        "DELTA：已實現 Delta 中性。資金費率收益：+0.04%/8h。"
+      ],
+      "mev-capture": [
+        "MEV：內存池掃描已激活 — 正在尋找搶跑機會...",
+        "MEV：1 筆交易搶跑成功。利潤：+0.12 SUI。"
+      ],
+      "perp-funding-arb": [
+        "永續資金費：正在讀取 Bluefin 永續合約資金費率...",
+        "永續資金費：確認為正資金費率 (+0.04%)。每 8 小時收割一次。"
+      ],
+      "pyth-oracle-sniper": [
+        "預言機套利：正在監控 Pyth Network 的價格更新區塊...",
+        "預言機套利：檢測到延遲窗口。正在執行同區塊套利。"
+      ],
+      "dual-yield-compounder": [
+        "雙重收益：正在分配抵押品 — 50% 驗證者，50% Scallop USDC...",
+        "雙重收益：雙重收益流已激活。SUI 質押 + USDC 借貸已實時。"
+      ],
+      "liquidation-hunter": [
+        "清算：正在掃描 Navi 和 Scallop 以尋找抵押不足的倉位...",
+        "清算：找到目標 (LTV 94%)。正在以 5% 的折扣執行清算。"
+      ],
+      "cross-chain-bridge-arb": [
+        "跨鏈套利：正在通過 Wormhole 檢查 Sui 與 ETH 的價差...",
+        "跨鏈套利：檢測到 USDC 存在 1.2% 的價差。正在原子化跨鏈和交易。"
+      ]
+    }
+  },
+  "terms": {
+    "title": "服务条款",
+    "lastUpdated": "最后更新：2026 年 2 月 25 日 · 使用本协议即生效",
+    "warning": {
+      "title": "高风险披露",
+      "body": "DeFi 策略存在重大财务风险，包括损失全部存入资金。SuiLoop 是一款软件工具，而非投资服务。您直接与区块链智能合约交互 — 没有任何实体可以撤销链上交易。仅使用您能承受完全损失的资金。"
+    }
+  },
+  "risk": {
+    "title": "扩展风险披露",
+    "warning": "在使用 SuiLoop 之前，请仔细阅读本文件。部署金库或执行任何链上策略即表示您已阅读、理解并接受此处描述的所有风险。",
+    "critical": "严重警告 — 继续前请阅读",
+    "criticalBody": "DeFi 具有高度实验性。仅使用您能承受完全损失的资金与 SuiLoop 交互。SuiLoop 是软件基础设施，而非金融产品。任何实体（包括 SuiLoop 运营商）均无法恢复因智能合约故障、市场波动或用户错误而损失的资金。Sui 上的交易是不可逆的。"
+  },
+  "common": {
+    "connectWallet": "连接钱包",
+    "viewExplorer": "在浏览器查看",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "confirm": "确认",
+    "close": "关闭",
+    "toasts": {
+      "installing": "正在安裝 {name}...",
+      "installedSuccess": "{name} 安裝成功！",
+      "installFailed": "安裝 {name} 失敗",
+      "executing": "正在執行 {name}...",
+      "executedSuccess": "{name} 執行成功",
+      "executionFailed": "執行失敗：{error}",
+      "unitActive": "神經擴展已在 {unit} 上激活。正在打開儀表板...",
+      "openDashboard": "打開代理儀表板",
+      "checkConnection": "請稍後再試或檢查您的連接。"
+    },
+    "coreTeam": "SuiLoop Core"
+  },
+  "analytics": {
+    "title": "神經情報作戰部",
+    "subtitle": "鏈上流動性向量的實時監測",
+    "target": "目標",
+    "guestMode": "訪客模式",
+    "encryptedFeed": "[!] 加密回傳 - 請連接錢包",
+    "vaults": "金庫",
+    "kpi": {
+      "walletBalance": "錢包余額",
+      "activeAgents": "活躍代理",
+      "alphaCapture": "阿爾法捕獲 (24時)",
+      "tvlManaged": "託管總價值 (TVL)",
+      "neuralReputation": "神經信譽值",
+      "ready": "就緒",
+      "engaged": "作戰中",
+      "standby": "待命",
+      "pts": "分",
+      "live": "實時",
+      "dailyChange": "+12 {unit} (24h)"
+    },
+    "chart": {
+      "title": "神經性能向量",
+      "projection": "預測展示"
+    },
+    "radar": {
+      "title": "目標獲取雷達",
+      "stable": "穩定",
+      "volatile": "波動",
+      "lowRisk": "低風險",
+      "active": "激活",
+      "live": "實時",
+      "pools": {
+        "scallop": "Scallop SUI 供應",
+        "navi": "Navi USDC 借貸",
+        "cetus": "Cetus SUI/USDC CLMM",
+        "deepbook": "DeepBook V3 限價單",
+        "matrix": "神經矩陣回傳"
+      }
+    },
+    "integrity": {
+      "title": "原子完整性",
+      "zeroSlippage": "零滑點保護已激活",
+      "vaultTypes": "活動金庫類型",
+      "walrusArmed": "神經取證日誌 (Walrus)：已裝載"
+    },
+    "status": {
+      "ready": "就緒",
+      "engaged": "已參與",
+      "standby": "待機",
+      "live": "實時",
+      "active": "活動"
+    },
+    "usd": "USD"
+  },
+  "strategies": {
+    "title": "協議武器庫",
+    "subtitle": "在 Sui 網絡上部署針對 SUI 或 USDC 金庫的自主內核。克隆機構級邏輯或在構建器中設計您自己的邏輯。",
+    "secureKernel": "安全內核",
+    "riskLevel": "{level} 風險",
+    "targetVault": "目標金庫",
+    "alphaCoefficient": "阿爾法係數",
+    "liquidityDepth": "流動性深度",
+    "backtest": "回測",
+    "initialize": "初始化",
+    "initializing": "正在初始化 {name}...",
+    "templateCompiled": "策略模板已編譯",
+    "kernelBroadcasted": "內核架構已廣播至神經矩陣",
+    "failedToInit": "初始化策略失敗",
+    "connectWallet": "連接錢包以部署策略",
+    "backtestSoon": "回測模塊即將推出 — 在構建器中編譯此內核以預覽性能。",
+    "architect": {
+      "title": "設計新協議",
+      "description": "具備 6 個節點類別的可視化拖放構建器：",
+      "categories": "原子引擎 · AI 情報 · 交換 · 安全 · 社交 · 信號",
+      "export": "+ 導出架構"
+    },
+    "list": {
+      "sui-usdc-loop": {
+        "name": "SUI-USDC 動能向量",
+        "description": "由 Move 原子 PTB 擔保的高頻三角套利。僅在價差 > 0.4% 且具備 Hot Potato 安全機制時執行。"
+      },
+      "turbo-sniper": {
+        "name": "模因波動獵手",
+        "description": "監控高流速模因代幣的資金池創建。在同一區塊內進出場。"
+      },
+      "liquid-staking-arb": {
+        "name": "LST 錨定修復",
+        "description": "在退還質押期間對脫錨的 afSUI/vSUI 與原生 SUI 進行套利。"
+      },
+      "eliza-sentiment": {
+        "name": "Eliza 情緒引擎",
+        "description": "由 AI 驅動的策略，掃描 X/Twitter 以獲取 SUI 生態代幣的看漲情緒信號。"
+      },
+      "lending-loop-max": {
+        "name": "Navi-Scallop 遞歸收益",
+        "description": "通過在 Navi 和 Scallop 協議中遞歸借貸和供應 SUI 來最大化收益。"
+      },
+      "blue-chip-dca": {
+        "name": "加權 DCA 累積器",
+        "description": "使用 4 小時區間的 TWAP 智能購買 SUI 跌勢。最適合長期持有。"
+      },
+      "stable-yield-agg": {
+        "name": "穩定幣優化循環",
+        "description": "在 Scallop、Navi 和 Cetus 之間自動輪換 USDC/USDT 資本，以獲取最高的借貸利率。"
+      },
+      "cetus-clmm-active": {
+        "name": "CLMM 活躍供應者",
+        "description": "具備自動範圍重新平衡的集中流動性供應，以最大化交易費用。"
+      },
+      "bluefin-delta-neutral": {
+        "name": "Delta 中性融資農民",
+        "description": "通過做多 Spot SUI 和做空 Perp SUI 來獲取融資利率。市場中性策略。"
+      },
+      "mev-capture": {
+        "name": "MEV 提取引擎",
+        "description": "通過檢測內存池中的待處理交換並原子化地搶先執行，領先於低滑點 DEX 交易。"
+      },
+      "perp-funding-arb": {
+        "name": "永續合約資金費率套利",
+        "description": "持續獲取 Bluefin 永續合約的正資金費率。持有 Delta 中性敞口以每 8 小時獲取一次資金。"
+      },
+      "pyth-oracle-sniper": {
+        "name": "預言機延遲套利者",
+        "description": "利用鏈上 Pyth 價格更新與 DEX 現貨價格之間的延遲。在預言機刷新同一區塊內執行。"
+      },
+      "dual-yield-compounder": {
+        "name": "雙代幣收益複利中心",
+        "description": "通過在 Scallop 和原生驗證者之間拆分抵押品，同時賺取 SUI 質押獎勵和 USDC 借貸收益。"
+      },
+      "liquidation-hunter": {
+        "name": "清算向量",
+        "description": "監控 Navi 和 Scallop 的抵押不足倉位。以協議折扣觸發清算，獲取即時利潤。"
+      },
+      "cross-chain-bridge-arb": {
+        "name": "跨鏈價差捕捉",
+        "description": "通過 Wormhole 檢測 Sui 與其他鏈之間的價格差異。在價差關閉前原子化地跨鏈並交易。"
+      }
+    },
+    "risks": {
+      "Very Low": "極低",
+      "Low": "低",
+      "Medium": "中等",
+      "High": "高"
+    },
+    "tags": {
+      "Stable": "穩定",
+      "Blue Chip": "藍籌",
+      "Neural Feed Enabled": "神經反饋已啟用",
+      "Degen": "Degen",
+      "High Yield": "高收益",
+      "Safe": "安全",
+      "Institutional": "機構級",
+      "AI Agent": "AI 代理",
+      "Social": "社交",
+      "Neural Matrix Sync": "神經矩陣同步",
+      "Leverage": "槓桿",
+      "Lending": "借貸",
+      "Savings": "儲蓄",
+      "Long Term": "長期",
+      "Stablecoin": "穩定幣",
+      "Liquidity": "流動性",
+      "Hedging": "對沖",
+      "Complex": "複雜",
+      "MEV": "MEV",
+      "Derivatives": "衍生品",
+      "Oracle": "預言機",
+      "Technical": "技術型",
+      "Staking": "質押",
+      "Liquidation": "清算",
+      "Bridge": "跨鏈橋",
+      "Arbitrage": "套利"
+    }
+  },
+  "builder": {
+    "title": "神經架構師",
+    "subtitle": "PTB 可視化設計器",
+    "unnamedKernel": "未命名內核",
+    "initKernel": "初始化內核",
+    "save": "保存架構",
+    "saving": "編譯中...",
+    "deploy": "初始化內核",
+    "history": "版本歷史",
+    "searchNodes": "搜索神經節點...",
+    "nodeCategories": {
+      "ATOMIC ENGINE": "原子引擎",
+      "SIGNAL INPUTS": "信號輸入",
+      "AI INTELLIGENCE": "AI 情報",
+      "TRADING & SWAPS": "交易與交換",
+      "SECURITY & VAULT": "安全與金庫",
+      "SOCIAL MESSAGING": "社交消息"
+    },
+    "nodes": {
+      "FLASH_LOAN": {
+        "name": "閃電貸",
+        "desc": "原子化借入資金 (Hot Potato)"
+      },
+      "EXECUTE_LOOP": {
+        "name": "執行循環",
+        "desc": "完整的借貸-交易-還款循環"
+      },
+      "CREATE_AGENT_CAP": {
+        "name": "創建代理許可証",
+        "desc": "鑄造代理許可證 (0.1 SUI 費用)"
+      },
+      "REPAY_LOAN": {
+        "name": "償還貸款",
+        "desc": "滿足 Hot Potato 收據 + 利潤"
+      },
+      "NEURAL_SIGNAL": {
+        "name": "神經信號",
+        "desc": "向註冊表發布鏈上遙測數據"
+      },
+      "PRICE_THRESHOLD": {
+        "name": "價格閾值",
+        "desc": "在達到目標價格時觸發"
+      },
+      "CRON_TICK": {
+        "name": "定時觸發",
+        "desc": "按時間間隔執行"
+      },
+      "MEMPOOL_SCAN": {
+        "name": "內存池掃描",
+        "desc": "實時交易追蹤"
+      },
+      "WHALE_ALERT": {
+        "name": "巨鯨警報",
+        "desc": "追蹤大戶錢包變動"
+      },
+      "ELIZA_SENTIMENT": {
+        "name": "社交情緒分析",
+        "desc": "分析社交情緒 (NLP)"
+      },
+      "KELLY_CRITERION": {
+        "name": "凱利準則",
+        "desc": "最佳倉位管理邏輯"
+      },
+      "MARKET_REGIME": {
+        "name": "市場狀態",
+        "desc": "檢測牛熊市轉換"
+      },
+      "CETUS_SWAP": {
+        "name": "Cetus 交換",
+        "desc": "Cetus CLMM 上的原子交換"
+      },
+      "TURBOS_SWAP": {
+        "name": "Turbos 交換",
+        "desc": "Turbos 上的資金池交換"
+      },
+      "DEEPBOOK_LIMIT": {
+        "name": "DeepBook 限價單",
+        "desc": "CLOB 訂單下單"
+      },
+      "VAULT_DEPOSIT": {
+        "name": "金庫存款",
+        "desc": "安全飛地資金鎖定"
+      },
+      "VAULT_WITHDRAW": {
+        "name": "金庫提款",
+        "desc": "OwnerCap 驗證的清算"
+      },
+      "ENCLAVE_GUARD": {
+        "name": "飛地守衛",
+        "desc": "Move 原生安全過濾器"
+      },
+      "WALRUS_BLACKBOX": {
+        "name": "Walrus 黑匣子",
+        "desc": "去中心化取證日誌"
+      },
+      "TWITTER_RELAY": {
+        "name": "Twitter 轉發",
+        "desc": "自動化狀態報告"
+      },
+      "DISCORD_ALARM": {
+        "name": "Discord 警報",
+        "desc": "緊急關鍵通知"
+      },
+      "TELEGRAM_PUSH": {
+        "name": "Telegram 推送",
+        "desc": "異步執行日誌"
+      }
+    },
+    "toasts": {
+      "matrixEnhanced": "矩陣已增強：{name} 已連接",
+      "schemaExported": "架構已導出為 .json",
+      "connectWallet": "連接錢包以架構協議",
+      "compiling": "正在編譯神經內核...",
+      "committing": "正在提交草稿...",
+      "cloudSyncOffline": "雲端同步離線：{error}",
+      "localSaved": "內核已保存在本地。存檔可能不完整。",
+      "broadcasted": "架構已廣播至神經矩陣",
+      "archived": "架構已存檔至 Walrus (blob: {id}...)",
+      "compiledSuccess": "內核已編譯並上行！",
+      "draftPersisted": "草稿已持久化（已嘗試本地 + 雲端同步）",
+      "transmissionError": "傳輸錯誤：{error}",
+      "reconstructed": "內核已重建：{name}"
+    },
+    "lab": "組件實驗室",
+    "vaultAsset": "金庫資產",
+    "searchPlaceholder": "尋找內核核心...",
+    "dragHint": "將節點拖到矩陣上。資產：",
+    "commitDraft": "提交草稿",
+    "compileKernel": "編譯內核",
+    "run": "運行",
+    "viewLogs": "查看內核日誌",
+    "exportSchema": "導出架構",
+    "archives": "內核存檔",
+    "archivesHint": "神經存儲上行鏈路激活",
+    "scanning": "正在掃描上行鏈路...",
+    "emptyArchive": "存檔為空",
+    "active": "激活",
+    "offline": "離線",
+    "categories": {
+      "ATOMIC ENGINE": "原子引擎",
+      "SIGNAL INPUTS": "信號輸入",
+      "AI INTELLIGENCE": "AI 情報",
+      "TRADING & SWAPS": "交易與交換",
+      "SECURITY & VAULT": "安全與金庫",
+      "SOCIAL MESSAGING": "社交消息"
+    },
+    "nodeTypes": {
+      "trigger": "觸發器",
+      "action": "操作",
+      "condition": "條件"
+    },
+    "mobileHint": "點擊 ☰ 按鈕打開組件實驗室。捏合以縮放畫布。"
+  },
+  "marketplace": {
+    "online": "神經矩陣在線",
+    "loopHub": "LoopHub 市場",
+    "title": "擴展您的代理",
+    "subtitle": "去中心化神經經濟。安裝社區構建的原型，為您的 SuiLoop 單元提供強大動力，並在排行榜上攀升。",
+    "stats": {
+      "skills": "技能",
+      "downloads": "下載",
+      "categories": "類別"
+    },
+    "searchPlaceholder": "按名稱、描述或標籤搜索技能...",
+    "featuredTitle": "精選技能",
+    "featuredBadge": "精選",
+    "monitor": "監控",
+    "installToAnotherUnit": "安裝到另一個單元",
+    "install": "安裝",
+    "allSkills": "所有技能",
+    "skillsFound": "找到 {count} 個技能",
+    "sortBy": {
+      "downloads": "最多下載",
+      "rating": "評分最高",
+      "newest": "最新"
+    },
+    "by": "由",
+    "free": "免費",
+    "verified": "已驗證",
+    "runAction": "執行操作",
+    "installToAnotherAgent": "安裝到另一個代理",
+    "noSkillsFound": "未找到技能",
+    "noSkillsDesc": "嘗試調整搜索或過濾條件。",
+    "neuralUplink": "神經上行鏈路",
+    "live": "直播",
+    "syncingMatrix": "正在同步矩陣...",
+    "autoSyncActive": "自動同步激活",
+    "telemetryDesc": "監控 Sui 測試網神經矩陣上所有去中心化單元的實時遙測數據。",
+    "buildYourOwn": "構建您自己的技能",
+    "buildYourOwnDesc": "為 SuiLoop 社區創建和發布技能。分享您的交易策略、集成和自動化工具。",
+    "readDocs": "閱讀開發者文檔",
+    "openBuilder": "打開策略構建器",
+    "executeTitle": "執行 {name}",
+    "categories": {
+      "trading": "交易",
+      "analysis": "分析",
+      "neural": "神經網絡",
+      "notification": "通知",
+      "integration": "集成",
+      "data": "數據",
+      "utility": "工具庫",
+      "defi": "去中心化金融",
+      "social": "社交",
+      "risk-mgmt": "風險管理",
+      "oracle": "預言機",
+      "tools": "工具"
+    },
+    "agentLabel": "代理人",
+    "skills": {
+      "manual-sui-dca": {
+        "name": "手動 SUI 累積器 (DCA)",
+        "description": "$SUI 專業 DCA 工具。手動設置累積水平或在特定價格點觸發。包括風險調整後的入場。"
+      },
+      "manual-hedge-master": {
+        "name": "Delta 中性對沖大師",
+        "description": "實時 Delta 中性對沖套件。手動平衡 Cetus 和 Bluefin 上的多頭/空頭頭寸。"
+      },
+      "manual-lp-scout": {
+        "name": "手動流動性偵查員",
+        "description": "Cetus CLMM 的視覺範圍管理。手動調整流動性刻度並監控無常損失。"
+      },
+      "manual-yield-harvester": {
+        "name": "手動收益收割機",
+        "description": "聚合 Navi、Scallop 和 Haedal 的所有待處理獎勵。一鍵手動領取所有獎勵。"
+      },
+      "manual-flash-arb": {
+        "name": "Alpha 閃電貸套利觸發器",
+        "description": "系統識別的閃電貸套利路徑的手動觸發器。執行最終控制權。"
+      }
+    },
+    "tags": {
+      "manual": "手動",
+      "dca": "定期定額",
+      "accumulation": "累積",
+      "hedging": "對沖",
+      "risk": "風險",
+      "liquidity": "流動性",
+      "lp": "流動性提供者",
+      "yield": "收益",
+      "harvest": "收割",
+      "flash-loan": "閃電貸",
+      "arbitrage": "套利",
+      "on-chain": "鏈上",
+      "verified": "已驗證"
+    },
+    "unnamedStrategy": "未命名策略",
+    "defaultDescription": "發布到 SuiLoop 矩陣的去中心化策略。",
+    "anonymous": "匿名",
+    "neuralPulse": "檢索到神經脈衝"
+  },
+  "plugins": {
+    "coreExtensions": "核心神經擴展",
+    "title": "LOOP 插件",
+    "subtitle": "使用先進的認知能力升級您的代理。從原子 DeFi 執行和 Walrus 取證日誌到社交情報和 MEV 捕獲。",
+    "available": "{count} 個插件可用",
+    "moveVerified": "所有 Move 驗證",
+    "compatible": "SUI + USDC 兼容",
+    "walrusLogging": "Walrus 日誌",
+    "installPlugin": "安裝插件",
+    "verifiedModules": "已驗證的核心模組",
+    "verifiedModulesDesc": "這些插件由 SuiLoop 核心團隊開發和維護。它們在具有受限權限的安全沙箱中運行，並經過安全審核。與社區技能不同，這些插件可以直接訪問優化的原生綁定。",
+    "items": {
+      "sui-deep-research": {
+        "name": "Sui 深度研究",
+        "description": "自主網頁抓取和分析引擎。閱讀白皮書、新聞和協議文檔以助決策。",
+        "category": "情報",
+        "features": [
+          "自主瀏覽",
+          "驗證信息",
+          "文檔解析"
+        ]
+      },
+      "social-sentiment": {
+        "name": "社交情緒",
+        "description": "聆聽市場脈搏。監控 Twitter/X 的看漲/看跌趨勢和社交量飆升。",
+        "category": "社交運營",
+        "features": [
+          "情緒評分",
+          "趨勢檢測",
+          "炒作週期分析"
+        ]
+      },
+      "knowledge-graph": {
+        "name": "知識圖譜",
+        "description": "通用搜索引擎和上下文構建器。通過查詢現實世界數據來理解市場波動的“原因”。",
+        "category": "認知",
+        "features": [
+          "上下文搜索",
+          "市場解釋",
+          "Tavily 集成"
+        ]
+      },
+      "flash-loan-engine": {
+        "name": "閃電貸引擎",
+        "description": "通過 DeepBook V3 在單個原子交易中執行零抵押閃電貸。一個區塊內完成套利、清算和再融資。",
+        "category": "DeFi 執行",
+        "features": [
+          "零抵押貸款",
+          "原子套利",
+          "自動還款"
+        ]
+      },
+      "onchain-oracle": {
+        "name": "鏈上預言機",
+        "description": "從 Pyth Network 和 Switchboard 獲取實時價格饋送。在任何執行前驗證鏈上數據，以防止過期價格攻擊。",
+        "category": "數據饋送",
+        "features": [
+          "Pyth 集成",
+          "Switchboard 支持",
+          "陈旧度保護"
+        ]
+      },
+      "whale-tracker": {
+        "name": "巨鯨追蹤器",
+        "description": "監控 Sui 生態系統中的大型錢包活動。在市場反應前檢測累積和分發模式。",
+        "category": "監視",
+        "features": [
+          "錢包監控",
+          "累積警報",
+          "前 100 名追蹤"
+        ]
+      },
+      "risk-shield": {
+        "name": "風險護盾",
+        "description": "應用凱利準則和 VaR 模型來保護您的資本。當虧損超過定義的閾值時自動停止策略。",
+        "category": "風險管理",
+        "features": [
+          "凱利準則",
+          "VaR 計算",
+          "自動斷路器"
+        ]
+      },
+      "auto-compounder": {
+        "name": "自動複利器",
+        "description": "自動收割並重新投資 Scallop 和 Cetus 倉位的收益。無需人工干預，全天候最大化 APY。",
+        "category": "收益操作",
+        "features": [
+          "Scallop 收割",
+          "Cetus LP 複利",
+          "燃料優化"
+        ]
+      },
+      "portfolio-rebalancer": {
+        "name": "投資組合再平衡器",
+        "description": "維持您 DeFi 倉位的目標分配。當偏離超過定義的閾值時，使用原子交換觸發再平衡。",
+        "category": "投資組合",
+        "features": [
+          "偏離檢測",
+          "原子再平衡",
+          "目標權重"
+        ]
+      },
+      "mev-interceptor": {
+        "name": "MEV 攔截器",
+        "description": "在 Sui 內存池中檢測並搶先執行 MEV 機會。在套利窗口關閉前捕捉價值。",
+        "category": "最大可提取價值 (MEV)",
+        "features": [
+          "內存池掃描",
+          "搶先交易保護",
+          "三明治攻擊檢測"
+        ]
+      },
+      "liquidity-sniper": {
+        "name": "流動性狙擊手",
+        "description": "監控 Cetus 和 Turbos 上的新池發布。在發布後的第一個區塊自動部署資金，以獲取早期流動性獎勵。",
+        "category": "狙擊",
+        "features": [
+          "新池檢測",
+          "自動進場邏輯",
+          "防跑路過濾"
+        ]
+      },
+      "walrus-blackbox": {
+        "name": "Walrus 黑匣子",
+        "description": "通過 Sui Walrus 進行不可篡改的去中心化取證日誌記錄。每筆交易、決策和異常都經過加密密封並存儲在鏈上。提供透明的防篡改審計軌跡。",
+        "category": "審計與日誌",
+        "features": [
+          "Walrus Blob 存儲",
+          "不可篡改的審計追踪",
+          "取證回放",
+          "WALRUS_BLACKBOX 節點"
+        ]
+      },
+      "usdc-vault-manager": {
+        "name": "USDC 保險庫管理器",
+        "description": "SuiLoop 上 USDC 保險庫的全生命週期管理。處理存款、取款、收益路由以及 Navi 和 Scallop 之間的自動輪換。",
+        "category": "保險庫操作",
+        "features": [
+          "USDC 保險庫部署",
+          "Navi/Scallop 輪換",
+          "收益自動路由",
+          "SUI/USDC 切換"
+        ]
+      },
+      "reputation-engine": {
+        "name": "神經聲譽",
+        "description": "將您的代理與神經註冊表鏈接。通過成功的交易賺取 ELO 積分並建立鏈上信譽。解鎖更高的閃電貸限額。",
+        "category": "排名",
+        "features": [
+          "ELO 積分累積",
+          "神經信號訪問",
+          "高交易量解鎖"
+        ]
+      }
+    },
+    "bootLogs": {
+      "sui-deep-research": [
+        "深度研究：瀏覽器引擎已初始化 — 正在抓取 Sui 生態系統文檔...",
+        "深度研究：312 份白皮書已索引。就緒。"
+      ],
+      "social-sentiment": [
+        "社交情緒：正在連接到 X/Twitter 流...",
+        "社交情緒：情緒反饋已激活 — 檢測到 $SUI 的看漲偏好。"
+      ],
+      "knowledge-graph": [
+        "知識圖譜：Tavily 搜索引擎已綁定。正在構建上下文圖譜...",
+        "知識圖譜：5,241 個節點已解析。圖譜就緒。"
+      ],
+      "flash-loan-engine": [
+        "閃電貸引擎：正在連接到 DeepBook V3 流動性池...",
+        "閃電貸引擎：已識別 3 條套利路徑。原子執行就緒。"
+      ],
+      "onchain-oracle": [
+        "鏈上預言機：正在綁定 Pyth Network 價格饋送...",
+        "鏈上預言機：追蹤 47 個資產。陳舊保護已激活。饋送在線。"
+      ],
+      "whale-tracker": [
+        "巨鯨追蹤器：正在掃描前 100 個 Sui 錢包...",
+        "巨鯨追蹤器：檢測到 2 個累積模式 — 監控中。"
+      ],
+      "risk-shield": [
+        "風險護盾：正在加載凱利準則模型...",
+        "風險護盾：VaR 閾值已配置。斷路器已武裝。"
+      ],
+      "auto-compounder": [
+        "自動複利器：正在讀取 Scallop 倉位...",
+        "自動複利器：下一次收割安排在 4 小時後。Cetus LP 複利已啟用。"
+      ],
+      "portfolio-rebalancer": [
+        "投資組合再平衡器：正在獲取當前分配權重...",
+        "投資組合再平衡器：偏離在閾值內 (1.2%)。自動再平衡待命。"
+      ],
+      "mev-interceptor": [
+        "MEV 攔截器：內存池掃描已啟動...",
+        "MEV 攔截器：2 個三明治模式已被阻止。實時監控中。"
+      ],
+      "liquidity-sniper": [
+        "流動性狙擊手：正在監視 Cetus 和 Turbos 的新池發布...",
+        "流動性狙擊手：防跑路過濾已加載。正在等待發布事件。"
+      ],
+      "walrus-blackbox": [
+        "Walrus 黑匣子：正在建立與 Sui Walrus 網絡的上行鏈路...",
+        "Walrus 黑匣子：Blob 存儲已激活。取證日誌已武裝。防篡改。"
+      ],
+      "usdc-vault-manager": [
+        "USDC 保險庫管理器：正在掃描現有的 USDC 保險庫...",
+        "USDC 保險庫管理器：Navi 和 Scallop USDC 池已索引。自動輪換已激活。"
+      ]
+    }
+  },
+  "modals": {
+    "installSkill": {
+      "title": "安裝能力",
+      "globalAgent": "神經矩陣（全局）",
+      "selectTarget": "選擇目標單元",
+      "securityCheck": "安全檢查",
+      "securityDesc": "安裝 {name} 賦予該單元執行與 {tag} 相關交易的能力。",
+      "applyAll": " 這將應用於所有活動代理。",
+      "applySelected": " 這僅應用於所選代理。",
+      "installing": "正在安裝...",
+      "installBtn": "安裝能力",
+      "selectedTarget": "此單元",
+      "customStrategy": "自定義策略"
+    }
+  },
+  "ops": {
+    "liveFeed": "操作控制台 // 實時反饋",
+    "connecting": "正在連接",
+    "online": "在線",
+    "unavailable": "不可用",
+    "noDb": "無數據庫連接。請檢查 Supabase 配置。",
+    "connectingDb": "正在連接到 Supabase Realtime...",
+    "matrixOnline": "SuiLoop 神經矩陣在線 — 實時反饋已激活"
+  },
+  "agents": {
+    "title": "操縱指揮中心",
+    "subtitle": "用於部署自主金融彈頭的界面。生成憑據，監視 SUI 和 USDC 現場單位，並直接將邏輯注入 SuiLoop 神經矩陣。所有活動都通過 Walrus 取證日誌永恆化。",
+    "systemBadge": "系統在線：v0.0.7 // 已加密",
+    "tabs": {
+      "logs": "日誌",
+      "sdk": "SDK"
+    },
+    "telemetry": {
+      "title": "軌道上行鏈路狀態",
+      "uplinkGateway": "上行網關",
+      "targetingEngine": "目標引擎",
+      "secureEnclave": "安全飛地",
+      "walrusAudit": "Walrus 審計日誌",
+      "rpcLatency": "RPC 延遲",
+      "measuring": "測量中...",
+      "status": {
+        "operational": "正常運行",
+        "degraded": "性能下降",
+        "offline": "離線",
+        "shieldActive": "護盾激活"
+      }
+    },
+    "walrusAudit": {
+      "title": "WALRUS 去中心化審計",
+      "description": "每個代理的執行都永恆化在 Walrus 上，這是 Sui 的去中心化 blob 存儲。審計日誌是內容尋址的且不可篡改。",
+      "blobsCommitted": "已提交的 Blob",
+      "storageNetwork": "存儲網絡",
+      "epochsRetained": "保留的紀元",
+      "permanent": "∞ 永久",
+      "status": {
+        "connecting": "連接中...",
+        "live": "實時 · {count} BLOBS",
+        "error": "錯誤"
+      }
+    },
+    "deployedUnits": {
+      "title": "部署單位",
+      "rateLabel": "數據包攔截率 (實時)"
+    },
+    "cli": {
+      "title": "SuiLoop CLI",
+      "badge": "新",
+      "description": "在幾秒鐘內搭建一個戰鬥就緒的代理。"
+    },
+    "sdk": {
+      "python": "Python SDK",
+      "nodejs": "Node.js SDK",
+      "ready": "v0.0.7 就緒",
+      "linkProtocol": "直接鏈接協議",
+      "neuralFeed": "實時神經餵送",
+      "waitingSignal": "等待信號上行...",
+      "tsCommentCoin": "// 金庫的代幣類型",
+      "tsCommentInit": "// 初始化單位",
+      "tsCommentSub": "// 訂閱信號",
+      "pyCommentCoin": "# 金庫的代幣類型",
+      "pyCommentInit": "# 初始化單位",
+      "pyCommentExec": "# 執行策略"
+    },
+    "security": {
+      "title": "機構級安全",
+      "description": "所有代理交互都受 Move 保證 (OwnerCap) 和簽名 nonce 的保護。交易在單個 PTB 中原子化執行。取證日誌永久存儲在 Walrus 去中心化存儲中，適用於 SUI 和 USDC 金庫。",
+      "btnAccess": "訪問黑匣子數據"
+    },
+    "logs": {
+      "liveFeedSupabase": "通過 Supabase Realtime 實時餵送。{walrusStatus}",
+      "walrusMirrored": "所有 {count} 條日誌已同步至 Walrus。",
+      "walrusConnecting": "正在連接 Walrus 同步...",
+      "sdkKeyHint": "使用上面的密鑰進行身份驗證。顯示 {asset} 金庫集成示例。",
+      "onChainPrefix": "📡 鏈上：",
+      "encryptedRequested": "⚠️ 操作員請求加密日誌轉儲"
+    },
+    "toasts": {
+      "copied": "已複製！",
+      "decrypting": "正在解密黑匣子神經簽名...",
+      "downloadSuccess": "安全日誌已下載 (sui-loop-audit.json)",
+      "accessDenied": "訪問被拒絕"
+    },
+    "apiKeyManager": {
+      "title": "代理控制台",
+      "subtitle": "為您的外部代理生成安全憑據。",
+      "walletNotConnected": "錢包未連接",
+      "connectToGenerate": "連接您的錢包以生成密鑰",
+      "useNavbarConnect": "使用導航欄進行連接",
+      "securityNote": "安全提示",
+      "securityDesc": "您將被要求簽名一條消息以證明此錢包的所有權。此簽名將安全地用於生成您唯一的 API 密鑰。",
+      "errorLabel": "錯誤",
+      "btnGenerate": "生成新的 API 密鑰",
+      "btnGenerating": "正在生成安全密鑰...",
+      "successLabel": "API 密鑰生成成功",
+      "secretKeyLabel": "您的機密 API 密鑰",
+      "warningLabel": "警告",
+      "warningDesc": "此密鑰將不會再次顯示。請立即複製。",
+      "scopeLabel": "權限範圍",
+      "limitLabel": "限制",
+      "btnClose": "關閉並從屏幕清除",
+      "defaultKeyName": "儀表板密鑰",
+      "toasts": {
+        "connectFirst": "請先使用導航欄中的按鈕連接您的錢包。",
+        "success": "API 密鑰生成成功！",
+        "copied": "已複製到剪貼板",
+        "failed": "生成 API 密鑰失敗"
+      }
+    }
+  },
+  "docs": {
+    "title": "技術文檔",
+    "subtitle": "Sui 網絡上自主金融操作的現場手冊。",
+    "loading": "正在加載現場手冊...",
+    "backLink": "返回協議",
+    "version": "v0.0.7",
+    "ghLink": "GitHub",
+    "scanLink": "Suiscan",
+    "tabs": {
+      "overview": "任務簡報",
+      "ideas": "戰術場景",
+      "architecture": "系統原理圖",
+      "contracts": "鏈上內核",
+      "agent": "自主單元",
+      "builder": "策略架構師",
+      "frontend": "指揮界面",
+      "api": "代理 API",
+      "security": "防禦協議"
+    },
+    "overview": {
+      "stats": {
+        "version": "測試網版本",
+        "tests": "單元測試",
+        "plugins": "神經插件",
+        "fee": "閃電貸費用",
+        "assets": "資產"
+      },
+      "summary": {
+        "title": "執行摘要",
+        "p1": "SuiLoop 是 Sui 區塊鏈上的一項機構級 DeFi 協議，它將原子槓桿執行與自主 AI 代理相結合。",
+        "p2": "該協議利用 Move 2024 的線性類型系統（Hot Potato 模式）在編譯器級別保證閃電貸償還，而 ElizaOS 則驅動智能鏈下代理分析市場狀況並通過可編程交易塊 (PTB) 編排交易。"
+      },
+      "automation": {
+        "title": "漸進式自動化",
+        "subtitle": "SuiLoop 解決了最大的 AI-加密貨幣難題：安全與自主",
+        "copilot": {
+          "title": "副駕駛模式",
+          "features": [
+            "用戶簽署每筆交易",
+            "人類速度執行",
+            "非託管且無需信任",
+            "最適合專注於安全的用戶"
+          ]
+        },
+        "autonomous": {
+          "title": "自主模式",
+          "features": [
+            "代理使用私鑰簽署",
+            "超人類速度（毫秒級）",
+            "完全代理化循環",
+            "最適合 HFT 和 MEV 搜索者"
+          ]
+        }
+      },
+      "features": {
+        "title": "核心特點 (v0.0.7)",
+        "items": {
+          "builder": {
+            "title": "視覺化策略構建器",
+            "desc": "用於自定義策略的拖放式節點編輯器"
+          },
+          "manual": {
+            "title": "操作手冊",
+            "desc": "協議操作員的分步指南"
+          },
+          "marketplace": {
+            "title": "策略市場",
+            "desc": "16+ 預建策略。每張卡片上都有 SUI 和 USDC 資產選擇器。"
+          },
+          "dashboard": {
+            "title": "控制面板指揮中心",
+            "desc": "實時指標、活動艦隊、執行日誌"
+          },
+          "vaults": {
+            "title": "多資產保險庫",
+            "desc": "部署 SUI 或 USDC 保險庫 — 每個策略的資產選擇"
+          },
+          "storage": {
+            "title": "Walrus 和 Supabase",
+            "desc": "用於取證日誌的混合去中心化存儲"
+          }
+        }
+      },
+      "business": {
+        "title": "業務模型與價值捕捉",
+        "b2c": {
+          "title": "B2C / 零售",
+          "desc": "Pro 級訂閱，可訪問高級 AI 模型 (OpenAI o1) 和高級策略模板。",
+          "label": "部署費用",
+          "sub": "即將推出：~100 MXN"
+        },
+        "b2b": {
+          "title": "B2B / 機構",
+          "desc": "完整的 API 訪問權限，為工業規模的後端部署和自定義保險庫管理提供保證的 SLA。",
+          "label": "基礎設施",
+          "sub": "基於配額"
+        },
+        "dev": {
+          "title": "開發者生態系統",
+          "desc": "神經市場內銷售/租賃策略的微型協議費用，支持 Walrus 審計追蹤。",
+          "label": "P2P 信號費",
+          "sub": "每個信號"
+        }
+      },
+      "verified": {
+        "title": "驗證的鏈上執行",
+        "table": {
+          "tx": "交易",
+          "amount": "金額",
+          "fee": "費用",
+          "status": "狀態",
+          "link": "鏈接"
+        },
+        "success": "成功",
+        "agentWallet": "代理錢包"
+      }
+    },
+    "ideas": {
+      "title": "構建什麼？",
+      "subtitle": "SuiLoop 提供金融導軌。您構建車輛。",
+      "subtitle2": "以下是一些使用我們 SDK 的 \"初創公司請求\"。",
+      "difficulty": "難度",
+      "medium": "中等",
+      "hard": "困難",
+      "easy": "簡單",
+      "items": {
+        "portfolio": {
+          "title": "PortfolioGuard 機器人",
+          "desc": "一個 24/7 監控用戶投資組合的 Telegram 機器人。如果抵押品健康狀況降至 1.1 以下，它會自動通過 SuiLoop 借入穩定幣以償還債務並防止清算。"
+        },
+        "arb": {
+          "title": "ArbSwarm DAO",
+          "desc": "一個用戶匯集 SUI 的 DAO。數以千計的微型代理掃描 DEX 尋找 0.5% 的差異並執行原子閃電貸。利潤在代理和 DAO 之間按 80/20 分配。"
+        },
+        "news": {
+          "title": "NewsTrader 預言機",
+          "desc": "將標準 Web2 新聞 API（彭博社、Twitter）連接到 Sui。當檢測到 \"監管批准\" 時，立即通過 SuiLoop Swaps 購買相關代幣。"
+        },
+        "gamefi": {
+          "title": "GameFi NPC 經濟",
+          "desc": "Sui 遊戲中的完全自主 NPC，管理自己的庫存商店。他們從玩家手中低價買入，高價賣出，通過 SuiLoop 管理自己的資本。"
+        },
+        "yield": {
+          "title": "USDC 收益最大化工具",
+          "desc": "將 USDC 部署到 SuiLoop 保險庫，然後使用代理在 Scallop、Navi 和 Cetus 之間自動旋轉資本 — 始終追求最高的借貸利率。"
+        },
+        "sniper": {
+          "title": "清算狙擊手機器人",
+          "desc": "監控 Navi 和 Scallop 上的每個抵押不足的頭寸。當健康因子降至 1.0 以下時，從 SuiLoop 閃電貸款償還並獲取清算獎金。"
+        },
+        "payroll": {
+          "title": "鏈上工資協議",
+          "desc": "DAO 財庫將 USDC 部署到 SuiLoop 保險庫。每週產生的收益會定期自動流向貢獻者的錢包。"
+        },
+        "insurance": {
+          "title": "鏈上保險基金",
+          "desc": "用戶每週支付少量 USDC 保費。資金池存放在 SuiLoop 保險庫中產生收益。當承保協議遭到攻擊時，代理會自主支付索赔。"
+        },
+        "social": {
+          "title": "Eliza 社交情緒交易員",
+          "desc": "ElizaOS 代理 24/7 掃描 X/Twitter、Telegram 和 Discord，尋找 Sui 生態系統項目的提及。當經過驗證的影響者發布看漲內容時，代理會開倉。"
+        },
+        "transparency": {
+          "title": "透明度證明對沖基金",
+          "desc": "一個基金，每項交易決策都由代理簽署並不可篡改地傳傳到 Walrus。零黑箱 — 全面的加密問責。"
+        }
+      }
+    },
+    "architecture": {
+      "title": "系統架構",
+      "layers": "架構分層",
+      "flow": "策略部署流程"
+    },
+    "contracts": {
+      "title": "鏈上內核 (Sui Move)",
+      "subtitle": "協議的安全性由 Move 的線性類型系統和 Hot Potato 模式保證。",
+      "objects": "關鍵協議對象",
+      "code": "代碼實現"
+    },
+    "agent": {
+      "title": "自主單元 (ElizaOS)",
+      "subtitle": "策劃複雜交易的鏈下大腦。",
+      "structure": "代理文件結構",
+      "actions": "核心代理動作"
+    },
+    "builder": {
+      "title": "策略架構師 (視覺化構建器)",
+      "subtitle": "無需編寫任何 Move 代碼即可構建複雜的金融策略。",
+      "categories": "節點類別",
+      "dragDrop": "拖放節點以創建邏輯連接。"
+    },
+    "frontend": {
+      "title": "指揮界面 (Next.js)",
+      "subtitle": "用於實時艦隊管理的神經網絡控制面板。",
+      "stack": "技術棧",
+      "pages": "應用頁面"
+    },
+    "api": {
+      "title": "代理 API 和 CLI",
+      "subtitle": "通過我們的 REST API 和命令行界面以編程方式控制您的艦隊。",
+      "auth": {
+        "title": "API 身份驗證",
+        "desc": "所有 API 請求都需要在 Authorization 標頭中包含 Secret Key。您可以在代理控制台中生成這些密鑰。"
+      }
+    },
+    "security": {
+      "title": "防禦協議",
+      "subtitle": "通過多層加密和邏輯屏障保護用戶資金。",
+      "hotPotato": {
+        "title": "Hot Potato 強制執行",
+        "desc": "閃電貸 'Receipt' 對象沒有 'drop' 或 'store' 能力，因此在不償還貸款的情況下無法完成交易。"
+      },
+      "attack": {
+        "title": "攻擊預防",
+        "desc": "防重入保護和滑點檢查已內置於每個執行塊中。"
+      }
+    }
+  },
+  "leaderboard": {
+    "hero": {
+      "verified": "链上验证性能",
+      "title1": "代理",
+      "title2": "精英",
+      "subtitle": "在 SuiLoop 协议上运行的自治代理的实时声誉排名。指标通过 Sui 测试网上的密码学证明进行验证。"
+    },
+    "search": {
+      "placeholder": "搜索代理或钱包..."
+    },
+    "tvl": {
+      "label": "全球总锁仓量"
+    },
+    "podium": {
+      "eloRating": "ELO 评分",
+      "winRate": "胜率",
+      "agentWallet": "代理钱包",
+      "lastSignal": "最新信号"
+    },
+    "feed": {
+      "title": "实时神经反馈",
+      "waiting": "等待代理同步...",
+      "justNow": "刚刚"
+    },
+    "table": {
+      "headers": {
+        "rank": "排名",
+        "profile": "代理资料",
+        "performance": "表现",
+        "trust": "信任评分",
+        "feed": "神经反馈",
+        "volume": "成交量"
+      },
+      "stats": {
+        "winRate": "胜率",
+        "trades": "交易笔数",
+        "elo": "ELO",
+        "standby": "待机模式",
+        "tx": "交易:"
+      }
     },
     "footer": {
-        "tagline": "Sui 的去中心化神经矩阵。具备链上 ELO 声誉的自主代理编排、DeepBook V3 闪电向量和 Walrus 取证日志。",
-        "mainframe": "神经主机",
-        "intelligence": "智能",
-        "stats": "协议统计",
-        "links": {
-            "dashboard": "神经控制台",
-            "analytics": "矩阵分析",
-            "strategies": "神经操作",
-            "builder": "策略构建器",
-            "marketplace": "市场",
-            "plugins": "插件",
-            "agents": "哨兵控制台",
-            "manifesto": "矩阵宣言",
-            "howToUse": "使用方法",
-            "docs": "技术文档",
-            "terms": "服务条款",
-            "risk": "风险披露",
-            "source": "内核源码"
-        },
-        "copyright": "© 2026 SuiLoop 协议。MIT 许可证。开源软件。",
-        "architect": "架构师：Vaiosx",
-        "legal": "非金融服务。仅限非托管软件。",
-        "launch": "启动控制台"
-    },
-    "legal": {
-        "banner": {
-            "title": "SuiLoop 是开源软件，不是金融服务。",
-            "body": "非托管。无 KYC。高风险 — 仅使用您能承受损失的资金。",
-            "terms": "服务条款",
-            "risk": "风险披露",
-            "cta": "我已了解"
-        }
-    },
-    "home": {
-        "hero": {
-            "badge": "自主 DeFi 协议 · Sui 网络",
-            "title1": "神经",
-            "title2": "DeFi 矩阵",
-            "description": "机构级自主 AI 代理，执行闪电贷、套利和收益策略 — 由 Sui Move 智能合约强制执行数学安全保证。",
-            "launch": "启动控制台",
-            "docs": "阅读文档"
-        },
-        "stats": {
-            "agents": "活跃代理",
-            "volume": "闪电量",
-            "uptime": "正常运行时间",
-            "apy": "平均 APY"
-        },
-        "features": {
-            "title": "为什么选择 SuiLoop？",
-            "nonCustodial": {
-                "title": "非托管金库",
-                "description": "您的资金保存在链上 Vault 对象中。代理可以执行策略，但只有您才能提款 — 由不可变的 Move 字节码强制执行。"
-            },
-            "flashLoans": {
-                "title": "热土豆闪电贷",
-                "description": "借入的资本必须在同一个可编程交易块中偿还，否则原子回滚。零债务风险，无需抵押。"
-            },
-            "agents": {
-                "title": "自主 AI 代理",
-                "description": "部署具名代理（TITAN、ELIZA、WHALE），具备链上 ELO 声誉。每个代理都有策略配置文件、风险承受度和可验证的业绩记录。"
-            },
-            "verified": {
-                "title": "Move Prover 验证",
-                "description": "智能合约通过 Move Prover 正式验证。偿付性不变量经过数学证明，而不仅仅是测试。"
-            }
-        },
-        "cta": {
-            "title": "准备好部署了吗？",
-            "description": "连接您的 Sui 钱包，几分钟内即可部署您的第一个自主代理。",
-            "button": "立即开始"
-        }
-    },
-    "dashboard": {
-        "legalNotice": "SuiLoop 是开源软件，不是金融服务。",
-        "nonCustodial": "非托管。无 KYC。高风险 — 仅使用您能承受损失的资金。",
-        "vault": {
-            "title": "安全金库",
-            "create": "创建金库",
-            "destroy": "销毁金库",
-            "deposit": "存款",
-            "withdraw": "提款",
-            "balance": "金库余额",
-            "agentAccess": "代理访问",
-            "granted": "已授权",
-            "revoked": "已撤销"
-        },
-        "strategy": {
-            "deploy": "部署策略",
-            "stop": "停止",
-            "active": "活跃策略"
-        }
-    },
-    "terms": {
-        "title": "服务条款",
-        "lastUpdated": "最后更新：2026 年 2 月 25 日 · 使用本协议即生效",
-        "warning": {
-            "title": "高风险披露",
-            "body": "DeFi 策略存在重大财务风险，包括损失全部存入资金。SuiLoop 是一款软件工具，而非投资服务。您直接与区块链智能合约交互 — 没有任何实体可以撤销链上交易。仅使用您能承受完全损失的资金。"
-        }
-    },
-    "risk": {
-        "title": "扩展风险披露",
-        "warning": "在使用 SuiLoop 之前，请仔细阅读本文件。部署金库或执行任何链上策略即表示您已阅读、理解并接受此处描述的所有风险。",
-        "critical": "严重警告 — 继续前请阅读",
-        "criticalBody": "DeFi 具有高度实验性。仅使用您能承受完全损失的资金与 SuiLoop 交互。SuiLoop 是软件基础设施，而非金融产品。任何实体（包括 SuiLoop 运营商）均无法恢复因智能合约故障、市场波动或用户错误而损失的资金。Sui 上的交易是不可逆的。"
-    },
-    "common": {
-        "connectWallet": "连接钱包",
-        "viewExplorer": "在浏览器查看",
-        "loading": "加载中...",
-        "error": "错误",
-        "success": "成功",
-        "cancel": "取消",
-        "confirm": "确认",
-        "close": "关闭"
+      "sync": "实时网络同步",
+      "nodes": "活跃节点",
+      "monitor": "监控我的代理",
+      "deploy": "部署新单元"
     }
+  }
 }

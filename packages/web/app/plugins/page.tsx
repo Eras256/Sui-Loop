@@ -34,6 +34,7 @@ import { supabase } from "@/lib/supabase";
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { writeLog } from "@/lib/logger";
 import { useCurrentAccount } from "@mysten/dapp-kit";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 // Core Plugins Definition
 const CORE_PLUGINS = [
@@ -222,6 +223,7 @@ const CORE_PLUGINS = [
 ];
 
 export default function PluginsPage() {
+    const { t, tRaw } = useLanguage();
     const [selectedPlugin, setSelectedPlugin] = useState<any>(null);
     const [installedSkills, setInstalledSkills] = useState<Record<string, boolean>>({});
     const [isInstalling, setIsInstalling] = useState(false);
@@ -252,7 +254,7 @@ export default function PluginsPage() {
         if (!selectedPlugin) return;
 
         setIsInstalling(true);
-        const toastId = toast.loading(`Installing ${selectedPlugin.name}...`);
+        const toastId = toast.loading(t('common.toasts.installing').replace('{name}', selectedPlugin.name));
 
         try {
             // Use relative path to leverage Next.js rewrites (prevents CORS/port issues)
@@ -271,11 +273,11 @@ export default function PluginsPage() {
                 throw new Error(data.error || 'Failed to install plugin');
             }
 
-            toast.success(`${selectedPlugin.name} installed successfully!`, {
+            toast.success(t('common.toasts.installedSuccess').replace('{name}', selectedPlugin.name), {
                 id: toastId,
-                description: `Neural extension active on ${agentId === 'global' ? 'all units' : 'this unit'}. Opening dashboard...`,
+                description: t('common.toasts.unitActive').replace('{unit}', agentId === 'global' ? t('modals.installSkill.globalAgent') : t('modals.installSkill.selectedTarget')),
                 action: {
-                    label: "Open Agent Dashboard",
+                    label: t('common.toasts.openDashboard'),
                     onClick: () => window.location.href = `/dashboard${agentId !== 'global' ? `?strategy=${agentId}` : ''}`
                 }
             });
@@ -310,28 +312,12 @@ export default function PluginsPage() {
                 console.warn("Neural sync failed", e);
             }
 
-            // Plugin-specific bootup activity logs (delayed for realism)
-            const PLUGIN_BOOT_LOGS: Record<string, Array<{ msg: string; level: 'info' | 'system' | 'success' | 'warn' }>> = {
-                'sui-deep-research': [{ msg: 'DEEP RESEARCH: Browser engine initialized — crawling Sui ecosystem docs...', level: 'info' }, { msg: 'DEEP RESEARCH: 312 whitepapers indexed. Ready.', level: 'success' }],
-                'social-sentiment': [{ msg: 'SOCIAL SENTIMENT: Connecting to X/Twitter stream...', level: 'info' }, { msg: 'SOCIAL SENTIMENT: Sentiment feed active — bullish bias detected on $SUI.', level: 'success' }],
-                'knowledge-graph': [{ msg: 'KNOWLEDGE GRAPH: Tavily search engine bound. Building context graph...', level: 'info' }, { msg: 'KNOWLEDGE GRAPH: 5,241 nodes resolved. Graph ready.', level: 'success' }],
-                'flash-loan-engine': [{ msg: 'FLASH LOAN ENGINE: Connecting to DeepBook V3 liquidity pools...', level: 'info' }, { msg: 'FLASH LOAN ENGINE: 3 arbitrage routes identified. Atomic execution ready.', level: 'success' }],
-                'onchain-oracle': [{ msg: 'ORACLE: Binding Pyth Network price feeds...', level: 'info' }, { msg: 'ORACLE: 47 assets tracked. Staleness guard active. Feed live.', level: 'success' }],
-                'whale-tracker': [{ msg: 'WHALE TRACKER: Scanning top 100 Sui wallets...', level: 'info' }, { msg: 'WHALE TRACKER: 2 accumulation patterns detected — monitoring active.', level: 'warn' }],
-                'risk-shield': [{ msg: 'RISK SHIELD: Loading Kelly Criterion model...', level: 'info' }, { msg: 'RISK SHIELD: VaR thresholds configured. Circuit breaker armed.', level: 'success' }],
-                'auto-compounder': [{ msg: 'AUTO-COMPOUNDER: Reading Scallop positions...', level: 'info' }, { msg: 'AUTO-COMPOUNDER: Next harvest scheduled in 4h. Cetus LP compounding enabled.', level: 'success' }],
-                'portfolio-rebalancer': [{ msg: 'PORTFOLIO REBALANCER: Fetching current allocation weights...', level: 'info' }, { msg: 'PORTFOLIO REBALANCER: Drift within threshold (1.2%). Auto-rebalance on standby.', level: 'success' }],
-                'mev-interceptor': [{ msg: 'MEV INTERCEPTOR: Mempool scanning initiated...', level: 'info' }, { msg: 'MEV INTERCEPTOR: 2 sandwich patterns blocked. Monitoring live.', level: 'warn' }],
-                'liquidity-sniper': [{ msg: 'LIQUIDITY SNIPER: Watching Cetus & Turbos for new pool launches...', level: 'info' }, { msg: 'LIQUIDITY SNIPER: Rug-pull filter loaded. Standing by for launch events.', level: 'success' }],
-                'walrus-blackbox': [{ msg: 'WALRUS BLACKBOX: Establishing uplink to Sui Walrus network...', level: 'info' }, { msg: 'WALRUS BLACKBOX: Blob storage active. Forensic logging armed. Tamper-proof.', level: 'success' }],
-                'usdc-vault-manager': [{ msg: 'USDC VAULT MANAGER: Scanning for existing USDC vaults...', level: 'info' }, { msg: 'USDC VAULT MANAGER: Navi & Scallop USDC pools indexed. Auto-rotation active.', level: 'success' }],
-            };
-
-            const bootLogs = PLUGIN_BOOT_LOGS[selectedPlugin.slug];
-            if (bootLogs) {
-                bootLogs.forEach((entry, i) => {
+            const bootLogs = tRaw(`plugins.bootLogs.${selectedPlugin.id}`);
+            if (Array.isArray(bootLogs)) {
+                bootLogs.forEach((msg, i) => {
                     setTimeout(() => {
-                        writeLog(entry.msg, entry.level, agentId);
+                        const level = i === bootLogs.length - 1 ? 'success' : 'info';
+                        writeLog(msg, level, agentId);
                     }, (i + 1) * 1500);
                 });
             }
@@ -341,7 +327,7 @@ export default function PluginsPage() {
             // fetchInstalledStatus(); // No need to re-fetch, we updated locally
         } catch (error: any) {
             console.error('Failed to install plugin:', error);
-            toast.error(error.message || 'Installation failed', { id: toastId });
+            toast.error(t('marketplace.installFailed'), { id: toastId });
         } finally {
             setIsInstalling(false);
         }
@@ -373,7 +359,7 @@ export default function PluginsPage() {
                             className="inline-flex items-center gap-2 px-3 py-1 bg-neon-cyan/10 border border-neon-cyan/30 rounded-full text-neon-cyan text-xs font-mono mb-6"
                         >
                             <Cpu size={14} />
-                            CORE NEURAL EXTENSIONS
+                            {t('plugins.coreExtensions')}
                         </motion.div>
 
                         <motion.h1
@@ -382,7 +368,7 @@ export default function PluginsPage() {
                             transition={{ delay: 0.1 }}
                             className="text-4xl md:text-6xl font-black tracking-tighter mb-6"
                         >
-                            <span className="text-white">LOOP</span> <span className="text-gradient">PLUGINS</span>
+                            <span className="text-white">{t('plugins.title').split(' ')[0]}</span> <span className="text-gradient">{t('plugins.title').split(' ')[1]}</span>
                         </motion.h1>
 
                         <motion.p
@@ -391,8 +377,7 @@ export default function PluginsPage() {
                             transition={{ delay: 0.2 }}
                             className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
                         >
-                            Upgrade your agents with advanced cognitive capabilities.<br />
-                            From atomic DeFi execution and Walrus forensic logging to social intelligence and MEV capture.
+                            {t('plugins.subtitle')}
                         </motion.p>
 
                         {/* Plugin Count */}
@@ -403,16 +388,16 @@ export default function PluginsPage() {
                             className="mt-6 flex flex-wrap items-center justify-center gap-3"
                         >
                             <span className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm font-mono text-gray-400">
-                                {CORE_PLUGINS.length} plugins available
+                                {t('plugins.available').replace('{count}', String(CORE_PLUGINS.length))}
                             </span>
                             <span className="px-4 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full text-sm font-mono text-green-400">
-                                ✓ All Move-verified
+                                ✓ {t('plugins.moveVerified')}
                             </span>
                             <span className="px-4 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-sm font-mono text-[#4ca2ff]">
-                                ✓ SUI + USDC compatible
+                                ✓ {t('plugins.compatible')}
                             </span>
                             <span className="px-4 py-1.5 bg-pink-500/10 border border-pink-500/20 rounded-full text-sm font-mono text-pink-400">
-                                ✓ Walrus logging
+                                ✓ {t('plugins.walrusLogging')}
                             </span>
                         </motion.div>
                     </div>
@@ -439,22 +424,21 @@ export default function PluginsPage() {
                                     <div className="flex-1">
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-xs font-mono text-neon-cyan tracking-wider uppercase border border-neon-cyan/20 px-2 py-1 rounded bg-neon-cyan/5">
-                                                {plugin.category}
+                                                {t(`plugins.items.${plugin.id}.category`)}
                                             </span>
                                             <span className="text-xs text-gray-500 font-mono">v{plugin.version}</span>
                                         </div>
 
                                         <h3 className="text-2xl font-bold mb-3 group-hover:text-white transition-colors">
-                                            {plugin.name}
+                                            {t(`plugins.items.${plugin.id}.name`)}
                                         </h3>
 
                                         <p className="text-gray-400 leading-relaxed mb-6 text-sm">
-                                            {plugin.description}
+                                            {t(`plugins.items.${plugin.id}.description`)}
                                         </p>
 
-                                        {/* Features */}
                                         <ul className="space-y-2 mb-8">
-                                            {plugin.features.map((feature, i) => (
+                                            {(tRaw(`plugins.items.${plugin.id}.features`) || plugin.features).map((feature: string, i: number) => (
                                                 <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
                                                     <CheckCircle2 size={14} className="text-green-400 shrink-0" />
                                                     {feature}
@@ -472,13 +456,13 @@ export default function PluginsPage() {
                                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                                         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                                                     </span>
-                                                    Monitor
+                                                    {t('marketplace.monitor')}
                                                 </button>
                                             </Link>
                                             <button
                                                 onClick={() => setSelectedPlugin(plugin)}
                                                 className="px-6 py-4 rounded-xl bg-neon-cyan/10 hover:bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/20 transition-all flex items-center justify-center"
-                                                title="Install to another agent"
+                                                title={t('marketplace.installToAnotherAgent')}
                                             >
                                                 <UserPlus size={18} />
                                             </button>
@@ -489,7 +473,7 @@ export default function PluginsPage() {
                                             className="w-full py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all flex items-center justify-center gap-2 group-hover:bg-neon-cyan group-hover:text-black group-hover:font-bold"
                                         >
                                             <Download size={18} />
-                                            <span>Install Plugin</span>
+                                            <span>{t('plugins.installPlugin')}</span>
                                         </button>
                                     )}
                                 </div>
@@ -509,9 +493,9 @@ export default function PluginsPage() {
                                 <Shield size={40} className="text-neon-purple" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold mb-2">Verified Core Modules</h3>
+                                <h3 className="text-xl font-bold mb-2">{t('plugins.verifiedModules')}</h3>
                                 <p className="text-gray-400">
-                                    These plugins are developed and maintained by the SuiLoop Core team. They run in a secure sandbox with restricted permissions and are audited for safety. Unlike community skills, these have direct access to optimized native bindings.
+                                    {t('plugins.verifiedModulesDesc')}
                                 </p>
                             </div>
                         </div>

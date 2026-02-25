@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 // Base Template Definitions
 const BASE_STRATEGIES = [
@@ -150,6 +151,7 @@ const BASE_STRATEGIES = [
 import { useCurrentAccount } from "@mysten/dapp-kit";
 
 export default function StrategiesPage() {
+    const { t } = useLanguage();
     const account = useCurrentAccount();
     const router = useRouter();
     const [deployingId, setDeployingId] = useState<string | null>(null);
@@ -236,12 +238,12 @@ export default function StrategiesPage() {
 
     const handleDeploy = async (strategy: typeof strategies[0]) => {
         if (!account?.address) {
-            toast.error("Connect Wallet to deploy strategies");
+            toast.error(t('strategies.connectWallet'));
             return;
         }
 
         setDeployingId(strategy.id);
-        const toastId = toast.loading(`Initializing ${strategy.name}...`);
+        const toastId = toast.loading(t('strategies.initializing').replace('{name}', t(`strategies.list.${strategy.id}.name`)));
 
         try {
             // Import Service
@@ -258,8 +260,8 @@ export default function StrategiesPage() {
             });
 
             toast.dismiss(toastId);
-            toast.success("Strategy Template Compiled", {
-                description: "Kernel architecture broadcasted to Neural Matrix",
+            toast.success(t('strategies.templateCompiled'), {
+                description: t('strategies.kernelBroadcasted'),
                 duration: 2000
             });
 
@@ -269,7 +271,7 @@ export default function StrategiesPage() {
 
         } catch (e) {
             console.error(e);
-            toast.error("Failed to initialize strategy");
+            toast.error(t('strategies.failedToInit'));
         } finally {
             setDeployingId(null);
         }
@@ -289,12 +291,11 @@ export default function StrategiesPage() {
 
                 {/* Header */}
                 <div className="mb-12">
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4">
-                        PROTOCOL <span className="text-gradient">ARSENAL</span>
+                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 uppercase">
+                        {t('strategies.title').split(' ').slice(0, -1).join(' ')} <span className="text-gradient">{t('strategies.title').split(' ').slice(-1)}</span>
                     </h1>
                     <p className="text-gray-400 max-w-2xl text-lg">
-                        Deploy autonomous kernels to the Sui Network targeting <span className="text-[#4ca2ff] font-bold">SUI</span> or <span className="text-neon-purple font-bold">USDC</span> vaults.
-                        Clone institutional-grade logic or architect your own in the Builder.
+                        {t('strategies.subtitle')}
                     </p>
                 </div>
 
@@ -316,47 +317,47 @@ export default function StrategiesPage() {
                                 </div>
                                 <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-2 py-1 rounded text-xs font-mono border border-white/10 flex items-center gap-1">
                                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                                    SECURE KERNEL v0.0.7
+                                    {t('strategies.secureKernel')} v0.0.7
                                 </div>
                             </div>
 
                             <div className="flex justify-between items-start mb-2">
-                                <h3 className="text-xl font-bold tracking-tight">{strat.name}</h3>
+                                <h3 className="text-xl font-bold tracking-tight">{t(`strategies.list.${strat.id}.name`)}</h3>
                                 <div className={`text-xs px-2 py-1 rounded font-bold font-mono uppercase ${strat.risk === 'Very Low' ? 'bg-emerald-500/20 text-emerald-400' :
                                     strat.risk === 'Low' ? 'bg-green-500/20 text-green-400' :
                                         strat.risk === 'Medium' ? 'bg-amber-500/20 text-amber-400' :
                                             'bg-red-500/20 text-red-400'
                                     }`}>
-                                    {strat.risk} Risk
+                                    {t('strategies.riskLevel').replace('{level}', t(`strategies.risks.${strat.risk}`))}
                                 </div>
                             </div>
 
                             <p className="text-sm text-gray-400 mb-3 flex-1 leading-relaxed">
-                                {strat.description}
+                                {t(`strategies.list.${strat.id}.description`)}
                             </p>
 
                             {/* Tags */}
                             <div className="flex flex-wrap gap-1.5 mb-5">
                                 {strat.tags.map(tag => (
                                     <span key={tag} className="text-[9px] font-mono uppercase tracking-wide px-2 py-0.5 rounded bg-white/5 border border-white/10 text-gray-400">
-                                        {tag}
+                                        {t(`strategies.tags.${tag}`)}
                                     </span>
                                 ))}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 <div className="bg-white/5 rounded-lg p-3">
-                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Alpha Coefficient</div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">{t('strategies.alphaCoefficient')}</div>
                                     <div className="text-xl font-mono text-neon-cyan animate-pulse-slow">{strat.apy}</div>
                                 </div>
                                 <div className="bg-white/5 rounded-lg p-3">
-                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Liquidity Depth</div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">{t('strategies.liquidityDepth')}</div>
                                     <div className="text-xl font-mono text-white">{strat.tvl}</div>
                                 </div>
                             </div>
 
                             <div className="flex justify-between items-center mb-4">
-                                <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">TARGET VAULT</span>
+                                <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">{t('strategies.targetVault')}</span>
                                 <div className="flex items-center bg-black/40 border border-white/10 rounded-lg p-1">
                                     <button
                                         onClick={() => setSelectedAssets({ ...selectedAssets, [strat.id]: 'USDC' })}
@@ -375,9 +376,9 @@ export default function StrategiesPage() {
 
                             <div className="flex gap-2 mt-auto">
                                 <button
-                                    onClick={() => toast.info('Backtesting module coming soon — compile this kernel in the Builder to preview performance.', { duration: 3000 })}
+                                    onClick={() => toast.info(t('strategies.backtestSoon'), { duration: 3000 })}
                                     className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 group-hover:bg-white/10 font-mono">
-                                    <Copy size={16} /> BACKTEST
+                                    <Copy size={16} /> {t('strategies.backtest')}
                                 </button>
                                 <button
                                     onClick={() => handleDeploy(strat)}
@@ -386,7 +387,7 @@ export default function StrategiesPage() {
                                     {deployingId === strat.id ? (
                                         <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                                     ) : (
-                                        <>INITIALIZE <ArrowRight size={16} /></>
+                                        <>{t('strategies.initialize')} <ArrowRight size={16} /></>
                                     )}
                                 </button>
                             </div>
@@ -398,15 +399,15 @@ export default function StrategiesPage() {
                         <div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-neon-cyan/10 flex items-center justify-center mb-2 transition-colors border border-white/5 group-hover:border-neon-cyan/20">
                             <Zap size={32} className="group-hover:text-neon-cyan transition-colors" />
                         </div>
-                        <h3 className="text-xl font-bold font-mono tracking-tight group-hover:text-neon-cyan transition-colors">ARCHITECT NEW PROTOCOL</h3>
+                        <h3 className="text-xl font-bold font-mono tracking-tight group-hover:text-neon-cyan transition-colors">{t('strategies.architect.title')}</h3>
                         <p className="text-sm max-w-xs text-gray-400">
-                            Visual drag-and-drop Builder with 6 node categories:<br />
-                            <span className="text-neon-cyan font-mono text-[10px] uppercase">Atomic Engine · AI Intelligence · Swaps · Security · Social · Signals</span>
+                            {t('strategies.architect.description')}<br />
+                            <span className="text-neon-cyan font-mono text-[10px] uppercase">{t('strategies.architect.categories')}</span>
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                             <span className="text-[10px] font-mono bg-blue-500/10 text-[#4ca2ff] px-2 py-0.5 rounded">SUI</span>
                             <span className="text-[10px] font-mono bg-neon-purple/10 text-neon-purple px-2 py-0.5 rounded">USDC</span>
-                            <span className="text-[10px] font-mono bg-white/5 text-gray-500 px-2 py-0.5 rounded">+ Export Schema</span>
+                            <span className="text-[10px] font-mono bg-white/5 text-gray-500 px-2 py-0.5 rounded">{t('strategies.architect.export')}</span>
                         </div>
                     </Link>
                 </div>

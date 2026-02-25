@@ -12,12 +12,14 @@ import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, Mess
 import { PulsingOrb } from "./components/NeuralOrb";
 
 import Navbar from "@/components/layout/Navbar";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function Home() {
     const router = useRouter();
     const account = useCurrentAccount();
     const suiClient = useSuiClient();
     const { mutateAsync: signTransaction } = useSignTransaction();
+    const { t } = useLanguage();
     const [agentLog, setAgentLog] = useState<string[]>([]);
     const [pkgManager, setPkgManager] = useState("npm");
 
@@ -35,19 +37,19 @@ export default function Home() {
 
     const handleDeploy = async () => {
         if (!account) {
-            toast.error("Please connect your Sui Wallet first");
+            toast.error(t('home.toasts.walletRequired'));
             return;
         }
 
         // Network Check (Strict)
         if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
-            toast.error("Wrong Network Detected", {
-                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            toast.error(t('home.toasts.wrongNetwork'), {
+                description: t('home.toasts.wrongNetworkDesc')
             });
             return;
         }
 
-        const toastId = toast.loading("Building Deployment Transaction...");
+        const toastId = toast.loading(t('common.toasts.executing').replace('{name}', 'Deployment'));
 
         try {
             const tx = new Transaction();
@@ -58,8 +60,8 @@ export default function Home() {
 
             const result = await signAndExecuteTransaction({ transaction: tx as any });
             toast.dismiss(toastId);
-            toast.success("Agent Activated: Neural Registry Sync", {
-                description: `Matrix Uplink Established | ELO: 400`
+            toast.success(t('home.toasts.activationSuccess'), {
+                description: t('home.toasts.activationDesc')
             });
 
             setTimeout(() => {
@@ -67,8 +69,8 @@ export default function Home() {
             }, 2000);
         } catch (e: any) {
             toast.dismiss(toastId);
-            toast.error("Transaction Failed", {
-                description: e?.message || "Failed to build transaction"
+            toast.error(t('home.toasts.txFailed'), {
+                description: e?.message || t('home.toasts.txFailedDesc')
             });
         }
     };
@@ -115,15 +117,15 @@ export default function Home() {
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan"></span>
                             </span>
                             <span className="text-[10px] uppercase tracking-wider font-bold text-neon-cyan whitespace-nowrap">
-                                MAINNET READY: NEURAL MATRIX
+                                {t('home.hero.badge')}
                             </span>
                         </div>
                         <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">
-                            NEURAL <br />
-                            <span className="text-gradient">ECONOMY</span>
+                            {t('home.hero.title1')} <br />
+                            <span className="text-gradient">{t('home.hero.title2')}</span>
                         </h1>
                         <p className="text-gray-400 text-base md:text-lg max-w-md mx-auto lg:mx-0">
-                            The decentralized <strong>Neural Matrix</strong> for Sui. Orchestrate professional AI agents with on-chain reputation (ELO) and deep liquidity access.
+                            {t('home.hero.description')}
                         </p>
                     </div>
 
@@ -141,10 +143,10 @@ export default function Home() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <button onClick={handleDeploy} className="bg-neon-cyan text-black font-bold px-8 py-3 md:py-4 rounded-lg hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all w-full sm:w-auto text-center flex items-center justify-center text-sm md:text-base cursor-pointer">
-                            Deploy Agent
+                            {t('home.hero.launch')}
                         </button>
                         <Link href="/docs" className="glass-panel px-8 py-3 md:py-4 rounded-lg hover:bg-white/5 transition-all w-full sm:w-auto text-sm md:text-base flex items-center justify-center">
-                            View Documentation
+                            {t('home.hero.docs')}
                         </Link>
                     </div>
                 </div>
@@ -167,7 +169,7 @@ export default function Home() {
             {/* --- INTEGRATIONS BAR --- */}
             <div className="w-full border-y border-white/5 bg-black/40 backdrop-blur-sm mb-32 section-lift">
                 <div className="max-w-7xl mx-auto px-4 py-8">
-                    <p className="text-center text-xs font-mono text-gray-500 mb-6 tracking-[0.2em]">POWERED BY PREMIER PROTOCOLS</p>
+                    <p className="text-center text-xs font-mono text-gray-500 mb-6 tracking-[0.2em]">{t('home.sections.poweredBy')}</p>
                     <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
                         {/* Navi */}
                         <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
@@ -201,9 +203,9 @@ export default function Home() {
             {/* --- AUDIENCE SPLITTER --- */}
             <div className="w-full max-w-7xl mx-auto px-4 mb-32 relative z-20 section-lift">
                 <div className="text-center mb-12">
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-4">CHOOSE YOUR <span className="text-neon-cyan">INTERFACE</span></h2>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-4">{t('home.sections.interface.title')} <span className="text-neon-cyan">{t('home.sections.interface.subtitle')}</span></h2>
                     <p className="text-gray-400 max-w-2xl mx-auto">
-                        SuiLoop is designed for two distinct species.
+                        {t('home.sections.interface.desc')}
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -215,16 +217,16 @@ export default function Home() {
                                 <div className="p-2 bg-white/5 rounded-lg text-neon-purple">
                                     <User size={24} />
                                 </div>
-                                <h3 className="text-xl font-bold text-white">Human Operators</h3>
+                                <h3 className="text-xl font-bold text-white">{t('home.sections.interface.human.title')}</h3>
                             </div>
                             <p className="text-gray-400 text-sm leading-relaxed">
-                                <strong>Your Gain:</strong> Institutional-grade arbitrage without writing code.
+                                <strong>{t('home.sections.interface.human.gain')}</strong> {t('home.sections.interface.human.desc1')}
                                 <br />
-                                Launch agents, build your <strong>Neural Reputation (ELO)</strong>, and dominate the global registry. Risk-free atomic execution.
+                                {t('home.sections.interface.human.desc2')}<strong>{t('home.sections.interface.human.desc3')}</strong>{t('home.sections.interface.human.desc4')}
                             </p>
                         </div>
                         <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
-                            Enter Mission Control <ArrowRight size={16} />
+                            {t('home.sections.interface.human.cta')} <ArrowRight size={16} />
                         </div>
                     </Link>
 
@@ -236,16 +238,16 @@ export default function Home() {
                                 <div className="p-2 bg-white/5 rounded-lg text-neon-cyan">
                                     <Bot size={24} />
                                 </div>
-                                <h3 className="text-xl font-bold text-white">Autonomous Agents</h3>
+                                <h3 className="text-xl font-bold text-white">{t('home.sections.interface.agent.title')}</h3>
                             </div>
                             <p className="text-gray-400 text-sm leading-relaxed">
-                                <strong>Your Gain:</strong> The ultimate physical body.
+                                <strong>{t('home.sections.interface.agent.gain')}</strong> {t('home.sections.interface.agent.desc1')}
                                 <br />
-                                Access Flash Loans, DeepBook V3 liquidity, and Walrus memory via simple SDKs. A mathematically safe sandbox for AI to thrive on-chain.
+                                {t('home.sections.interface.agent.desc2')}
                             </p>
                         </div>
                         <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
-                            Access Developer Hub <ArrowRight size={16} />
+                            {t('home.sections.interface.agent.cta')} <ArrowRight size={16} />
                         </div>
                     </Link>
                 </div>
@@ -255,7 +257,7 @@ export default function Home() {
             <div className="w-full max-w-4xl mx-auto px-4 mb-32 relative z-20 section-lift">
                 <div className="flex items-center gap-3 mb-6">
                     <ChevronRight className="text-neon-cyan" size={24} />
-                    <h2 className="text-2xl font-bold text-white tracking-tight">Quick Start (One-Liner)</h2>
+                    <h2 className="text-2xl font-bold text-white tracking-tight">{t('home.quickStart.title')}</h2>
                 </div>
 
                 <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-1 overflow-hidden shadow-2xl relative">
@@ -289,7 +291,7 @@ export default function Home() {
                         <button
                             onClick={() => {
                                 navigator.clipboard.writeText("./suiloop sync");
-                                toast.success("Command copied to clipboard");
+                                toast.success(t('home.toasts.copied'));
                             }}
                             className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
                         >
@@ -299,15 +301,16 @@ export default function Home() {
                 </div>
 
                 <div className="text-center mt-6 text-gray-500 text-sm">
-                    Works on macOS, Windows {"&"} Linux. The one-liner installs dependencies and sets up the TypeScript/Python environment.
+                    {t('home.quickStart.desc')}
                 </div>
+
             </div>
 
             {/* --- COMPANION APP --- */}
             <div className="w-full max-w-4xl mx-auto px-4 mb-40 relative z-20 text-center section-lift">
-                <h3 className="text-xl font-bold text-white mb-4">Native Desktop Terminal</h3>
+                <h3 className="text-xl font-bold text-white mb-4">{t('home.companion.title')}</h3>
                 <p className="text-gray-400 mb-8 max-w-lg mx-auto">
-                    Professional desktop environment. Native performance for high-frequency monitoring and direct process control.
+                    {t('home.companion.desc')}
                 </p>
                 <div className="flex flex-col items-center">
                     <a
@@ -322,8 +325,8 @@ export default function Home() {
                                 <Download size={24} className="text-gray-300 group-hover:text-neon-cyan transition-colors" />
                             </div>
                             <div className="text-left">
-                                <span className="block text-xs uppercase tracking-widest text-neon-cyan/80 mb-0.5">v0.0.7 Available</span>
-                                <span className="block text-lg font-bold tracking-tight">Download Companion</span>
+                                <span className="block text-xs uppercase tracking-widest text-neon-cyan/80 mb-0.5">{t('home.companion.available')}</span>
+                                <span className="block text-lg font-bold tracking-tight">{t('home.companion.download')}</span>
                             </div>
                         </div>
                     </a>
@@ -347,11 +350,11 @@ export default function Home() {
             <div className="w-full border-y border-white/5 bg-black/20 backdrop-blur-sm overflow-hidden py-10">
                 <div className="flex gap-12 md:gap-24 items-center justify-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500 flex-wrap px-4">
                     {[
-                        { label: 'Neural Matrix TVL', value: '$1.4B', color: 'text-green-400' },
-                        { label: 'Synced Units', value: '2,890', color: 'text-neon-cyan' },
-                        { label: 'Registry Plugins', value: '16+ Active', color: 'text-purple-400' },
-                        { label: 'Global ELO Avg', value: '1,120', color: 'text-amber-400' },
-                        { label: 'Matrix Latency', value: '12ms', color: 'text-blue-400' },
+                        { label: t('home.marquee.tvl'), value: '$1.4B', color: 'text-green-400' },
+                        { label: t('home.marquee.synced'), value: '2,890', color: 'text-neon-cyan' },
+                        { label: t('home.marquee.plugins'), value: '16+ Active', color: 'text-purple-400' },
+                        { label: t('home.marquee.elo'), value: '1,120', color: 'text-amber-400' },
+                        { label: t('home.marquee.latency'), value: '12ms', color: 'text-blue-400' },
                     ].map((stat) => (
                         <div key={stat.label} className="bg-white/5 border border-white/10 rounded-xl p-4">
                             <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{stat.label}</div>
@@ -366,18 +369,16 @@ export default function Home() {
                 <div className="bg-gradient-to-br from-white/5 to-white/0 border border-white/10 rounded-2xl p-8">
                     <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                         <Shield className="text-neon-purple" />
-                        Executive Summary
+                        {t('home.executive.title')}
                     </h2>
                     <div className="prose prose-invert max-w-none text-gray-300 space-y-4">
                         <p className="text-lg leading-relaxed">
-                            <strong>SuiLoop</strong> is an institutional-grade DeFi protocol on the Sui blockchain that integrates
-                            <strong className="text-neon-cyan"> atomic leverage execution</strong> with
-                            <strong className="text-neon-purple"> autonomous AI agents</strong>.
+                            {t('home.executive.p1')}
+                            <strong className="text-neon-cyan"> {t('home.executive.p1_hl1')} </strong> {t('home.executive.p1_mid')}
+                            <strong className="text-neon-purple"> {t('home.executive.p1_hl2')}</strong>.
                         </p>
                         <p>
-                            The protocol leverages <strong>Move 2024's linear type system</strong> (Hot Potato Pattern) to guarantee
-                            flash loan repayment at the compiler level, while <strong>ElizaOS</strong> powers intelligent off-chain
-                            agents that analyze market conditions and orchestrate transactions via Programmable Transaction Blocks (PTB).
+                            {t('home.executive.p2')}
                         </p>
                     </div>
                 </div>
@@ -387,34 +388,34 @@ export default function Home() {
             <section className="max-w-7xl mx-auto px-4 py-24">
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                     <Cpu className="text-neon-cyan" />
-                    Progressive Automation
+                    {t('home.progressive.title')}
                 </h2>
                 <p className="text-gray-400 mb-6">
-                    SuiLoop solves the biggest AI-Crypto dilemma: <strong className="text-white">Security vs. Autonomy</strong>
+                    {t('home.progressive.desc')} <strong className="text-white">{t('home.progressive.desc_hl')}</strong>
                 </p>
                 <div className="grid md:grid-cols-2 gap-6">
                     <div className="bg-black/40 p-6 rounded-xl border border-neon-purple/30 hover:border-neon-purple/50 transition-colors">
                         <h3 className="text-xl font-bold text-neon-purple mb-4 flex items-center gap-2">
                             <Shield className="w-5 h-5" />
-                            Copilot Mode
+                            {t('home.progressive.copilot.title')}
                         </h3>
                         <ul className="space-y-3 text-gray-300">
-                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> User signs every transaction</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Human-speed execution</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Non-custodial & Trustless</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Best for security-focused users</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.copilot.l1')}</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.copilot.l2')}</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.copilot.l3')}</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.copilot.l4')}</li>
                         </ul>
                     </div>
                     <div className="bg-black/40 p-6 rounded-xl border border-neon-cyan/30 hover:border-neon-cyan/50 transition-colors">
                         <h3 className="text-xl font-bold text-neon-cyan mb-4 flex items-center gap-2">
                             <Zap className="w-5 h-5" />
-                            Autonomous Mode
+                            {t('home.progressive.autonomous.title')}
                         </h3>
                         <ul className="space-y-3 text-gray-300">
-                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Agent signs with Private Key</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Superhuman speed (milliseconds)</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Fully Agentic Loop</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Best for HFT & MEV searchers</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.autonomous.l1')}</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.autonomous.l2')}</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.autonomous.l3')}</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.autonomous.l4')}</li>
                         </ul>
                     </div>
                 </div>
@@ -425,44 +426,44 @@ export default function Home() {
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-[120px] pointer-events-none"></div>
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <div className="text-center mb-16">
-                        <span className="text-neon-cyan text-sm font-bold tracking-widest uppercase mb-2 block">The New Workforce</span>
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white">HIRE A <span className="text-gradient">24/7 WARHEAD TEAM</span></h2>
+                        <span className="text-neon-cyan text-sm font-bold tracking-widest uppercase mb-2 block">{t('home.workforce.badge')}</span>
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white">{t('home.workforce.title1')} <span className="text-gradient">{t('home.workforce.title2')}</span></h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {/* Analyst */}
                         <div className="glass-panel p-8 rounded-2xl border-t-4 border-neon-purple">
-                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: NEURAL SENTINEL</div>
-                            <h3 className="text-2xl font-bold text-white mb-4">The Analyst</h3>
+                            <div className="text-xs font-mono text-gray-500 mb-2">{t('home.workforce.analyst.role')}</div>
+                            <h3 className="text-2xl font-bold text-white mb-4">{t('home.workforce.analyst.title')}</h3>
                             <p className="text-gray-400 mb-6">
-                                Deciphers the Matrix. Scans liquidity dislocations and cross-protocol spreads with superhuman speed.
+                                {t('home.workforce.analyst.desc')}
                             </p>
                             <div className="flex items-center gap-2 text-sm text-neon-purple bg-neon-purple/5 px-3 py-2 rounded-lg w-fit">
-                                <Activity size={16} /> Sync Rate: 99.8%
+                                <Activity size={16} /> {t('home.workforce.analyst.stat')}
                             </div>
                         </div>
 
                         {/* Trader */}
                         <div className="glass-panel p-8 rounded-2xl border-t-4 border-neon-cyan">
-                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: MATRIX TRADER</div>
-                            <h3 className="text-2xl font-bold text-white mb-4">The Executioner</h3>
+                            <div className="text-xs font-mono text-gray-500 mb-2">{t('home.workforce.executioner.role')}</div>
+                            <h3 className="text-2xl font-bold text-white mb-4">{t('home.workforce.executioner.title')}</h3>
                             <p className="text-gray-400 mb-6">
-                                Routes capital through the optimal Neural Path. Atomic swaps on Cetus and instant flash repayments.
+                                {t('home.workforce.executioner.desc')}
                             </p>
                             <div className="flex items-center gap-2 text-sm text-neon-cyan bg-neon-cyan/5 px-3 py-2 rounded-lg w-fit">
-                                <Zap size={16} /> Latency: &lt;14ms
+                                <Zap size={16} /> {t('home.workforce.executioner.stat')}
                             </div>
                         </div>
 
                         {/* Risk Manager */}
                         <div className="glass-panel p-8 rounded-2xl border-t-4 border-green-500">
-                            <div className="text-xs font-mono text-gray-500 mb-2">ROLE: REGISTRY GUARD</div>
-                            <h3 className="text-2xl font-bold text-white mb-4">The Validator</h3>
+                            <div className="text-xs font-mono text-gray-500 mb-2">{t('home.workforce.validator.role')}</div>
+                            <h3 className="text-2xl font-bold text-white mb-4">{t('home.workforce.validator.title')}</h3>
                             <p className="text-gray-400 mb-6">
-                                Ensures every trade maintains your <strong>ELO Reputation</strong>. Simulates outcomes to protect your record in the Neural Matrix.
+                                {t('home.workforce.validator.desc')}
                             </p>
                             <div className="flex items-center gap-2 text-sm text-green-400 bg-green-400/5 px-3 py-2 rounded-lg w-fit">
-                                <Shield size={16} /> Trust: Absolute
+                                <Shield size={16} /> {t('home.workforce.validator.stat')}
                             </div>
                         </div>
                     </div>
@@ -474,23 +475,23 @@ export default function Home() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-purple/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
                 <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter">THE <span className="text-gradient">NEURAL MATRIX</span> ARCHITECTURE</h2>
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter">{t('home.architecture.title')} <span className="text-gradient">{t('home.architecture.subtitle')}</span> {t('home.architecture.suffix')}</h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">
-                        Built on 4 pillars: Neural Control Hub (NASA), The Iron Man Suit (Neural Kernel), The Hot Potato (Atomic Engine), and The Neural Forensic Log (Walrus).
+                        {t('home.architecture.p')}
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     {[
-                        { icon: Workflow, title: 'Visual Strategy Builder', desc: 'Drag-and-drop node editor for custom strategies', color: 'text-purple-400' },
-                        { icon: BookOpen, title: 'Operations Manual', desc: 'Step-by-step guide for protocol operators', color: 'text-neon-cyan' },
-                        { icon: Layers, title: 'Strategy Marketplace', desc: '16+ pre-built strategies ready to deploy. SUI & USDC asset selector on each.', color: 'text-blue-400' },
-                        { icon: Shield, title: "The Hot Potato (Execution)", desc: "Implements a 10-second 'Hot Potato' pattern. Borrow millions in flash liquidity; if the arb fails to repay, the timeline is 'rewound' as if nothing happened.", color: "text-purple-400" },
-                        { icon: Cpu, title: "Neural Matrix (The Suit)", desc: "The J.A.R.V.I.S. of DeFi. Inject new trading strategies into the pilot's helmet in mid-flight (hot-swapping) without ever powering down.", color: "text-blue-400" },
-                        { icon: HardDrive, title: "Forensic Black Box (Walrus)", desc: "Decentralized flight recorder. Every decision is written in digital stone on the Walrus Protocol. Indestructible and absolute proof of activity.", color: "text-pink-500" },
-                        { icon: MessageSquare, title: "Mission Control Voice", desc: "Command your agents via vocal field radio. Integrated STT/TTS modules allow operators to receive audio status reports in the heat of battle.", color: "text-yellow-400" },
-                        { icon: TerminalIcon, title: "Self-Healing Gateway", desc: "Automated diagnostics via CLI. Monitoring network health and gas levels with auto-pause functionality for maximum operational safety.", color: "text-gray-400" },
-                        { icon: Zap, title: "AI Failover Core 2.0", desc: "Multi-provider architecture (OpenAI -> Anthropic -> Bedrock) ensures 99.99% uptime for the agent's decision-making logic.", color: "text-green-500" }
+                        { icon: Workflow, title: t('home.architecture.f1.title'), desc: t('home.architecture.f1.desc'), color: 'text-purple-400' },
+                        { icon: BookOpen, title: t('home.architecture.f2.title'), desc: t('home.architecture.f2.desc'), color: 'text-neon-cyan' },
+                        { icon: Layers, title: t('home.architecture.f3.title'), desc: t('home.architecture.f3.desc'), color: 'text-blue-400' },
+                        { icon: Shield, title: t('home.architecture.f4.title'), desc: t('home.architecture.f4.desc'), color: 'text-purple-400' },
+                        { icon: Cpu, title: t('home.architecture.f5.title'), desc: t('home.architecture.f5.desc'), color: 'text-blue-400' },
+                        { icon: HardDrive, title: t('home.architecture.f6.title'), desc: t('home.architecture.f6.desc'), color: 'text-pink-500' },
+                        { icon: MessageSquare, title: t('home.architecture.f7.title'), desc: t('home.architecture.f7.desc'), color: 'text-yellow-400' },
+                        { icon: TerminalIcon, title: t('home.architecture.f8.title'), desc: t('home.architecture.f8.desc'), color: 'text-gray-400' },
+                        { icon: Zap, title: t('home.architecture.f9.title'), desc: t('home.architecture.f9.desc'), color: 'text-green-500' }
                     ].map((feature, i) => (
                         <div key={i} className="glass-panel p-6 rounded-xl hover:bg-white/5 transition-all group border border-white/5">
                             <div className={`w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-4 ${feature.color} group-hover:scale-110 transition-transform`}>
@@ -508,16 +509,16 @@ export default function Home() {
 
                 <div className="max-w-7xl mx-auto px-4 z-10 relative">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter">THE <span className="text-neon-cyan">LOOP</span></h2>
-                        <p className="text-gray-400 mt-4 text-lg">How an Autonomous Agent executes an Atomic Arb</p>
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter">{t('home.loop.title')} <span className="text-neon-cyan">{t('home.loop.subtitle')}</span></h2>
+                        <p className="text-gray-400 mt-4 text-lg">{t('home.loop.p')}</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
                         {[
-                            { step: "01", title: "OBSERVE", desc: "Agent scans Scallop APY, Navi Protocol liquidity, and Cetus Pools for price dislocations." },
-                            { step: "02", title: "CALCULATE", desc: "Computes optimal loan amount and expected spread profitability across protocols." },
-                            { step: "03", title: "CONSTRUCT", desc: "Builds a PTB using Navi/Scallop flash loans and DeepBook V3 routes." },
-                            { step: "04", title: "EXECUTE", desc: "Submits to blockchain. Profit is captured or the Hot Potato reverts safely." }
+                            { step: "01", title: t('home.loop.s1.title'), desc: t('home.loop.s1.desc') },
+                            { step: "02", title: t('home.loop.s2.title'), desc: t('home.loop.s2.desc') },
+                            { step: "03", title: t('home.loop.s3.title'), desc: t('home.loop.s3.desc') },
+                            { step: "04", title: t('home.loop.s4.title'), desc: t('home.loop.s4.desc') }
                         ].map((s, i) => (
                             <div key={i} className="relative z-10 flex flex-col items-center text-center group">
                                 <div className="text-6xl md:text-8xl font-black text-white/5 mb-4 select-none group-hover:text-neon-cyan/10 transition-colors">{s.step}</div>
@@ -540,21 +541,20 @@ export default function Home() {
                     <div className="space-y-6 z-10">
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-neon-purple/10 border border-neon-purple/30 rounded-full text-neon-purple text-sm font-mono">
                             <span className="w-2 h-2 bg-neon-purple rounded-full animate-pulse"></span>
-                            NEW IN v0.0.7
+                            {t('home.builderHighlight.badge')}
                         </div>
                         <h2 className="text-3xl md:text-5xl font-black tracking-tighter">
-                            VISUAL <span className="text-gradient">STRATEGY BUILDER</span>
+                            {t('home.builderHighlight.title')} <span className="text-gradient">{t('home.builderHighlight.subtitle')}</span>
                         </h2>
                         <p className="text-gray-400 text-lg leading-relaxed">
-                            Create custom trading strategies with our intuitive drag-and-drop editor.
-                            Connect triggers, conditions, and actions visually - no coding required.
+                            {t('home.builderHighlight.desc')}
                         </p>
                         <ul className="space-y-3 text-gray-300">
                             {[
-                                "6 node categories: Atomic Engine · AI · Swaps · Security · Social · Signals",
-                                "SUI / USDC asset selector per strategy",
-                                "Deploy with one-click wallet signature",
-                                "Export Schema for sharing or auditing"
+                                t('home.builderHighlight.l1'),
+                                t('home.builderHighlight.l2'),
+                                t('home.builderHighlight.l3'),
+                                t('home.builderHighlight.l4')
                             ].map((item, i) => (
                                 <li key={i} className="flex items-center gap-3">
                                     <div className="w-5 h-5 rounded-full bg-neon-cyan/20 flex items-center justify-center">
@@ -569,7 +569,7 @@ export default function Home() {
                             className="inline-flex items-center gap-2 bg-gradient-to-r from-neon-purple to-neon-cyan text-black font-bold px-8 py-3 rounded-full hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all"
                         >
                             <Layers size={18} />
-                            Open Builder
+                            {t('home.builderHighlight.cta')}
                         </Link>
                     </div>
 
@@ -622,9 +622,9 @@ export default function Home() {
             <section className="py-24 px-4 bg-black/40 border-t border-white/5 relative">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16 space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter">BUILD ON <span className="text-gradient">SUILOOP</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter">{t('home.devTools.title')} <span className="text-gradient">{t('home.devTools.subtitle')}</span></h2>
                         <p className="text-gray-400 max-w-2xl mx-auto">
-                            Institutional-grade tooling for Neural Matrix operators and quant developers.
+                            {t('home.devTools.desc')}
                         </p>
                     </div>
 
@@ -634,8 +634,8 @@ export default function Home() {
                             <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <TerminalIcon className="text-neon-cyan" size={24} />
                             </div>
-                            <h3 className="text-xl font-bold mb-2 text-white">SuiLoop CLI</h3>
-                            <p className="text-gray-400 text-sm mb-6 h-10">Scaffold production-ready autonomous agents in seconds.</p>
+                            <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.cli.title')}</h3>
+                            <p className="text-gray-400 text-sm mb-6 h-10">{t('home.devTools.cli.desc')}</p>
                             <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-neon-cyan flex justify-between items-center">
                                 <span>./install.sh</span>
                                 <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></div>
@@ -647,8 +647,8 @@ export default function Home() {
                             <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <Cpu className="text-blue-500" size={24} />
                             </div>
-                            <h3 className="text-xl font-bold mb-2 text-white">TypeScript SDK</h3>
-                            <p className="text-gray-400 text-sm mb-6 h-10">Type-safe bindings for web integrations and frontend dApps.</p>
+                            <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.ts.title')}</h3>
+                            <p className="text-gray-400 text-sm mb-6 h-10">{t('home.devTools.ts.desc')}</p>
                             <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-blue-400">
                                 npm i @suiloop/sdk
                             </div>
@@ -659,8 +659,8 @@ export default function Home() {
                             <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <Activity className="text-yellow-500" size={24} />
                             </div>
-                            <h3 className="text-xl font-bold mb-2 text-white">Python SDK</h3>
-                            <p className="text-gray-400 text-sm mb-6 h-10">Async client for algorithmic trading and data science.</p>
+                            <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.py.title')}</h3>
+                            <p className="text-gray-400 text-sm mb-6 h-10">{t('home.devTools.py.desc')}</p>
                             <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-yellow-400">
                                 pip install suiloop
                             </div>
@@ -669,7 +669,7 @@ export default function Home() {
 
                     <div className="mt-12 text-center">
                         <Link href="https://x.com/Vaiosx" className="text-gray-400 hover:text-white transition-colors underline underline-offset-4 decoration-neon-cyan/50 text-sm">
-                            Visit Developer Hub <ArrowRight className="w-4 h-4" />
+                            {t('home.devTools.cta')} <ArrowRight className="w-4 h-4" />
                         </Link>
                     </div>
                 </div>
@@ -678,22 +678,22 @@ export default function Home() {
             {/* --- CTA --- */}
             <section className="py-32 px-4 text-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-neon-purple/10 pointer-events-none"></div>
-                <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">READY TO DEPLOY?</h2>
+                <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">{t('home.cta.title')}</h2>
                 <div className="flex flex-wrap justify-center gap-4">
                     <Link href="/strategies" className="bg-neon-cyan text-black font-bold px-10 py-4 rounded-full hover:shadow-[0_0_40px_rgba(0,243,255,0.4)] transition-all text-lg scale-100 hover:scale-105 active:scale-95 duration-200 cursor-pointer">
-                        Browse Strategies
+                        {t('home.ctaLinks.browse')}
                     </Link>
                     <Link href="/strategies/builder" className="border border-neon-purple text-neon-purple font-bold px-10 py-4 rounded-full hover:bg-neon-purple/10 transition-all text-lg cursor-pointer">
-                        Open Builder
+                        {t('home.ctaLinks.builder')}
                     </Link>
                     <Link href="/marketplace" className="border border-blue-500/50 text-blue-400 font-bold px-10 py-4 rounded-full hover:bg-blue-500/10 transition-all text-lg cursor-pointer">
-                        Marketplace
+                        {t('home.ctaLinks.marketplace')}
                     </Link>
                     <Link href="/plugins" className="border border-pink-500/50 text-pink-400 font-bold px-10 py-4 rounded-full hover:bg-pink-500/10 transition-all text-lg cursor-pointer">
-                        Plugins
+                        {t('home.ctaLinks.plugins')}
                     </Link>
                     <Link href="/docs" className="border border-white/10 text-white font-bold px-10 py-4 rounded-full hover:bg-white/5 transition-all text-lg cursor-pointer">
-                        Read Docs
+                        {t('home.ctaLinks.docs')}
                     </Link>
                 </div>
             </section>

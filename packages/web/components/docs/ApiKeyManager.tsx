@@ -5,6 +5,7 @@ import { useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
 import { Key, Lock, Copy, CheckCircle, RefreshCw, AlertTriangle, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 import { API_URL } from '@/lib/constants';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface ApiKeyData {
     apiKey: string;
@@ -24,13 +25,14 @@ export default function ApiKeyManager() {
     const [hasCopied, setHasCopied] = useState(false);
 
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const { t } = useLanguage();
 
     const handleGenerateKey = async () => {
         setErrorMsg(null);
         console.log("Generating key initiated...");
 
         if (!account) {
-            const msg = "Please connect your wallet first using the button in the navbar.";
+            const msg = t('agents.apiKeyManager.toasts.connectFirst');
             toast.error(msg);
             setErrorMsg(msg);
             return;
@@ -79,7 +81,7 @@ export default function ApiKeyManager() {
                     'Authorization': `Bearer ${jwt}`
                 },
                 body: JSON.stringify({
-                    name: `Dashboard Key - ${new Date().toLocaleDateString()}`,
+                    name: `${t('agents.apiKeyManager.defaultKeyName')} - ${new Date().toLocaleDateString()}`,
                     permissions: ['execute', 'subscribe']
                 })
             });
@@ -88,11 +90,11 @@ export default function ApiKeyManager() {
             if (!keyData.success) throw new Error(keyData.error || 'Failed to generate key');
 
             setGeneratedKey(keyData);
-            toast.success("API Key Generated Successfully!");
+            toast.success(t('agents.apiKeyManager.toasts.success'));
 
         } catch (error: any) {
             console.error("Key Generation Error:", error);
-            const msg = error.message || "Failed to generate API Key";
+            const msg = error.message || t('agents.apiKeyManager.toasts.failed');
             setErrorMsg(msg);
             toast.error(msg);
         } finally {
@@ -105,7 +107,7 @@ export default function ApiKeyManager() {
         if (generatedKey) {
             navigator.clipboard.writeText(generatedKey.apiKey);
             setHasCopied(true);
-            toast.success("Copied to clipboard");
+            toast.success(t('agents.apiKeyManager.toasts.copied'));
             setTimeout(() => setHasCopied(false), 2000);
         }
     };
@@ -117,19 +119,19 @@ export default function ApiKeyManager() {
                     <Key className="w-6 h-6 text-neon-purple" />
                 </div>
                 <div>
-                    <h3 className="text-xl font-bold text-white">Agent Console</h3>
-                    <p className="text-sm text-gray-400">Generate secure credentials for your external agents.</p>
+                    <h3 className="text-xl font-bold text-white">{t('agents.apiKeyManager.title')}</h3>
+                    <p className="text-sm text-gray-400">{t('agents.apiKeyManager.subtitle')}</p>
                 </div>
             </div>
 
             {!account ? (
                 <div className="flex flex-col items-center justify-center py-8 bg-white/5 rounded-lg border border-dashed border-white/20">
                     <Lock className="w-8 h-8 text-gray-500 mb-3" />
-                    <p className="text-gray-300 font-medium">Wallet Not Connected</p>
-                    <p className="text-sm text-gray-500 mb-4">Connect your wallet to generate keys</p>
+                    <p className="text-gray-300 font-medium">{t('agents.apiKeyManager.walletNotConnected')}</p>
+                    <p className="text-sm text-gray-500 mb-4">{t('agents.apiKeyManager.connectToGenerate')}</p>
                     {/* Note: The user should use the main Navbar connect button */}
                     <div className="text-xs text-neon-cyan bg-neon-cyan/10 px-3 py-1 rounded-full">
-                        Use Navbar to Connect
+                        {t('agents.apiKeyManager.useNavbarConnect')}
                     </div>
                 </div>
             ) : !generatedKey ? (
@@ -137,8 +139,7 @@ export default function ApiKeyManager() {
                     <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-start gap-3">
                         <Shield className="w-5 h-5 text-blue-400 mt-0.5" />
                         <div className="text-sm text-blue-200">
-                            <strong>Security Note:</strong> You will be asked to sign a message to prove ownership of this wallet.
-                            This signature is used securely to generate your unique API Key.
+                            <strong>{t('agents.apiKeyManager.securityNote')}:</strong> {t('agents.apiKeyManager.securityDesc')}
                         </div>
                     </div>
 
@@ -146,7 +147,7 @@ export default function ApiKeyManager() {
                         <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
                             <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
                             <div className="text-sm text-red-200">
-                                <strong>Error:</strong> {errorMsg}
+                                <strong>{t('agents.apiKeyManager.errorLabel')}:</strong> {errorMsg}
                             </div>
                         </div>
                     )}
@@ -159,12 +160,12 @@ export default function ApiKeyManager() {
                         {isLoading ? (
                             <>
                                 <RefreshCw className="w-5 h-5 animate-spin" />
-                                Generating Secure Key...
+                                {t('agents.apiKeyManager.btnGenerating')}
                             </>
                         ) : (
                             <>
                                 <Key className="w-5 h-5" />
-                                Generate New API Key
+                                {t('agents.apiKeyManager.btnGenerate')}
                             </>
                         )}
                     </button>
@@ -173,11 +174,11 @@ export default function ApiKeyManager() {
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-2 text-green-400">
                         <CheckCircle className="w-5 h-5" />
-                        <span className="font-bold">API Key Generated Successfully</span>
+                        <span className="font-bold">{t('agents.apiKeyManager.successLabel')}</span>
                     </div>
 
                     <div className="relative">
-                        <div className="text-xs text-gray-500 mb-1 ml-1 uppercase font-bold tracking-wider">Your Secret API Key</div>
+                        <div className="text-xs text-gray-500 mb-1 ml-1 uppercase font-bold tracking-wider">{t('agents.apiKeyManager.secretKeyLabel')}</div>
                         <div className="flex items-center gap-2 bg-black border border-neon-cyan/50 rounded-lg p-1 pr-2">
                             <div className="flex-1 bg-transparent font-mono text-neon-cyan px-3 py-2 text-lg truncate">
                                 {generatedKey.apiKey}
@@ -192,17 +193,17 @@ export default function ApiKeyManager() {
                         </div>
                         <div className="mt-2 flex items-center gap-2 text-xs text-amber-500">
                             <AlertTriangle className="w-3 h-3" />
-                            Warning: This key will not be shown again. Copy it now.
+                            <strong>{t('agents.apiKeyManager.warningLabel')}:</strong> {t('agents.apiKeyManager.warningDesc')}
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="bg-white/5 p-3 rounded-lg">
-                            <span className="text-gray-500 block text-xs">Permission Scope</span>
+                            <span className="text-gray-500 block text-xs">{t('agents.apiKeyManager.scopeLabel')}</span>
                             <span className="text-white font-mono">execute, subscribe</span>
                         </div>
                         <div className="bg-white/5 p-3 rounded-lg">
-                            <span className="text-gray-500 block text-xs">Limit</span>
+                            <span className="text-gray-500 block text-xs">{t('agents.apiKeyManager.limitLabel')}</span>
                             <span className="text-white font-mono">60 req/min</span>
                         </div>
                     </div>
@@ -211,7 +212,7 @@ export default function ApiKeyManager() {
                         onClick={() => setGeneratedKey(null)}
                         className="text-sm text-gray-500 hover:text-white underline w-full text-center"
                     >
-                        Close and Clear from Screen
+                        {t('agents.apiKeyManager.btnClose')}
                     </button>
                 </div>
             )}

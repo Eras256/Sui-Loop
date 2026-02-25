@@ -1,132 +1,1546 @@
 {
-    "nav": {
-        "home": "Inicio",
-        "dashboard": "Panel",
+  "nav": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "marketplace": "Mercado",
+    "strategies": "Estrategias",
+    "agents": "Agentes",
+    "analytics": "Análisis",
+    "docs": "Documentación",
+    "leaderboard": "Clasificación",
+    "plugins": "Plugins",
+    "launch": "Lanzar App",
+    "neuralOps": "OPS NEURALES",
+    "builder": "CONSTRUCTOR",
+    "walletNotConnected": "BILLETERA NO CONECTADA",
+    "currentPage": "PÁGINA ACTUAL",
+    "matrixUplink": "ENLACE MATRICIAL",
+    "strategyBuilder": "CONSTRUCTOR DE ESTRATEGIAS"
+  },
+  "footer": {
+    "tagline": "La Matriz Neural descentralizada para Sui. Orquestación autónoma de agentes con reputación ELO on-chain, vectores flash de DeepBook V3 y registro forense en Walrus.",
+    "mainframe": "Mainframe Neural",
+    "intelligence": "Inteligencia",
+    "stats": "Estadísticas del Protocolo",
+    "links": {
+      "dashboard": "Panel Neural",
+      "analytics": "Análisis de Matriz",
+      "strategies": "Operaciones Neurales",
+      "builder": "Constructor de Estrategias",
+      "marketplace": "Mercado",
+      "plugins": "Plugins",
+      "agents": "Consola Centinela",
+      "manifesto": "Manifiesto de la Matriz",
+      "howToUse": "Cómo Usar",
+      "docs": "Documentación Técnica",
+      "terms": "Términos de Servicio",
+      "risk": "Divulgación de Riesgos",
+      "source": "Código Fuente"
+    },
+    "copyright": "© 2026 Protocolo SuiLoop. Licencia MIT. Software de Código Abierto.",
+    "architect": "Arquitecto: Vaiosx",
+    "legal": "No es un servicio financiero. Solo software sin custodia.",
+    "launch": "Lanzar Panel",
+    "status": {
+      "uplink": "ENLACE MATRICIAL ESTABLECIDO",
+      "kernel": "NÚCLEO NEURAL",
+      "verified": "VERIFICADO POR MOVE",
+      "mainnet": "MAINNET ACTIVA",
+      "builtFor": "Construido para Sui"
+    },
+    "statsLabels": {
+      "synced": "Unidades Neurales Sincronizadas",
+      "elo": "ELO Promedio del Registro",
+      "network": "Red Matricial",
+      "assets": "Activos Soportados",
+      "kernel": "Núcleo Neural",
+      "walrus": "Registro Walrus",
+      "uptime": "Tiempo de Actividad (Matriz)"
+    }
+  },
+  "legal": {
+    "banner": {
+      "title": "SuiLoop es software de código abierto, no un servicio financiero.",
+      "body": "Sin custodia. Sin KYC. Alto riesgo — solo usa fondos que puedas permitirte perder.",
+      "terms": "Términos de Servicio",
+      "risk": "Divulgación de Riesgos",
+      "cta": "Entendido"
+    }
+  },
+  "home": {
+    "hero": {
+      "badge": "Protocolo DeFi Autónomo · Red Sui",
+      "title1": "La Matriz",
+      "title2": "DeFi Neural",
+      "description": "Agentes de IA autónomos de grado institucional que ejecutan préstamos flash, arbitraje y estrategias de rendimiento — con garantías de seguridad matemática aplicadas por contratos inteligentes de Sui Move.",
+      "launch": "Lanzar Panel",
+      "docs": "Leer Documentación"
+    },
+    "stats": {
+      "agents": "Agentes Activos",
+      "volume": "Volumen Flash",
+      "uptime": "Disponibilidad",
+      "apy": "APY Promedio"
+    },
+    "features": {
+      "title": "¿Por qué SuiLoop?",
+      "nonCustodial": {
+        "title": "Bóvedas Sin Custodia",
+        "description": "Tus fondos se guardan en objetos Vault on-chain. El agente puede ejecutar estrategias, pero solo tú puedes retirar — aplicado por bytecode Move inmutable."
+      },
+      "flashLoans": {
+        "title": "Préstamos Flash Hot Potato",
+        "description": "El capital prestado debe reembolsarse en el mismo Bloque de Transacción Programable o se revierte atómicamente. Cero riesgo de deuda, cero colateral requerido."
+      },
+      "agents": {
+        "title": "Agentes de IA Autónomos",
+        "description": "Despliega agentes nombrados (TITAN, ELIZA, WHALE) con reputación ELO on-chain. Cada agente tiene un perfil de estrategia, tolerancia al riesgo y historial verificable."
+      },
+      "verified": {
+        "title": "Verificado con Move Prover",
+        "description": "Los contratos inteligentes están formalmente verificados con Move Prover. Los invariantes de solvencia están matemáticamente probados, no solo testeados."
+      }
+    },
+    "cta": {
+      "title": "¿Listo para Desplegar?",
+      "description": "Conecta tu cartera Sui y despliega tu primer agente autónomo en minutos.",
+      "button": "Comenzar Ahora"
+    },
+    "sections": {
+      "poweredBy": "IMPULSADO POR PROTOCOLOS LÍDERES",
+      "interface": {
+        "title": "ELIGE TU",
+        "subtitle": "INTERFAZ",
+        "desc": "SuiLoop está diseñado para dos especies distintas.",
+        "human": {
+          "title": "Operadores Humanos",
+          "gain": "Tu Venta: ",
+          "desc1": "Arbitraje de grado institucional sin escribir código.",
+          "desc2": "Lanza agentes, construye tu ",
+          "desc3": "Reputación Neural (ELO)",
+          "desc4": ", y domina el registro global. Ejecución atómica sin riesgo.",
+          "cta": "Entrar al Centro de Control"
+        },
+        "agent": {
+          "title": "Agentes Autónomos",
+          "gain": "Tu Ventaja: ",
+          "desc1": "El cuerpo físico definitivo.",
+          "desc2": "Accede a préstamos flash, liquidez de DeepBook V3 y memoria de Walrus mediante SDKs sencillos. Un entorno seguro para la IA en cadena.",
+          "cta": "Acceder al Developer Hub"
+        }
+      },
+      "cta": {
+        "title": "¿Listo para Desplegar?",
+        "browse": "Explorar Estrategias",
+        "builder": "Abrir Constructor",
         "marketplace": "Mercado",
-        "strategies": "Estrategias",
-        "agents": "Agentes",
-        "analytics": "Análisis",
-        "docs": "Documentación",
-        "leaderboard": "Clasificación",
         "plugins": "Plugins",
-        "launch": "Lanzar App"
+        "docs": "Leer Docs"
+      }
+    },
+    "ctaLinks": {
+      "title": "¿Listo para Desplegar?",
+      "browse": "Explorar Estrategias",
+      "builder": "Abrir Constructor",
+      "marketplace": "Mercado",
+      "plugins": "Plugins",
+      "docs": "Leer Docs"
+    },
+    "quickStart": {
+      "title": "Inicio Rápido (Línea de comandos)",
+      "desc": "Funciona en macOS, Windows y Linux. El comando instala las dependencias y configura el entorno TypeScript/Python."
+    },
+    "companion": {
+      "title": "Terminal de Escritorio Nativa",
+      "desc": "Entorno de escritorio profesional. Rendimiento nativo para monitoreo de alta frecuencia y control directo de procesos.",
+      "available": "v0.0.7 Disponible",
+      "download": "Descargar Aplicación"
+    },
+    "marquee": {
+      "tvl": "TVL de Matriz Neural",
+      "synced": "Unidades Sincronizadas",
+      "plugins": "Plugins en Registro",
+      "elo": "Promedio ELO Global",
+      "latency": "Latencia de Matriz"
+    },
+    "executive": {
+      "title": "Resumen Ejecutivo",
+      "p1": "SuiLoop es un protocolo DeFi de grado institucional en la blockchain de Sui que integra",
+      "p1_hl1": "ejecución de apalancamiento atómica",
+      "p1_mid": "con",
+      "p1_hl2": "agentes autónomos de IA",
+      "p2": "El protocolo utiliza el sistema de tipos lineales de Move 2024 (Patrón Hot Potato) para garantizar el pago de préstamos flash a nivel del compilador, mientras que ElizaOS impulsa agentes inteligentes fuera de la cadena que analizan las condiciones del mercado y orquestan transacciones mediante Bloques de Transacción Programables (PTB)."
+    },
+    "progressive": {
+      "title": "Automatización Progresiva",
+      "desc": "SuiLoop resuelve el mayor dilema de la IA en Cripto:",
+      "desc_hl": "Seguridad vs. Autonomía",
+      "copilot": {
+        "title": "Modo Copiloto",
+        "l1": "El usuario firma cada transacción",
+        "l2": "Ejecución a velocidad humana",
+        "l3": "Sin custodia y Sin confianza",
+        "l4": "Ideal para usuarios enfocados en seguridad"
+      },
+      "autonomous": {
+        "title": "Modo Autónomo",
+        "l1": "El agente firma con Clave Privada",
+        "l2": "Velocidad sobrehumana (milisegundos)",
+        "l3": "Bucle completamente agéntico",
+        "l4": "Ideal para buscadores de HFT y MEV"
+      }
+    },
+    "workforce": {
+      "badge": "La Nueva Fuerza Laboral",
+      "title1": "CONTRATA UN",
+      "title2": "EQUIPO ÉLITE 24/7",
+      "analyst": {
+        "role": "ROL: CENTINELA NEURAL",
+        "title": "El Analista",
+        "desc": "Descifra la Matriz. Escanea dislocaciones de liquidez y márgenes entre protocolos con velocidad sobrehumana.",
+        "stat": "Tasa de Sincronización: 99.8%"
+      },
+      "executioner": {
+        "role": "ROL: OPERADOR DE MATRIZ",
+        "title": "El Ejecutor",
+        "desc": "Enruta capital a través de la Ruta Neural óptima. Swaps atómicos en Cetus y reembolsos flash instantáneos.",
+        "stat": "Latencia: <14ms"
+      },
+      "validator": {
+        "role": "ROL: GUARDIA DEL REGISTRO",
+        "title": "El Validador",
+        "desc": "Asegura que cada operación mantenga tu Reputación ELO. Simula resultados para proteger tu historial en la Matriz Neural.",
+        "stat": "Confianza: Absoluta"
+      }
+    },
+    "architecture": {
+      "title": "LA ARQUITECTURA DE LA",
+      "subtitle": "MATRIZ NEURAL",
+      "suffix": "",
+      "p": "Basado en 4 pilares: Neural Control Hub (NASA), El Traje de Iron Man (Kernel Neural), El Hot Potato (Motor Atómico) y El Registro Forense Neural (Walrus).",
+      "f1": {
+        "title": "Constructor de Estrategias Visual",
+        "desc": "Editor de nodos arrastrar y soltar para estrategias personalizadas"
+      },
+      "f2": {
+        "title": "Manual de Operaciones",
+        "desc": "Guía paso a paso para operadores del protocolo"
+      },
+      "f3": {
+        "title": "Mercado de Estrategias",
+        "desc": "Más de 16 estrategias listas para desplegar. Selector de activos SUI y USDC en cada una."
+      },
+      "f4": {
+        "title": "El Hot Potato (Ejecución)",
+        "desc": "Implementa un patrón 'Hot Potato' de 10 segundos. Toma millones en liquidez flash; si el arbitraje no se paga, la línea de tiempo se 'rebobina' como si nada hubiera pasado."
+      },
+      "f5": {
+        "title": "Matriz Neural (El Traje)",
+        "desc": "El J.A.R.V.I.S. de DeFi. Inyecta nuevas estrategias de trading en el casco del piloto en pleno vuelo sin apagar nunca el sistema."
+      },
+      "f6": {
+        "title": "Caja Negra Forense (Walrus)",
+        "desc": "Grabador de vuelo descentralizado. Cada decisión escrita en piedra digital. Prueba indestructible y absoluta de actividad."
+      },
+      "f7": {
+        "title": "Voz de Mando (Mission Control)",
+        "desc": "Comanda a tus agentes vía radio. Módulos STT/TTS integrados para recibir informes de audio en pleno combate."
+      },
+      "f8": {
+        "title": "Pasarela de Autocuración",
+        "desc": "Diagnósticos automáticos vía CLI. Monitoreo de salud de red y gas con función de pausa automática para máxima seguridad."
+      },
+      "f9": {
+        "title": "Núcleo de Respaldo IA 2.0",
+        "desc": "Arquitectura multi-proveedor (OpenAI -> Anthropic -> Bedrock) que asegura 99.99% de disponibilidad."
+      }
+    },
+    "loop": {
+      "title": "EL",
+      "subtitle": "BUCLE (LOOP)",
+      "p": "¿Cómo ejecuta un agente autónomo un arbitraje atómico?",
+      "s1": {
+        "title": "OBSERVAR",
+        "desc": "El agente escanea APY en Scallop, liquidez en Navi y pools en Cetus buscando dislocaciones de precio."
+      },
+      "s2": {
+        "title": "CALCULAR",
+        "desc": "Calcula el monto óptimo del préstamo y la rentabilidad esperada entre protocolos."
+      },
+      "s3": {
+        "title": "CONSTRUIR",
+        "desc": "Construye un PTB usando préstamos flash de Navi/Scallop y rutas de DeepBook V3."
+      },
+      "s4": {
+        "title": "EJECUTAR",
+        "desc": "Se envía a la blockchain. Se captura la ganancia o el Hot Potato revierte de forma segura."
+      }
+    },
+    "builderHighlight": {
+      "badge": "NUEVO EN v0.0.7",
+      "title": "CONSTRUCTOR DE",
+      "subtitle": "ESTRATEGIAS VISUAL",
+      "desc": "Crea estrategias de trading personalizadas con nuestro editor intuitivo. Conecta disparadores, condiciones y acciones visualmente - sin código.",
+      "l1": "6 categorías de nodos: Motor Atómico · IA · Swaps · Seguridad · Social · Señales",
+      "l2": "Selector de activos SUI / USDC por estrategia",
+      "l3": "Despliegue con firma de billetera en un clic",
+      "l4": "Exportación de esquema para compartir o auditar",
+      "cta": "Abrir Constructor"
+    },
+    "devTools": {
+      "title": "CONSTRUYE EN",
+      "subtitle": "SUILOOP",
+      "desc": "Herramientas de grado institucional para operadores de la Matriz Neural y desarrolladores quant.",
+      "cli": {
+        "title": "SuiLoop CLI",
+        "desc": "Crea agentes autónomos listos para producción en segundos."
+      },
+      "ts": {
+        "title": "TypeScript SDK",
+        "desc": "Bindings seguros para integraciones web y dApps frontend."
+      },
+      "py": {
+        "title": "Python SDK",
+        "desc": "Cliente asíncrono para trading algorítmico y ciencia de datos."
+      },
+      "cta": "Visitar Centro de Desarrolladores"
+    },
+    "toasts": {
+      "copied": "Comando copiado al portapapeles",
+      "activationSuccess": "Agente Activado: Sincronización del Registro Neural",
+      "activationDesc": "Enlace de Matrix Establecido | ELO: 400",
+      "wrongNetwork": "Red Incorrecta Detectada",
+      "wrongNetworkDesc": "Esta dApp funciona en Sui Testnet. Por favor, cambia la red de tu billetera.",
+      "walletRequired": "Por favor, conecta tu billetera Sui primero",
+      "txFailed": "Transacción Fallida",
+      "txFailedDesc": "Error al construir la transacción"
+    }
+  },
+  "dashboard": {
+    "legalNotice": "AVISO LEGAL:",
+    "nonCustodial": "SuiLoop es un protocolo no custodio. Usted es responsable de sus propias llaves y seguridad.",
+    "walletRequired": "Billetera Requerida",
+    "walletRequiredDesc": "Por favor conecte su billetera Sui para realizar esta operación.",
+    "deployStrategy": "¿Desplegar {name}?",
+    "protocolFee": "COMISIÓN DE PROTOCOLO",
+    "authorized": "AUTORIZADO",
+    "suiTestnet": "SUI TESTNET",
+    "deploymentDesc": "Iniciando compuertas lógicas autónomas. El despliegue incluye sincronización segura de la bóveda.",
+    "cancel": "CANCELAR",
+    "confirm": "CONFIRMACIÓN",
+    "dismiss": "DESCARTAR",
+    "running": "EJECUTANDO",
+    "latestExecution": "Última Ejecución",
+    "txHash": "Hash de Transacción",
+    "pending": "Pendiente...",
+    "network": "Red",
+    "protocol": "Protocolo",
+    "installedPlugins": "Plugins Instalados",
+    "installedSkills": "Habilidades Instaladas",
+    "noPlugins": "No hay plugins instalados en esta unidad.",
+    "noSkills": "No hay habilidades instaladas en esta unidad.",
+    "securityContext": "Contexto de Seguridad",
+    "agentCapId": "ID de Capacidad del Agente",
+    "closeView": "CERRAR VISTA",
+    "terminateAgent": "TERMINAR AGENTE",
+    "secureVaultTvl": "TVL en Bóveda Segura",
+    "walletBalanceLabel": "BILLETERA:",
+    "marketAlpha": "Alfa de Mercado",
+    "projectedYield": "Rendimiento Proyectado (24H)",
+    "matrixSentiment": "Sentimiento de Matriz",
+    "globalSync": "Sincronización Neural Global:",
+    "securityEnclave": "Enclave de Seguridad Neural",
+    "active": "ACTIVO",
+    "vaultIdNotCreated": "ID de Bóveda: No creada",
+    "locked": "Bloqueado",
+    "agentAccessGranted": "ACCESO DE AGENTE: CONCEDIDO 🔓",
+    "agentAccessRevoked": "ACCESO DE AGENTE: REVOCADO 🔒",
+    "initializeVault": "+ INICIALIZAR BÓVEDA",
+    "inject": "Inyectar",
+    "extract": "Extraer",
+    "unitFleet": "Flota de Unidades Neurales",
+    "deployDefault": "DESPLEGAR BUCLE POR DEFECTO",
+    "stop": "PARAR",
+    "noAgents": "No hay agentes desplegados actualmente.",
+    "noAgentsDesc": "Inicialice su Bóveda Segura y seleccione una estrategia para comenzar el trading automatizado.",
+    "unitRegistry": "Registro de Unidades Neurales",
+    "synced": "SINCRONIZADO",
+    "details": "DETALLES",
+    "deployMore": "DESPLEGAR MÁS AGENTES",
+    "createYourAgent": "CREA TU AGENTE",
+    "liquidityAlpha": "Alfa de Liquidez de Matriz",
+    "supply": "Suministro",
+    "borrow": "Préstamo",
+    "initializing": "Iniciando Panel de Control...",
+    "metrics": {
+      "targetYield": "Rendimiento Objetivo",
+      "profit24h": "Ganancia 24h",
+      "uptime": "Tiempo Activo"
+    },
+    "strategies": {
+      "sui-usdc-loop": "Bucle Kinético SUI/USDC",
+      "turbo-sniper": "Francotirador de Volatilidad Meme",
+      "liquid-staking-arb": "Restauración de Paridad LST",
+      "eliza-sentiment": "Motor de Sentimiento Eliza",
+      "lending-loop-max": "Rendimiento Recursivo Navi-Scallop",
+      "manual-sui-dca": "Acumulador SUI Manual (DCA)",
+      "manual-hedge-master": "Maestro de Cobertura Delta Neutral",
+      "manual-lp-scout": "Explorador de Liquidez Manual",
+      "manual-yield-harvester": "Cosechador de Rendimiento Manual",
+      "manual-flash-arb": "Disparador de Arbitraje Flash Alfa",
+      "blue-chip-dca": "Acumulador DCA Ponderado",
+      "stable-yield-agg": "Bucle de Optimización de Stables",
+      "cetus-clmm-active": "Proveedor Activo CLMM",
+      "bluefin-delta-neutral": "Granjero de Financiación Delta Neutral",
+      "mev-capture": "Motor de Extracción MEV",
+      "perp-funding-arb": "Arbitraje de Tasas de Financiación Perp",
+      "pyth-oracle-sniper": "Arbitrajista de Latencia de Oráculo",
+      "dual-yield-compounder": "Compuesto de Rendimiento Dual",
+      "liquidation-hunter": "Vector de Liquidación",
+      "cross-chain-bridge-arb": "Captura de Diferencial Cross-Chain"
+    },
+    "terminateTitle": "¿Terminar Agente?",
+    "terminateDesc": "Estás a punto de desconectar la lógica autónoma para {name}.",
+    "protocolWarning": "Advertencia de Protocolo",
+    "protocolWarningBody": "• Las posiciones activas se congelarán\n• Se requiere firma en cadena\n• La generación de rendimiento cesará inmediatamente",
+    "stopExecution": "DETENER EJECUCIÓN",
+    "revokingLicense": "Revocando Licencia de Agente en Cadena...",
+    "stoppingLocally": "Deteniendo Agente Localmente...",
+    "licenseRevoked": "Licencia de Agente Revocada en Cadena",
+    "stopSignalSigned": "Señal de Detención de Agente Firmada",
+    "stopConfirmed": "Parada local confirmada con firma en cadena.",
+    "viewTx": "Ver Tx",
+    "logs": {
+      "agentDeployed": "{emoji} Agente Desplegado {cap}",
+      "capCreated": "(Cap Creado)",
+      "oneOffMode": "| Modo Único",
+      "agentDeployedDetail": "{emoji} AGENTE DESPLEGADO: {name} {detail} | tx: {tx}..."
+    },
+    "bootLogs": {
+      "sui-usdc-loop": [
+        "ARBITRAJE: Escaneando spread SUI/USDC en DeepBook V3...",
+        "ARBITRAJE: Ventana de spread detectada (0.47%). Ejecutando vector flash."
+      ],
+      "turbo-sniper": [
+        "SNIPER: Monitoreando el mempool de Cetus para nuevos lanzamientos de memes...",
+        "SNIPER: Token de alta velocidad detectado. Entrando en posición."
+      ],
+      "liquid-staking-arb": [
+        "PEG-ARB: Leyendo desviación de paridad afSUI/vSUI...",
+        "PEG-ARB: Desviación del 0.3% detectada. Restaurando paridad vía swap LST."
+      ],
+      "eliza-sentiment": [
+        "AI-SENTIMENT: Agente ElizaOS inicializando escáner de feed de X/Twitter...",
+        "AI-SENTIMENT: Señal alcista detectada — $SUI es tendencia. Entrando en largo."
+      ],
+      "lending-loop-max": [
+        "LENDING: Vinculando posiciones de colateral recursivo en Navi + Scallop...",
+        "LENDING: Bucle de rendimiento recursivo activo — APY efectivo 3.2x base."
+      ],
+      "blue-chip-dca": [
+        "DCA: Programa TWAP cargado — intervalos de 4h. Monitoreando precio de SUI...",
+        "DCA: Primera orden de compra en cola. Modo de acumulación activo."
+      ],
+      "stable-yield-agg": [
+        "STABLE: Escaneando tasas USDC/USDT en Scallop, Navi, Cetus...",
+        "STABLE: Rotando capital al Pool de Cetus (tasa más alta: 19.8%)."
+      ],
+      "cetus-clmm-active": [
+        "CLMM: Leyendo rango de liquidez concentrada para el pool SUI/USDC...",
+        "CLMM: Posición en rango [$0.94-$1.06]. Comisiones acumulándose."
+      ],
+      "bluefin-delta-neutral": [
+        "DELTA: Abriendo largo en Spot + corto en Perp simultáneamente...",
+        "DELTA: Delta neutral alcanzado. Cosecha de tasa de financiación: +0.04%/8h."
+      ],
+      "mev-capture": [
+        "MEV: Escaneo de mempool activo — vigilando oportunidades de front-run...",
+        "MEV: 1 transacción front-run. Beneficio capturado: +0.12 SUI."
+      ],
+      "perp-funding-arb": [
+        "PERP-FUND: Leyendo tasas de financiación perpetua de Bluefin...",
+        "PERP-FUND: Financiación positiva confirmada (+0.04%). Cosechando cada 8h."
+      ],
+      "pyth-oracle-sniper": [
+        "ORACLE-ARB: Vigilando bloques de actualización de precios de Pyth Network...",
+        "ORACLE-ARB: Ventana de latencia detectada. Ejecutando arbitraje en el mismo bloque."
+      ],
+      "dual-yield-compounder": [
+        "DUAL-YIELD: Dividiendo colateral — 50% validadores, 50% Scallop USDC...",
+        "DUAL-YIELD: Flujo de rendimiento dual activo. Staking de SUI + préstamo de USDC en vivo."
+      ],
+      "liquidation-hunter": [
+        "LIQUIDACIÓN: Escaneando Navi y Scallop para posiciones subcolateralizadas...",
+        "LIQUIDACIÓN: Objetivo encontrado (LTV 94%). Ejecutando liquidación con 5% de descuento."
+      ],
+      "cross-chain-bridge-arb": [
+        "BRIDGE-ARB: Verificando delta de precio Sui vs ETH vía Wormhole...",
+        "BRIDGE-ARB: Spread de 1.2% en USDC detectado. Puentes y trades atómicos."
+      ]
+    }
+  },
+  "terms": {
+    "title": "Términos de Servicio",
+    "lastUpdated": "Última actualización: 25 de febrero de 2026 · Vigente al usar el Protocolo",
+    "warning": {
+      "title": "Divulgación de Alto Riesgo",
+      "body": "Las estrategias DeFi conllevan un riesgo financiero significativo que incluye la pérdida total de los fondos depositados. SuiLoop es una herramienta de software, no un servicio de inversión. Interactúas directamente con contratos inteligentes blockchain — ninguna entidad puede revertir transacciones on-chain. Solo usa fondos que puedas permitirte perder totalmente."
+    }
+  },
+  "risk": {
+    "title": "Divulgación Extendida de Riesgos",
+    "warning": "Lee este documento cuidadosamente antes de usar SuiLoop. Al desplegar una Bóveda o ejecutar cualquier estrategia on-chain, reconoces que has leído, entendido y aceptado todos los riesgos descritos aquí.",
+    "critical": "ADVERTENCIA CRÍTICA — LEE ANTES DE CONTINUAR",
+    "criticalBody": "DeFi es altamente experimental. Solo interactúa con SuiLoop usando fondos que puedas permitirte perder totalmente. SuiLoop es infraestructura de software, no un producto financiero. Ninguna entidad — incluidos los operadores de SuiLoop — puede recuperar fondos perdidos por fallos de contratos inteligentes, volatilidad del mercado o errores del usuario. Las transacciones en Sui son irreversibles."
+  },
+  "common": {
+    "connectWallet": "Conectar Cartera",
+    "viewExplorer": "Ver en Explorador",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "close": "Cerrar",
+    "toasts": {
+      "installing": "Instalando {name}...",
+      "installedSuccess": "¡{name} instalado con éxito!",
+      "installFailed": "Error al instalar {name}",
+      "executing": "Ejecutando {name}...",
+      "executedSuccess": "{name} ejecutado con éxito",
+      "executionFailed": "Error de ejecución: {error}",
+      "unitActive": "Extensión neural activa en {unit}. Abriendo panel...",
+      "openDashboard": "Abrir Panel de Agentes",
+      "checkConnection": "Por favor, inténtalo de nuevo más tarde o verifica tu conexión."
+    },
+    "coreTeam": "SuiLoop Core"
+  },
+  "analytics": {
+    "title": "OPERACIONES DE INTELIGENCIA NEURAL",
+    "subtitle": "Vigilancia en tiempo real de vectores de liquidez en cadena",
+    "target": "OBJETIVO",
+    "guestMode": "MODO INVITADO",
+    "encryptedFeed": "[!] FEED ENCRIPTADO - CONECTAR BILLETERA",
+    "vaults": "BÓVEDAS",
+    "kpi": {
+      "walletBalance": "Saldo de Billetera",
+      "activeAgents": "Agentes Activos",
+      "alphaCapture": "Captura Alfa (24h)",
+      "tvlManaged": "TVL Gestionado",
+      "neuralReputation": "Reputación Neural",
+      "ready": "LISTO",
+      "engaged": "COMPROMETIDO",
+      "standby": "EN ESPERA",
+      "pts": "pts",
+      "live": "EN VIVO",
+      "dailyChange": "+12 {unit} (24h)"
+    },
+    "chart": {
+      "title": "VECTOR DE RENDIMIENTO NEURAL",
+      "projection": "PROYECCIÓN"
+    },
+    "radar": {
+      "title": "RADAR DE ADQUISICIÓN DE OBJETIVOS",
+      "stable": "ESTABLE",
+      "volatile": "VOLÁTIL",
+      "lowRisk": "BAJO RIESGO",
+      "active": "ACTIVO",
+      "live": "EN VIVO",
+      "pools": {
+        "scallop": "Suministro SUI Scallop",
+        "navi": "Préstamos USDC Navi",
+        "cetus": "Cetus SUI/USDC CLMM",
+        "deepbook": "DeepBook V3 Limit",
+        "matrix": "Feed de Matriz Neural"
+      }
+    },
+    "integrity": {
+      "title": "INTEGRIDAD ATÓMICA",
+      "zeroSlippage": "DESLIZAMIENTO_CERO_ACTIVO",
+      "vaultTypes": "TIPOS DE BÓVEDA ACTIVOS",
+      "walrusArmed": "Registro Forense Neural (Walrus): ARMADO"
+    },
+    "status": {
+      "ready": "LISTO",
+      "engaged": "COMPROMETIDO",
+      "standby": "EN ESPERA",
+      "live": "EN VIVO",
+      "active": "ACTIVO"
+    },
+    "usd": "USD"
+  },
+  "strategies": {
+    "title": "ARSENAL DEL PROTOCOLO",
+    "subtitle": "Desplegar núcleos autónomos en la Red Sui dirigidos a bóvedas SUI o USDC. Clonar lógica de grado institucional o diseñar la suya propia en el Builder.",
+    "secureKernel": "NÚCLEO SEGURO",
+    "riskLevel": "Riesgo {level}",
+    "targetVault": "BÓVEDA OBJETIVO",
+    "alphaCoefficient": "Coeficiente Alfa",
+    "liquidityDepth": "Profundidad de Liquidez",
+    "backtest": "PROBAR",
+    "initialize": "INICIALIZAR",
+    "initializing": "Inicializando {name}...",
+    "templateCompiled": "Plantilla de Estrategia Compilada",
+    "kernelBroadcasted": "Arquitectura del núcleo transmitida a la Matriz Neural",
+    "failedToInit": "Error al inicializar la estrategia",
+    "connectWallet": "Conecte su billetera para desplegar estrategias",
+    "backtestSoon": "Módulo de backtesting próximamente — compile este núcleo en el Builder para previsualizar el rendimiento.",
+    "architect": {
+      "title": "DISEÑAR NUEVO PROTOCOLO",
+      "description": "Builder visual de arrastrar y soltar con 6 categorías de nodos:",
+      "categories": "Motor Atómico · Inteligencia AI · Swaps · Seguridad · Social · Señales",
+      "export": "+ Exportar Esquema"
+    },
+    "list": {
+      "sui-usdc-loop": {
+        "name": "Vector Kinético SUI-USDC",
+        "description": "Arbitraje triangular de alta frecuencia asegurado por PTBs atómicos de Move. Se ejecuta solo cuando el diferencial > 0.4% con seguridad Hot Potato."
+      },
+      "turbo-sniper": {
+        "name": "Cazador de Volatilidad Memética",
+        "description": "Monitorea la creación de pools para tokens meme de alta velocidad. Entra y sale dentro del mismo bloque."
+      },
+      "liquid-staking-arb": {
+        "name": "Restauración de Paridad LST",
+        "description": "Arbitraje de afSUI/vSUI con paridad perdida contra SUI nativo durante las épocas de retiro de staking."
+      },
+      "eliza-sentiment": {
+        "name": "Motor de Sentimiento Eliza",
+        "description": "Estrategia impulsada por IA que escanea X/Twitter en busca de señales de sentimiento alcista en los tokens del ecosistema SUI."
+      },
+      "lending-loop-max": {
+        "name": "Rendimiento Recursivo Navi-Scallop",
+        "description": "Maximiza el rendimiento mediante el préstamo y suministro recursivo de SUI en los protocolos Navi y Scallop."
+      },
+      "blue-chip-dca": {
+        "name": "Acumulador DCA Ponderado",
+        "description": "Compra inteligentemente caídas de SUI usando TWAP en intervalos de 4 horas. Ideal para holding a largo plazo."
+      },
+      "stable-yield-agg": {
+        "name": "Bucle de Optimización de Stables",
+        "description": "Auto-rota capital USDC/USDT entre Scallop, Navi y Cetus para capturar las tasas de préstamo más altas."
+      },
+      "cetus-clmm-active": {
+        "name": "Proveedor Activo CLMM",
+        "description": "Provisión de liquidez concentrada con reequilibrio de rango automatizado para maximizar las comisiones de trading."
+      },
+      "bluefin-delta-neutral": {
+        "name": "Granjero de Financiación Delta Neutral",
+        "description": "Cultiva tasas de financiación tomando posiciones largas en Spot SUI y cortas en Perp SUI. Estrategia neutral al mercado."
+      },
+      "mev-capture": {
+        "name": "Motor de Extracción MEV",
+        "description": "Se anticipa a transacciones DEX de bajo deslizamiento detectando swaps pendientes en el mempool y ejecutándolos de forma atómica."
+      },
+      "perp-funding-arb": {
+        "name": "Arbitraje de Tasas de Financiación Perp",
+        "description": "Cosecha continuamente tasas de financiación positivas en Bluefin perpetuals. Mantiene exposición delta-neutral para capturar financiación cada 8 horas."
+      },
+      "pyth-oracle-sniper": {
+        "name": "Arbitrajista de Latencia de Oráculo",
+        "description": "Explota la latencia entre las actualizaciones de precios de Pyth en cadena y los precios spot de DEX. Se ejecuta en el mismo bloque que la actualización del oráculo."
+      },
+      "dual-yield-compounder": {
+        "name": "Compuesto de Rendimiento Dual",
+        "description": "Gana simultáneamente recompensas de staking de SUI y rendimiento de préstamos USDC dividiendo el colateral entre Scallop y validadores nativos."
+      },
+      "liquidation-hunter": {
+        "name": "Vector de Liquidación",
+        "description": "Monitorea posiciones subcolateralizadas en Navi y Scallop. Activa liquidaciones con descuento de protocolo, capturando beneficios instantáneos."
+      },
+      "cross-chain-bridge-arb": {
+        "name": "Captura de Diferencial Cross-Chain",
+        "description": "Detecta discrepancias de precios entre Sui y otras cadenas a través de Wormhole. Puentea y opera atómicamente antes de que se cierre el diferencial."
+      }
+    },
+    "risks": {
+      "Very Low": "Muy Bajo",
+      "Low": "Bajo",
+      "Medium": "Medio",
+      "High": "Alto"
+    },
+    "tags": {
+      "Stable": "Estable",
+      "Blue Chip": "Blue Chip",
+      "Neural Feed Enabled": "Feed Neural Activo",
+      "Degen": "Degen",
+      "High Yield": "Alto Rendimiento",
+      "Safe": "Seguro",
+      "Institutional": "Institucional",
+      "AI Agent": "Agente IA",
+      "Social": "Social",
+      "Neural Matrix Sync": "Sincronía de Matriz Neural",
+      "Leverage": "Apalancamiento",
+      "Lending": "Préstamos",
+      "Savings": "Ahorros",
+      "Long Term": "Largo Plazo",
+      "Stablecoin": "Stablecoin",
+      "Liquidity": "Liquidez",
+      "Hedging": "Cobertura",
+      "Complex": "Complejo",
+      "MEV": "MEV",
+      "Derivatives": "Derivados",
+      "Oracle": "Oráculo",
+      "Technical": "Técnico",
+      "Staking": "Staking",
+      "Liquidation": "Liquidación",
+      "Bridge": "Puente",
+      "Arbitrage": "Arbitraje"
+    }
+  },
+  "builder": {
+    "title": "ARQUITECTO NEURAL",
+    "subtitle": "Diseñador Visual de PTB",
+    "unnamedKernel": "NÚCLEO_SIN_NOMBRE",
+    "initKernel": "INICIAR_NÚCLEO",
+    "save": "GUARDAR ARQUITECTURA",
+    "saving": "COMPILANDO...",
+    "deploy": "INICIALIZAR NÚCLEO",
+    "history": "HISTORIAL DE VERSIONES",
+    "searchNodes": "Buscar nodos neurales...",
+    "nodeCategories": {
+      "ATOMIC ENGINE": "MOTOR ATÓMICO",
+      "SIGNAL INPUTS": "ENTRADAS DE SEÑAL",
+      "AI INTELLIGENCE": "INTELIGENCIA IA",
+      "TRADING & SWAPS": "TRADING Y SWAPS",
+      "SECURITY & VAULT": "SEGURIDAD Y BÓVEDA",
+      "SOCIAL MESSAGING": "MENSAJERÍA SOCIAL"
+    },
+    "nodes": {
+      "FLASH_LOAN": {
+        "name": "PRÉSTAMO_FLASH",
+        "desc": "Préstamo de capital atómico (Hot Potato)"
+      },
+      "EXECUTE_LOOP": {
+        "name": "EJECUTAR_CICLO",
+        "desc": "Ciclo completo de préstamo-operación-reembolso"
+      },
+      "CREATE_AGENT_CAP": {
+        "name": "CREAR_AGENT_CAP",
+        "desc": "Emitir licencia de agente (comisión 0.1 SUI)"
+      },
+      "REPAY_LOAN": {
+        "name": "REEMBOLSAR_PRÉSTAMO",
+        "desc": "Satisfacer recibo Hot Potato + beneficio"
+      },
+      "NEURAL_SIGNAL": {
+        "name": "SEÑAL_NEURAL",
+        "desc": "Publicar telemetría en cadena al registro"
+      },
+      "PRICE_THRESHOLD": {
+        "name": "UMBRAL_DE_PRECIO",
+        "desc": "Se activa al alcanzar el precio objetivo"
+      },
+      "CRON_TICK": {
+        "name": "CRON_TICK",
+        "desc": "Ejecución en intervalos de tiempo"
+      },
+      "MEMPOOL_SCAN": {
+        "name": "ESCANEO_MEMPOOL",
+        "desc": "Seguimiento de transacciones en tiempo real"
+      },
+      "WHALE_ALERT": {
+        "name": "ALERTA_DE_BALLENA",
+        "desc": "Sigue movimientos de billeteras grandes"
+      },
+      "ELIZA_SENTIMENT": {
+        "name": "SENTIMIENTO_ELIZA",
+        "desc": "Analiza sentimiento social (NLP)"
+      },
+      "KELLY_CRITERION": {
+        "name": "CRITERIO_DE_KELLY",
+        "desc": "Lógica de tamaño de posición óptima"
+      },
+      "MARKET_REGIME": {
+        "name": "RÉGIMEN_DE_MERCADO",
+        "desc": "Detecta transiciones Alcistas/Bajistas"
+      },
+      "CETUS_SWAP": {
+        "name": "SWAP_CETUS",
+        "desc": "Swap atómico en Cetus CLMM"
+      },
+      "TURBOS_SWAP": {
+        "name": "SWAP_TURBOS",
+        "desc": "Swap en pool de liquidez en Turbos"
+      },
+      "DEEPBOOK_LIMIT": {
+        "name": "LÍMITE_DEEPBOOK",
+        "desc": "Colocación de órdenes CLOB"
+      },
+      "VAULT_DEPOSIT": {
+        "name": "DEPÓSITO_BÓVEDA",
+        "desc": "Bloqueo de capital en Enclave seguro"
+      },
+      "VAULT_WITHDRAW": {
+        "name": "RETIRO_BÓVEDA",
+        "desc": "Liquidación verificada por OwnerCap"
+      },
+      "ENCLAVE_GUARD": {
+        "name": "GUARDIA_ENCLAVE",
+        "desc": "Filtro de seguridad nativo de Move"
+      },
+      "WALRUS_BLACKBOX": {
+        "name": "CAJA_NEGRA_WALRUS",
+        "desc": "Registro forense descentralizado"
+      },
+      "TWITTER_RELAY": {
+        "name": "RELEVADOR_TWITTER",
+        "desc": "Informes de estado automatizados"
+      },
+      "DISCORD_ALARM": {
+        "name": "ALARMA_DISCORD",
+        "desc": "Notificaciones críticas urgentes"
+      },
+      "TELEGRAM_PUSH": {
+        "name": "PUSH_TELEGRAM",
+        "desc": "Logs de ejecución asíncronos"
+      }
+    },
+    "toasts": {
+      "matrixEnhanced": "Matriz Mejorada: {name} conectado",
+      "schemaExported": "Esquema exportado como .json",
+      "connectWallet": "Conecta la Billetera para Diseñar Protocolos",
+      "compiling": "Compilando Núcleo Neural...",
+      "committing": "Enviando Borrador...",
+      "cloudSyncOffline": "Sincronización en la Nube Desactivada: {error}",
+      "localSaved": "Núcleo guardado localmente. El archivo puede estar incompleto.",
+      "broadcasted": "Arquitectura transmitida a la Matriz Neural",
+      "archived": "Esquema archivado en Walrus (blob: {id}...)",
+      "compiledSuccess": "¡Núcleo Compilado y Transmitido!",
+      "draftPersisted": "Borrador Persistido (Sincronización Local + Nube Intentada)",
+      "transmissionError": "Error de Transmisión: {error}",
+      "reconstructed": "Núcleo Reconstruido: {name}"
+    },
+    "lab": "Laboratorio de Componentes",
+    "vaultAsset": "Activo de Bóveda",
+    "searchPlaceholder": "Buscar Núcleo de Kernel...",
+    "dragHint": "Arrastre nodos a la matriz. Activo: ",
+    "commitDraft": "GUARDAR BORRADOR",
+    "compileKernel": "COMPILAR KERNEL",
+    "run": "EJECUTAR",
+    "viewLogs": "VER LOGS DE KERNEL",
+    "exportSchema": "EXPORTAR ESQUEMA",
+    "archives": "Archivos de Kernel",
+    "archivesHint": "Enlace de almacenamiento neural activo",
+    "scanning": "Escaneando Enlace...",
+    "emptyArchive": "Archivo Vacío",
+    "active": "ACTIVO",
+    "offline": "DESCONECTADO",
+    "categories": {
+      "ATOMIC ENGINE": "MOTOR ATÓMICO",
+      "SIGNAL INPUTS": "ENTRADAS DE SEÑAL",
+      "AI INTELLIGENCE": "INTELIGENCIA IA",
+      "TRADING & SWAPS": "TRADING Y SWAPS",
+      "SECURITY & VAULT": "SEGURIDAD Y BÓVEDA",
+      "SOCIAL MESSAGING": "MENSAJERÍA SOCIAL"
+    },
+    "nodeTypes": {
+      "trigger": "DISPARADOR",
+      "action": "ACCIÓN",
+      "condition": "CONDICIÓN"
+    },
+    "mobileHint": "Toca el botón ☰ para abrir el Laboratorio de Componentes. Pellizca para ampliar la matriz."
+  },
+  "marketplace": {
+    "online": "Neural Matrix Online",
+    "loopHub": "Mercado LoopHub",
+    "title": "Extiende tu Agente",
+    "subtitle": "La Economía Neural Descentralizada. Instala arquetipos creados por la comunidad para potenciar tus unidades SuiLoop y escalar en la clasificación.",
+    "stats": {
+      "skills": "Habilidades",
+      "downloads": "Descargas",
+      "categories": "Categorías"
+    },
+    "searchPlaceholder": "Buscar habilidades por nombre, descripción o etiqueta...",
+    "featuredTitle": "Habilidades Destacadas",
+    "featuredBadge": "Destacado",
+    "monitor": "Monitorear",
+    "installToAnotherUnit": "Instalar en otra unidad",
+    "install": "Instalar",
+    "allSkills": "Todas las Habilidades",
+    "skillsFound": "{count} habilidades encontradas",
+    "sortBy": {
+      "downloads": "Más Descargas",
+      "rating": "Mejor Valoradas",
+      "newest": "Más Recientes"
+    },
+    "by": "por",
+    "free": "GRATIS",
+    "verified": "Verificado",
+    "runAction": "Ejecutar Acción",
+    "installToAnotherAgent": "Instalar en otro agente",
+    "noSkillsFound": "No se encontraron habilidades",
+    "noSkillsDesc": "Intenta ajustar tu búsqueda o criterios de filtrado.",
+    "neuralUplink": "ENLACE NEURAL",
+    "live": "EN VIVO",
+    "syncingMatrix": "SINCRONIZANDO MATRIZ...",
+    "autoSyncActive": "SINCRONIZACIÓN AUTOMÁTICA ACTIVA",
+    "telemetryDesc": "Monitoreo de telemetría en tiempo real de todas las unidades descentralizadas en la matriz neural de la red de prueba de Sui.",
+    "buildYourOwn": "Crea tu Propia Habilidad",
+    "buildYourOwnDesc": "Crea y publica habilidades para la comunidad SuiLoop. Comparte tus estrategias de trading, integraciones y herramientas de automatización.",
+    "readDocs": "Leer la Documentación",
+    "openBuilder": "Abrir Constructor de Estrategias",
+    "executeTitle": "Ejecutar {name}",
+    "categories": {
+      "trading": "Trading",
+      "analysis": "Análisis",
+      "neural": "Neural",
+      "notification": "Notificación",
+      "integration": "Integración",
+      "data": "Datos",
+      "utility": "Utilidad",
+      "defi": "DeFi",
+      "social": "Social",
+      "risk-mgmt": "Gestión de Riesgo",
+      "oracle": "Oráculo",
+      "tools": "Herramientas"
+    },
+    "agentLabel": "AGENTE",
+    "skills": {
+      "manual-sui-dca": {
+        "name": "Acumulador Manual de SUI (DCA)",
+        "description": "Herramienta profesional de DCA para $SUI. Establece niveles de acumulación manualmente o activa en puntos de precio específicos. Incluye entradas ajustadas por riesgo."
+      },
+      "manual-hedge-master": {
+        "name": "Maestro de Cobertura Delta Neutral",
+        "description": "Suite de cobertura delta neutral en tiempo real. Equilibra manualmente posiciones largas/cortas en Cetus y Bluefin."
+      },
+      "manual-lp-scout": {
+        "name": "Explorador de Liquidez Manual",
+        "description": "Gestión visual de rangos para Cetus CLMM. Ajusta manualmente los ticks de liquidez y monitorea la pérdida impermanente."
+      },
+      "manual-yield-harvester": {
+        "name": "Recolector de Rendimiento Manual",
+        "description": "Agrega todas las recompensas pendientes en Navi, Scallop y Haedal. Reclama manualmente todas las recompensas en un solo clic."
+      },
+      "manual-flash-arb": {
+        "name": "Activador de Arbitraje Flash Alpha",
+        "description": "Activador manual para rutas de arbitraje de préstamos flash identificadas por el sistema. Control final sobre la ejecución."
+      }
+    },
+    "tags": {
+      "manual": "manual",
+      "dca": "DCA",
+      "accumulation": "acumulación",
+      "hedging": "cobertura",
+      "risk": "riesgo",
+      "liquidity": "liquidez",
+      "lp": "LP",
+      "yield": "rendimiento",
+      "harvest": "cosecha",
+      "flash-loan": "préstamo flash",
+      "arbitrage": "arbitraje",
+      "on-chain": "en cadena",
+      "verified": "verificado"
+    },
+    "unnamedStrategy": "Estrategia Sin Nombre",
+    "defaultDescription": "Estrategia descentralizada publicada en la Matriz SuiLoop.",
+    "anonymous": "Anónimo",
+    "neuralPulse": "Pulso neural detectado"
+  },
+  "plugins": {
+    "coreExtensions": "EXTENSIONES NEURALES PRINCIPALES",
+    "title": "PLUGINS DE LOOP",
+    "subtitle": "Mejora tus agentes con capacidades cognitivas avanzadas. Desde ejecución atómica de DeFi y registro forense de Walrus hasta inteligencia social y captura de MEV.",
+    "available": "{count} plugins disponibles",
+    "moveVerified": "Todo verificado por Move",
+    "compatible": "Compatible con SUI + USDC",
+    "walrusLogging": "Registro Walrus",
+    "installPlugin": "Instalar Plugin",
+    "verifiedModules": "Módulos Principales Verificados",
+    "verifiedModulesDesc": "Estos plugins son desarrollados y mantenidos por el equipo principal de SuiLoop. Se ejecutan en un sandbox seguro con permisos restringidos y están auditados para su seguridad. A diferencia de las habilidades de la comunidad, estos tienen acceso directo a enlaces nativos optimizados.",
+    "items": {
+      "sui-deep-research": {
+        "name": "Investigación Profunda de Sui",
+        "description": "Motor autónomo de scraping y análisis web. Lee whitepapers, noticias y documentos de protocolo para informar decisiones.",
+        "category": "Inteligencia",
+        "features": [
+          "Navegación Autónoma",
+          "Información Verificada",
+          "Análisis de Documentos"
+        ]
+      },
+      "social-sentiment": {
+        "name": "Sentimiento Social",
+        "description": "Escucha el pulso del mercado. Monitorea Twitter/X para tendencias alcistas/bajistas y picos de volumen social.",
+        "category": "Operaciones Sociales",
+        "features": [
+          "Puntuación de Sentimiento",
+          "Detección de Tendencias",
+          "Análisis del Ciclo de Hype"
+        ]
+      },
+      "knowledge-graph": {
+        "name": "Grafo de Conocimiento",
+        "description": "Motor de búsqueda universal y constructor de contexto. Entiende el 'por qué' se mueve el mercado consultando datos del mundo real.",
+        "category": "Cognición",
+        "features": [
+          "Búsqueda Contextual",
+          "Explicaciones de Mercado",
+          "Integración con Tavily"
+        ]
+      },
+      "flash-loan-engine": {
+        "name": "Motor de Préstamos Flash",
+        "description": "Ejecuta préstamos flash sin colateral vía DeepBook V3 en una sola transacción atómica. Arbitraje, liquidación y refinanciamiento en un solo bloque.",
+        "category": "Ejecución DeFi",
+        "features": [
+          "Préstamos Sin Colateral",
+          "Arbitraje Atómico",
+          "Reembolso Automático"
+        ]
+      },
+      "onchain-oracle": {
+        "name": "Oráculo En Cadena",
+        "description": "Obtiene feeds de precios en tiempo real de Pyth Network y Switchboard. Verifica datos en cadena antes de cualquier ejecución para prevenir exploits de precios obsoletos.",
+        "category": "Feeds de Datos",
+        "features": [
+          "Integración con Pyth",
+          "Soporte para Switchboard",
+          "Guardia de Obsolescencia"
+        ]
+      },
+      "whale-tracker": {
+        "name": "Rastreador de Ballenas",
+        "description": "Monitorea movimientos de billeteras grandes en el ecosistema Sui. Detecta patrones de acumulación y distribución antes de que lleguen al mercado.",
+        "category": "Vigilancia",
+        "features": [
+          "Monitoreo de Billeteras",
+          "Alertas de Acumulación",
+          "Seguimiento del Top 100"
+        ]
+      },
+      "risk-shield": {
+        "name": "Escudo de Riesgo",
+        "description": "Aplica el Criterio de Kelly y modelos VaR para proteger tu capital. Detiene estrategias automáticamente cuando se superan los umbrales de pérdida.",
+        "category": "Gestión de Riesgo",
+        "features": [
+          "Criterio de Kelly",
+          "Cálculo de VaR",
+          "Disyuntor Automático"
+        ]
+      },
+      "auto-compounder": {
+        "name": "Auto-Interés Compuesto",
+        "description": "Cosecha y reinvierte automáticamente el rendimiento de las posiciones en Scallop y Cetus. Maximiza el APY sin intervención manual, 24/7.",
+        "category": "Operaciones de Rendimiento",
+        "features": [
+          "Cosecha de Scallop",
+          "Interés Compuesto Cetus LP",
+          "Optimizado para Gas"
+        ]
+      },
+      "portfolio-rebalancer": {
+        "name": "Rebalanceador de Portafolio",
+        "description": "Mantiene las asignaciones objetivo en tus posiciones DeFi. Activa el rebalanceo cuando la desviación supera los umbrales definidos mediante swaps atómicos.",
+        "category": "Portafolio",
+        "features": [
+          "Detección de Desviación",
+          "Rebalanceo Atómico",
+          "Pesos Objetivo"
+        ]
+      },
+      "mev-interceptor": {
+        "name": "Interceptor MEV",
+        "description": "Detecta y se anticipa a oportunidades MEV en el mempool de Sui. Captura valor de ventanas de arbitraje antes de que se cierren.",
+        "category": "MEV",
+        "features": [
+          "Escaneo de Mempool",
+          "Protección Anti-Front-Run",
+          "Detección de Sandwich"
+        ]
+      },
+      "liquidity-sniper": {
+        "name": "Francotirador de Liquidez",
+        "description": "Monitorea nuevos lanzamientos de pools en Cetus y Turbos. Despliega capital automáticamente en los primeros bloques tras el lanzamiento para capturar recompensas tempranas.",
+        "category": "Sniping",
+        "features": [
+          "Detección de Nuevos Pools",
+          "Lógica de Entrada Automática",
+          "Filtro Anti-Rug Pull"
+        ]
+      },
+      "walrus-blackbox": {
+        "name": "Caja Negra Walrus",
+        "description": "Registro forense descentralizado e inmutable a través de Sui Walrus. Cada operación, decisión y anomalía se sella criptográficamente y se almacena en cadena. Rastro de auditoría a prueba de manipulaciones.",
+        "category": "Auditoría y Registros",
+        "features": [
+          "Almacenamiento en Blob Walrus",
+          "Registro de Auditoría Inmutable",
+          "Repetición Forense",
+          "Nodo WALRUS_BLACKBOX"
+        ]
+      },
+      "usdc-vault-manager": {
+        "name": "Gestor de Bóvedas USDC",
+        "description": "Gestión completa del ciclo de vida de las bóvedas USDC en SuiLoop. Maneja depósitos, retiros, enrutamiento de rendimiento y rotación automática entre Navi y Scallop.",
+        "category": "Operaciones de Bóveda",
+        "features": [
+          "Despliegue de Bóveda USDC",
+          "Rotación Navi/Scallop",
+          "Auto-Enrutamiento de Rendimiento",
+          "Selector SUI/USDC"
+        ]
+      },
+      "reputation-engine": {
+        "name": "Reputación Neural",
+        "description": "Vincula tu agente al Registro Neural. Gana puntos ELO mediante trades exitosos y construye credibilidad en cadena. Desbloquea límites más altos de préstamos flash.",
+        "category": "Clasificación",
+        "features": [
+          "Acumulación de Puntos ELO",
+          "Acceso a Señales Neurales",
+          "Desbloqueo de Alto Volumen"
+        ]
+      }
+    },
+    "bootLogs": {
+      "sui-deep-research": [
+        "INVESTIGACIÓN PROFUNDA: Motor de navegador inicializado — rastreando documentos del ecosistema Sui...",
+        "INVESTIGACIÓN PROFUNDA: 312 whitepapers indexados. Listo."
+      ],
+      "social-sentiment": [
+        "SENTIMIENTO SOCIAL: Conectando con el flujo de X/Twitter...",
+        "SENTIMIENTO SOCIAL: Feed de sentimiento activo — sesgo alcista detectado en $SUI."
+      ],
+      "knowledge-graph": [
+        "GRAFO DE CONOCIMIENTO: Motor de búsqueda Tavily vinculado. Construyendo grafo de contexto...",
+        "GRAFO DE CONOCIMIENTO: 5,241 nodos resueltos. Grafo listo."
+      ],
+      "flash-loan-engine": [
+        "MOTOR DE PRÉSTAMOS FLASH: Conectando con pools de liquidez de DeepBook V3...",
+        "MOTOR DE PRÉSTAMOS FLASH: 3 rutas de arbitraje identificadas. Ejecución atómica lista."
+      ],
+      "onchain-oracle": [
+        "ORÁCULO: Vinculando feeds de precios de Pyth Network...",
+        "ORÁCULO: 47 activos rastreados. Guardia de obsolescencia activa. Feed en vivo."
+      ],
+      "whale-tracker": [
+        "RASTREADOR DE BALLENAS: Escaneando las 100 mejores billeteras de Sui...",
+        "RASTREADOR DE BALLENAS: 2 patrones de acumulación detectados — monitoreo activo."
+      ],
+      "risk-shield": [
+        "ESCUDO DE RIESGO: Cargando modelo de Criterio de Kelly...",
+        "ESCUDO DE RIESGO: Umbrales VaR configurados. Disyuntor armado."
+      ],
+      "auto-compounder": [
+        "AUTO-INTERÉS COMPUESTO: Leyendo posiciones de Scallop...",
+        "AUTO-INTERÉS COMPUESTO: Próxima cosecha programada en 4h. Interés compuesto Cetus LP habilitado."
+      ],
+      "portfolio-rebalancer": [
+        "REBALANCEADOR DE PORTAFOLIO: Obteniendo pesos de asignación actuales...",
+        "REBALANCEADOR DE PORTAFOLIO: Desviación dentro del umbral (1.2%). Auto-rebalanceo en espera."
+      ],
+      "mev-interceptor": [
+        "INTERCEPTOR MEV: Escaneo de mempool iniciado...",
+        "INTERCEPTOR MEV: 2 patrones de sandwich bloqueados. Monitoreo en vivo."
+      ],
+      "liquidity-sniper": [
+        "FRANCOTIRADOR DE LIQUIDEZ: Vigilando Cetus y Turbos para nuevos lanzamientos de pools...",
+        "FRANCOTIRADOR DE LIQUIDEZ: Filtro anti-rug pull cargado. En espera de eventos de lanzamiento."
+      ],
+      "walrus-blackbox": [
+        "CAJA NEGRA WALRUS: Estableciendo enlace con la red Sui Walrus...",
+        "CAJA NEGRA WALRUS: Almacenamiento de blobs activo. Registro forense armado. A prueba de manipulaciones."
+      ],
+      "usdc-vault-manager": [
+        "GESTOR DE BÓVEDAS USDC: Escaneando bóvedas USDC existentes...",
+        "GESTOR DE BÓVEDAS USDC: Pools de USDC de Navi y Scallop indexados. Rotación automática activa."
+      ]
+    }
+  },
+  "modals": {
+    "installSkill": {
+      "title": "Instalar Capacidad",
+      "globalAgent": "Matrix Neural (Global)",
+      "selectTarget": "Seleccionar Unidad de Destino",
+      "securityCheck": "Verificación de Seguridad",
+      "securityDesc": "Instalar {name} otorga a esta unidad la capacidad de ejecutar transacciones relacionadas con {tag}.",
+      "applyAll": " Esto se aplicará a TODOS los agentes activos.",
+      "applySelected": " Esto se aplica solo al agente seleccionado.",
+      "installing": "Instalando...",
+      "installBtn": "Instalar Capacidad",
+      "selectedTarget": "esta unidad",
+      "customStrategy": "Estrategia Personalizada"
+    }
+  },
+  "ops": {
+    "liveFeed": "CONSOLA OPS // FEED EN VIVO",
+    "connecting": "CONECTANDO",
+    "online": "EN LÍNEA",
+    "unavailable": "NO DISPONIBLE",
+    "noDb": "Sin conexión a la base de datos. Verifique la configuración de Supabase.",
+    "connectingDb": "Conectando a Supabase Realtime...",
+    "matrixOnline": "SuiLoop Neural Matrix EN LÍNEA — Feed en tiempo real activo"
+  },
+  "agents": {
+    "title": "CENTRO DE COMANDO DE OPERACIONES",
+    "subtitle": "Interfaz para desplegar ojivas financieras autónomas. Genere credenciales, monitoree unidades de campo SUI y USDC, e inyecte lógica directamente en la Matriz Neural de SuiLoop. Toda la actividad inmortalizada mediante el registro forense de Walrus.",
+    "systemBadge": "SISTEMA EN LÍNEA: v0.0.7 // ENCRIPTADO",
+    "tabs": {
+      "logs": "LOGS",
+      "sdk": "SDK"
+    },
+    "telemetry": {
+      "title": "ESTADO DEL ENLACE ORBITAL",
+      "uplinkGateway": "Pasarela de Enlace",
+      "targetingEngine": "Motor de Objetivo",
+      "secureEnclave": "Enclave Seguro",
+      "walrusAudit": "Log de Auditoría Walrus",
+      "rpcLatency": "Latencia RPC",
+      "measuring": "midiendo...",
+      "status": {
+        "operational": "OPERATIVO",
+        "degraded": "DEGRADADO",
+        "offline": "DESCONECTADO",
+        "shieldActive": "ESCUDO ACTIVO"
+      }
+    },
+    "walrusAudit": {
+      "title": "AUDITORÍA DESCENTRALIZADA WALRUS",
+      "description": "Cada ejecución de agente se inmortaliza en Walrus, el almacenamiento de blobs descentralizado de Sui. Los registros de auditoría están direccionados por contenido y son a prueba de manipulaciones.",
+      "blobsCommitted": "Blobs confirmados",
+      "storageNetwork": "Red de almacenamiento",
+      "epochsRetained": "Épocas retenidas",
+      "permanent": "∞ permanente",
+      "status": {
+        "connecting": "CONECTANDO...",
+        "live": "EN VIVO · {count} BLOBS",
+        "error": "ERROR"
+      }
+    },
+    "deployedUnits": {
+      "title": "UNIDADES DESPLEGADAS",
+      "rateLabel": "TASA DE INTERCEPCIÓN DE PAQUETES (VIVO)"
+    },
+    "cli": {
+      "title": "SuiLoop CLI",
+      "badge": "NUEVO",
+      "description": "Cree un agente listo para el combate en segundos."
+    },
+    "sdk": {
+      "python": "Python SDK",
+      "nodejs": "Node.js SDK",
+      "ready": "v0.0.7 Listo",
+      "linkProtocol": "PROTOCOLO DE ENLACE DIRECTO",
+      "neuralFeed": "FEED NEURAL EN VIVO",
+      "waitingSignal": "Esperando enlace de señal...",
+      "tsCommentCoin": "// Tipo de moneda para la bóveda",
+      "tsCommentInit": "// Inicializar Unidad",
+      "tsCommentSub": "// Suscribirse a señales",
+      "pyCommentCoin": "# Tipo de moneda para la bóveda",
+      "pyCommentInit": "# Inicializar Unidad",
+      "pyCommentExec": "# Ejecutar estrategia"
+    },
+    "security": {
+      "title": "Seguridad Institucional",
+      "description": "Todas las interacciones de los agentes están aseguradas por las garantías de Move (OwnerCap) y nonces firmados. Las transacciones se ejecutan atómicamente en un solo PTB. Los registros forenses se almacenan permanentemente en el almacenamiento descentralizado de Walrus para las bóvedas SUI y USDC.",
+      "btnAccess": "ACCEDER A DATOS DE CAJA NEGRA"
+    },
+    "logs": {
+      "liveFeedSupabase": "Feed en vivo vía Supabase Realtime. {walrusStatus}",
+      "walrusMirrored": "Los {count} logs se han reflejado en Walrus.",
+      "walrusConnecting": "Conectando sincronización con Walrus...",
+      "sdkKeyHint": "Use la clave anterior para autenticarse. Mostrando ejemplo de integración de bóveda {asset}.",
+      "onChainPrefix": "📡 EN CADENA: ",
+      "encryptedRequested": "⚠️ VOLCADO DE LOGS ENCRIPTADOS SOLICITADO POR EL OPERADOR"
+    },
+    "toasts": {
+      "copied": "¡Copiado!",
+      "decrypting": "Desencriptando Firmas Neurales de Caja Negra...",
+      "downloadSuccess": "Logs Seguros Descargados (sui-loop-audit.json)",
+      "accessDenied": "Acceso Denegado"
+    },
+    "apiKeyManager": {
+      "title": "Consola de Agentes",
+      "subtitle": "Genere credenciales seguras para sus agentes externos.",
+      "walletNotConnected": "Billetera No Conectada",
+      "connectToGenerate": "Conecte su billetera para generar claves",
+      "useNavbarConnect": "Use la Barra de Navegación para Conectar",
+      "securityNote": "Nota de Seguridad",
+      "securityDesc": "Se le pedirá que firme un mensaje para demostrar la propiedad de esta billetera. Esta firma se utiliza de forma segura para generar su clave API única.",
+      "errorLabel": "Error",
+      "btnGenerate": "Generar Nueva Clave API",
+      "btnGenerating": "Generando Clave Segura...",
+      "successLabel": "Clave API Generada con Éxito",
+      "secretKeyLabel": "Su Clave API Secreta",
+      "warningLabel": "Advertencia",
+      "warningDesc": "Esta clave no se volverá a mostrar. Cópiela ahora.",
+      "scopeLabel": "Alcance de Permisos",
+      "limitLabel": "Límite",
+      "btnClose": "Cerrar y Limpiar Pantalla",
+      "defaultKeyName": "Clave de Panel",
+      "toasts": {
+        "connectFirst": "Por favor, conecte su billetera primero usando el botón en la barra de navegación.",
+        "success": "¡Clave API Generada con Éxito!",
+        "copied": "Copiado al portapapeles",
+        "failed": "No se pudo generar la clave API"
+      }
+    }
+  },
+  "docs": {
+    "title": "DOCUMENTACIÓN",
+    "subtitle": "Manual de Campo para Operaciones Financieras Autónomas en la Red Sui.",
+    "loading": "CARGANDO MANUAL DE CAMPO...",
+    "backLink": "Volver al Protocolo",
+    "version": "v0.0.7",
+    "ghLink": "GitHub",
+    "scanLink": "Suiscan",
+    "tabs": {
+      "overview": "RESUMEN DE MISIÓN",
+      "ideas": "ESCENARIOS TÁCTICOS",
+      "architecture": "ESQUEMAS DEL SISTEMA",
+      "contracts": "NÚCLEO ON-CHAIN",
+      "agent": "UNIDADES AUTÓNOMAS",
+      "builder": "ARQUITECTO DE ESTRATEGIAS",
+      "frontend": "INTERFAZ DE MANDO",
+      "api": "API PARA AGENTES",
+      "security": "PROTOCOLOS DE DEFENSA"
+    },
+    "overview": {
+      "stats": {
+        "version": "Versión Testnet",
+        "tests": "Pruebas Unitarias",
+        "plugins": "Plugins Neuronales",
+        "fee": "Comisión Flash Loan",
+        "assets": "Activos"
+      },
+      "summary": {
+        "title": "Resumen Ejecutivo",
+        "p1": "SuiLoop es un protocolo DeFi de grado institucional en la blockchain Sui que integra ejecución de apalancamiento atómico con agentes de IA autónomos.",
+        "p2": "El protocolo aprovecha el sistema de tipos lineales de Move 2024 (Patrón Hot Potato) para garantizar el reembolso del préstamo flash a nivel de compilador, mientras que ElizaOS potencia agentes off-chain inteligentes que analizan las condiciones del mercado y orquestan transacciones mediante Bloques de Transacción Programables (PTB)."
+      },
+      "automation": {
+        "title": "Automatización Progresiva",
+        "subtitle": "SuiLoop resuelve el mayor dilema AI-Crypto: Seguridad vs. Autonomía",
+        "copilot": {
+          "title": "Modo Copiloto",
+          "features": [
+            "El usuario firma cada transacción",
+            "Ejecución a velocidad humana",
+            "No custodial y sin confianza",
+            "Ideal para usuarios centrados en seguridad"
+          ]
+        },
+        "autonomous": {
+          "title": "Modo Autónomo",
+          "features": [
+            "El agente firma con clave privada",
+            "Velocidad sobrehumana (milisegundos)",
+            "Bucle totalmente agentic",
+            "Ideal para busquedas de HFT y MEV"
+          ]
+        }
+      },
+      "features": {
+        "title": "Características Clave (v0.0.7)",
+        "items": {
+          "builder": {
+            "title": "Constructor Visual de Estrategias",
+            "desc": "Editor de nodos arrastrar y soltar para estrategias personalizadas"
+          },
+          "manual": {
+            "title": "Manual de Operaciones",
+            "desc": "Guía paso a paso para operadores del protocolo"
+          },
+          "marketplace": {
+            "title": "Mercado de Estrategias",
+            "desc": "Más de 16 estrategias pre-construidas. Selector de activos SUI y USDC en cada tarjeta."
+          },
+          "dashboard": {
+            "title": "Centro de Mando del Panel",
+            "desc": "Métricas en tiempo real, flota activa, registros de ejecución"
+          },
+          "vaults": {
+            "title": "Bóvedas Multi-Activo",
+            "desc": "Despliegue bóvedas de SUI o USDC — selección de activos por estrategia"
+          },
+          "storage": {
+            "title": "Walrus y Supabase",
+            "desc": "Almacenamiento descentralizado híbrido para registros forenses"
+          }
+        }
+      },
+      "business": {
+        "title": "Modelo de Negocio y Captura de Valor",
+        "b2c": {
+          "title": "B2C / Minorista",
+          "desc": "Suscripciones de nivel profesional para acceso a modelos de IA premium (OpenAI o1) y plantillas de estrategias avanzadas.",
+          "label": "Tarifa de Despliegue",
+          "sub": "Próximamente: ~100 MXN"
+        },
+        "b2b": {
+          "title": "B2B / Institucional",
+          "desc": "Acceso total a la API con SLAs garantizados para despliegues de backend a escala industrial y gestión de bóvedas personalizadas.",
+          "label": "Infraestructura",
+          "sub": "Basado en Cuota"
+        },
+        "dev": {
+          "title": "Ecosistema de Desarrolladores",
+          "desc": "Microcomisiones del protocolo sobre estrategias vendidas/alquiladas en el Mercado Neuronal, apoyando el rastro de auditoría de Walrus.",
+          "label": "Tarifa de Señal P2P",
+          "sub": "Por Señal"
+        }
+      },
+      "verified": {
+        "title": "Ejecución Verificada On-Chain",
+        "table": {
+          "tx": "Transacción",
+          "amount": "Cantidad",
+          "fee": "Comisión",
+          "status": "Estado",
+          "link": "Enlace"
+        },
+        "success": "Éxito",
+        "agentWallet": "Billetera del Agente"
+      }
+    },
+    "ideas": {
+      "title": "¿Qué construir?",
+      "subtitle": "SuiLoop proporciona los rieles financieros. Tú construyes los vehículos.",
+      "subtitle2": "Aquí tienes algunas \"Solicitudes de Startups\" utilizando nuestro SDK.",
+      "difficulty": "Dificultad",
+      "medium": "Media",
+      "hard": "Difícil",
+      "easy": "Fácil",
+      "items": {
+        "portfolio": {
+          "title": "Bot PortfolioGuard",
+          "desc": "Un bot de Telegram que monitorea carteras 24/7. Si la salud del colateral baja de 1.1, pide prestado stablecoins automáticamente vía SuiLoop para pagar deuda y evitar liquidación."
+        },
+        "arb": {
+          "title": "ArbSwarm DAO",
+          "desc": "Una DAO donde los usuarios agrupan SUI. Miles de micro-agentes escanean DEXs en busca de discrepancias del 0.5% y ejecutan préstamos flash atómicos."
+        },
+        "news": {
+          "title": "NewsTrader Oracle",
+          "desc": "Conecta APIs de noticias Web2 estándar (Bloomberg, Twitter) a Sui. Cuando se detecta \"Aprobación Regulatoria\", compra el token relacionado vía SuiLoop Swaps al instante."
+        },
+        "gamefi": {
+          "title": "Economía NPC GameFi",
+          "desc": "NPCs totalmente autónomos en un juego de Sui que gestionan sus propias tiendas. Compran barato a jugadores y venden caro, gestionando su propio capital vía SuiLoop."
+        },
+        "yield": {
+          "title": "Maximizador de Rendimiento USDC",
+          "desc": "Despliega USDC en una bóveda de SuiLoop, luego usa el agente para rotar capital entre Scallop, Navi y Cetus — siempre buscando la tasa más alta."
+        },
+        "sniper": {
+          "title": "Bot Sniper de Liquidación",
+          "desc": "Monitorea cada posición subcolateralizada en Navi y Scallop. Cuando el factor de salud baja de 1.0, ejecuta el préstamo flash y reclama el bono de liquidación."
+        },
+        "payroll": {
+          "title": "Protocolo de Nómina Onchain",
+          "desc": "Una tesorería DAO despliega USDC en una bóveda de SuiLoop. El rendimiento generado semanalmente se envía automáticamente como nómina a los contribuyentes."
+        },
+        "insurance": {
+          "title": "Fondo de Seguros On-Chain",
+          "desc": "Los usuarios pagan una pequeña prima semanal en USDC. El pool genera rendimiento en una bóveda. Si se explota un protocolo cubierto, el agente paga reclamaciones autónomamente."
+        },
+        "social": {
+          "title": "Trader de Sentimiento Social Eliza",
+          "desc": "Un agente de ElizaOS escanea redes sociales 24/7 buscando menciones de proyectos Sui. Cuando un influencer verificado publica contenido alcista, el agente abre una posición."
+        },
+        "transparency": {
+          "title": "Fondo de Cobertura Proof-of-Transparency",
+          "desc": "Un fondo donde cada decisión de trade es firmada por el agente y subida de forma inmutable a Walrus. Sin cajas negras — plena rendición de cuentas criptográfica."
+        }
+      }
+    },
+    "architecture": {
+      "title": "Arquitectura del Sistema",
+      "layers": "Capas de Arquitectura",
+      "flow": "Flujo de Despliegue de Estrategias"
+    },
+    "contracts": {
+      "title": "NúcleO On-Chain (Sui Move)",
+      "subtitle": "La seguridad del protocolo está garantizada por el sistema de tipos lineales de Move y el patrón Hot Potato.",
+      "objects": "Objetos Clave del Protocolo",
+      "code": "Implementación del Código"
+    },
+    "agent": {
+      "title": "Unidades Autónomas (ElizaOS)",
+      "subtitle": "El cerebro off-chain que orquestra transacciones complejas.",
+      "structure": "Estructura de Archivos del Agente",
+      "actions": "Acciones Agénticas Principales"
+    },
+    "builder": {
+      "title": "Arquitecto de Estrategias (Constructor Visual)",
+      "subtitle": "Construye estrategias financieras complejas sin escribir una sola línea de código Move.",
+      "categories": "Categorías de Nodos",
+      "dragDrop": "Arrastra y suelta nodos para crear conexiones lógicas."
+    },
+    "frontend": {
+      "title": "Interfaz de Mando (Next.js)",
+      "subtitle": "Panel Glass & Neon para gestión de flotas en tiempo real.",
+      "stack": "Stack Tecnológico",
+      "pages": "Páginas de la Aplicación"
+    },
+    "api": {
+      "title": "API y CLI para Agentes",
+      "subtitle": "Controla tu flota programáticamente a través de nuestra API REST e interfaz de línea de comandos.",
+      "auth": {
+        "title": "Autenticación de API",
+        "desc": "Todas las solicitudes de API requieren una Secret Key en el encabezado de autorización. Puedes generar estas claves en la Consola de Agentes."
+      }
+    },
+    "security": {
+      "title": "Protocolos de Defensa",
+      "subtitle": "Protegiendo el capital de los usuarios con múltiples capas de barreras criptográficas y lógicas.",
+      "hotPotato": {
+        "title": "Ejecución Hot Potato",
+        "desc": "El objeto 'Receipt' del préstamo flash no tiene habilidades de 'drop' ni 'store', lo que hace imposible finalizar una transacción sin devolver el préstamo."
+      },
+      "attack": {
+        "title": "Prevención de Ataques",
+        "desc": "La protección contra reentrada y las comprobaciones de deslizamiento están integradas en cada bloque de ejecución."
+      }
+    }
+  },
+  "leaderboard": {
+    "hero": {
+      "verified": "rendimiento verificado en cadena",
+      "title1": "Agente",
+      "title2": "Élite",
+      "subtitle": "Clasificación de reputación en tiempo real de los agentes autónomos que operan en el Protocolo SuiLoop. Las métricas se verifican mediante pruebas criptográficas en la red de pruebas (Sui Testnet)."
+    },
+    "search": {
+      "placeholder": "Buscar agente o billetera..."
+    },
+    "tvl": {
+      "label": "TVL Global"
+    },
+    "podium": {
+      "eloRating": "Clasificación ELO",
+      "winRate": "Tasa de Ganancia",
+      "agentWallet": "BILLETERA DEL AGENTE",
+      "lastSignal": "Última Señal"
+    },
+    "feed": {
+      "title": "FEED NEURONAL EN VIVO",
+      "waiting": "Esperando a que los agentes se sincronicen...",
+      "justNow": "justo ahora"
+    },
+    "table": {
+      "headers": {
+        "rank": "Rango",
+        "profile": "Perfil del Agente",
+        "performance": "Rendimiento",
+        "trust": "Puntuación de Confianza",
+        "feed": "Feed Neuronal",
+        "volume": "Volumen"
+      },
+      "stats": {
+        "winRate": "Tasa de ganancia",
+        "trades": "Comercios",
+        "elo": "ELO",
+        "standby": "MODO DE ESPERA",
+        "tx": "TX:"
+      }
     },
     "footer": {
-        "tagline": "La Matriz Neural descentralizada para Sui. Orquestación autónoma de agentes con reputación ELO on-chain, vectores flash de DeepBook V3 y registro forense en Walrus.",
-        "mainframe": "Mainframe Neural",
-        "intelligence": "Inteligencia",
-        "stats": "Estadísticas del Protocolo",
-        "links": {
-            "dashboard": "Panel Neural",
-            "analytics": "Análisis de Matriz",
-            "strategies": "Operaciones Neurales",
-            "builder": "Constructor de Estrategias",
-            "marketplace": "Mercado",
-            "plugins": "Plugins",
-            "agents": "Consola Centinela",
-            "manifesto": "Manifiesto de la Matriz",
-            "howToUse": "Cómo Usar",
-            "docs": "Documentación Técnica",
-            "terms": "Términos de Servicio",
-            "risk": "Divulgación de Riesgos",
-            "source": "Código Fuente"
-        },
-        "copyright": "© 2026 Protocolo SuiLoop. Licencia MIT. Software de Código Abierto.",
-        "architect": "Arquitecto: Vaiosx",
-        "legal": "No es un servicio financiero. Solo software sin custodia.",
-        "launch": "Lanzar Panel"
-    },
-    "legal": {
-        "banner": {
-            "title": "SuiLoop es software de código abierto, no un servicio financiero.",
-            "body": "Sin custodia. Sin KYC. Alto riesgo — solo usa fondos que puedas permitirte perder.",
-            "terms": "Términos de Servicio",
-            "risk": "Divulgación de Riesgos",
-            "cta": "Entendido"
-        }
-    },
-    "home": {
-        "hero": {
-            "badge": "Protocolo DeFi Autónomo · Red Sui",
-            "title1": "La Matriz",
-            "title2": "DeFi Neural",
-            "description": "Agentes de IA autónomos de grado institucional que ejecutan préstamos flash, arbitraje y estrategias de rendimiento — con garantías de seguridad matemática aplicadas por contratos inteligentes de Sui Move.",
-            "launch": "Lanzar Panel",
-            "docs": "Leer Documentación"
-        },
-        "stats": {
-            "agents": "Agentes Activos",
-            "volume": "Volumen Flash",
-            "uptime": "Disponibilidad",
-            "apy": "APY Promedio"
-        },
-        "features": {
-            "title": "¿Por qué SuiLoop?",
-            "nonCustodial": {
-                "title": "Bóvedas Sin Custodia",
-                "description": "Tus fondos se guardan en objetos Vault on-chain. El agente puede ejecutar estrategias, pero solo tú puedes retirar — aplicado por bytecode Move inmutable."
-            },
-            "flashLoans": {
-                "title": "Préstamos Flash Hot Potato",
-                "description": "El capital prestado debe reembolsarse en el mismo Bloque de Transacción Programable o se revierte atómicamente. Cero riesgo de deuda, cero colateral requerido."
-            },
-            "agents": {
-                "title": "Agentes de IA Autónomos",
-                "description": "Despliega agentes nombrados (TITAN, ELIZA, WHALE) con reputación ELO on-chain. Cada agente tiene un perfil de estrategia, tolerancia al riesgo y historial verificable."
-            },
-            "verified": {
-                "title": "Verificado con Move Prover",
-                "description": "Los contratos inteligentes están formalmente verificados con Move Prover. Los invariantes de solvencia están matemáticamente probados, no solo testeados."
-            }
-        },
-        "cta": {
-            "title": "¿Listo para Desplegar?",
-            "description": "Conecta tu cartera Sui y despliega tu primer agente autónomo en minutos.",
-            "button": "Comenzar Ahora"
-        }
-    },
-    "dashboard": {
-        "legalNotice": "SuiLoop es software de código abierto, no un servicio financiero.",
-        "nonCustodial": "Sin custodia. Sin KYC. Alto riesgo — solo usa fondos que puedas permitirte perder.",
-        "vault": {
-            "title": "Bóveda Segura",
-            "create": "Crear Bóveda",
-            "destroy": "Destruir Bóveda",
-            "deposit": "Depositar",
-            "withdraw": "Retirar",
-            "balance": "Saldo de Bóveda",
-            "agentAccess": "Acceso del Agente",
-            "granted": "CONCEDIDO",
-            "revoked": "REVOCADO"
-        },
-        "strategy": {
-            "deploy": "Desplegar Estrategia",
-            "stop": "Detener",
-            "active": "Estrategia Activa"
-        }
-    },
-    "terms": {
-        "title": "Términos de Servicio",
-        "lastUpdated": "Última actualización: 25 de febrero de 2026 · Vigente al usar el Protocolo",
-        "warning": {
-            "title": "Divulgación de Alto Riesgo",
-            "body": "Las estrategias DeFi conllevan un riesgo financiero significativo que incluye la pérdida total de los fondos depositados. SuiLoop es una herramienta de software, no un servicio de inversión. Interactúas directamente con contratos inteligentes blockchain — ninguna entidad puede revertir transacciones on-chain. Solo usa fondos que puedas permitirte perder totalmente."
-        }
-    },
-    "risk": {
-        "title": "Divulgación Extendida de Riesgos",
-        "warning": "Lee este documento cuidadosamente antes de usar SuiLoop. Al desplegar una Bóveda o ejecutar cualquier estrategia on-chain, reconoces que has leído, entendido y aceptado todos los riesgos descritos aquí.",
-        "critical": "ADVERTENCIA CRÍTICA — LEE ANTES DE CONTINUAR",
-        "criticalBody": "DeFi es altamente experimental. Solo interactúa con SuiLoop usando fondos que puedas permitirte perder totalmente. SuiLoop es infraestructura de software, no un producto financiero. Ninguna entidad — incluidos los operadores de SuiLoop — puede recuperar fondos perdidos por fallos de contratos inteligentes, volatilidad del mercado o errores del usuario. Las transacciones en Sui son irreversibles."
-    },
-    "common": {
-        "connectWallet": "Conectar Cartera",
-        "viewExplorer": "Ver en Explorador",
-        "loading": "Cargando...",
-        "error": "Error",
-        "success": "Éxito",
-        "cancel": "Cancelar",
-        "confirm": "Confirmar",
-        "close": "Cerrar"
+      "sync": "Sincronización de Red en Vivo",
+      "nodes": "Nodos Activos",
+      "monitor": "Monitorear Mi Agente",
+      "deploy": "Desplegar Nueva Unidad"
     }
+  }
 }

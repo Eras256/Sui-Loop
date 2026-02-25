@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Check, Search, Download, Shield, Cpu, Zap, ChevronDown } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface Agent {
     id: string;
@@ -20,12 +21,10 @@ interface InstallSkillModalProps {
     isInstalling?: boolean;
 }
 
-// Default Global Agent
-const GLOBAL_AGENT: Agent = { id: "global", name: "Neural Matrix (Global)", type: "System Wide", status: "System" };
-
 export default function InstallSkillModal({ skill, isOpen, onClose, onInstall, isInstalling = false }: InstallSkillModalProps) {
+    const { t } = useLanguage();
     const account = useCurrentAccount();
-    const [activeAgents, setActiveAgents] = useState<Agent[]>([GLOBAL_AGENT]);
+    const [activeAgents, setActiveAgents] = useState<Agent[]>([{ id: "global", name: t('modals.installSkill.globalAgent'), type: "System Wide", status: "System" }]);
     const [selectedAgent, setSelectedAgent] = useState<string>("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -41,25 +40,27 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall, i
                     const agents: Agent[] = parsed.map((s: any) => ({
                         id: s.id,
                         name: s.name,
-                        type: s.strategy_id || "Custom Strategy", // fallback type
+                        type: s.strategy_id || t('modals.installSkill.customStrategy'), // localized fallback type
                         status: s.status || "Unknown"
                     }));
 
+                    const globalAgent = { id: "global", name: t('modals.installSkill.globalAgent'), type: "System Wide", status: "System" };
+
                     // Combine Global + Real Agents
-                    setActiveAgents([GLOBAL_AGENT, ...agents]);
+                    setActiveAgents([globalAgent, ...agents]);
 
                     // Default to first real agent if available, otherwise global
                     if (agents.length > 0) {
                         setSelectedAgent(agents[0].id);
                     } else {
-                        setSelectedAgent(GLOBAL_AGENT.id);
+                        setSelectedAgent(globalAgent.id);
                     }
                 } else {
-                    setSelectedAgent(GLOBAL_AGENT.id);
+                    setSelectedAgent("global");
                 }
             } catch (e) {
                 console.error("Failed to load active agents", e);
-                setSelectedAgent(GLOBAL_AGENT.id);
+                setSelectedAgent("global");
             }
         }
     }, [isOpen, account]);
@@ -94,7 +95,15 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall, i
                                         <Zap className="w-6 h-6 text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-bold text-white">{skill.name}</h3>
+                                        <h3 className="text-lg font-bold text-white">
+                                            {(() => {
+                                                const mkName = t(`marketplace.skills.${skill.id}.name`);
+                                                const pgName = t(`plugins.items.${skill.id}.name`);
+                                                if (mkName !== `marketplace.skills.${skill.id}.name`) return mkName;
+                                                if (pgName !== `plugins.items.${skill.id}.name`) return pgName;
+                                                return skill.name;
+                                            })()}
+                                        </h3>
                                         <p className="text-xs text-purple-300">v{skill.version}</p>
                                     </div>
                                 </div>
@@ -111,7 +120,7 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall, i
                         {/* Content */}
                         <div className="p-6 space-y-6">
                             <div className="space-y-2">
-                                <label className="text-xs text-gray-400 font-mono uppercase tracking-wider">Select Target Unit</label>
+                                <label className="text-xs text-gray-400 font-mono uppercase tracking-wider">{t('modals.installSkill.selectTarget')}</label>
                                 <div className="relative">
                                     <button
                                         onClick={() => !isInstalling && setIsDropdownOpen(!isDropdownOpen)}
@@ -169,10 +178,10 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall, i
                             <div className="bg-blue-500/5 border border-blue-500/10 rounded-xl p-4 flex gap-3">
                                 <Shield className="w-5 h-5 text-blue-400 shrink-0" />
                                 <div className="space-y-1">
-                                    <h4 className="text-xs font-bold text-blue-300">Security Check</h4>
+                                    <h4 className="text-xs font-bold text-blue-300">{t('modals.installSkill.securityCheck')}</h4>
                                     <p className="text-[10px] text-blue-200/60 leading-relaxed">
-                                        Installing {skill.name} grants this unit capability to execute transactions related to {skill.tags?.[0] || skill.category || 'DeFi'}.
-                                        {selectedAgent === 'global' ? ' This will apply to ALL active agents.' : ' This applies only to the selected agent.'}
+                                        {t('modals.installSkill.securityDesc').replace('{name}', skill.name).replace('{tag}', skill.tags?.[0] || skill.category || 'DeFi')}
+                                        {selectedAgent === 'global' ? t('modals.installSkill.applyAll') : t('modals.installSkill.applySelected')}
                                     </p>
                                 </div>
                             </div>
@@ -185,12 +194,12 @@ export default function InstallSkillModal({ skill, isOpen, onClose, onInstall, i
                                 {isInstalling ? (
                                     <>
                                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        <span>Installing...</span>
+                                        <span>{t('modals.installSkill.installing')}</span>
                                     </>
                                 ) : (
                                     <>
                                         <Download size={18} />
-                                        <span>Install Capability</span>
+                                        <span>{t('modals.installSkill.installBtn')}</span>
                                     </>
                                 )}
                             </button>

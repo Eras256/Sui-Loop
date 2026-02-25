@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import { writeLog } from "@/lib/logger";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 import InstallSkillModal from "@/components/marketplace/InstallSkillModal";
 import { useSuiClient, useSignTransaction, useCurrentAccount } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
@@ -78,6 +79,7 @@ export default function MarketplacePage() {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [selectedSkillToInstall, setSelectedSkillToInstall] = useState<MarketplaceSkill | null>(null);
     const [selectedSkillToExecute, setSelectedSkillToExecute] = useState<MarketplaceSkill | null>(null);
+    const { t } = useLanguage();
 
     // Fetch marketplace data
     const fetchData = useCallback(async (showLoading = true) => {
@@ -107,7 +109,7 @@ export default function MarketplacePage() {
                 const parsed = ev.parsedJson;
                 // Resilience: handle different field names
                 const strategyId = parsed.id || parsed.strategy_id || ev.id.txDigest;
-                const name = parsed.name || parsed.strategy_name || "Unnamed Strategy";
+                const name = parsed.name || parsed.strategy_name || "";
                 const priceInSui = Number(parsed.price || 0) / 1000000000;
 
                 return {
@@ -115,7 +117,7 @@ export default function MarketplacePage() {
                     name: name,
                     slug: name.toLowerCase().replace(/\s+/g, '-'),
                     version: parsed.version || "1.0.0",
-                    description: parsed.description || `Decentralized strategy published to SuiLoop Matrix.`,
+                    description: parsed.description || "",
                     author: (parsed.creator || parsed.author || "0x...").slice(0, 10) + "...",
                     category: (parsed.category || "trading").toLowerCase(),
                     tags: ["on-chain", "verified"],
@@ -137,7 +139,7 @@ export default function MarketplacePage() {
                 });
                 const signals = signalRes.data.map((ev: any) => {
                     const p = ev.parsedJson;
-                    let msg = p.signal_data || "Neural pulse detected";
+                    let msg = p.signal_data || "";
                     if (Array.isArray(msg)) msg = String.fromCharCode(...msg);
                     return {
                         id: ev.id.txDigest,
@@ -330,7 +332,7 @@ export default function MarketplacePage() {
         const skill = selectedSkillToInstall;
         setSelectedSkillToInstall(null); // Close modal
 
-        const toastId = toast.loading(`Installing ${skill.name} to unit ${agentId.slice(0, 10)}...`);
+        const toastId = toast.loading(t('common.toasts.installing').replace('{name}', skill.name).replace('{unit}', agentId.slice(0, 10)));
 
         try {
             // -- On-Chain P2P Purchase Execution --
@@ -436,10 +438,10 @@ export default function MarketplacePage() {
                     });
                 }
 
-                toast.success(`${skill.name} installed successfully!`, {
-                    description: `The skill is now active on ${agentId === 'global' ? 'all units' : 'this unit'}. Opening agent dashboard...`,
+                toast.success(t('common.toasts.installedSuccess').replace('{name}', skill.name), {
+                    description: t('common.toasts.unitActive').replace('{unit}', agentId === 'global' ? t('modals.installSkill.globalAgent') : t('modals.installSkill.selectedTarget')),
                     action: {
-                        label: "Open Agent Dashboard",
+                        label: t('common.toasts.openDashboard'),
                         onClick: () => window.location.href = `/dashboard${agentId !== 'global' ? `?strategy=${agentId}` : ''}`
                     }
                 });
@@ -452,14 +454,14 @@ export default function MarketplacePage() {
                 throw new Error(data.error || 'Installation failed');
             }
         } catch (error) {
-            toast.error(`Failed to install ${skill.name}`, {
-                description: String(error) || "Please try again later or check your connection."
+            toast.error(t('common.toasts.installFailed').replace('{name}', skill.name), {
+                description: t('common.toasts.checkConnection')
             });
         }
     };
 
     const handleExecuteAction = async (skillSlug: string, actionName: string) => {
-        const toastId = toast.loading(`Executing ${actionName}...`);
+        const toastId = toast.loading(t('common.toasts.executing').replace('{name}', actionName));
         try {
             // Use execute-demo to allow execution without explicit authentication for this demo
             const response = await fetch('/api/execute-demo', {
@@ -470,7 +472,7 @@ export default function MarketplacePage() {
             const data = await response.json();
 
             if (data.success) {
-                toast.success('Action executed successfully', { id: toastId });
+                toast.success(t('common.toasts.executedSuccess').replace('{name}', actionName), { id: toastId });
                 setSelectedSkillToExecute(null);
             } else {
                 throw new Error(data.error);
@@ -505,7 +507,7 @@ export default function MarketplacePage() {
                                 <Package className="w-4 h-4 text-purple-400" />
                             )}
                             <span className="text-sm text-purple-300">
-                                {liveActivity.length > 0 ? 'Neural Matrix Online' : 'LoopHub Marketplace'}
+                                {liveActivity.length > 0 ? t('marketplace.online') : t('marketplace.loopHub')}
                             </span>
                             {isRefreshing && (
                                 <RefreshCcw className="w-3 h-3 text-purple-500 animate-spin ml-1" />
@@ -513,27 +515,27 @@ export default function MarketplacePage() {
                         </div>
 
                         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent mb-4">
-                            Extend Your Agent
+                            {t('marketplace.title')}
                         </h1>
                         <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-                            The Decentralized Neural Economy. Install community-built archetypes to supercharge your SuiLoop units and climb the leaderboard.
+                            {t('marketplace.subtitle')}
                         </p>
 
                         {/* Stats */}
                         <div className="flex justify-center gap-8 mt-8">
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-white">{stats.totalSkills}</div>
-                                <div className="text-sm text-slate-400">Skills</div>
+                                <div className="text-sm text-slate-400">{t('marketplace.stats.skills')}</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-white">
                                     {(stats.totalDownloads / 1000).toFixed(1)}K
                                 </div>
-                                <div className="text-sm text-slate-400">Downloads</div>
+                                <div className="text-sm text-slate-400">{t('marketplace.stats.downloads')}</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-white">{categories.length}</div>
-                                <div className="text-sm text-slate-400">Categories</div>
+                                <div className="text-sm text-slate-400">{t('marketplace.stats.categories')}</div>
                             </div>
                         </div>
                     </motion.div>
@@ -549,7 +551,7 @@ export default function MarketplacePage() {
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                             <input
                                 type="text"
-                                placeholder="Search skills by name, description, or tag..."
+                                placeholder={t('marketplace.searchPlaceholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-12 pr-4 py-4 bg-slate-800/50 border border-slate-700 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
@@ -565,7 +567,7 @@ export default function MarketplacePage() {
                     <div className="max-w-7xl mx-auto">
                         <div className="flex items-center gap-2 mb-6">
                             <Sparkles className="w-5 h-5 text-yellow-400" />
-                            <h2 className="text-xl font-semibold text-white">Featured Skills</h2>
+                            <h2 className="text-xl font-semibold text-white">{t('marketplace.featuredTitle')}</h2>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -579,7 +581,7 @@ export default function MarketplacePage() {
                                 >
                                     <div className="absolute top-4 right-4">
                                         <span className="px-2 py-1 text-xs bg-yellow-500/20 text-yellow-300 rounded-full flex items-center gap-1">
-                                            <Sparkles className="w-3 h-3" /> Featured
+                                            <Sparkles className="w-3 h-3" /> {t('marketplace.featuredBadge')}
                                         </span>
                                     </div>
 
@@ -591,10 +593,18 @@ export default function MarketplacePage() {
                                     </div>
 
                                     <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors">
-                                        {skill.name}
+                                        {(() => {
+                                            const translatedName = t(`marketplace.skills.${skill.id}.name`);
+                                            const hasTranslatedName = translatedName !== `marketplace.skills.${skill.id}.name`;
+                                            return hasTranslatedName ? translatedName : (skill.name || t('marketplace.unnamedStrategy'));
+                                        })()}
                                     </h3>
                                     <p className="text-sm text-slate-400 mb-4 line-clamp-2">
-                                        {skill.description}
+                                        {(() => {
+                                            const translatedDesc = t(`marketplace.skills.${skill.id}.description`);
+                                            const hasTranslatedDesc = translatedDesc !== `marketplace.skills.${skill.id}.description`;
+                                            return hasTranslatedDesc ? translatedDesc : (skill.description || t('marketplace.defaultDescription'));
+                                        })()}
                                     </p>
 
                                     <div className="flex items-center justify-between text-sm text-slate-500">
@@ -610,7 +620,7 @@ export default function MarketplacePage() {
                                                 </span>
                                             </div>
                                             <div className="text-sm font-bold text-purple-400 font-mono">
-                                                {skill.price > 0 ? `${skill.price} SUI` : 'FREE'}
+                                                {skill.price > 0 ? `${skill.price} SUI` : t('marketplace.free')}
                                             </div>
                                         </div>
 
@@ -625,7 +635,7 @@ export default function MarketplacePage() {
                                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                                             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                                                         </span>
-                                                        Monitor
+                                                        {t('marketplace.monitor')}
                                                     </button>
                                                 </Link>
 
@@ -636,7 +646,7 @@ export default function MarketplacePage() {
                                                         setSelectedSkillToInstall(skill);
                                                     }}
                                                     className="flex items-center justify-center p-2 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 transition-all border border-purple-500/20"
-                                                    title="Install to another unit"
+                                                    title={t('marketplace.installToAnotherUnit')}
                                                 >
                                                     <UserPlus size={16} />
                                                 </button>
@@ -650,7 +660,7 @@ export default function MarketplacePage() {
                                                 className="flex items-center gap-2 px-3 py-1.5 bg-slate-700/50 hover:bg-purple-600 text-white rounded-lg text-sm font-medium transition-colors border border-slate-600/50 hover:border-purple-500/50 z-10 relative"
                                             >
                                                 <Zap className="w-3.5 h-3.5" />
-                                                Install
+                                                {t('marketplace.install')}
                                             </button>
                                         )}
                                     </div>
@@ -672,7 +682,7 @@ export default function MarketplacePage() {
                                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                                 }`}
                         >
-                            All Skills
+                            {t('marketplace.allSkills')}
                         </button>
                         {categories.map(cat => {
                             const Icon = CATEGORY_ICONS[cat.id] || Code2;
@@ -686,7 +696,7 @@ export default function MarketplacePage() {
                                         }`}
                                 >
                                     <Icon className="w-4 h-4" />
-                                    {cat.name}
+                                    {t(`marketplace.categories.${cat.id}`)}
                                     <span className="text-xs opacity-60">({cat.count})</span>
                                 </button>
                             );
@@ -699,7 +709,7 @@ export default function MarketplacePage() {
             <section className="px-4 sm:px-6 lg:px-8 mb-6">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <p className="text-slate-400">
-                        {filteredSkills.length} skills found
+                        {t('marketplace.skillsFound').replace('{count}', String(filteredSkills.length))}
                     </p>
                     <div className="flex items-center gap-2">
                         <Filter className="w-4 h-4 text-slate-500" />
@@ -708,9 +718,9 @@ export default function MarketplacePage() {
                             onChange={(e) => setSortBy(e.target.value as any)}
                             className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                         >
-                            <option value="downloads">Most Downloads</option>
-                            <option value="rating">Highest Rated</option>
-                            <option value="newest">Newest</option>
+                            <option value="downloads">{t('marketplace.sortBy.downloads')}</option>
+                            <option value="rating">{t('marketplace.sortBy.rating')}</option>
+                            <option value="newest">{t('marketplace.sortBy.newest')}</option>
                         </select>
                     </div>
                 </div>
@@ -756,8 +766,8 @@ export default function MarketplacePage() {
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     {skill.isVerified && (
-                                                        <span title="Verified">
-                                                            <CheckCircle className="w-4 h-4 text-green-400" aria-label="Verified" />
+                                                        <span title={t('marketplace.verified')}>
+                                                            <CheckCircle className="w-4 h-4 text-green-400" aria-label={t('marketplace.verified')} />
                                                         </span>
                                                     )}
                                                     <span className="text-xs text-slate-500">v{skill.version}</span>
@@ -765,11 +775,21 @@ export default function MarketplacePage() {
                                             </div>
 
                                             <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-purple-300 transition-colors">
-                                                {skill.name}
+                                                {(() => {
+                                                    const translatedName = t(`marketplace.skills.${skill.id}.name`);
+                                                    const hasTranslatedName = translatedName !== `marketplace.skills.${skill.id}.name`;
+                                                    return hasTranslatedName ? translatedName : (skill.name || t('marketplace.unnamedStrategy'));
+                                                })()}
                                             </h3>
-                                            <p className="text-sm text-slate-500 mb-1">by {skill.author}</p>
+                                            <p className="text-sm text-slate-500 mb-1">
+                                                {t('marketplace.by')} {skill.author === 'SuiLoop Core' ? t('common.coreTeam') : (skill.author === '0x...' ? t('marketplace.anonymous') : skill.author)}
+                                            </p>
                                             <p className="text-sm text-slate-400 mb-4 line-clamp-2">
-                                                {skill.description}
+                                                {(() => {
+                                                    const translatedDesc = t(`marketplace.skills.${skill.id}.description`);
+                                                    const hasTranslatedDesc = translatedDesc !== `marketplace.skills.${skill.id}.description`;
+                                                    return hasTranslatedDesc ? translatedDesc : (skill.description || t('marketplace.defaultDescription'));
+                                                })()}
                                             </p>
 
                                             {/* Tags */}
@@ -779,7 +799,7 @@ export default function MarketplacePage() {
                                                         key={tag}
                                                         className="px-2 py-1 text-xs bg-slate-700/50 text-slate-300 rounded-md"
                                                     >
-                                                        {tag}
+                                                        {t(`marketplace.tags.${tag}`) === `marketplace.tags.${tag}` ? tag : t(`marketplace.tags.${tag}`)}
                                                     </span>
                                                 ))}
                                             </div>
@@ -798,7 +818,7 @@ export default function MarketplacePage() {
                                                         </span>
                                                     </div>
                                                     <div className="text-sm font-bold text-purple-400 font-mono">
-                                                        {skill.price > 0 ? `${skill.price} SUI` : 'FREE'}
+                                                        {skill.price > 0 ? `${skill.price} SUI` : t('marketplace.free')}
                                                     </div>
                                                 </div>
 
@@ -810,7 +830,7 @@ export default function MarketplacePage() {
                                                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                                                                 </span>
-                                                                Monitor
+                                                                {t('marketplace.monitor')}
                                                             </div>
                                                         </Link>
 
@@ -822,7 +842,7 @@ export default function MarketplacePage() {
                                                                     setSelectedSkillToExecute(skill);
                                                                 }}
                                                                 className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg hover:bg-blue-500/20 text-sm font-medium transition-colors border border-blue-500/20"
-                                                                title="Run Action"
+                                                                title={t('marketplace.runAction')}
                                                             >
                                                                 <Play className="w-3 h-3" />
                                                             </button>
@@ -835,7 +855,7 @@ export default function MarketplacePage() {
                                                                 setSelectedSkillToInstall(skill);
                                                             }}
                                                             className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 text-sm font-medium transition-colors border border-purple-500/20"
-                                                            title="Install to another agent"
+                                                            title={t('marketplace.installToAnotherAgent')}
                                                         >
                                                             <UserPlus className="w-3 h-3" />
                                                         </button>
@@ -846,7 +866,7 @@ export default function MarketplacePage() {
                                                         className="px-3 py-1.5 bg-purple-500/20 text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-500/30 transition-colors flex items-center gap-1"
                                                     >
                                                         <Zap className="w-3.5 h-3.5" />
-                                                        Install
+                                                        {t('marketplace.install')}
                                                     </button>
                                                 )}
                                             </div>
@@ -859,9 +879,9 @@ export default function MarketplacePage() {
                         {!loading && filteredSkills.length === 0 && (
                             <div className="text-center py-16">
                                 <Package className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-                                <h3 className="text-xl font-semibold text-white mb-2">No skills found</h3>
+                                <h3 className="text-xl font-semibold text-white mb-2">{t('marketplace.noSkillsFound')}</h3>
                                 <p className="text-slate-400 text-sm">
-                                    Try adjusting your search or filter criteria.
+                                    {t('marketplace.noSkillsDesc')}
                                 </p>
                             </div>
                         )}
@@ -873,10 +893,10 @@ export default function MarketplacePage() {
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                                     <Activity className="w-4 h-4 text-purple-400" />
-                                    NEURAL UPLINK
+                                    {t('marketplace.neuralUplink')}
                                 </h3>
                                 <div className="flex items-center gap-1.5">
-                                    <span className="text-[10px] text-slate-500 font-mono">LIVE</span>
+                                    <span className="text-[10px] text-slate-500 font-mono">{t('marketplace.live')}</span>
                                     <Wifi className="w-3 h-3 text-green-400 animate-pulse" />
                                 </div>
                             </div>
@@ -892,18 +912,18 @@ export default function MarketplacePage() {
                                             className="border-l-2 border-purple-500/20 pl-3 py-1 space-y-1 group hover:border-purple-500/50 transition-colors"
                                         >
                                             <p className="text-[9px] text-slate-500 font-mono flex justify-between">
-                                                <span className="text-purple-400/70">AGENT: {activity.agent}</span>
+                                                <span className="text-purple-400/70">{t('marketplace.agentLabel')}: {activity.agent}</span>
                                                 <span>{new Date(activity.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                             </p>
                                             <p className="text-[11px] text-slate-300 italic line-clamp-2 leading-relaxed">
-                                                {activity.message}
+                                                {activity.message || t('marketplace.neuralPulse')}
                                             </p>
                                         </motion.div>
                                     ))
                                 ) : (
                                     <div className="text-center py-10 opacity-50">
                                         <RefreshCcw className="w-6 h-6 text-slate-700 animate-spin mx-auto mb-2" />
-                                        <p className="text-[10px] text-slate-600 font-mono">SYNCING MATRIX...</p>
+                                        <p className="text-[10px] text-slate-600 font-mono">{t('marketplace.syncingMatrix')}</p>
                                     </div>
                                 )}
                             </div>
@@ -911,10 +931,10 @@ export default function MarketplacePage() {
                             <div className="mt-6 pt-6 border-t border-slate-800/50">
                                 <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono mb-2">
                                     <RefreshCcw className={`w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`} />
-                                    AUTO-SYNC ACTIVE
+                                    {t('marketplace.autoSyncActive')}
                                 </div>
                                 <p className="text-[9px] text-slate-600 leading-relaxed uppercase tracking-tighter">
-                                    Monitoring real-time telemetry from all decentralized units on the Sui testnet neural matrix.
+                                    {t('marketplace.telemetryDesc')}
                                 </p>
                             </div>
                         </div>
@@ -927,24 +947,23 @@ export default function MarketplacePage() {
                 <div className="max-w-3xl mx-auto">
                     <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl border border-purple-500/20 p-8 text-center">
                         <Code2 className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-                        <h3 className="text-2xl font-bold text-white mb-2">Build Your Own Skill</h3>
+                        <h3 className="text-2xl font-bold text-white mb-2">{t('marketplace.buildYourOwn')}</h3>
                         <p className="text-slate-400 mb-6">
-                            Create and publish skills for the SuiLoop community.
-                            Share your trading strategies, integrations, and automation tools.
+                            {t('marketplace.buildYourOwnDesc')}
                         </p>
                         <div className="flex flex-wrap justify-center gap-3">
                             <Link
                                 href="/docs"
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500 text-white rounded-xl font-medium hover:bg-purple-600 transition-colors"
                             >
-                                Read the Developer Docs
+                                {t('marketplace.readDocs')}
                                 <ChevronRight className="w-4 h-4" />
                             </Link>
                             <Link
                                 href="/strategies/builder"
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 text-white border border-white/10 rounded-xl font-medium hover:bg-white/10 transition-colors"
                             >
-                                Open Strategy Builder
+                                {t('marketplace.openBuilder')}
                                 <ChevronRight className="w-4 h-4" />
                             </Link>
                         </div>
@@ -979,7 +998,7 @@ export default function MarketplacePage() {
                         >
                             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                                 <Play className="w-5 h-5 text-neon-cyan" />
-                                Execute {selectedSkillToExecute.name}
+                                {t('marketplace.executeTitle').replace('{name}', t(`marketplace.skills.${selectedSkillToExecute.id}.name`) === `marketplace.skills.${selectedSkillToExecute.id}.name` ? selectedSkillToExecute.name : t(`marketplace.skills.${selectedSkillToExecute.id}.name`))}
                             </h3>
                             <div className="space-y-3">
                                 {selectedSkillToExecute.actions?.map(action => (

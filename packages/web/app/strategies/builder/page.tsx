@@ -31,6 +31,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 import CustomNode from './CustomNode';
 
@@ -138,8 +139,14 @@ function StrategyBuilderInner() {
 
     const account = useCurrentAccount();
     const router = useRouter();
+    const { t } = useLanguage();
 
-    useEffect(() => { setMounted(true); }, []);
+    useEffect(() => {
+        setMounted(true);
+        if (strategyName === 'UNNAMED_KERNEL') {
+            setStrategyName(t('builder.unnamedKernel'));
+        }
+    }, [t]);
 
     // Auto-collapse sidebar on small screens
     useEffect(() => {
@@ -204,7 +211,7 @@ function StrategyBuilderInner() {
             }
             return [...nds, newNode];
         });
-        toast.success(`Matrix Enhanced: ${template.label} connected`);
+        toast.success(t('builder.toasts.matrixEnhanced').replace('{name}', template.label));
     }, [reactFlowInstance, setNodes, setEdges]);
 
     const onDrop = useCallback(
@@ -271,16 +278,16 @@ function StrategyBuilderInner() {
         a.click();
         URL.revokeObjectURL(url);
         document.body.removeChild(a);
-        toast.success('Schema exported as .json');
+        toast.success(t('builder.toasts.schemaExported'));
     };
 
     const handleSave = async (deploy = false) => {
         if (!account?.address) {
-            toast.error("Connect Wallet to Architect Protocol");
+            toast.error(t('builder.toasts.connectWallet'));
             return;
         }
         setIsSaving(true);
-        const toastId = toast.loading(deploy ? "Compiling Neural Kernel..." : "Committing Draft...");
+        const toastId = toast.loading(deploy ? t('builder.toasts.compiling') : t('builder.toasts.committing'));
         try {
             const flow = reactFlowInstance.toObject();
             const sid = strategyId || `custom-${Date.now()}`;
@@ -312,30 +319,30 @@ function StrategyBuilderInner() {
             try {
                 await StrategyService.deployStrategy(account.address, newStrat);
             } catch (dbError: any) {
-                toast.error(`Cloud Sync Offline: ${dbError.message || 'Persistence Error'}`, {
-                    description: "Kernel saved locally. Archive may be incomplete."
+                toast.error(t('builder.toasts.cloudSyncOffline').replace('{error}', dbError.message || 'Persistence Error'), {
+                    description: t('builder.toasts.localSaved')
                 });
             }
 
             // 3. Walrus & Neural Matrix simulation on deploy
             if (deploy) {
                 setTimeout(() => {
-                    toast.success(`📡 Architecture broadcasted to Neural Matrix`, { duration: 2500 });
-                    toast.success(`⬆ Schema archived to Walrus (blob: ${sid.slice(0, 12)}...)`, { duration: 4000 });
+                    toast.success(t('builder.toasts.broadcasted'), { duration: 2500 });
+                    toast.success(t('builder.toasts.archived').replace('{id}', sid.slice(0, 12)), { duration: 4000 });
                 }, 1000);
             }
 
             toast.dismiss(toastId);
             if (deploy) {
-                toast.success("Kernel Compiled and Uplinked!");
+                toast.success(t('builder.toasts.compiledSuccess'));
                 router.push(`/dashboard?autostart=true&strategy=${sid}&name=${encodeURIComponent(strategyName)}&asset=${selectedAsset}`);
             } else {
-                toast.success("Draft Persisted (Local + Cloud Sync Attempted)");
+                toast.success(t('builder.toasts.draftPersisted'));
                 fetchHistory();
             }
         } catch (e: any) {
             console.error(e);
-            toast.error(`Transmission Error: ${e.message || 'Unknown Failure'}`);
+            toast.error(t('builder.toasts.transmissionError').replace('{error}', e.message || 'Unknown Failure'));
         } finally {
             setIsSaving(false);
         }
@@ -377,7 +384,7 @@ function StrategyBuilderInner() {
             setStrategyId(strat.strategy_id || strat.id);
             if (strat.asset === 'SUI' || strat.asset === 'USDC') setSelectedAsset(strat.asset);
             setShowHistory(false);
-            toast.success(`Kernel Reconstructed: ${strat.name}`);
+            toast.success(t('builder.toasts.reconstructed').replace('{name}', strat.name));
             setTimeout(() => { reactFlowInstance?.fitView({ duration: 800 }); }, 100);
         }
     };
@@ -427,7 +434,7 @@ function StrategyBuilderInner() {
             `}>
                 <div className="p-4 border-b border-white/10 space-y-3">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">Component Lab</h2>
+                        <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">{t('builder.lab')}</h2>
                         <div className="flex items-center gap-2">
                             <span className="text-[10px] font-mono text-neon-cyan/50">v0.0.7</span>
                             <button
@@ -441,7 +448,7 @@ function StrategyBuilderInner() {
 
                     {/* Asset Selector */}
                     <div className="flex items-center justify-between bg-black/40 border border-white/10 rounded-xl p-1">
-                        <span className="text-[10px] text-gray-500 uppercase tracking-wider pl-2">Vault Asset</span>
+                        <span className="text-[10px] text-gray-500 uppercase tracking-wider pl-2">{t('builder.vaultAsset')}</span>
                         <div className="flex items-center gap-1">
                             <button
                                 onClick={() => setSelectedAsset('USDC')}
@@ -462,7 +469,7 @@ function StrategyBuilderInner() {
                         <Search className="absolute left-3 top-2.5 text-gray-500" size={14} />
                         <input
                             type="text"
-                            placeholder="Find Kernel Core..."
+                            placeholder={t('builder.searchPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-neon-cyan/50 transition-all font-mono"
@@ -475,7 +482,7 @@ function StrategyBuilderInner() {
                         <div key={idx} className="space-y-2">
                             <div className="flex items-center gap-2">
                                 <div className={`w-1 h-3 rounded-full bg-gradient-to-b ${category.color}`}></div>
-                                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{category.category}</h3>
+                                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t(`builder.categories.${category.category}`)}</h3>
                             </div>
                             <div className="grid grid-cols-1 gap-2">
                                 {category.items.map((item, i) => (
@@ -494,9 +501,9 @@ function StrategyBuilderInner() {
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="text-[11px] font-bold text-gray-200 group-hover:text-white truncate font-mono uppercase">
-                                                {item.label}
+                                                {t(`builder.nodes.${item.label}.name`)}
                                             </div>
-                                            <div className="text-[9px] text-gray-500 truncate">{item.desc}</div>
+                                            <div className="text-[9px] text-gray-500 truncate">{t(`builder.nodes.${item.label}.desc`)}</div>
                                         </div>
                                         <button
                                             onClick={(e) => { e.stopPropagation(); onAddNode(item); if (window.innerWidth < 768) setSidebarOpen(false); }}
@@ -515,7 +522,7 @@ function StrategyBuilderInner() {
                     <div className="flex items-center gap-2 p-2.5 bg-neon-cyan/5 rounded-xl border border-neon-cyan/10">
                         <Info size={13} className="text-neon-cyan shrink-0" />
                         <p className="text-[10px] text-gray-400 leading-tight">
-                            Drag nodes onto the matrix. Asset: <span className={selectedAsset === 'USDC' ? 'text-neon-purple font-bold' : 'text-[#4ca2ff] font-bold'}>{selectedAsset}</span>
+                            {t('builder.dragHint')} <span className={selectedAsset === 'USDC' ? 'text-neon-purple font-bold' : 'text-[#4ca2ff] font-bold'}>{selectedAsset}</span>
                         </p>
                     </div>
                 </div>
@@ -581,7 +588,7 @@ function StrategyBuilderInner() {
                             />
                             <div className="flex items-center gap-1.5 flex-wrap">
                                 <span className={`w-1.5 h-1.5 rounded-full ${account ? 'bg-green-500' : 'bg-red-500'} animate-pulse shrink-0`}></span>
-                                <span className="text-[9px] sm:text-[10px] font-mono text-gray-500">{account ? 'ACTIVE' : 'OFFLINE'}</span>
+                                <span className="text-[9px] sm:text-[10px] font-mono text-gray-500">{account ? t('builder.active') : t('builder.offline')}</span>
                                 <span className={`text-[9px] sm:text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${selectedAsset === 'USDC' ? 'bg-neon-purple/20 text-neon-purple' : 'bg-blue-500/20 text-[#4ca2ff]'}`}>
                                     {selectedAsset}
                                 </span>
@@ -597,7 +604,7 @@ function StrategyBuilderInner() {
                             className="bg-[#0F0F0F]/90 backdrop-blur-md border border-white/10 px-3 md:px-6 py-2.5 rounded-xl font-mono text-[11px] font-bold tracking-widest text-gray-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2 disabled:opacity-50"
                         >
                             <Save size={14} />
-                            <span className="hidden sm:inline">COMMIT DRAFT</span>
+                            <span className="hidden sm:inline">{t('builder.commitDraft')}</span>
                         </button>
                         <button
                             onClick={() => handleSave(true)}
@@ -605,8 +612,8 @@ function StrategyBuilderInner() {
                             className="bg-neon-cyan px-4 md:px-8 py-2.5 rounded-xl font-mono text-[11px] font-black tracking-widest text-black hover:bg-cyan-400 shadow-[0_0_20px_rgba(0,243,255,0.3)] transition-all flex items-center gap-2 disabled:opacity-50"
                         >
                             <Play size={14} fill="currentColor" />
-                            <span className="hidden sm:inline">COMPILE KERNEL</span>
-                            <span className="sm:hidden">RUN</span>
+                            <span className="hidden sm:inline">{t('builder.compileKernel')}</span>
+                            <span className="sm:hidden">{t('builder.run')}</span>
                         </button>
                     </Panel>
 
@@ -618,14 +625,14 @@ function StrategyBuilderInner() {
                                 className="bg-[#0F0F0F]/90 backdrop-blur-md border border-white/10 p-3 rounded-xl text-gray-400 hover:text-white transition-all shadow-xl group relative"
                             >
                                 <History size={18} />
-                                <span className="absolute right-full mr-2 px-2 py-1 bg-black text-[10px] text-neon-cyan border border-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden md:block">VIEW KERNEL LOGS</span>
+                                <span className="absolute right-full mr-2 px-2 py-1 bg-black text-[10px] text-neon-cyan border border-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden md:block">{t('builder.viewLogs')}</span>
                             </button>
                             <button
                                 onClick={handleExport}
                                 className="bg-[#0F0F0F]/90 backdrop-blur-md border border-white/10 p-3 rounded-xl text-gray-400 hover:text-white transition-all shadow-xl group relative"
                             >
                                 <Download size={18} />
-                                <span className="absolute right-full mr-2 px-2 py-1 bg-black text-[10px] text-gray-400 border border-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden md:block">EXPORT SCHEMA</span>
+                                <span className="absolute right-full mr-2 px-2 py-1 bg-black text-[10px] text-gray-400 border border-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden md:block">{t('builder.exportSchema')}</span>
                             </button>
                         </div>
                     </Panel>
@@ -652,8 +659,8 @@ function StrategyBuilderInner() {
                         >
                             <div className="p-5 border-b border-white/10 flex items-center justify-between bg-black/40">
                                 <div>
-                                    <h2 className="text-sm font-black tracking-[0.2em] text-white uppercase font-mono">Kernel Archives</h2>
-                                    <p className="text-[10px] text-gray-500 font-mono mt-1 uppercase tracking-wider">Neural storage uplink active</p>
+                                    <h2 className="text-sm font-black tracking-[0.2em] text-white uppercase font-mono">{t('builder.archives')}</h2>
+                                    <p className="text-[10px] text-gray-500 font-mono mt-1 uppercase tracking-wider">{t('builder.archivesHint')}</p>
                                 </div>
                                 <button onClick={() => setShowHistory(false)} className="p-2 hover:bg-white/5 rounded-lg text-gray-500 hover:text-white transition-all">
                                     <X size={20} />
@@ -664,14 +671,14 @@ function StrategyBuilderInner() {
                                 {isLoadingHistory ? (
                                     <div className="flex flex-col items-center justify-center h-64 space-y-4">
                                         <div className="w-8 h-8 border-2 border-neon-cyan border-t-transparent rounded-full animate-spin"></div>
-                                        <p className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Scanning Uplink...</p>
+                                        <p className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">{t('builder.scanning')}</p>
                                     </div>
                                 ) : history.length === 0 ? (
                                     <div className="text-center p-12 space-y-3">
                                         <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mx-auto border border-white/5">
                                             <Database size={20} className="text-gray-600" />
                                         </div>
-                                        <p className="text-[11px] font-mono text-gray-500 uppercase">Archive Empty</p>
+                                        <p className="text-[11px] font-mono text-gray-500 uppercase">{t('builder.emptyArchive')}</p>
                                     </div>
                                 ) : (
                                     history.map((strat, i) => (
@@ -723,6 +730,7 @@ function StrategyBuilderInner() {
 }
 
 export default function StrategyBuilderPro() {
+    const { t } = useLanguage();
     return (
         <main className="h-screen w-screen bg-[#0A0A0A] text-white flex flex-col font-sans selection:bg-neon-cyan/30 overflow-hidden">
             <Navbar />
@@ -730,7 +738,7 @@ export default function StrategyBuilderPro() {
             {/* Mobile banner for touch hint */}
             <div className="md:hidden flex items-center gap-2 bg-neon-cyan/5 border-b border-neon-cyan/10 px-4 py-2 text-[11px] text-neon-cyan/70 font-mono shrink-0">
                 <MousePointer2 size={12} />
-                Tap the ☰ button to open the Component Lab. Pinch to zoom the canvas.
+                {t('builder.mobileHint')}
             </div>
 
             <div className="h-[64px] md:h-[90px] w-full shrink-0"></div>

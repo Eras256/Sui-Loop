@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 type ChangeVariant = 'positive' | 'negative' | 'neutral' | 'status';
@@ -27,34 +28,40 @@ function changeIcon(change: string) {
 }
 
 // ── StatCard ──────────────────────────────────────────────────────────────
-const StatCard = ({ title, value, change, icon: Icon, color }: any) => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md relative overflow-hidden group hover:border-white/20 transition-colors"
-    >
-        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Icon className="w-24 h-24" style={{
-                color: color === 'neon-cyan' ? '#00f3ff' :
-                    color === 'neon-purple' ? '#bd00ff' :
-                        color === 'amber-500' ? '#f59e0b' :
-                            color === 'green-500' ? '#22c55e' :
-                                color === 'blue-500' ? '#3b82f6' : '#ffffff'
-            }} />
-        </div>
-        <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-lg bg-white/10">
-                <Icon className="w-5 h-5 text-white" />
+const StatCard = ({ title, value, change, icon: Icon, color, isStatus }: any) => {
+    const { t } = useLanguage();
+
+    const displayChange = isStatus ? t(`analytics.status.${change.toLowerCase()}`) : change;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md relative overflow-hidden group hover:border-white/20 transition-colors"
+        >
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Icon className="w-24 h-24" style={{
+                    color: color === 'neon-cyan' ? '#00f3ff' :
+                        color === 'neon-purple' ? '#bd00ff' :
+                            color === 'amber-500' ? '#f59e0b' :
+                                color === 'green-500' ? '#22c55e' :
+                                    color === 'blue-500' ? '#3b82f6' : '#ffffff'
+                }} />
             </div>
-            <span className="text-gray-400 text-sm font-medium">{title}</span>
-        </div>
-        <div className="text-3xl font-bold text-white mb-1 font-mono">{value}</div>
-        <div className={`text-xs font-mono flex items-center gap-1 ${changeColor(change)}`}>
-            {changeIcon(change)}
-            {change}
-        </div>
-    </motion.div>
-);
+            <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 rounded-lg bg-white/10">
+                    <Icon className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-gray-400 text-sm font-medium">{title}</span>
+            </div>
+            <div className="text-3xl font-bold text-white mb-1 font-mono">{value}</div>
+            <div className={`text-xs font-mono flex items-center gap-1 ${changeColor(change)}`}>
+                {changeIcon(change)}
+                {displayChange}
+            </div>
+        </motion.div>
+    );
+};
 
 // ── generate chart points ─────────────────────────────────────────────────
 function generateHistory(points: number, hoursBack: number, baseBalance: number) {
@@ -78,6 +85,7 @@ type TimeRange = '24H' | '7D' | '30D';
 
 export default function AnalyticsPage() {
     const account = useCurrentAccount();
+    const { t } = useLanguage();
     const [activeStrategies, setActiveStrategies] = useState<any[]>([]);
     const [scallopData, setScallopData] = useState<any>(null);
     const [timeRange, setTimeRange] = useState<TimeRange>('24H');
@@ -140,16 +148,16 @@ export default function AnalyticsPage() {
                 <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                     <div>
                         <div className="flex items-center gap-3 mb-2">
-                            <h1 className="text-4xl font-bold text-white tracking-tight">NEURAL INTELLIGENCE OPS</h1>
+                            <h1 className="text-4xl font-bold text-white tracking-tight">{t('analytics.title')}</h1>
                             <span className="px-2 py-0.5 bg-neon-cyan/10 text-neon-cyan text-[10px] font-mono rounded border border-neon-cyan/20">
                                 v0.0.7
                             </span>
                         </div>
                         <p className="text-gray-400 font-mono text-sm">
-                            Real-time surveillance of on-chain liquidity vectors{" "}
+                            {t('analytics.subtitle')}{" "}
                             {account
-                                ? `// TARGET: ${account.address.slice(0, 6)}...${account.address.slice(-4)}`
-                                : '// GUEST MODE'}
+                                ? `// ${t('analytics.target')}: ${account.address.slice(0, 6)}...${account.address.slice(-4)}`
+                                : `// ${t('analytics.guestMode')}`}
                         </p>
                     </div>
 
@@ -159,12 +167,12 @@ export default function AnalyticsPage() {
                             <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-mono">
                                 <span className="bg-blue-500/20 text-[#4ca2ff] px-2 py-0.5 rounded font-bold">{suiStrategies} SUI</span>
                                 <span className="bg-neon-purple/20 text-neon-purple px-2 py-0.5 rounded font-bold">{usdcStrategies} USDC</span>
-                                <span className="text-gray-500">VAULTS</span>
+                                <span className="text-gray-500">{t('analytics.vaults')}</span>
                             </div>
                         )}
                         {!account && (
                             <div className="px-4 py-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 rounded-lg text-xs font-mono animate-pulse">
-                                [!] ENCRYPTED FEED - CONNECT WALLET
+                                {t('analytics.encryptedFeed')}
                             </div>
                         )}
                     </div>
@@ -173,37 +181,40 @@ export default function AnalyticsPage() {
                 {/* KPI Grid — 5 cards */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
                     <StatCard
-                        title="Wallet Balance"
+                        title={t('analytics.kpi.walletBalance')}
                         value={userBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         change="READY"
+                        isStatus
                         icon={Wallet}
                         color="neon-cyan"
                     />
                     <StatCard
-                        title="Active Agents"
+                        title={t('analytics.kpi.activeAgents')}
                         value={activeStrategies.length}
                         change={activeStrategies.length > 0 ? "ENGAGED" : "STANDBY"}
+                        isStatus
                         icon={Server}
                         color="amber-500"
                     />
                     <StatCard
-                        title="Alpha Capture (24h)"
+                        title={t('analytics.kpi.alphaCapture')}
                         value={`+${dailyYield.toFixed(3)}`}
-                        change={`+$${(dailyYield * 3.42).toFixed(2)} USD`}
+                        change={`+$${(dailyYield * 3.42).toFixed(2)} ${t('analytics.usd')}`}
                         icon={TrendingUp}
                         color="green-500"
                     />
                     <StatCard
-                        title="TVL Managed"
+                        title={t('analytics.kpi.tvlManaged')}
                         value={`$${tvl.toFixed(0)}`}
-                        change={tvl > 0 ? `LIVE` : "STANDBY"}
+                        change={tvl > 0 ? "LIVE" : "STANDBY"}
+                        isStatus
                         icon={Database}
                         color="blue-500"
                     />
                     <StatCard
-                        title="Neural Reputation"
-                        value="742 ELO"
-                        change="+12 pts (24h)"
+                        title={t('analytics.kpi.neuralReputation')}
+                        value={`742 ${t('analytics.kpi.pts')}`}
+                        change={t('analytics.kpi.dailyChange').replace('{unit}', t('analytics.kpi.pts'))}
                         icon={Activity}
                         color="neon-purple"
                     />
@@ -215,8 +226,8 @@ export default function AnalyticsPage() {
                     <div className="lg:col-span-2 glass-panel border border-white/10 rounded-2xl p-6">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-xl font-bold flex items-center gap-2 tracking-tight">
-                                NEURAL PERFORMANCE VECTOR
-                                <span className="text-xs font-normal text-gray-500 bg-white/5 px-2 py-0.5 rounded font-mono">[PROJECTION]</span>
+                                {t('analytics.chart.title')}
+                                <span className="text-xs font-normal text-gray-500 bg-white/5 px-2 py-0.5 rounded font-mono">[{t('analytics.chart.projection')}]</span>
                             </h3>
                             <div className="flex gap-1.5">
                                 {(['24H', '7D', '30D'] as TimeRange[]).map(r => (
@@ -258,14 +269,14 @@ export default function AnalyticsPage() {
                     {/* Side Stats */}
                     <div className="space-y-6">
                         <div className="glass-panel border border-white/10 rounded-2xl p-6">
-                            <h3 className="text-lg font-bold mb-4 text-gray-200 tracking-tight">TARGET ACQUISITION RADAR</h3>
+                            <h3 className="text-lg font-bold mb-4 text-gray-200 tracking-tight">{t('analytics.radar.title')}</h3>
                             <div className="space-y-3">
                                 {[
-                                    { name: "Scallop SUI Supply", vol: "STABLE", apy: `${(scallopData?.supplyApy || 11).toFixed(2)}%`, asset: 'SUI' },
-                                    { name: "Navi USDC Lending", vol: "STABLE", apy: "9.40%", asset: 'USDC' },
-                                    { name: "Cetus SUI/USDC CLMM", vol: "VOLATILE", apy: "45.2%", asset: 'SUI' },
-                                    { name: "DeepBook V3 Limit", vol: "LOW RISK", apy: "8.5%", asset: 'SUI' },
-                                    { name: "Neural Matrix Feed", vol: "LIVE", apy: "ACTIVE", asset: 'LOG' },
+                                    { name: t('analytics.radar.pools.scallop'), vol: t('analytics.radar.stable'), apy: `${(scallopData?.supplyApy || 11).toFixed(2)}%`, asset: 'SUI' },
+                                    { name: t('analytics.radar.pools.navi'), vol: t('analytics.radar.stable'), apy: "9.40%", asset: 'USDC' },
+                                    { name: t('analytics.radar.pools.cetus'), vol: t('analytics.radar.volatile'), apy: "45.2%", asset: 'SUI' },
+                                    { name: t('analytics.radar.pools.deepbook'), vol: t('analytics.radar.lowRisk'), apy: "8.5%", asset: 'SUI' },
+                                    { name: t('analytics.radar.pools.matrix'), vol: t('analytics.radar.live'), apy: t('analytics.radar.active'), asset: 'LOG' },
                                 ].map((pool, i) => (
                                     <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5 hover:border-neon-cyan/30 transition-colors cursor-pointer group">
                                         <div className="flex items-center gap-2">
@@ -286,19 +297,19 @@ export default function AnalyticsPage() {
 
                         <div className="glass-panel border border-neon-purple/30 rounded-2xl p-6 relative overflow-hidden">
                             <div className="relative z-10">
-                                <h3 className="text-lg font-bold mb-2 text-white tracking-tight">ATOMIC INTEGRITY</h3>
+                                <h3 className="text-lg font-bold mb-2 text-white tracking-tight">{t('analytics.integrity.title')}</h3>
                                 <div className="text-4xl font-bold text-white mb-1 font-mono">100%</div>
-                                <div className="text-sm text-gray-300 mb-3 font-mono">ZERO_SLIPPAGE_ACTIVE</div>
+                                <div className="text-sm text-gray-300 mb-3 font-mono">{t('analytics.integrity.zeroSlippage')}</div>
                                 <div className="flex items-center gap-2 mb-4">
                                     <span className="text-[10px] bg-blue-500/20 text-[#4ca2ff] px-2 py-0.5 rounded font-mono font-bold">SUI</span>
                                     <span className="text-[10px] bg-neon-purple/20 text-neon-purple px-2 py-0.5 rounded font-mono font-bold">USDC</span>
-                                    <span className="text-[10px] text-gray-500 font-mono">VAULT TYPES ACTIVE</span>
+                                    <span className="text-[10px] text-gray-500 font-mono">{t('analytics.integrity.vaultTypes')}</span>
                                 </div>
                                 <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
                                     <div className="h-full bg-neon-purple w-full rounded-full shadow-[0_0_10px_#bd00ff]" />
                                 </div>
                                 <div className="mt-3 text-[10px] font-mono text-gray-500 flex items-center gap-1">
-                                    <span className="text-pink-400">◉</span> Neural Forensic Log (Walrus): ARMED
+                                    <span className="text-pink-400">◉</span> {t('analytics.integrity.walrusArmed')}
                                 </div>
                             </div>
                         </div>

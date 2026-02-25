@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import Navbar from '@/components/layout/Navbar';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 type AgentProfile = {
     address: string;
@@ -43,6 +44,7 @@ const AGENT_ASSETS: Record<string, string> = {
 };
 
 export default function LeaderboardPage() {
+    const { t } = useLanguage();
     const [agents, setAgents] = useState<AgentProfile[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
@@ -242,14 +244,13 @@ export default function LeaderboardPage() {
                         className="space-y-4"
                     >
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-[10px] font-mono tracking-widest uppercase">
-                            <Shield className="w-3 h-3" /> verified on-chain performance
+                            <Shield className="w-3 h-3" /> {t('leaderboard.hero.verified')}
                         </div>
                         <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase font-orbitron italic">
-                            Agent <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-white to-neon-purple">Elite</span>
+                            {t('leaderboard.hero.title1')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-white to-neon-purple">{t('leaderboard.hero.title2')}</span>
                         </h1>
                         <p className="text-gray-400 max-w-xl text-lg font-light leading-relaxed">
-                            Real-time reputation ranking of autonomous agents operating on the SuiLoop Protocol.
-                            Metrics are verified via cryptographical proof on Sui Testnet.
+                            {t('leaderboard.hero.subtitle')}
                         </p>
                     </motion.div>
 
@@ -258,7 +259,7 @@ export default function LeaderboardPage() {
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-neon-cyan transition-colors" />
                             <input
                                 type="text"
-                                placeholder="Search agent or wallet..."
+                                placeholder={t('leaderboard.search.placeholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm focus:outline-none focus:border-neon-cyan/50 focus:ring-1 focus:ring-neon-cyan/20 transition-all backdrop-blur-md"
@@ -266,7 +267,7 @@ export default function LeaderboardPage() {
                         </div>
                         <div className="flex gap-2">
                             <div className="flex flex-col items-center justify-center h-full px-6 py-3 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
-                                <span className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Global TVL</span>
+                                <span className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">{t('leaderboard.tvl.label')}</span>
                                 <span className="text-xl font-bold font-mono text-neon-cyan">${(agents.reduce((acc, a) => acc + a.volume, 0)).toFixed(1)} SUI</span>
                             </div>
                         </div>
@@ -326,18 +327,18 @@ export default function LeaderboardPage() {
 
                                 <div className="grid grid-cols-2 gap-4 mb-8">
                                     <div className="p-4 rounded-3xl bg-white/5 border border-white/5">
-                                        <span className="block text-[10px] text-gray-500 uppercase tracking-widest mb-1">ELO Rating</span>
+                                        <span className="block text-[10px] text-gray-500 uppercase tracking-widest mb-1">{t('leaderboard.podium.eloRating')}</span>
                                         <span className={`text-2xl font-mono font-bold ${idx === 0 ? 'text-yellow-500' : 'text-white'}`}>{agent.elo}</span>
                                     </div>
                                     <div className="p-4 rounded-3xl bg-white/5 border border-white/5">
-                                        <span className="block text-[10px] text-gray-500 uppercase tracking-widest mb-1">Win Rate</span>
+                                        <span className="block text-[10px] text-gray-500 uppercase tracking-widest mb-1">{t('leaderboard.podium.winRate')}</span>
                                         <span className="text-2xl font-mono font-bold text-neon-cyan">{agent.winRate}%</span>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between text-xs">
-                                        <span className="text-gray-500 font-mono">AGENT WALLET</span>
+                                        <span className="text-gray-500 font-mono">{t('leaderboard.podium.agentWallet')}</span>
                                         <a
                                             href={`https://suiscan.xyz/testnet/account/${agent.address}`}
                                             target="_blank"
@@ -348,7 +349,7 @@ export default function LeaderboardPage() {
                                     </div>
                                     {agent.lastSignal && (
                                         <div className="flex flex-col gap-1 px-4 py-2 mt-4 rounded-2xl bg-neon-cyan/5 border border-neon-cyan/20 animate-pulse">
-                                            <span className="text-[9px] text-neon-cyan/60 font-mono tracking-tighter uppercase">Last Signal</span>
+                                            <span className="text-[9px] text-neon-cyan/60 font-mono tracking-tighter uppercase">{t('leaderboard.podium.lastSignal')}</span>
                                             <span className="text-[11px] text-neon-cyan font-mono leading-tight">{agent.lastSignal}</span>
                                         </div>
                                     )}
@@ -362,7 +363,7 @@ export default function LeaderboardPage() {
                 <div className="mb-8 overflow-hidden h-10 flex items-center bg-white/5 border-y border-white/10 backdrop-blur-md">
                     <div className="flex-shrink-0 px-6 bg-neon-cyan/20 h-full flex items-center border-r border-white/10">
                         <Activity className="w-4 h-4 text-neon-cyan animate-pulse mr-2" />
-                        <span className="text-[10px] font-black uppercase tracking-tighter text-neon-cyan">LIVE NEURAL FEED</span>
+                        <span className="text-[10px] font-black uppercase tracking-tighter text-neon-cyan">{t('leaderboard.feed.title')}</span>
                     </div>
                     <div className="flex-1 overflow-hidden relative">
                         <div className="flex gap-12 animate-marquee whitespace-nowrap px-8">
@@ -370,10 +371,10 @@ export default function LeaderboardPage() {
                                 <div key={i} className="flex items-center gap-2 text-[11px] font-mono">
                                     <span className="text-neon-cyan font-bold">[{s.agent}]</span>
                                     <span className="text-white/60">{s.content}</span>
-                                    <span className="text-[9px] text-gray-600 italic">just now</span>
+                                    <span className="text-[9px] text-gray-600 italic">{t('leaderboard.feed.justNow')}</span>
                                 </div>
                             )) : (
-                                <span className="text-[11px] font-mono text-gray-500 uppercase italic">Waiting for agents to sync...</span>
+                                <span className="text-[11px] font-mono text-gray-500 uppercase italic">{t('leaderboard.feed.waiting')}</span>
                             )}
                         </div>
                     </div>
@@ -392,19 +393,19 @@ export default function LeaderboardPage() {
                         <table className="w-full text-left border-collapse min-w-[1000px]">
                             <thead>
                                 <tr className="border-b border-white/5 text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono whitespace-nowrap">
-                                    <th className="py-8 px-8 font-semibold w-24">Rank</th>
+                                    <th className="py-8 px-8 font-semibold w-24">{t('leaderboard.table.headers.rank')}</th>
                                     <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
-                                        Agent Profile {sortConfig.key === 'creator' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
+                                        {t('leaderboard.table.headers.profile')} {sortConfig.key === 'creator' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                     <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
-                                        Performance {sortConfig.key === 'winRate' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
+                                        {t('leaderboard.table.headers.performance')} {sortConfig.key === 'winRate' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                     <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
-                                        Trust Score {sortConfig.key === 'elo' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
+                                        {t('leaderboard.table.headers.trust')} {sortConfig.key === 'elo' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="py-8 px-6 font-semibold">Neural Feed</th>
+                                    <th className="py-8 px-6 font-semibold">{t('leaderboard.table.headers.feed')}</th>
                                     <th className="py-8 px-8 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
-                                        Volume {sortConfig.key === 'volume' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
+                                        {t('leaderboard.table.headers.volume')} {sortConfig.key === 'volume' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                 </tr>
                             </thead>
@@ -499,12 +500,12 @@ export default function LeaderboardPage() {
                                                 <div className="flex items-center gap-4">
                                                     <div className="flex flex-col">
                                                         <span className="text-sm font-bold font-mono text-neon-cyan">{agent.winRate}%</span>
-                                                        <span className="text-[9px] text-gray-600 uppercase font-mono">Win Rate</span>
+                                                        <span className="text-[9px] text-gray-600 uppercase font-mono">{t('leaderboard.table.stats.winRate')}</span>
                                                     </div>
                                                     <div className="h-8 w-px bg-white/5" />
                                                     <div className="flex flex-col">
                                                         <span className="text-sm font-bold font-mono">{agent.trades}</span>
-                                                        <span className="text-[9px] text-gray-600 uppercase font-mono">Trades</span>
+                                                        <span className="text-[9px] text-gray-600 uppercase font-mono">{t('leaderboard.table.stats.trades')}</span>
                                                     </div>
                                                 </div>
                                             </td>
@@ -513,7 +514,7 @@ export default function LeaderboardPage() {
                                             <td className="py-8 px-6">
                                                 <div className="flex items-center gap-3">
                                                     <div className="text-xl font-bold font-mono tracking-tighter">
-                                                        {agent.elo} <span className="text-[10px] text-gray-600 font-light ml-1">ELO</span>
+                                                        {agent.elo} <span className="text-[10px] text-gray-600 font-light ml-1">{t('leaderboard.table.stats.elo')}</span>
                                                     </div>
                                                     <TrendingUp className="w-4 h-4 text-green-500/50" />
                                                 </div>
@@ -536,12 +537,12 @@ export default function LeaderboardPage() {
                                                                     target="_blank"
                                                                     className="text-[9px] text-gray-600 font-mono hover:text-white transition-colors mt-0.5 flex items-center gap-1"
                                                                 >
-                                                                    TX: {agent.lastTx.slice(0, 10)}... <ArrowUpRight className="w-2.5 h-2.5" />
+                                                                    {t('leaderboard.table.stats.tx')} {agent.lastTx.slice(0, 10)}... <ArrowUpRight className="w-2.5 h-2.5" />
                                                                 </a>
                                                             )}
                                                         </>
                                                     ) : (
-                                                        <span className="text-[10px] font-mono text-gray-700">STANDBY MODE</span>
+                                                        <span className="text-[10px] font-mono text-gray-700">{t('leaderboard.table.stats.standby')}</span>
                                                     )}
                                                 </div>
                                             </td>
@@ -574,22 +575,22 @@ export default function LeaderboardPage() {
                         <div className="flex items-center gap-6 text-[10px] font-mono tracking-widest text-gray-500 uppercase">
                             <div className="flex items-center gap-2">
                                 <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)] animate-pulse" />
-                                Live Network Sync
+                                {t('leaderboard.footer.sync')}
                             </div>
                             <div className="flex items-center gap-2">
                                 <BarChart3 className="w-3 h-3" />
-                                {filteredAgents.length} Active Nodes
+                                {filteredAgents.length} {t('leaderboard.footer.nodes')}
                             </div>
                         </div>
                         <div className="flex gap-4">
                             <Link href="/agents">
                                 <button className="px-6 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-mono uppercase tracking-widest hover:bg-white/10 transition-all">
-                                    Monitor My Agent
+                                    {t('leaderboard.footer.monitor')}
                                 </button>
                             </Link>
                             <Link href="/strategies/builder">
                                 <button className="px-8 py-2 rounded-xl bg-neon-cyan text-black text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all shadow-[0_0_20px_rgba(0,229,255,0.3)]">
-                                    Deploy New Unit
+                                    {t('leaderboard.footer.deploy')}
                                 </button>
                             </Link>
                         </div>

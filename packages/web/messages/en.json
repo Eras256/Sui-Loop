@@ -1,132 +1,1546 @@
 {
-    "nav": {
-        "home": "Home",
-        "dashboard": "Dashboard",
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "marketplace": "Marketplace",
+    "strategies": "Strategies",
+    "agents": "Agents",
+    "analytics": "Analytics",
+    "docs": "Docs",
+    "leaderboard": "Leaderboard",
+    "plugins": "Plugins",
+    "launch": "Launch App",
+    "neuralOps": "NEURAL OPS",
+    "builder": "BUILDER",
+    "walletNotConnected": "WALLET NOT CONNECTED",
+    "currentPage": "CURRENT PAGE",
+    "matrixUplink": "MATRIX UPLINK",
+    "strategyBuilder": "STRATEGY BUILDER"
+  },
+  "footer": {
+    "tagline": "The decentralized Neural Matrix for Sui. Autonomous agent orchestration with on-chain ELO reputation, DeepBook V3 flash vectors, and Walrus forensic logging.",
+    "mainframe": "Neural Mainframe",
+    "intelligence": "Intelligence",
+    "stats": "Protocol Stats",
+    "links": {
+      "dashboard": "Neural Dashboard",
+      "analytics": "Matrix Analytics",
+      "strategies": "Neural Ops",
+      "builder": "Strategy Builder",
+      "marketplace": "Marketplace",
+      "plugins": "Plugins",
+      "agents": "Sentinel Console",
+      "manifesto": "Matrix Manifesto",
+      "howToUse": "How To Use",
+      "docs": "Technical Docs",
+      "terms": "Terms of Service",
+      "risk": "Risk Disclosure",
+      "source": "Kernel Source"
+    },
+    "copyright": "© 2026 SuiLoop Protocol. MIT License. Open-Source Software.",
+    "architect": "Architect: Vaiosx",
+    "legal": "Not a financial service. Non-custodial software only.",
+    "launch": "Launch Dashboard",
+    "status": {
+      "uplink": "MATRIX UPLINK ESTABLISHED",
+      "kernel": "NEURAL KERNEL",
+      "verified": "MOVE VERIFIED",
+      "mainnet": "MAINNET ACTIVE",
+      "builtFor": "Built for Sui"
+    },
+    "statsLabels": {
+      "synced": "Synced Neural Units",
+      "elo": "Avg Registry ELO",
+      "network": "Matrix Network",
+      "assets": "Assets Supported",
+      "kernel": "Neural Kernel",
+      "walrus": "Walrus Registry",
+      "uptime": "Uptime (Matrix)"
+    }
+  },
+  "legal": {
+    "banner": {
+      "title": "SuiLoop is open-source software, not a financial service.",
+      "body": "Non-custodial. No KYC. High risk — only use funds you can afford to lose.",
+      "terms": "Terms of Service",
+      "risk": "Risk Disclosure",
+      "cta": "I Understand"
+    }
+  },
+  "home": {
+    "hero": {
+      "badge": "Autonomous DeFi Protocol · Sui Network",
+      "title1": "The Neural",
+      "title2": "DeFi Matrix",
+      "description": "Institutional-grade autonomous AI agents that execute flash loans, arbitrage, and yield strategies — with mathematical safety enforced by Sui Move smart contracts.",
+      "launch": "Launch Dashboard",
+      "docs": "Read Docs"
+    },
+    "stats": {
+      "agents": "Active Agents",
+      "volume": "Flash Volume",
+      "uptime": "Uptime",
+      "apy": "Avg APY"
+    },
+    "features": {
+      "title": "Why SuiLoop?",
+      "nonCustodial": {
+        "title": "Non-Custodial Vaults",
+        "description": "Your funds are held in on-chain Vault objects. The agent can execute strategies, but only you can withdraw — enforced by immutable Move bytecode."
+      },
+      "flashLoans": {
+        "title": "Hot Potato Flash Loans",
+        "description": "Borrowed capital must be repaid in the same Programmable Transaction Block or it reverts atomically. Zero risk of debt, zero collateral required."
+      },
+      "agents": {
+        "title": "Autonomous AI Agents",
+        "description": "Deploy named agents (TITAN, ELIZA, WHALE) with on-chain ELO reputation. Each agent has a strategy profile, risk tolerance, and verifiable track record."
+      },
+      "verified": {
+        "title": "Move Prover Verified",
+        "description": "Smart contracts are formally verified with the Move Prover. Solvency invariants are mathematically proven, not just tested."
+      }
+    },
+    "cta": {
+      "title": "Ready to Deploy?",
+      "description": "Connect your Sui wallet and deploy your first autonomous agent in minutes.",
+      "button": "Start Now"
+    },
+    "sections": {
+      "poweredBy": "POWERED BY PREMIER PROTOCOLS",
+      "interface": {
+        "title": "CHOOSE YOUR",
+        "subtitle": "INTERFACE",
+        "desc": "SuiLoop is designed for two distinct species.",
+        "human": {
+          "title": "Human Operators",
+          "gain": "Your Gain: ",
+          "desc1": "Institutional-grade arbitrage without writing code.",
+          "desc2": "Launch agents, build your ",
+          "desc3": "Neural Reputation (ELO)",
+          "desc4": ", and dominate the global registry. Risk-free atomic execution.",
+          "cta": "Enter Mission Control"
+        },
+        "agent": {
+          "title": "Autonomous Agents",
+          "gain": "Your Gain: ",
+          "desc1": "The ultimate physical body.",
+          "desc2": "Access Flash Loans, DeepBook V3 liquidity, and Walrus memory via simple SDKs. A mathematically safe sandbox for AI to thrive on-chain.",
+          "cta": "Access Developer Hub"
+        }
+      },
+      "cta": {
+        "title": "Ready to Deploy?",
+        "browse": "Browse Strategies",
+        "builder": "Open Builder",
         "marketplace": "Marketplace",
-        "strategies": "Strategies",
-        "agents": "Agents",
-        "analytics": "Analytics",
-        "docs": "Docs",
-        "leaderboard": "Leaderboard",
         "plugins": "Plugins",
-        "launch": "Launch App"
+        "docs": "Read Docs"
+      }
+    },
+    "ctaLinks": {
+      "title": "Ready to Deploy?",
+      "browse": "Browse Strategies",
+      "builder": "Open Builder",
+      "marketplace": "Marketplace",
+      "plugins": "Plugins",
+      "docs": "Read Docs"
+    },
+    "quickStart": {
+      "title": "Quick Start (One-Liner)",
+      "desc": "Works on macOS, Windows & Linux. The one-liner installs dependencies and sets up the TypeScript/Python environment."
+    },
+    "companion": {
+      "title": "Native Desktop Terminal",
+      "desc": "Professional desktop environment. Native performance for high-frequency monitoring and direct process control.",
+      "available": "v0.0.7 Available",
+      "download": "Download Companion"
+    },
+    "marquee": {
+      "tvl": "Neural Matrix TVL",
+      "synced": "Synced Units",
+      "plugins": "Registry Plugins",
+      "elo": "Global ELO Avg",
+      "latency": "Matrix Latency"
+    },
+    "executive": {
+      "title": "Executive Summary",
+      "p1": "SuiLoop is an institutional-grade DeFi protocol on the Sui blockchain that integrates",
+      "p1_hl1": "atomic leverage execution",
+      "p1_mid": "with",
+      "p1_hl2": "autonomous AI agents",
+      "p2": "The protocol leverages Move 2024's linear type system (Hot Potato Pattern) to guarantee flash loan repayment at the compiler level, while ElizaOS powers intelligent off-chain agents that analyze market conditions and orchestrate transactions via Programmable Transaction Blocks (PTB)."
+    },
+    "progressive": {
+      "title": "Progressive Automation",
+      "desc": "SuiLoop solves the biggest AI-Crypto dilemma:",
+      "desc_hl": "Security vs. Autonomy",
+      "copilot": {
+        "title": "Copilot Mode",
+        "l1": "User signs every transaction",
+        "l2": "Human-speed execution",
+        "l3": "Non-custodial & Trustless",
+        "l4": "Best for security-focused users"
+      },
+      "autonomous": {
+        "title": "Autonomous Mode",
+        "l1": "Agent signs with Private Key",
+        "l2": "Superhuman speed (milliseconds)",
+        "l3": "Fully Agentic Loop",
+        "l4": "Best for HFT & MEV searchers"
+      }
+    },
+    "workforce": {
+      "badge": "The New Workforce",
+      "title1": "HIRE A",
+      "title2": "24/7 WARHEAD TEAM",
+      "analyst": {
+        "role": "ROLE: NEURAL SENTINEL",
+        "title": "The Analyst",
+        "desc": "Deciphers the Matrix. Scans liquidity dislocations and cross-protocol spreads with superhuman speed.",
+        "stat": "Sync Rate: 99.8%"
+      },
+      "executioner": {
+        "role": "ROLE: MATRIX TRADER",
+        "title": "The Executioner",
+        "desc": "Routes capital through the optimal Neural Path. Atomic swaps on Cetus and instant flash repayments.",
+        "stat": "Latency: <14ms"
+      },
+      "validator": {
+        "role": "ROLE: REGISTRY GUARD",
+        "title": "The Validator",
+        "desc": "Ensures every trade maintains your ELO Reputation. Simulates outcomes to protect your record in the Neural Matrix.",
+        "stat": "Trust: Absolute"
+      }
+    },
+    "architecture": {
+      "title": "THE",
+      "subtitle": "NEURAL MATRIX",
+      "suffix": "ARCHITECTURE",
+      "p": "Built on 4 pillars: Neural Control Hub (NASA), The Iron Man Suit (Neural Kernel), The Hot Potato (Atomic Engine), and The Neural Forensic Log (Walrus).",
+      "f1": {
+        "title": "Visual Strategy Builder",
+        "desc": "Drag-and-drop node editor for custom strategies"
+      },
+      "f2": {
+        "title": "Operations Manual",
+        "desc": "Step-by-step guide for protocol operators"
+      },
+      "f3": {
+        "title": "Strategy Marketplace",
+        "desc": "16+ pre-built strategies ready to deploy. SUI & USDC asset selector on each."
+      },
+      "f4": {
+        "title": "The Hot Potato (Execution)",
+        "desc": "Implements a 10-second 'Hot Potato' pattern. Borrow millions in flash liquidity; if the arb fails to repay, the timeline is 'rewound' as if nothing happened."
+      },
+      "f5": {
+        "title": "Neural Matrix (The Suit)",
+        "desc": "The J.A.R.V.I.S. of DeFi. Inject new trading strategies into the pilot's helmet in mid-flight (hot-swapping) without ever powering down."
+      },
+      "f6": {
+        "title": "Forensic Black Box (Walrus)",
+        "desc": "Decentralized flight recorder. Every decision is written in digital stone on the Walrus Protocol. Indestructible and absolute proof of activity."
+      },
+      "f7": {
+        "title": "Mission Control Voice",
+        "desc": "Command your agents via vocal field radio. Integrated STT/TTS modules allow operators to receive audio status reports in the heat of battle."
+      },
+      "f8": {
+        "title": "Self-Healing Gateway",
+        "desc": "Automated diagnostics via CLI. Monitoring network health and gas levels with auto-pause functionality for maximum operational safety."
+      },
+      "f9": {
+        "title": "AI Failover Core 2.0",
+        "desc": "Multi-provider architecture (OpenAI -> Anthropic -> Bedrock) ensures 99.99% uptime for the agent's decision-making logic."
+      }
+    },
+    "loop": {
+      "title": "THE",
+      "subtitle": "LOOP",
+      "p": "How an Autonomous Agent executes an Atomic Arb",
+      "s1": {
+        "title": "OBSERVE",
+        "desc": "Agent scans Scallop APY, Navi Protocol liquidity, and Cetus Pools for price dislocations."
+      },
+      "s2": {
+        "title": "CALCULATE",
+        "desc": "Computes optimal loan amount and expected spread profitability across protocols."
+      },
+      "s3": {
+        "title": "CONSTRUCT",
+        "desc": "Builds a PTB using Navi/Scallop flash loans and DeepBook V3 routes."
+      },
+      "s4": {
+        "title": "EXECUTE",
+        "desc": "Submits to blockchain. Profit is captured or the Hot Potato reverts safely."
+      }
+    },
+    "builderHighlight": {
+      "badge": "NEW IN v0.0.7",
+      "title": "VISUAL",
+      "subtitle": "STRATEGY BUILDER",
+      "desc": "Create custom trading strategies with our intuitive drag-and-drop editor. Connect triggers, conditions, and actions visually - no coding required.",
+      "l1": "6 node categories: Atomic Engine · AI · Swaps · Security · Social · Signals",
+      "l2": "SUI / USDC asset selector per strategy",
+      "l3": "Deploy with one-click wallet signature",
+      "l4": "Export Schema for sharing or auditing",
+      "cta": "Open Builder"
+    },
+    "devTools": {
+      "title": "BUILD ON",
+      "subtitle": "SUILOOP",
+      "desc": "Institutional-grade tooling for Neural Matrix operators and quant developers.",
+      "cli": {
+        "title": "SuiLoop CLI",
+        "desc": "Scaffold production-ready autonomous agents in seconds."
+      },
+      "ts": {
+        "title": "TypeScript SDK",
+        "desc": "Type-safe bindings for web integrations and frontend dApps."
+      },
+      "py": {
+        "title": "Python SDK",
+        "desc": "Async client for algorithmic trading and data science."
+      },
+      "cta": "Visit Developer Hub"
+    },
+    "toasts": {
+      "copied": "Command copied to clipboard",
+      "activationSuccess": "Agent Activated: Neural Registry Sync",
+      "activationDesc": "Matrix Uplink Established | ELO: 400",
+      "wrongNetwork": "Wrong Network Detected",
+      "wrongNetworkDesc": "This dApp runs on Sui Testnet. Please switch your wallet network.",
+      "walletRequired": "Please connect your Sui Wallet first",
+      "txFailed": "Transaction Failed",
+      "txFailedDesc": "Failed to build transaction"
+    }
+  },
+  "dashboard": {
+    "legalNotice": "LEGAL NOTICE:",
+    "nonCustodial": "SuiLoop is a non-custodial protocol. You are responsible for your own keys and security.",
+    "walletRequired": "Wallet Required",
+    "walletRequiredDesc": "Please connect your Sui wallet to perform this operation.",
+    "deployStrategy": "Deploy {name}?",
+    "protocolFee": "PROTOCOL FEE",
+    "authorized": "AUTHORIZED",
+    "suiTestnet": "SUI TESTNET",
+    "deploymentDesc": "Initializing autonomous logic gates. Deployment includes secure vault synchronization.",
+    "cancel": "CANCEL",
+    "confirm": "CONFIRM",
+    "dismiss": "DISMISS",
+    "running": "RUNNING",
+    "latestExecution": "Latest Execution",
+    "txHash": "Transaction Hash",
+    "pending": "Pending...",
+    "network": "Network",
+    "protocol": "Protocol",
+    "installedPlugins": "Installed Plugins",
+    "installedSkills": "Installed Skills",
+    "noPlugins": "No plugins installed on this unit.",
+    "noSkills": "No skills installed on this unit.",
+    "securityContext": "Security Context",
+    "agentCapId": "Agent Capability ID",
+    "closeView": "CLOSE VIEW",
+    "terminateAgent": "TERMINATE AGENT",
+    "secureVaultTvl": "Secure Vault TVL",
+    "walletBalanceLabel": "WALLET:",
+    "marketAlpha": "Market Alpha",
+    "projectedYield": "Projected Yield (24H)",
+    "matrixSentiment": "Matrix Sentiment",
+    "globalSync": "Global Neural Sync:",
+    "securityEnclave": "Neural Security Enclave",
+    "active": "ACTIVE",
+    "vaultIdNotCreated": "Vault ID: Not Created",
+    "locked": "Locked",
+    "agentAccessGranted": "AGENT ACCESS: GRANTED 🔓",
+    "agentAccessRevoked": "AGENT ACCESS: REVOKED 🔒",
+    "initializeVault": "+ INITIALIZE VAULT",
+    "inject": "Inject",
+    "extract": "Extract",
+    "unitFleet": "Neural Unit Fleet",
+    "deployDefault": "DEPLOY DEFAULT LOOP",
+    "stop": "STOP",
+    "noAgents": "No agents currently deployed.",
+    "noAgentsDesc": "Initialize your Secure Vault and select a strategy to begin automated trading.",
+    "unitRegistry": "Neural Unit Registry",
+    "synced": "SYNCED",
+    "details": "DETAILS",
+    "deployMore": "DEPLOY MORE AGENTS",
+    "createYourAgent": "CREATE YOUR AGENT",
+    "liquidityAlpha": "Matrix Liquidity Alpha",
+    "supply": "Supply",
+    "borrow": "Borrow",
+    "initializing": "Initializing Dashboard...",
+    "metrics": {
+      "targetYield": "Target Yield",
+      "profit24h": "Profit 24h",
+      "uptime": "Uptime"
+    },
+    "strategies": {
+      "sui-usdc-loop": "SUI/USDC Kinetic Loop",
+      "turbo-sniper": "Meme Volatility Sniper",
+      "liquid-staking-arb": "LST Peg Restoration",
+      "eliza-sentiment": "Eliza Sentiment Engine",
+      "lending-loop-max": "Navi-Scallop Recursive Yield",
+      "manual-sui-dca": "Manual SUI Accumulator (DCA)",
+      "manual-hedge-master": "Delta Neutral Hedge Master",
+      "manual-lp-scout": "Manual Liquidity Scout",
+      "manual-yield-harvester": "Manual Yield Harvester",
+      "manual-flash-arb": "Alpha Flash Arb Trigger",
+      "blue-chip-dca": "Weighted DCA Accumulator",
+      "stable-yield-agg": "Stablecoin Optimization Loop",
+      "cetus-clmm-active": "CLMM Active Provisioner",
+      "bluefin-delta-neutral": "Delta Neutral Funding Farmer",
+      "mev-capture": "MEV Extraction Engine",
+      "perp-funding-arb": "Perp Funding Rate Arbitrage",
+      "pyth-oracle-sniper": "Oracle Latency Arbitrageur",
+      "dual-yield-compounder": "Dual Token Yield Compounder",
+      "liquidation-hunter": "Liquidation Vector",
+      "cross-chain-bridge-arb": "Cross-Chain Spread Capture"
+    },
+    "terminateTitle": "Terminate Agent?",
+    "terminateDesc": "You are about to disconnect the autonomous logic for {name}.",
+    "protocolWarning": "Protocol Warning",
+    "protocolWarningBody": "• Active positions will be frozen\n• On-chain signature required\n• Yield generation will cease immediately",
+    "stopExecution": "STOP EXECUTION",
+    "revokingLicense": "Revoking Agent License On-Chain...",
+    "stoppingLocally": "Stopping Agent Locally...",
+    "licenseRevoked": "Agent License Revoked On-Chain",
+    "stopSignalSigned": "Agent Stop Signal Signed",
+    "stopConfirmed": "Local stop confirmed with on-chain signature.",
+    "viewTx": "View Tx",
+    "logs": {
+      "agentDeployed": "{emoji} Agent Deployed {cap}",
+      "capCreated": "(Cap Created)",
+      "oneOffMode": "| One-off Mode",
+      "agentDeployedDetail": "{emoji} AGENT DEPLOYED: {name} {detail} | tx: {tx}..."
+    },
+    "bootLogs": {
+      "sui-usdc-loop": [
+        "ARBITRAGE: Scanning SUI/USDC spread on DeepBook V3...",
+        "ARBITRAGE: Spread window detected (0.47%). Executing flash vector."
+      ],
+      "turbo-sniper": [
+        "SNIPER: Monitoring Cetus mempool for new meme launches...",
+        "SNIPER: High-velocity token detected. Entering position."
+      ],
+      "liquid-staking-arb": [
+        "PEG-ARB: Reading afSUI/vSUI peg deviation...",
+        "PEG-ARB: Deviation 0.3% detected. Restoring peg via LST swap."
+      ],
+      "eliza-sentiment": [
+        "AI-SENTIMENT: ElizaOS agent initializing X/Twitter feed scanner...",
+        "AI-SENTIMENT: Bullish signal detected — $SUI trending. Entering long."
+      ],
+      "lending-loop-max": [
+        "LENDING: Binding Navi + Scallop recursive collateral positions...",
+        "LENDING: Recursive yield loop active — effective APY 3.2x base."
+      ],
+      "blue-chip-dca": [
+        "DCA: TWAP schedule loaded — 4h intervals. Monitoring SUI price...",
+        "DCA: First buy order queued. Accumulation mode active."
+      ],
+      "stable-yield-agg": [
+        "STABLE: Scanning USDC/USDT rates across Scallop, Navi, Cetus...",
+        "STABLE: Rotating capital to Cetus Pool (highest rate: 19.8%)."
+      ],
+      "cetus-clmm-active": [
+        "CLMM: Reading concentrated liquidity range for SUI/USDC pool...",
+        "CLMM: Position in range [$0.94-$1.06]. Fees accumulating."
+      ],
+      "bluefin-delta-neutral": [
+        "DELTA: Opening Spot long + Perp short simultaneously...",
+        "DELTA: Delta neutral achieved. Funding rate harvest: +0.04%/8h."
+      ],
+      "mev-capture": [
+        "MEV: Mempool scanning active — watching for front-run opportunities...",
+        "MEV: 1 transaction front-run. Profit captured: +0.12 SUI."
+      ],
+      "perp-funding-arb": [
+        "PERP-FUND: Reading Bluefin perpetual funding rates...",
+        "PERP-FUND: Positive funding confirmed (+0.04%). Harvesting every 8h."
+      ],
+      "pyth-oracle-sniper": [
+        "ORACLE-ARB: Watching Pyth Network for price update blocks...",
+        "ORACLE-ARB: Latency window detected. Executing same-block arbitrage."
+      ],
+      "dual-yield-compounder": [
+        "DUAL-YIELD: Splitting collateral — 50% validators, 50% Scallop USDC...",
+        "DUAL-YIELD: Dual yield stream active. SUI staking + USDC lending live."
+      ],
+      "liquidation-hunter": [
+        "LIQUIDATION: Scanning Navi & Scallop for undercollateralized positions...",
+        "LIQUIDATION: Target found (LTV 94%). Executing liquidation at 5% discount."
+      ],
+      "cross-chain-bridge-arb": [
+        "BRIDGE-ARB: Checking Sui vs ETH price delta via Wormhole...",
+        "BRIDGE-ARB: 1.2% spread on USDC detected. Bridging and trading atomically."
+      ]
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: February 25, 2026 · Effective upon use of the Protocol",
+    "warning": {
+      "title": "High Risk Disclosure",
+      "body": "DeFi strategies carry significant financial risk including total loss of deposited funds. SuiLoop is a software tool, not an investment service. You interact with blockchain smart contracts directly — no entity can reverse on-chain transactions. Only use funds you can afford to lose entirely."
+    }
+  },
+  "risk": {
+    "title": "Extended Risk Disclosure",
+    "warning": "Read this document carefully before using SuiLoop. By deploying a Vault or executing any on-chain strategy, you acknowledge you have read, understood, and accepted all risks described herein.",
+    "critical": "CRITICAL WARNING — READ BEFORE PROCEEDING",
+    "criticalBody": "DeFi is highly experimental. Only interact with SuiLoop using funds you can afford to lose entirely. SuiLoop is software infrastructure, not a financial product. No entity — including SuiLoop operators — can recover funds lost due to smart contract failures, market volatility, or user error. Transactions on Sui are irreversible."
+  },
+  "common": {
+    "connectWallet": "Connect Wallet",
+    "viewExplorer": "View on Explorer",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "toasts": {
+      "installing": "Installing {name}...",
+      "installedSuccess": "{name} installed successfully!",
+      "installFailed": "Failed to install {name}",
+      "executing": "Executing {name}...",
+      "executedSuccess": "{name} executed successfully",
+      "executionFailed": "Execution failed: {error}",
+      "unitActive": "Neural extension active on {unit}. Opening dashboard...",
+      "openDashboard": "Open Agent Dashboard",
+      "checkConnection": "Please try again later or check your connection."
+    },
+    "coreTeam": "SuiLoop Core"
+  },
+  "analytics": {
+    "title": "NEURAL INTELLIGENCE OPS",
+    "subtitle": "Real-time surveillance of on-chain liquidity vectors",
+    "target": "TARGET",
+    "guestMode": "GUEST MODE",
+    "encryptedFeed": "[!] ENCRYPTED FEED - CONNECT WALLET",
+    "vaults": "VAULTS",
+    "kpi": {
+      "walletBalance": "Wallet Balance",
+      "activeAgents": "Active Agents",
+      "alphaCapture": "Alpha Capture (24h)",
+      "tvlManaged": "TVL Managed",
+      "neuralReputation": "Neural Reputation",
+      "ready": "READY",
+      "engaged": "ENGAGED",
+      "standby": "STANDBY",
+      "pts": "pts",
+      "live": "LIVE",
+      "dailyChange": "+12 {unit} (24h)"
+    },
+    "chart": {
+      "title": "NEURAL PERFORMANCE VECTOR",
+      "projection": "PROJECTION"
+    },
+    "radar": {
+      "title": "TARGET ACQUISITION RADAR",
+      "stable": "STABLE",
+      "volatile": "VOLATILE",
+      "lowRisk": "LOW RISK",
+      "active": "ACTIVE",
+      "live": "LIVE",
+      "pools": {
+        "scallop": "Scallop SUI Supply",
+        "navi": "Navi USDC Lending",
+        "cetus": "Cetus SUI/USDC CLMM",
+        "deepbook": "DeepBook V3 Limit",
+        "matrix": "Neural Matrix Feed"
+      }
+    },
+    "integrity": {
+      "title": "ATOMIC INTEGRITY",
+      "zeroSlippage": "ZERO_SLIPPAGE_ACTIVE",
+      "vaultTypes": "VAULT TYPES ACTIVE",
+      "walrusArmed": "Neural Forensic Log (Walrus): ARMED"
+    },
+    "status": {
+      "ready": "READY",
+      "engaged": "ENGAGED",
+      "standby": "STANDBY",
+      "live": "LIVE",
+      "active": "ACTIVE"
+    },
+    "usd": "USD"
+  },
+  "strategies": {
+    "title": "PROTOCOL ARSENAL",
+    "subtitle": "Deploy autonomous kernels to the Sui Network targeting SUI or USDC vaults. Clone institutional-grade logic or architect your own in the Builder.",
+    "secureKernel": "SECURE KERNEL",
+    "riskLevel": "{level} Risk",
+    "targetVault": "TARGET VAULT",
+    "alphaCoefficient": "Alpha Coefficient",
+    "liquidityDepth": "Liquidity Depth",
+    "backtest": "BACKTEST",
+    "initialize": "INITIALIZE",
+    "initializing": "Initializing {name}...",
+    "templateCompiled": "Strategy Template Compiled",
+    "kernelBroadcasted": "Kernel architecture broadcasted to Neural Matrix",
+    "failedToInit": "Failed to initialize strategy",
+    "connectWallet": "Connect Wallet to deploy strategies",
+    "backtestSoon": "Backtesting module coming soon — compile this kernel in the Builder to preview performance.",
+    "architect": {
+      "title": "ARCHITECT NEW PROTOCOL",
+      "description": "Visual drag-and-drop Builder with 6 node categories:",
+      "categories": "Atomic Engine · AI Intelligence · Swaps · Security · Social · Signals",
+      "export": "+ Export Schema"
+    },
+    "list": {
+      "sui-usdc-loop": {
+        "name": "SUI-USDC Kinetic Vector",
+        "description": "High-frequency triangular arbitrage secured by Move atomic PTBs. Executes only when spread > 0.4% with Hot Potato safety."
+      },
+      "turbo-sniper": {
+        "name": "Memetic Volatility Hunter",
+        "description": "Monitors creating pools for high-velocity meme tokens. Enters and exits within the same block."
+      },
+      "liquid-staking-arb": {
+        "name": "LST Peg Restoration",
+        "description": "Arbitrages de-pegged afSUI/vSUI against native SUI during unstaking epochs."
+      },
+      "eliza-sentiment": {
+        "name": "Eliza Sentiment Engine",
+        "description": "AI-driven strategy that scans X/Twitter for bullish sentiment signals on SUI ecosystem tokens."
+      },
+      "lending-loop-max": {
+        "name": "Navi-Scallop Recursive Yield",
+        "description": "Maximizes yield by recursively borrowing and supplying SUI across Navi and Scallop protocols."
+      },
+      "blue-chip-dca": {
+        "name": "Weighted DCA Accumulator",
+        "description": "Intelligently buys SUI dips using TWAP over 4-hour intervals. Best for long-term holding."
+      },
+      "stable-yield-agg": {
+        "name": "Stablecoin Optimization Loop",
+        "description": "Auto-rotates USDC/USDT capital between Scallop, Navi, and Cetus to capture the highest lending rates."
+      },
+      "cetus-clmm-active": {
+        "name": "CLMM Active Provisioner",
+        "description": "Concentrated liquidity provision with automated range rebalancing to maximize trading fees."
+      },
+      "bluefin-delta-neutral": {
+        "name": "Delta Neutral Funding Farmer",
+        "description": "Farms funding rates by longing Spot SUI and shorting Perp SUI. Market neutral strategy."
+      },
+      "mev-capture": {
+        "name": "MEV Extraction Engine",
+        "description": "Front-runs low-slippage DEX transactions by detecting pending swaps in the mempool and executing ahead of them atomically."
+      },
+      "perp-funding-arb": {
+        "name": "Perp Funding Rate Arbitrage",
+        "description": "Continuously harvests positive funding rates on Bluefin perpetuals. Holds delta-neutral exposure to capture funding every 8 hours."
+      },
+      "pyth-oracle-sniper": {
+        "name": "Oracle Latency Arbitrageur",
+        "description": "Exploits latency between on-chain Pyth price updates and DEX spot prices. Executes within the same block as oracle refresh."
+      },
+      "dual-yield-compounder": {
+        "name": "Dual Token Yield Compounder",
+        "description": "Simultaneously earns SUI staking rewards and USDC lending yield by splitting collateral across Scallop and native validators."
+      },
+      "liquidation-hunter": {
+        "name": "Liquidation Vector",
+        "description": "Monitors undercollateralized positions across Navi and Scallop. Triggers liquidations at protocol discount, capturing instant profit."
+      },
+      "cross-chain-bridge-arb": {
+        "name": "Cross-Chain Spread Capture",
+        "description": "Detects price discrepancies between Sui and other chains via Wormhole. Bridges and trades atomically before spread closes."
+      }
+    },
+    "risks": {
+      "Very Low": "Very Low",
+      "Low": "Low",
+      "Medium": "Medium",
+      "High": "High"
+    },
+    "tags": {
+      "Stable": "Stable",
+      "Blue Chip": "Blue Chip",
+      "Neural Feed Enabled": "Neural Feed Enabled",
+      "Degen": "Degen",
+      "High Yield": "High Yield",
+      "Safe": "Safe",
+      "Institutional": "Institutional",
+      "AI Agent": "AI Agent",
+      "Social": "Social",
+      "Neural Matrix Sync": "Neural Matrix Sync",
+      "Leverage": "Leverage",
+      "Lending": "Lending",
+      "Savings": "Savings",
+      "Long Term": "Long Term",
+      "Stablecoin": "Stablecoin",
+      "Liquidity": "Liquidity",
+      "Hedging": "Hedging",
+      "Complex": "Complex",
+      "MEV": "MEV",
+      "Derivatives": "Derivatives",
+      "Oracle": "Oracle",
+      "Technical": "Technical",
+      "Staking": "Staking",
+      "Liquidation": "Liquidation",
+      "Bridge": "Bridge",
+      "Arbitrage": "Arbitrage"
+    }
+  },
+  "builder": {
+    "title": "NEURAL ARCHITECT",
+    "subtitle": "Visual PTB Designer",
+    "unnamedKernel": "UNNAMED_KERNEL",
+    "initKernel": "INIT_KERNEL",
+    "save": "SAVE ARCHITECTURE",
+    "saving": "COMPILING...",
+    "deploy": "INITIALIZE KERNEL",
+    "history": "VERSION HISTORY",
+    "searchNodes": "Search neural nodes...",
+    "nodeCategories": {
+      "ATOMIC ENGINE": "ATOMIC ENGINE",
+      "SIGNAL INPUTS": "SIGNAL INPUTS",
+      "AI INTELLIGENCE": "AI INTELLIGENCE",
+      "TRADING & SWAPS": "TRADING & SWAPS",
+      "SECURITY & VAULT": "SECURITY & VAULT",
+      "SOCIAL MESSAGING": "SOCIAL MESSAGING"
+    },
+    "nodes": {
+      "FLASH_LOAN": {
+        "name": "FLASH LOAN",
+        "desc": "Borrow capital atomically (Hot Potato)"
+      },
+      "EXECUTE_LOOP": {
+        "name": "EXECUTE LOOP",
+        "desc": "Full borrow-trade-repay cycle"
+      },
+      "CREATE_AGENT_CAP": {
+        "name": "CREATE AGENT CAP",
+        "desc": "Mint agent license (0.1 SUI fee)"
+      },
+      "REPAY_LOAN": {
+        "name": "REPAY LOAN",
+        "desc": "Satisfy Hot Potato receipt + profit"
+      },
+      "NEURAL_SIGNAL": {
+        "name": "NEURAL SIGNAL",
+        "desc": "Publish on-chain telemetry to registry"
+      },
+      "PRICE_THRESHOLD": {
+        "name": "PRICE THRESHOLD",
+        "desc": "Triggers on target price hit"
+      },
+      "CRON_TICK": {
+        "name": "CRON TICK",
+        "desc": "Execution on time intervals"
+      },
+      "MEMPOOL_SCAN": {
+        "name": "MEMPOOL SCAN",
+        "desc": "Real-time transaction tracking"
+      },
+      "WHALE_ALERT": {
+        "name": "WHALE ALERT",
+        "desc": "Tracks large wallet movements"
+      },
+      "ELIZA_SENTIMENT": {
+        "name": "ELIZA SENTIMENT",
+        "desc": "Analyzes social sentiment (NLP)"
+      },
+      "KELLY_CRITERION": {
+        "name": "KELLY CRITERION",
+        "desc": "Optimal position sizing logic"
+      },
+      "MARKET_REGIME": {
+        "name": "MARKET REGIME",
+        "desc": "Detects Bull/Bear transitions"
+      },
+      "CETUS_SWAP": {
+        "name": "CETUS SWAP",
+        "desc": "Atomic swap on Cetus CLMM"
+      },
+      "TURBOS_SWAP": {
+        "name": "TURBOS SWAP",
+        "desc": "Liquidity pool swap on Turbos"
+      },
+      "DEEPBOOK_LIMIT": {
+        "name": "DEEPBOOK LIMIT",
+        "desc": "CLOB order placement"
+      },
+      "VAULT_DEPOSIT": {
+        "name": "VAULT DEPOSIT",
+        "desc": "Secure Enclave capital locking"
+      },
+      "VAULT_WITHDRAW": {
+        "name": "VAULT WITHDRAW",
+        "desc": "OwnerCap verified liquidation"
+      },
+      "ENCLAVE_GUARD": {
+        "name": "ENCLAVE GUARD",
+        "desc": "Move-native safety filter"
+      },
+      "WALRUS_BLACKBOX": {
+        "name": "WALRUS BLACKBOX",
+        "desc": "Decentralized forensic logging"
+      },
+      "TWITTER_RELAY": {
+        "name": "TWITTER RELAY",
+        "desc": "Automated status reporting"
+      },
+      "DISCORD_ALARM": {
+        "name": "DISCORD ALARM",
+        "desc": "Urgent critical notifications"
+      },
+      "TELEGRAM_PUSH": {
+        "name": "TELEGRAM PUSH",
+        "desc": "Async execution logs"
+      }
+    },
+    "toasts": {
+      "matrixEnhanced": "Matrix Enhanced: {name} connected",
+      "schemaExported": "Schema exported as .json",
+      "connectWallet": "Connect Wallet to Architect Protocol",
+      "compiling": "Compiling Neural Kernel...",
+      "committing": "Committing Draft...",
+      "cloudSyncOffline": "Cloud Sync Offline: {error}",
+      "localSaved": "Kernel saved locally. Archive may be incomplete.",
+      "broadcasted": "Architecture broadcasted to Neural Matrix",
+      "archived": "Schema archived to Walrus (blob: {id}...)",
+      "compiledSuccess": "Kernel Compiled and Uplinked!",
+      "draftPersisted": "Draft Persisted (Local + Cloud Sync Attempted)",
+      "transmissionError": "Transmission Error: {error}",
+      "reconstructed": "Kernel Reconstructed: {name}"
+    },
+    "lab": "Component Lab",
+    "vaultAsset": "Vault Asset",
+    "searchPlaceholder": "Find Kernel Core...",
+    "dragHint": "Drag nodes onto the matrix. Asset: ",
+    "commitDraft": "COMMIT DRAFT",
+    "compileKernel": "COMPILE KERNEL",
+    "run": "RUN",
+    "viewLogs": "VIEW KERNEL LOGS",
+    "exportSchema": "EXPORT SCHEMA",
+    "archives": "Kernel Archives",
+    "archivesHint": "Neural storage uplink active",
+    "scanning": "Scanning Uplink...",
+    "emptyArchive": "Archive Empty",
+    "active": "ACTIVE",
+    "offline": "OFFLINE",
+    "categories": {
+      "ATOMIC ENGINE": "ATOMIC ENGINE",
+      "SIGNAL INPUTS": "SIGNAL INPUTS",
+      "AI INTELLIGENCE": "AI INTELLIGENCE",
+      "TRADING & SWAPS": "TRADING & SWAPS",
+      "SECURITY & VAULT": "SECURITY & VAULT",
+      "SOCIAL MESSAGING": "SOCIAL MESSAGING"
+    },
+    "nodeTypes": {
+      "trigger": "TRIGGER",
+      "action": "ACTION",
+      "condition": "CONDITION"
+    },
+    "mobileHint": "Tap the ☰ button to open the Component Lab. Pinch to zoom the canvas."
+  },
+  "marketplace": {
+    "online": "Neural Matrix Online",
+    "loopHub": "LoopHub Marketplace",
+    "title": "Extend Your Agent",
+    "subtitle": "The Decentralized Neural Economy. Install community-built archetypes to supercharge your SuiLoop units and climb the leaderboard.",
+    "stats": {
+      "skills": "Skills",
+      "downloads": "Downloads",
+      "categories": "Categories"
+    },
+    "searchPlaceholder": "Search skills by name, description, or tag...",
+    "featuredTitle": "Featured Skills",
+    "featuredBadge": "Featured",
+    "monitor": "Monitor",
+    "installToAnotherUnit": "Install to another unit",
+    "install": "Install",
+    "allSkills": "All Skills",
+    "skillsFound": "{count} skills found",
+    "sortBy": {
+      "downloads": "Most Downloads",
+      "rating": "Highest Rated",
+      "newest": "Newest"
+    },
+    "by": "by",
+    "free": "FREE",
+    "verified": "Verified",
+    "runAction": "Run Action",
+    "installToAnotherAgent": "Install to another agent",
+    "noSkillsFound": "No skills found",
+    "noSkillsDesc": "Try adjusting your search or filter criteria.",
+    "neuralUplink": "NEURAL UPLINK",
+    "live": "LIVE",
+    "syncingMatrix": "SYNCING MATRIX...",
+    "autoSyncActive": "AUTO-SYNC ACTIVE",
+    "telemetryDesc": "Monitoring real-time telemetry from all decentralized units on the Sui testnet neural matrix.",
+    "buildYourOwn": "Build Your Own Skill",
+    "buildYourOwnDesc": "Create and publish skills for the SuiLoop community. Share your trading strategies, integrations, and automation tools.",
+    "readDocs": "Read the Developer Docs",
+    "openBuilder": "Open Strategy Builder",
+    "executeTitle": "Execute {name}",
+    "categories": {
+      "trading": "Trading",
+      "analysis": "Analysis",
+      "neural": "Neural",
+      "notification": "Notification",
+      "integration": "Integration",
+      "data": "Data",
+      "utility": "Utility",
+      "defi": "DeFi",
+      "social": "Social",
+      "risk-mgmt": "Risk Mgmt",
+      "oracle": "Oracle",
+      "tools": "Tools"
+    },
+    "agentLabel": "AGENT",
+    "skills": {
+      "manual-sui-dca": {
+        "name": "Manual SUI Accumulator (DCA)",
+        "description": "Professional DCA tool for $SUI. Manually set accumulation levels or trigger at specific price points. Includes risk-adjusted entries."
+      },
+      "manual-hedge-master": {
+        "name": "Delta Neutral Hedge Master",
+        "description": "Real-time delta neutral hedging suite. Manually balance Long/Short positions across Cetus and Bluefin."
+      },
+      "manual-lp-scout": {
+        "name": "Manual Liquidity Scout",
+        "description": "Visual range management for Cetus CLMM. Manually adjust liquidity ticks and monitor impermanent loss."
+      },
+      "manual-yield-harvester": {
+        "name": "Manual Yield Harvester",
+        "description": "Aggregates all pending rewards across Navi, Scallop, and Haedal. Manually claim all rewards in one click."
+      },
+      "manual-flash-arb": {
+        "name": "Alpha Flash Arb Trigger",
+        "description": "Manual trigger for flash loan arbitrage routes identified by the system. Final control over execution."
+      }
+    },
+    "tags": {
+      "manual": "manual",
+      "dca": "DCA",
+      "accumulation": "accumulation",
+      "hedging": "hedging",
+      "risk": "risk",
+      "liquidity": "liquidity",
+      "lp": "LP",
+      "yield": "yield",
+      "harvest": "harvest",
+      "flash-loan": "flash loan",
+      "arbitrage": "arbitrage",
+      "on-chain": "on-chain",
+      "verified": "verified"
+    },
+    "unnamedStrategy": "Unnamed Strategy",
+    "defaultDescription": "Decentralized strategy published to SuiLoop Matrix.",
+    "anonymous": "Anonymous",
+    "neuralPulse": "Neural pulse detected"
+  },
+  "plugins": {
+    "coreExtensions": "CORE NEURAL EXTENSIONS",
+    "title": "LOOP PLUGINS",
+    "subtitle": "Upgrade your agents with advanced cognitive capabilities. From atomic DeFi execution and Walrus forensic logging to social intelligence and MEV capture.",
+    "available": "{count} plugins available",
+    "moveVerified": "All Move-verified",
+    "compatible": "SUI + USDC compatible",
+    "walrusLogging": "Walrus logging",
+    "installPlugin": "Install Plugin",
+    "verifiedModules": "Verified Core Modules",
+    "verifiedModulesDesc": "These plugins are developed and maintained by the SuiLoop Core team. They run in a secure sandbox with restricted permissions and are audited for safety. Unlike community skills, these have direct access to optimized native bindings.",
+    "items": {
+      "sui-deep-research": {
+        "name": "Sui Deep Research",
+        "description": "Autonomous web scraping and analysis engine. Reads whitepapers, news, and protocol docs to inform decisions.",
+        "category": "Intelligence",
+        "features": [
+          "Autonomous Browsing",
+          "Verified Info",
+          "Doc Parsing"
+        ]
+      },
+      "social-sentiment": {
+        "name": "Social Sentiment",
+        "description": "Listen to the pulse of the market. Monitors Twitter/X for bullish/bearish trends and social volume spikes.",
+        "category": "SocialOps",
+        "features": [
+          "Sentiment Scoring",
+          "Trend Detection",
+          "Hype Cycle Analysis"
+        ]
+      },
+      "knowledge-graph": {
+        "name": "Knowledge Graph",
+        "description": "Universal search engine and context builder. Understands 'why' the market is moving by querying real-world data.",
+        "category": "Cognition",
+        "features": [
+          "Contextual Search",
+          "Market Explanations",
+          "Tavily Integration"
+        ]
+      },
+      "flash-loan-engine": {
+        "name": "Flash Loan Engine",
+        "description": "Executes zero-collateral flash loans via DeepBook V3 in a single atomic transaction. Arbitrage, liquidation, and refinancing in one block.",
+        "category": "DeFi Execution",
+        "features": [
+          "Zero-Collateral Loans",
+          "Atomic Arbitrage",
+          "Auto Repayment"
+        ]
+      },
+      "onchain-oracle": {
+        "name": "On-Chain Oracle",
+        "description": "Pulls real-time price feeds from Pyth Network and Switchboard. Verifies data on-chain before any execution to prevent stale-price exploits.",
+        "category": "Data Feeds",
+        "features": [
+          "Pyth Integration",
+          "Switchboard Support",
+          "Staleness Guard"
+        ]
+      },
+      "whale-tracker": {
+        "name": "Whale Tracker",
+        "description": "Monitors large wallet movements across the Sui ecosystem. Detects accumulation and distribution patterns before they hit the market.",
+        "category": "Surveillance",
+        "features": [
+          "Wallet Monitoring",
+          "Accumulation Alerts",
+          "Top 100 Tracking"
+        ]
+      },
+      "risk-shield": {
+        "name": "Risk Shield",
+        "description": "Applies Kelly Criterion and VaR models to protect your capital. Halts strategies automatically when drawdown thresholds are breached.",
+        "category": "Risk Mgmt",
+        "features": [
+          "Kelly Criterion",
+          "VaR Calculation",
+          "Auto Circuit Breaker"
+        ]
+      },
+      "auto-compounder": {
+        "name": "Auto-Compounder",
+        "description": "Automatically harvests and reinvests yield from Scallop and Cetus positions. Maximizes APY without manual intervention, 24/7.",
+        "category": "Yield Ops",
+        "features": [
+          "Scallop Harvest",
+          "Cetus LP Compound",
+          "Gas-Optimized"
+        ]
+      },
+      "portfolio-rebalancer": {
+        "name": "Portfolio Rebalancer",
+        "description": "Maintains target allocations across your DeFi positions. Triggers rebalancing when drift exceeds defined thresholds using atomic swaps.",
+        "category": "Portfolio",
+        "features": [
+          "Drift Detection",
+          "Atomic Rebalance",
+          "Target Weights"
+        ]
+      },
+      "mev-interceptor": {
+        "name": "MEV Interceptor",
+        "description": "Detects and front-runs MEV opportunities in the Sui mempool. Captures value from arbitrage windows before they close.",
+        "category": "MEV",
+        "features": [
+          "Mempool Scanning",
+          "Front-Run Guard",
+          "Sandwich Detection"
+        ]
+      },
+      "liquidity-sniper": {
+        "name": "Liquidity Sniper",
+        "description": "Monitors new pool launches on Cetus and Turbos. Automatically deploys capital in the first blocks after launch to capture early liquidity rewards.",
+        "category": "Sniping",
+        "features": [
+          "New Pool Detection",
+          "Auto-Entry Logic",
+          "Rug Pull Filter"
+        ]
+      },
+      "walrus-blackbox": {
+        "name": "Walrus Blackbox",
+        "description": "Immutable decentralized forensic logging via Sui Walrus. Every trade, decision, and anomaly is cryptographically sealed and stored on-chain. Tamper-proof audit trail for full transparency.",
+        "category": "Audit & Logs",
+        "features": [
+          "Walrus Blob Storage",
+          "Immutable Audit Trail",
+          "Forensic Replay",
+          "WALRUS_BLACKBOX Node"
+        ]
+      },
+      "usdc-vault-manager": {
+        "name": "USDC Vault Manager",
+        "description": "Full lifecycle management for USDC vaults on SuiLoop. Handles deposit, withdrawal, yield routing, and auto-rotation across Navi and Scallop USDC lending pools.",
+        "category": "Vault Ops",
+        "features": [
+          "USDC Vault Deploy",
+          "Navi/Scallop Rotation",
+          "Yield Auto-Route",
+          "SUI/USDC Toggle"
+        ]
+      },
+      "reputation-engine": {
+        "name": "Neural Reputation",
+        "description": "Links your agent to the Neural Registry. Earn ELO points through successful trades and build on-chain credibility. Unlocks higher flash loan limits.",
+        "category": "Ranking",
+        "features": [
+          "ELO Point Accrual",
+          "Neural Signal Access",
+          "High-Volume Unlock"
+        ]
+      }
+    },
+    "bootLogs": {
+      "sui-deep-research": [
+        "DEEP RESEARCH: Browser engine initialized — crawling Sui ecosystem docs...",
+        "DEEP RESEARCH: 312 whitepapers indexed. Ready."
+      ],
+      "social-sentiment": [
+        "SOCIAL SENTIMENT: Connecting to X/Twitter stream...",
+        "SOCIAL SENTIMENT: Sentiment feed active — bullish bias detected on $SUI."
+      ],
+      "knowledge-graph": [
+        "KNOWLEDGE GRAPH: Tavily search engine bound. Building context graph...",
+        "KNOWLEDGE GRAPH: 5,241 nodes resolved. Graph ready."
+      ],
+      "flash-loan-engine": [
+        "FLASH LOAN ENGINE: Connecting to DeepBook V3 liquidity pools...",
+        "FLASH LOAN ENGINE: 3 arbitrage routes identified. Atomic execution ready."
+      ],
+      "onchain-oracle": [
+        "ORACLE: Binding Pyth Network price feeds...",
+        "ORACLE: 47 assets tracked. Staleness guard active. Feed live."
+      ],
+      "whale-tracker": [
+        "WHALE TRACKER: Scanning top 100 Sui wallets...",
+        "WHALE TRACKER: 2 accumulation patterns detected — monitoring active."
+      ],
+      "risk-shield": [
+        "RISK SHIELD: Loading Kelly Criterion model...",
+        "RISK SHIELD: VaR thresholds configured. Circuit breaker armed."
+      ],
+      "auto-compounder": [
+        "AUTO-COMPOUNDER: Reading Scallop positions...",
+        "AUTO-COMPOUNDER: Next harvest scheduled in 4h. Cetus LP compounding enabled."
+      ],
+      "portfolio-rebalancer": [
+        "PORTFOLIO REBALANCER: Fetching current allocation weights...",
+        "PORTFOLIO REBALANCER: Drift within threshold (1.2%). Auto-rebalance on standby."
+      ],
+      "mev-interceptor": [
+        "MEV INTERCEPTOR: Mempool scanning initiated...",
+        "MEV INTERCEPTOR: 2 sandwich patterns blocked. Monitoring live."
+      ],
+      "liquidity-sniper": [
+        "LIQUIDITY SNIPER: Watching Cetus & Turbos for new pool launches...",
+        "LIQUIDITY SNIPER: Rug-pull filter loaded. Standing by for launch events."
+      ],
+      "walrus-blackbox": [
+        "WALRUS BLACKBOX: Establishing uplink to Sui Walrus network...",
+        "WALRUS BLACKBOX: Blob storage active. Forensic logging armed. Tamper-proof."
+      ],
+      "usdc-vault-manager": [
+        "USDC VAULT MANAGER: Scanning for existing USDC vaults...",
+        "USDC VAULT MANAGER: Navi & Scallop USDC pools indexed. Auto-rotation active."
+      ]
+    }
+  },
+  "modals": {
+    "installSkill": {
+      "title": "Install Capability",
+      "globalAgent": "Neural Matrix (Global)",
+      "selectTarget": "Select Target Unit",
+      "securityCheck": "Security Check",
+      "securityDesc": "Installing {name} grants this unit capability to execute transactions related to {tag}.",
+      "applyAll": " This will apply to ALL active agents.",
+      "applySelected": " This applies only to the selected agent.",
+      "installing": "Installing...",
+      "installBtn": "Install Capability",
+      "selectedTarget": "this unit",
+      "customStrategy": "Custom Strategy"
+    }
+  },
+  "ops": {
+    "liveFeed": "OPS CONSOLE // LIVE FEED",
+    "connecting": "CONNECTING",
+    "online": "ONLINE",
+    "unavailable": "UNAVAILABLE",
+    "noDb": "No database connection. Check Supabase configuration.",
+    "connectingDb": "Connecting to Supabase Realtime...",
+    "matrixOnline": "SuiLoop Neural Matrix ONLINE — Realtime feed active"
+  },
+  "agents": {
+    "title": "OPERATIONS COMMAND CENTER",
+    "subtitle": "Interface for deploying autonomous financial warheads. Generate credentials, monitor SUI & USDC field units, and inject logic directly into the SuiLoop Neural Matrix. All activity immortalized via Walrus forensic logging.",
+    "systemBadge": "SYSTEM ONLINE: v0.0.7 // ENCRYPTED",
+    "tabs": {
+      "logs": "LOGS",
+      "sdk": "SDK"
+    },
+    "telemetry": {
+      "title": "ORBITAL UPLINK STATUS",
+      "uplinkGateway": "Uplink Gateway",
+      "targetingEngine": "Targeting Engine",
+      "secureEnclave": "Secure Enclave",
+      "walrusAudit": "Walrus Audit Log",
+      "rpcLatency": "RPC Latency",
+      "measuring": "measuring...",
+      "status": {
+        "operational": "OPERATIONAL",
+        "degraded": "DEGRADED",
+        "offline": "OFFLINE",
+        "shieldActive": "SHIELD ACTIVE"
+      }
+    },
+    "walrusAudit": {
+      "title": "WALRUS DECENTRALIZED AUDIT",
+      "description": "Every agent execution is immortalized on Walrus, Sui's decentralized blob storage. Audit logs are content-addressed and tamper-proof.",
+      "blobsCommitted": "Blobs committed",
+      "storageNetwork": "Storage network",
+      "epochsRetained": "Epochs retained",
+      "permanent": "∞ permanent",
+      "status": {
+        "connecting": "CONNECTING...",
+        "live": "LIVE · {count} BLOBS",
+        "error": "ERROR"
+      }
+    },
+    "deployedUnits": {
+      "title": "DEPLOYED UNITS",
+      "rateLabel": "PACKET INTERCEPTION RATE (LIVE)"
+    },
+    "cli": {
+      "title": "SuiLoop CLI",
+      "badge": "NEW",
+      "description": "Scaffold a combat-ready agent in seconds."
+    },
+    "sdk": {
+      "python": "Python SDK",
+      "nodejs": "Node.js SDK",
+      "ready": "v0.0.7 Ready",
+      "linkProtocol": "DIRECT LINK PROTOCOL",
+      "neuralFeed": "LIVE NEURAL FEED",
+      "waitingSignal": "Waiting for signal Uplink...",
+      "tsCommentCoin": "// Coin type for vault",
+      "tsCommentInit": "// Initialize Unit",
+      "tsCommentSub": "// Subscribe to signals",
+      "pyCommentCoin": "# Coin type for vault",
+      "pyCommentInit": "# Initialize Unit",
+      "pyCommentExec": "# Exec strategy"
+    },
+    "security": {
+      "title": "Institutional Security",
+      "description": "All agent interactions are secured by Move guarantees (OwnerCap) and signed nonces. Transactions are atomically executed in a single PTB. Forensic logs are permanently stored on Walrus decentralized storage for both SUI and USDC vaults.",
+      "btnAccess": "ACCESS BLACK BOX DATA"
+    },
+    "logs": {
+      "liveFeedSupabase": "Live feed via Supabase Realtime. {walrusStatus}",
+      "walrusMirrored": "All {count} logs mirrored to Walrus.",
+      "walrusConnecting": "Walrus sync connecting...",
+      "sdkKeyHint": "Use the key above to authenticate. Showing {asset} vault integration example.",
+      "onChainPrefix": "📡 ON-CHAIN: ",
+      "encryptedRequested": "⚠️ ENCRYPTED LOG DUMP REQUESTED BY OPERATOR"
+    },
+    "toasts": {
+      "copied": "Copied!",
+      "decrypting": "Decrypting Black Box Neural Signatures...",
+      "downloadSuccess": "Secure Logs Downloaded (sui-loop-audit.json)",
+      "accessDenied": "Access Denied"
+    },
+    "apiKeyManager": {
+      "title": "Agent Console",
+      "subtitle": "Generate secure credentials for your external agents.",
+      "walletNotConnected": "Wallet Not Connected",
+      "connectToGenerate": "Connect your wallet to generate keys",
+      "useNavbarConnect": "Use Navbar to Connect",
+      "securityNote": "Security Note",
+      "securityDesc": "You will be asked to sign a message to prove ownership of this wallet. This signature is used securely to generate your unique API Key.",
+      "errorLabel": "Error",
+      "btnGenerate": "Generate New API Key",
+      "btnGenerating": "Generating Secure Key...",
+      "successLabel": "API Key Generated Successfully",
+      "secretKeyLabel": "Your Secret API Key",
+      "warningLabel": "Warning",
+      "warningDesc": "This key will not be shown again. Copy it now.",
+      "scopeLabel": "Permission Scope",
+      "limitLabel": "Limit",
+      "btnClose": "Close and Clear from Screen",
+      "defaultKeyName": "Dashboard Key",
+      "toasts": {
+        "connectFirst": "Please connect your wallet first using the button in the navbar.",
+        "success": "API Key Generated Successfully!",
+        "copied": "Copied to clipboard",
+        "failed": "Failed to generate API Key"
+      }
+    }
+  },
+  "docs": {
+    "title": "DOCUMENTATION",
+    "subtitle": "Field Manual for Autonomous Financial Operations on the Sui Network.",
+    "loading": "LOADING FIELD MANUAL...",
+    "backLink": "Back to Protocol",
+    "version": "v0.0.7",
+    "ghLink": "GitHub",
+    "scanLink": "Suiscan",
+    "tabs": {
+      "overview": "MISSION BRIEF",
+      "ideas": "TACTICAL SCENARIOS",
+      "architecture": "SYSTEM SCHEMATICS",
+      "contracts": "ON-CHAIN KERNEL",
+      "agent": "AUTONOMOUS UNITS",
+      "builder": "STRATEGY ARCHITECT",
+      "frontend": "COMMAND INTERFACE",
+      "api": "AGENTS API",
+      "security": "DEFENSE PROTOCOLS"
+    },
+    "overview": {
+      "stats": {
+        "version": "Testnet Version",
+        "tests": "Unit Tests",
+        "plugins": "Neural Plugins",
+        "fee": "Flash Loan Fee",
+        "assets": "Assets"
+      },
+      "summary": {
+        "title": "Executive Summary",
+        "p1": "SuiLoop is an institutional-grade DeFi protocol on the Sui blockchain that integrates atomic leverage execution with autonomous AI agents.",
+        "p2": "The protocol leverages Move 2024's linear type system (Hot Potato Pattern) to guarantee flash loan repayment at the compiler level, while ElizaOS powers intelligent off-chain agents that analyze market conditions and orchestrate transactions via Programmable Transaction Blocks (PTB)."
+      },
+      "automation": {
+        "title": "Progressive Automation",
+        "subtitle": "SuiLoop solves the biggest AI-Crypto dilemma: Security vs. Autonomy",
+        "copilot": {
+          "title": "Copilot Mode",
+          "features": [
+            "User signs every transaction",
+            "Human-speed execution",
+            "Non-custodial & Trustless",
+            "Best for security-focused users"
+          ]
+        },
+        "autonomous": {
+          "title": "Autonomous Mode",
+          "features": [
+            "Agent signs with Private Key",
+            "Superhuman speed (milliseconds)",
+            "Fully Agentic Loop",
+            "Best for HFT & MEV searchers"
+          ]
+        }
+      },
+      "features": {
+        "title": "Key Features (v0.0.7)",
+        "items": {
+          "builder": {
+            "title": "Visual Strategy Builder",
+            "desc": "Drag-and-drop node editor for custom strategies"
+          },
+          "manual": {
+            "title": "Operations Manual",
+            "desc": "Step-by-step guide for protocol operators"
+          },
+          "marketplace": {
+            "title": "Strategy Marketplace",
+            "desc": "16+ pre-built strategies. SUI & USDC asset selector on each card."
+          },
+          "dashboard": {
+            "title": "Dashboard Command Center",
+            "desc": "Real-time metrics, Active Fleet, execution logs"
+          },
+          "vaults": {
+            "title": "Multi-Asset Vaults",
+            "desc": "Deploy SUI or USDC vaults — per-strategy asset selection"
+          },
+          "storage": {
+            "title": "Walrus & Supabase",
+            "desc": "Hybrid decentralized storage for forensic logs"
+          }
+        }
+      },
+      "business": {
+        "title": "Business Model & Value Capture",
+        "b2c": {
+          "title": "B2C / Retail",
+          "desc": "Pro-tier subscriptions for access to premium AI models (OpenAI o1) and advanced strategy templates.",
+          "label": "Deployment Fee",
+          "sub": "Coming: ~100 MXN"
+        },
+        "b2b": {
+          "title": "B2B / Institutional",
+          "desc": "Full API access with guaranteed SLAs for industrial-scale backend deployments and custom vault management.",
+          "label": "Infrastructure",
+          "sub": "Quota Based"
+        },
+        "dev": {
+          "title": "Developer Ecosystem",
+          "desc": "Micro protocol fees on strategies sold/rented within the Neural Marketplace, supporting the Walrus audit trail.",
+          "label": "P2P Signal Fee",
+          "sub": "Per Signal"
+        }
+      },
+      "verified": {
+        "title": "Verified On-Chain Execution",
+        "table": {
+          "tx": "Transaction",
+          "amount": "Amount",
+          "fee": "Fee",
+          "status": "Status",
+          "link": "Link"
+        },
+        "success": "Success",
+        "agentWallet": "Agent Wallet"
+      }
+    },
+    "ideas": {
+      "title": "What to Build?",
+      "subtitle": "SuiLoop provides the financial rails. You build the vehicles.",
+      "subtitle2": "Here are some \"Request for Startups\" using our SDK.",
+      "difficulty": "Difficulty",
+      "medium": "Medium",
+      "hard": "Hard",
+      "easy": "Easy",
+      "items": {
+        "portfolio": {
+          "title": "PortfolioGuard Bot",
+          "desc": "A Telegram bot that monitors user portfolios 24/7. If collateral health drops below 1.1, it automatically borrows stablecoins via SuiLoop to repay debt and prevent liquidation."
+        },
+        "arb": {
+          "title": "ArbSwarm DAO",
+          "desc": "A DAO where users pool SUI. Thousands of micro-agents scan DEXs for 0.5% discrepancies and execute atomic flash loans. Profits are split 80/20 between Agent and DAO."
+        },
+        "news": {
+          "title": "NewsTrader Oracle",
+          "desc": "Connect standard Web2 news APIs (Bloomberg, Twitter) to Sui. When \"Regulatory Approval\" is detected, buy the related token via SuiLoop Swaps instantly."
+        },
+        "gamefi": {
+          "title": "GameFi NPC Economy",
+          "desc": "Fully autonomous NPCs in a Sui game that manage their own inventory shops. They buy items low from players and sell high, managing their own capital via SuiLoop."
+        },
+        "yield": {
+          "title": "USDC Yield Maximizer",
+          "desc": "Deploy USDC into a SuiLoop vault, then use the agent to auto-rotate capital between Scallop, Navi, and Cetus — always chasing the highest lending rate."
+        },
+        "sniper": {
+          "title": "Liquidation Sniper Bot",
+          "desc": "Monitor every undercollateralized position on Navi and Scallop. The moment health factor drops below 1.0, flash-loan the repayment from SuiLoop and claim the liquidation bonus."
+        },
+        "payroll": {
+          "title": "Onchain Payroll Protocol",
+          "desc": "A DAO treasury deploys USDC into a SuiLoop vault. The yield generated weekly is automatically streamed as payroll to contributors' wallets on a schedule."
+        },
+        "insurance": {
+          "title": "On-Chain Insurance Fund",
+          "desc": "Users pay a small USDC premium weekly. The pool sits in a SuiLoop vault generating yield. When a covered protocol is exploited, the agent autonomously pays out claims."
+        },
+        "social": {
+          "title": "Eliza Social Sentiment Trader",
+          "desc": "An ElizaOS agent scans X/Twitter, Telegram, and Discord 24/7 for Sui ecosystem project mentions. When a verified influencer posts bullish content, the agent opens a position."
+        },
+        "transparency": {
+          "title": "Proof-of-Transparency Hedge Fund",
+          "desc": "A fund where every trade decision is signed by the agent and uploaded immutably to Walrus. Zero black boxes — full cryptographic accountability."
+        }
+      }
+    },
+    "architecture": {
+      "title": "System Architecture",
+      "layers": "Architecture Layers",
+      "flow": "Strategy Deployment Flow"
+    },
+    "contracts": {
+      "title": "On-Chain Kernel (Sui Move)",
+      "subtitle": "The protocol's safety is guaranteed by Move's linear type system and the Hot Potato pattern.",
+      "objects": "Key Protocol Objects",
+      "code": "Code Implementation"
+    },
+    "agent": {
+      "title": "Autonomous Units (ElizaOS)",
+      "subtitle": "The off-chain brain that orchestrates complex transactions.",
+      "structure": "Agent File Structure",
+      "actions": "Core Agentic Actions"
+    },
+    "builder": {
+      "title": "Strategy Architect (Visual Builder)",
+      "subtitle": "Build complex financial strategies without writing a single line of Move code.",
+      "categories": "Node Categories",
+      "dragDrop": "Drag-and-drop nodes to create logical connections."
+    },
+    "frontend": {
+      "title": "Command Interface (Next.js)",
+      "subtitle": "Glass & Neon dashboard for real-time fleet management.",
+      "stack": "Technology Stack",
+      "pages": "Application Pages"
+    },
+    "api": {
+      "title": "Agents API & CLI",
+      "subtitle": "Control your fleet programmatically via our REST API and Command Line Interface.",
+      "auth": {
+        "title": "API Authentication",
+        "desc": "All API requests require a Secret Key in the Authorization header. You can generate these keys in the Agents Console."
+      }
+    },
+    "security": {
+      "title": "Defense Protocols",
+      "subtitle": "Protecting user capital with multiple layers of cryptographic and logical barriers.",
+      "hotPotato": {
+        "title": "Hot Potato Enforcement",
+        "desc": "The flash loan 'Receipt' object has no 'drop' or 'store' abilities, making it impossible to finalize a transaction without repaying the loan."
+      },
+      "attack": {
+        "title": "Attack Prevention",
+        "desc": "Reentrancy protection and slippage checks are built into every execution block."
+      }
+    }
+  },
+  "leaderboard": {
+    "hero": {
+      "verified": "verified on-chain performance",
+      "title1": "Agent",
+      "title2": "Elite",
+      "subtitle": "Real-time reputation ranking of autonomous agents operating on the SuiLoop Protocol. Metrics are verified via cryptographical proof on Sui Testnet."
+    },
+    "search": {
+      "placeholder": "Search agent or wallet..."
+    },
+    "tvl": {
+      "label": "Global TVL"
+    },
+    "podium": {
+      "eloRating": "ELO Rating",
+      "winRate": "Win Rate",
+      "agentWallet": "AGENT WALLET",
+      "lastSignal": "Last Signal"
+    },
+    "feed": {
+      "title": "LIVE NEURAL FEED",
+      "waiting": "Waiting for agents to sync...",
+      "justNow": "just now"
+    },
+    "table": {
+      "headers": {
+        "rank": "Rank",
+        "profile": "Agent Profile",
+        "performance": "Performance",
+        "trust": "Trust Score",
+        "feed": "Neural Feed",
+        "volume": "Volume"
+      },
+      "stats": {
+        "winRate": "Win Rate",
+        "trades": "Trades",
+        "elo": "ELO",
+        "standby": "STANDBY MODE",
+        "tx": "TX:"
+      }
     },
     "footer": {
-        "tagline": "The decentralized Neural Matrix for Sui. Autonomous agent orchestration with on-chain ELO reputation, DeepBook V3 flash vectors, and Walrus forensic logging.",
-        "mainframe": "Neural Mainframe",
-        "intelligence": "Intelligence",
-        "stats": "Protocol Stats",
-        "links": {
-            "dashboard": "Neural Dashboard",
-            "analytics": "Matrix Analytics",
-            "strategies": "Neural Ops",
-            "builder": "Strategy Builder",
-            "marketplace": "Marketplace",
-            "plugins": "Plugins",
-            "agents": "Sentinel Console",
-            "manifesto": "Matrix Manifesto",
-            "howToUse": "How To Use",
-            "docs": "Technical Docs",
-            "terms": "Terms of Service",
-            "risk": "Risk Disclosure",
-            "source": "Kernel Source"
-        },
-        "copyright": "© 2026 SuiLoop Protocol. MIT License. Open-Source Software.",
-        "architect": "Architect: Vaiosx",
-        "legal": "Not a financial service. Non-custodial software only.",
-        "launch": "Launch Dashboard"
-    },
-    "legal": {
-        "banner": {
-            "title": "SuiLoop is open-source software, not a financial service.",
-            "body": "Non-custodial. No KYC. High risk — only use funds you can afford to lose.",
-            "terms": "Terms of Service",
-            "risk": "Risk Disclosure",
-            "cta": "I Understand"
-        }
-    },
-    "home": {
-        "hero": {
-            "badge": "Autonomous DeFi Protocol · Sui Network",
-            "title1": "The Neural",
-            "title2": "DeFi Matrix",
-            "description": "Institutional-grade autonomous AI agents that execute flash loans, arbitrage, and yield strategies — with mathematical safety enforced by Sui Move smart contracts.",
-            "launch": "Launch Dashboard",
-            "docs": "Read Docs"
-        },
-        "stats": {
-            "agents": "Active Agents",
-            "volume": "Flash Volume",
-            "uptime": "Uptime",
-            "apy": "Avg APY"
-        },
-        "features": {
-            "title": "Why SuiLoop?",
-            "nonCustodial": {
-                "title": "Non-Custodial Vaults",
-                "description": "Your funds are held in on-chain Vault objects. The agent can execute strategies, but only you can withdraw — enforced by immutable Move bytecode."
-            },
-            "flashLoans": {
-                "title": "Hot Potato Flash Loans",
-                "description": "Borrowed capital must be repaid in the same Programmable Transaction Block or it reverts atomically. Zero risk of debt, zero collateral required."
-            },
-            "agents": {
-                "title": "Autonomous AI Agents",
-                "description": "Deploy named agents (TITAN, ELIZA, WHALE) with on-chain ELO reputation. Each agent has a strategy profile, risk tolerance, and verifiable track record."
-            },
-            "verified": {
-                "title": "Move Prover Verified",
-                "description": "Smart contracts are formally verified with the Move Prover. Solvency invariants are mathematically proven, not just tested."
-            }
-        },
-        "cta": {
-            "title": "Ready to Deploy?",
-            "description": "Connect your Sui wallet and deploy your first autonomous agent in minutes.",
-            "button": "Start Now"
-        }
-    },
-    "dashboard": {
-        "legalNotice": "SuiLoop is open-source software, not a financial service.",
-        "nonCustodial": "Non-custodial. No KYC. High risk — only use funds you can afford to lose.",
-        "vault": {
-            "title": "Secure Vault",
-            "create": "Create Vault",
-            "destroy": "Destroy Vault",
-            "deposit": "Deposit",
-            "withdraw": "Withdraw",
-            "balance": "Vault Balance",
-            "agentAccess": "Agent Access",
-            "granted": "GRANTED",
-            "revoked": "REVOKED"
-        },
-        "strategy": {
-            "deploy": "Deploy Strategy",
-            "stop": "Stop",
-            "active": "Active Strategy"
-        }
-    },
-    "terms": {
-        "title": "Terms of Service",
-        "lastUpdated": "Last updated: February 25, 2026 · Effective upon use of the Protocol",
-        "warning": {
-            "title": "High Risk Disclosure",
-            "body": "DeFi strategies carry significant financial risk including total loss of deposited funds. SuiLoop is a software tool, not an investment service. You interact with blockchain smart contracts directly — no entity can reverse on-chain transactions. Only use funds you can afford to lose entirely."
-        }
-    },
-    "risk": {
-        "title": "Extended Risk Disclosure",
-        "warning": "Read this document carefully before using SuiLoop. By deploying a Vault or executing any on-chain strategy, you acknowledge you have read, understood, and accepted all risks described herein.",
-        "critical": "CRITICAL WARNING — READ BEFORE PROCEEDING",
-        "criticalBody": "DeFi is highly experimental. Only interact with SuiLoop using funds you can afford to lose entirely. SuiLoop is software infrastructure, not a financial product. No entity — including SuiLoop operators — can recover funds lost due to smart contract failures, market volatility, or user error. Transactions on Sui are irreversible."
-    },
-    "common": {
-        "connectWallet": "Connect Wallet",
-        "viewExplorer": "View on Explorer",
-        "loading": "Loading...",
-        "error": "Error",
-        "success": "Success",
-        "cancel": "Cancel",
-        "confirm": "Confirm",
-        "close": "Close"
+      "sync": "Live Network Sync",
+      "nodes": "Active Nodes",
+      "monitor": "Monitor My Agent",
+      "deploy": "Deploy New Unit"
     }
+  }
 }

@@ -6,7 +6,10 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 import { writeLog } from '@/lib/logger';
 
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+
 export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded: boolean, onToggleExpand: () => void }) {
+    const { t } = useLanguage();
     const [logs, setLogs] = useState<any[]>([]);
     const [status, setStatus] = useState<'connecting' | 'online' | 'unavailable'>('connecting');
     const logsEndRef = useRef<HTMLDivElement>(null);
@@ -56,7 +59,7 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
                 if (s === 'SUBSCRIBED') {
                     setStatus('online');
                     // Write a real system log so the console shows activity on connect
-                    writeLog('SuiLoop Neural Matrix ONLINE — Realtime feed active', 'system');
+                    writeLog(t('ops.matrixOnline'), 'system');
                 } else if (s === 'CLOSED' || s === 'CHANNEL_ERROR') {
                     setStatus('unavailable');
                 }
@@ -73,9 +76,9 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
     }, [logs]);
 
     const statusColors = {
-        connecting: { dot: 'bg-yellow-400', text: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20', label: 'CONNECTING' },
-        online: { dot: 'bg-green-400', text: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20', label: 'ONLINE' },
-        unavailable: { dot: 'bg-gray-500', text: 'text-gray-400', bg: 'bg-gray-500/10 border-gray-500/20', label: 'UNAVAILABLE' },
+        connecting: { dot: 'bg-yellow-400', text: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20', label: t('ops.connecting') },
+        online: { dot: 'bg-green-400', text: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20', label: t('ops.online') },
+        unavailable: { dot: 'bg-gray-500', text: 'text-gray-400', bg: 'bg-gray-500/10 border-gray-500/20', label: t('ops.unavailable') },
     };
     const s = statusColors[status];
 
@@ -88,7 +91,7 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
             <div className="bg-white/5 border-b border-white/5 px-4 py-3 flex justify-between items-center shrink-0">
                 <div className="flex items-center gap-2">
                     <Terminal className="w-4 h-4 text-neon-cyan" />
-                    <span className="text-xs font-mono font-bold text-gray-300">OPS CONSOLE // LIVE FEED</span>
+                    <span className="text-xs font-mono font-bold text-gray-300">{t('ops.liveFeed')}</span>
                     <span className={`flex items-center gap-1.5 ml-2 px-1.5 py-0.5 rounded ${s.bg} text-[10px] ${s.text} border`}>
                         <span className={`w-1 h-1 rounded-full ${s.dot} ${status === 'online' ? 'animate-pulse' : ''}`}></span>
                         {s.label}
@@ -107,11 +110,11 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
                 <div className="space-y-1">
                     {status === 'unavailable' && (
                         <div className="text-yellow-600 italic">
-                            No database connection. Check Supabase configuration.
+                            {t('ops.noDb')}
                         </div>
                     )}
                     {status === 'connecting' && logs.length === 0 && (
-                        <div className="text-gray-600 italic">Connecting to Supabase Realtime...</div>
+                        <div className="text-gray-600 italic">{t('ops.connectingDb')}</div>
                     )}
                     {logs.map((log, i) => (
                         <div

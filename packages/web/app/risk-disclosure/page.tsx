@@ -1,13 +1,10 @@
-import type { Metadata } from "next";
+'use client';
+
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Link from "next/link";
 import { AlertTriangle, TrendingDown, Zap, Globe, Shield, BarChart2 } from "lucide-react";
-
-export const metadata: Metadata = {
-    title: "Risk Disclosure | SuiLoop Protocol",
-    description: "Comprehensive risk disclosure for SuiLoop DeFi software. Flash loans, smart contract risks, market risks, and regulatory risks explained.",
-};
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 const risks = [
     {
@@ -55,37 +52,15 @@ const risks = [
 ];
 
 const colorMap: Record<string, { border: string; bg: string; text: string; badge: string; badgeText: string }> = {
-    red: {
-        border: "border-red-500/30",
-        bg: "bg-red-500/5",
-        text: "text-red-400",
-        badge: "bg-red-500/20 border-red-500/40",
-        badgeText: "text-red-300"
-    },
-    orange: {
-        border: "border-orange-500/30",
-        bg: "bg-orange-500/5",
-        text: "text-orange-400",
-        badge: "bg-orange-500/20 border-orange-500/40",
-        badgeText: "text-orange-300"
-    },
-    yellow: {
-        border: "border-yellow-500/30",
-        bg: "bg-yellow-500/5",
-        text: "text-yellow-400",
-        badge: "bg-yellow-500/20 border-yellow-500/40",
-        badgeText: "text-yellow-300"
-    },
-    blue: {
-        border: "border-blue-500/30",
-        bg: "bg-blue-500/5",
-        text: "text-blue-400",
-        badge: "bg-blue-500/20 border-blue-500/40",
-        badgeText: "text-blue-300"
-    }
+    red: { border: "border-red-500/30", bg: "bg-red-500/5", text: "text-red-400", badge: "bg-red-500/20 border-red-500/40", badgeText: "text-red-300" },
+    orange: { border: "border-orange-500/30", bg: "bg-orange-500/5", text: "text-orange-400", badge: "bg-orange-500/20 border-orange-500/40", badgeText: "text-orange-300" },
+    yellow: { border: "border-yellow-500/30", bg: "bg-yellow-500/5", text: "text-yellow-400", badge: "bg-yellow-500/20 border-yellow-500/40", badgeText: "text-yellow-300" },
+    blue: { border: "border-blue-500/30", bg: "bg-blue-500/5", text: "text-blue-400", badge: "bg-blue-500/20 border-blue-500/40", badgeText: "text-blue-300" }
 };
 
 export default function RiskDisclosurePage() {
+    const { t } = useLanguage();
+
     return (
         <div className="min-h-screen bg-[#030014] text-white">
             <Navbar />
@@ -99,23 +74,23 @@ export default function RiskDisclosurePage() {
                         <span className="text-xs font-mono text-red-300 uppercase tracking-wider">Risk Disclosure</span>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                        Extended Risk Disclosure
+                        {t('risk.title')}
                     </h1>
                     <p className="text-gray-400 text-sm max-w-2xl mx-auto">
-                        Read this document carefully before using SuiLoop. By deploying a Vault or executing any on-chain strategy, you acknowledge you have read, understood, and accepted all risks described herein.
+                        {t('risk.warning')}
                     </p>
                 </div>
             </div>
 
-            {/* Absolute Warning */}
+            {/* Critical Warning */}
             <div className="max-w-4xl mx-auto px-4 mb-10">
                 <div className="bg-red-900/20 border-2 border-red-500/50 rounded-2xl p-6">
                     <div className="flex gap-4">
                         <AlertTriangle className="w-8 h-8 text-red-500 shrink-0 mt-0.5" />
                         <div>
-                            <p className="text-red-300 font-bold text-base mb-2">⚠️ CRITICAL WARNING — READ BEFORE PROCEEDING</p>
+                            <p className="text-red-300 font-bold text-base mb-2">⚠️ {t('risk.critical')}</p>
                             <p className="text-red-200/80 text-sm leading-relaxed">
-                                DeFi is highly experimental. Only interact with SuiLoop using funds you can afford to lose entirely. SuiLoop is software infrastructure, not a financial product. No entity — including SuiLoop operators — can recover funds lost due to smart contract failures, market volatility, or user error. Transactions on Sui are irreversible. There is no customer support for on-chain operations.
+                                {t('risk.criticalBody')}
                             </p>
                         </div>
                     </div>
@@ -128,10 +103,7 @@ export default function RiskDisclosurePage() {
                     const styles = colorMap[risk.color];
                     const Icon = risk.icon;
                     return (
-                        <div
-                            key={i}
-                            className={`border ${styles.border} ${styles.bg} rounded-2xl p-6`}
-                        >
+                        <div key={i} className={`border ${styles.border} ${styles.bg} rounded-2xl p-6`}>
                             <div className="flex items-start gap-4 mb-3">
                                 <Icon className={`w-6 h-6 ${styles.text} shrink-0 mt-0.5`} />
                                 <div className="flex-1">
@@ -141,9 +113,7 @@ export default function RiskDisclosurePage() {
                                         </span>
                                         <h3 className="font-bold text-white text-base">{risk.title}</h3>
                                     </div>
-                                    <p className="text-gray-400 text-sm leading-relaxed">
-                                        {risk.description}
-                                    </p>
+                                    <p className="text-gray-400 text-sm leading-relaxed">{risk.description}</p>
                                 </div>
                             </div>
                         </div>
@@ -173,10 +143,10 @@ export default function RiskDisclosurePage() {
 
                 <div className="flex flex-wrap gap-3 justify-center pt-2">
                     <Link href="/terms" className="text-xs font-mono text-gray-400 hover:text-neon-cyan transition-colors border border-white/10 px-4 py-2 rounded-lg hover:border-neon-cyan/30">
-                        ← Terms of Service
+                        ← {t('footer.links.terms')}
                     </Link>
                     <Link href="/dashboard" className="text-xs font-mono text-gray-400 hover:text-neon-cyan transition-colors border border-white/10 px-4 py-2 rounded-lg hover:border-neon-cyan/30">
-                        → Launch Dashboard
+                        → {t('footer.links.dashboard')}
                     </Link>
                 </div>
             </div>

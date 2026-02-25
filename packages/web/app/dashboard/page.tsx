@@ -8,6 +8,7 @@ import { Canvas } from "@react-three/fiber";
 import { Environment, Float, Sphere, MeshTransmissionMaterial } from "@react-three/drei";
 import Link from 'next/link';
 import { ConnectButton, useCurrentAccount, useSignTransaction, useSuiClient } from '@mysten/dapp-kit';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { Transaction } from "@mysten/sui/transactions";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -80,12 +81,14 @@ function DashboardContent() {
     const account = useCurrentAccount();
     const suiClient = useSuiClient();
     const { mutateAsync: signTransaction } = useSignTransaction();
+    const { t } = useLanguage();
+
 
     // Helper: Require wallet for operations
     const requireAuth = () => {
         if (!account) {
-            toast.error("Wallet Required", {
-                description: "Please connect your Sui wallet to perform this operation.",
+            toast.error(t('dashboard.walletRequired'), {
+                description: t('dashboard.walletRequiredDesc'),
             });
             return false;
         }
@@ -435,26 +438,26 @@ function DashboardContent() {
 
     // --- 2. CONSTANTS & MEMOS ---
     const STRATEGIES: Record<string, { name: string, logPrefix: string, emoji: string }> = {
-        "sui-usdc-loop": { name: "SUI/USDC Kinetic Loop", logPrefix: "ARBITRAGE", emoji: "🔄" },
-        "turbo-sniper": { name: "Meme Volatility Sniper", logPrefix: "SNIPER", emoji: "🎯" },
-        "liquid-staking-arb": { name: "LST Peg Restoration", logPrefix: "PEG-ARB", emoji: "💧" },
-        "eliza-sentiment": { name: "Eliza Sentiment Engine", logPrefix: "AI-SENTIMENT", emoji: "🧠" },
-        "lending-loop-max": { name: "Navi-Scallop Recursive Yield", logPrefix: "LENDING", emoji: "📈" },
-        "manual-sui-dca": { name: "Manual SUI Accumulator (DCA)", logPrefix: "DCA", emoji: "💰" },
-        "manual-hedge-master": { name: "Delta Neutral Hedge Master", logPrefix: "HEDGE", emoji: "⚖️" },
-        "manual-lp-scout": { name: "Manual Liquidity Scout", logPrefix: "LP", emoji: "🌊" },
-        "manual-yield-harvester": { name: "Manual Yield Harvester", logPrefix: "HARVEST", emoji: "🚜" },
-        "manual-flash-arb": { name: "Alpha Flash Arb Trigger", logPrefix: "FLASH", emoji: "🎯" },
-        "blue-chip-dca": { name: "Weighted DCA Accumulator", logPrefix: "DCA", emoji: "💰" },
-        "stable-yield-agg": { name: "Stablecoin Optimization Loop", logPrefix: "STABLE", emoji: "🏦" },
-        "cetus-clmm-active": { name: "CLMM Active Provisioner", logPrefix: "CLMM", emoji: "🛠️" },
-        "bluefin-delta-neutral": { name: "Delta Neutral Funding Farmer", logPrefix: "DELTA", emoji: "⚖️" },
-        "mev-capture": { name: "MEV Extraction Engine", logPrefix: "MEV", emoji: "⚡" },
-        "perp-funding-arb": { name: "Perp Funding Rate Arbitrage", logPrefix: "PERP-FUND", emoji: "📊" },
-        "pyth-oracle-sniper": { name: "Oracle Latency Arbitrageur", logPrefix: "ORACLE-ARB", emoji: "🔭" },
-        "dual-yield-compounder": { name: "Dual Token Yield Compounder", logPrefix: "DUAL-YIELD", emoji: "🌀" },
-        "liquidation-hunter": { name: "Liquidation Vector", logPrefix: "LIQUIDATION", emoji: "🩸" },
-        "cross-chain-bridge-arb": { name: "Cross-Chain Spread Capture", logPrefix: "BRIDGE-ARB", emoji: "🌉" },
+        "sui-usdc-loop": { name: t('dashboard.strategies.sui-usdc-loop'), logPrefix: "ARBITRAGE", emoji: "🔄" },
+        "turbo-sniper": { name: t('dashboard.strategies.turbo-sniper'), logPrefix: "SNIPER", emoji: "🎯" },
+        "liquid-staking-arb": { name: t('dashboard.strategies.liquid-staking-arb'), logPrefix: "PEG-ARB", emoji: "💧" },
+        "eliza-sentiment": { name: t('dashboard.strategies.eliza-sentiment'), logPrefix: "AI-SENTIMENT", emoji: "🧠" },
+        "lending-loop-max": { name: t('dashboard.strategies.lending-loop-max'), logPrefix: "LENDING", emoji: "📈" },
+        "manual-sui-dca": { name: t('dashboard.strategies.manual-sui-dca'), logPrefix: "DCA", emoji: "💰" },
+        "manual-hedge-master": { name: t('dashboard.strategies.manual-hedge-master'), logPrefix: "HEDGE", emoji: "⚖️" },
+        "manual-lp-scout": { name: t('dashboard.strategies.manual-lp-scout'), logPrefix: "LP", emoji: "🌊" },
+        "manual-yield-harvester": { name: t('dashboard.strategies.manual-yield-harvester'), logPrefix: "HARVEST", emoji: "🚜" },
+        "manual-flash-arb": { name: t('dashboard.strategies.manual-flash-arb'), logPrefix: "FLASH", emoji: "🎯" },
+        "blue-chip-dca": { name: t('dashboard.strategies.blue-chip-dca'), logPrefix: "DCA", emoji: "💰" },
+        "stable-yield-agg": { name: t('dashboard.strategies.stable-yield-agg'), logPrefix: "STABLE", emoji: "🏦" },
+        "cetus-clmm-active": { name: t('dashboard.strategies.cetus-clmm-active'), logPrefix: "CLMM", emoji: "🛠️" },
+        "bluefin-delta-neutral": { name: t('dashboard.strategies.bluefin-delta-neutral'), logPrefix: "DELTA", emoji: "⚖️" },
+        "mev-capture": { name: t('dashboard.strategies.mev-capture'), logPrefix: "MEV", emoji: "⚡" },
+        "perp-funding-arb": { name: t('dashboard.strategies.perp-funding-arb'), logPrefix: "PERP-FUND", emoji: "📊" },
+        "pyth-oracle-sniper": { name: t('dashboard.strategies.pyth-oracle-sniper'), logPrefix: "ORACLE-ARB", emoji: "🔭" },
+        "dual-yield-compounder": { name: t('dashboard.strategies.dual-yield-compounder'), logPrefix: "DUAL-YIELD", emoji: "🌀" },
+        "liquidation-hunter": { name: t('dashboard.strategies.liquidation-hunter'), logPrefix: "LIQUIDATION", emoji: "🩸" },
+        "cross-chain-bridge-arb": { name: t('dashboard.strategies.cross-chain-bridge-arb'), logPrefix: "BRIDGE-ARB", emoji: "🌉" },
     };
 
     const strategyId = searchParams.get('strategy') || "sui-usdc-loop";
@@ -846,48 +849,35 @@ function DashboardContent() {
             });
 
             setLogs(prev => [
-                `[SUCCESS] ${currentStrategy.emoji} Agent Deployed ${agentCapId ? '(Cap Created)' : ''}`,
+                t('dashboard.logs.agentDeployed')
+                    .replace('{emoji}', currentStrategy.emoji)
+                    .replace('{cap}', agentCapId ? t('dashboard.logs.capCreated') : ''),
                 ...prev
             ].slice(0, 15));
 
             // Write live log to Supabase Ops Console
             writeLog(
-                `${currentStrategy.emoji} AGENT DEPLOYED: ${currentStrategy.name} ${agentCapId ? '| AgentCap Created' : '| One-off Mode'} | tx: ${result.digest.slice(0, 12)}...`,
+                t('dashboard.logs.agentDeployedDetail')
+                    .replace('{emoji}', currentStrategy.emoji)
+                    .replace('{name}', currentStrategy.name)
+                    .replace('{detail}', agentCapId ? t('dashboard.logs.capCreated') : t('dashboard.logs.oneOffMode'))
+                    .replace('{tx}', result.digest.slice(0, 12)),
                 'success',
                 account?.address
             );
 
-            // Strategy-specific boot logs (sequential, simulates agent coming online)
-            const STRATEGY_BOOT_LOGS: Record<string, Array<{ msg: string; level: 'info' | 'success' | 'warn' | 'system' }>> = {
-                'sui-usdc-loop': [{ msg: 'ARBITRAGE: Scanning SUI/USDC spread on DeepBook V3...', level: 'info' }, { msg: 'ARBITRAGE: Spread window detected (0.47%). Executing flash vector.', level: 'success' }],
-                'turbo-sniper': [{ msg: 'SNIPER: Monitoring Cetus mempool for new meme launches...', level: 'info' }, { msg: 'SNIPER: High-velocity token detected. Entering position.', level: 'warn' }],
-                'liquid-staking-arb': [{ msg: 'PEG-ARB: Reading afSUI/vSUI peg deviation...', level: 'info' }, { msg: 'PEG-ARB: Deviation 0.3% detected. Restoring peg via LST swap.', level: 'success' }],
-                'eliza-sentiment': [{ msg: 'AI-SENTIMENT: ElizaOS agent initializing X/Twitter feed scanner...', level: 'info' }, { msg: 'AI-SENTIMENT: Bullish signal detected — $SUI trending. Entering long.', level: 'success' }],
-                'lending-loop-max': [{ msg: 'LENDING: Binding Navi + Scallop recursive collateral positions...', level: 'info' }, { msg: 'LENDING: Recursive yield loop active — effective APY 3.2x base.', level: 'success' }],
-                'blue-chip-dca': [{ msg: 'DCA: TWAP schedule loaded — 4h intervals. Monitoring SUI price...', level: 'info' }, { msg: 'DCA: First buy order queued. Accumulation mode active.', level: 'success' }],
-                'stable-yield-agg': [{ msg: 'STABLE: Scanning USDC/USDT rates across Scallop, Navi, Cetus...', level: 'info' }, { msg: 'STABLE: Rotating capital to Cetus Pool (highest rate: 19.8%).', level: 'success' }],
-                'cetus-clmm-active': [{ msg: 'CLMM: Reading concentrated liquidity range for SUI/USDC pool...', level: 'info' }, { msg: 'CLMM: Position in range [$0.94-$1.06]. Fees accumulating.', level: 'success' }],
-                'bluefin-delta-neutral': [{ msg: 'DELTA: Opening Spot long + Perp short simultaneously...', level: 'info' }, { msg: 'DELTA: Delta neutral achieved. Funding rate harvest: +0.04%/8h.', level: 'success' }],
-                'mev-capture': [{ msg: 'MEV: Mempool scanning active — watching for front-run opportunities...', level: 'info' }, { msg: 'MEV: 1 transaction front-run. Profit captured: +0.12 SUI.', level: 'warn' }],
-                'perp-funding-arb': [{ msg: 'PERP-FUND: Reading Bluefin perpetual funding rates...', level: 'info' }, { msg: 'PERP-FUND: Positive funding confirmed (+0.04%). Harvesting every 8h.', level: 'success' }],
-                'pyth-oracle-sniper': [{ msg: 'ORACLE-ARB: Watching Pyth Network for price update blocks...', level: 'info' }, { msg: 'ORACLE-ARB: Latency window detected. Executing same-block arbitrage.', level: 'success' }],
-                'dual-yield-compounder': [{ msg: 'DUAL-YIELD: Splitting collateral — 50% validators, 50% Scallop USDC...', level: 'info' }, { msg: 'DUAL-YIELD: Dual yield stream active. SUI staking + USDC lending live.', level: 'success' }],
-                'liquidation-hunter': [{ msg: 'LIQUIDATION: Scanning Navi & Scallop for undercollateralized positions...', level: 'info' }, { msg: 'LIQUIDATION: Target found (LTV 94%). Executing liquidation at 5% discount.', level: 'warn' }],
-                'cross-chain-bridge-arb': [{ msg: 'BRIDGE-ARB: Checking Sui vs ETH price delta via Wormhole...', level: 'info' }, { msg: 'BRIDGE-ARB: 1.2% spread on USDC detected. Bridging and trading atomically.', level: 'success' }],
-            };
-
-            const bootLogs = STRATEGY_BOOT_LOGS[strategyId];
-            if (bootLogs) {
-                bootLogs.forEach((entry, i) => {
+            const bootLogsKeys = t(`dashboard.bootLogs.${strategyId}`) as unknown as string[];
+            if (Array.isArray(bootLogsKeys)) {
+                bootLogsKeys.forEach((msg, i) => {
                     setTimeout(() => {
-                        writeLog(entry.msg, entry.level, account?.address);
+                        writeLog(msg, (i === 1 && (strategyId === 'turbo-sniper' || strategyId === 'mev-capture' || strategyId === 'liquidation-hunter')) ? 'warn' : 'success', account?.address);
                     }, (i + 1) * 2000);
                 });
             }
         } catch (e) {
             console.error(e);
             toast.dismiss(toastId);
-            toast.error("Failed to build transaction");
+            toast.error(t('home.toasts.txFailed'));
         }
     };
 
@@ -898,19 +888,17 @@ function DashboardContent() {
 
         setConfirmConfig({
             isOpen: true,
-            title: "Terminate Agent?",
+            title: t('dashboard.terminateTitle'),
             description: (
                 <div className="space-y-3">
-                    <p className="text-xs text-gray-400">You are about to disconnect the autonomous logic for <span className="text-white font-bold">{foundStrategy.name}</span>.</p>
+                    <p className="text-xs text-gray-400">{t('dashboard.terminateDesc').replace('{name}', foundStrategy.name)}</p>
                     <div className="bg-red-500/5 border border-red-500/10 p-3 rounded-xl text-left">
                         <div className="flex items-center gap-2 mb-1.5">
                             <AlertTriangle size={14} className="text-red-500" />
-                            <span className="text-[10px] font-bold text-red-200 uppercase tracking-wider">Protocol Warning</span>
+                            <span className="text-[10px] font-bold text-red-200 uppercase tracking-wider">{t('dashboard.protocolWarning')}</span>
                         </div>
-                        <p className="text-[10px] text-gray-400 leading-relaxed font-mono">
-                            • Active positions will be frozen<br />
-                            • On-chain signature required<br />
-                            • Yield generation will cease immediately
+                        <p className="text-[10px] text-gray-400 leading-relaxed font-mono whitespace-pre-line">
+                            {t('dashboard.protocolWarningBody')}
                         </p>
                     </div>
                 </div>
@@ -919,7 +907,7 @@ function DashboardContent() {
                 <Shield size={32} className="text-red-500/50" />
                 <X size={16} className="absolute inset-0 m-auto text-red-500" />
             </div>,
-            confirmText: "STOP EXECUTION",
+            confirmText: t('dashboard.stopExecution'),
             type: 'danger',
             onConfirm: () => {
                 setConfirmConfig(prev => ({ ...prev, isOpen: false }));
@@ -933,8 +921,8 @@ function DashboardContent() {
 
         // Network Check (Strict)
         if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
-            toast.error("Wrong Network Detected", {
-                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            toast.error(t('home.toasts.wrongNetwork'), {
+                description: t('home.toasts.wrongNetworkDesc')
             });
             return;
         }
@@ -943,7 +931,7 @@ function DashboardContent() {
         const foundStrategy = activeStrategies.find(s => s.id === dbId || s.strategy_id === dbId);
         const agentCapId = foundStrategy?.agentCapId || foundStrategy?.config?.agentCapId;
 
-        const toastId = toast.loading(agentCapId ? "Revoking Agent License On-Chain..." : "Stopping Agent Locally...");
+        const toastId = toast.loading(agentCapId ? t('dashboard.revokingLicense') : t('dashboard.stoppingLocally'));
 
         try {
             // Step 1: Revoke Agent Permission On-Chain (Burn AgentCap) if exists
@@ -961,9 +949,9 @@ function DashboardContent() {
                 // Wait for user to sign
                 const result = await signAndExecuteTransaction({ transaction: tx as any });
                 console.log("Revoke Tx Digest:", result.digest);
-                toast.success("Agent License Revoked On-Chain", {
+                toast.success(t('dashboard.licenseRevoked'), {
                     action: {
-                        label: "View Tx",
+                        label: t('dashboard.viewTx'),
                         onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
                     }
                 });
@@ -981,10 +969,10 @@ function DashboardContent() {
                 const result = await signAndExecuteTransaction({ transaction: tx as any });
 
                 toast.dismiss(toastId);
-                toast.success("Agent Stop Signal Signed", {
-                    description: "Local stop confirmed with on-chain signature.",
+                toast.success(t('dashboard.stopSignalSigned'), {
+                    description: t('dashboard.stopConfirmed'),
                     action: {
-                        label: "View Tx",
+                        label: t('dashboard.viewTx'),
                         onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
                     }
                 });
@@ -1688,12 +1676,12 @@ function DashboardContent() {
                 <div className="flex flex-wrap items-center justify-between gap-2 bg-amber-500/5 border border-amber-500/15 rounded-xl px-4 py-2.5 text-[9px] font-mono">
                     <div className="flex items-center gap-2 text-amber-400/80">
                         <AlertTriangle size={10} className="shrink-0" />
-                        <span><span className="text-white font-bold">SuiLoop is open-source software, not a financial service.</span> Non-custodial. No KYC. High risk — only use funds you can afford to lose.</span>
+                        <span><span className="text-white font-bold">{t('dashboard.legalNotice')}</span> {t('dashboard.nonCustodial')}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">Terms</a>
+                        <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">{t('footer.links.terms')}</a>
                         <span className="text-gray-700">|</span>
-                        <a href="/risk-disclosure" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">Risk Disclosure</a>
+                        <a href="/risk-disclosure" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">{t('footer.links.risk')}</a>
                     </div>
                 </div>
             </div>
@@ -1719,32 +1707,32 @@ function DashboardContent() {
                                 <div className="absolute inset-0 bg-neon-cyan/20 rounded-full animate-ping group-hover:animate-none opacity-20"></div>
                                 <span className="text-2xl relative z-10">{currentStrategy.emoji}</span>
                             </div>
-                            <h2 className="text-xl font-bold text-white mb-1.5 leading-tight">Deploy {currentStrategy.name}?</h2>
+                            <h2 className="text-xl font-bold text-white mb-1.5 leading-tight">{t('dashboard.deployStrategy').replace('{name}', currentStrategy.name)}</h2>
                             <div className="bg-neon-cyan/5 border border-neon-cyan/20 p-3 rounded-lg mb-4">
                                 <div className="flex justify-between items-center text-[9px] text-gray-400 uppercase tracking-widest mb-0.5 font-mono">
-                                    <span>PROTOCOL FEE</span>
-                                    <span>AUTHORIZED</span>
+                                    <span>{t('dashboard.protocolFee')}</span>
+                                    <span>{t('dashboard.authorized')}</span>
                                 </div>
                                 <p className="text-neon-cyan font-mono text-base font-bold flex justify-between items-baseline">
                                     <span>0.10</span>
-                                    <span className="text-[10px] ml-1 opacity-70 font-sans">SUI TESTNET</span>
+                                    <span className="text-[10px] ml-1 opacity-70 font-sans">{t('dashboard.suiTestnet')}</span>
                                 </p>
                             </div>
                             <p className="text-gray-400 mb-6 text-xs leading-relaxed max-w-[280px] mx-auto">
-                                Initializing autonomous logic gates. Deployment includes secure vault synchronization.
+                                {t('dashboard.deploymentDesc')}
                             </p>
                             <div className="flex gap-3">
                                 <button
                                     onClick={() => setShowAutoStartModal(false)}
                                     className="flex-1 px-3 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-colors font-mono font-bold text-[10px]"
                                 >
-                                    CANCEL
+                                    {t('dashboard.cancel')}
                                 </button>
                                 <button
                                     onClick={confirmAutoStart}
                                     className="flex-1 px-3 py-2.5 rounded-lg bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all font-mono font-bold text-[10px] shadow-[0_0_20px_rgba(0,243,255,0.2)] flex items-center justify-center gap-1.5 group"
                                 >
-                                    CONFIRM
+                                    {t('dashboard.confirm')}
                                     <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
                             </div>
@@ -1787,10 +1775,16 @@ function DashboardContent() {
                                     </div>
                                     <div>
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h2 className="text-xl font-bold text-white tracking-tight">{selectedStrategy.name}</h2>
+                                            <h2 className="text-xl font-bold text-white tracking-tight">
+                                                {t(`strategies.list.${selectedStrategy.strategy_id}.name`) !== `strategies.list.${selectedStrategy.strategy_id}.name`
+                                                    ? t(`strategies.list.${selectedStrategy.strategy_id}.name`)
+                                                    : (t(`dashboard.strategies.${selectedStrategy.strategy_id}`) !== `dashboard.strategies.${selectedStrategy.strategy_id}`
+                                                        ? t(`dashboard.strategies.${selectedStrategy.strategy_id}`)
+                                                        : selectedStrategy.name)}
+                                            </h2>
                                             <span className="px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] text-green-400 font-mono flex items-center gap-1">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-                                                RUNNING
+                                                {t('dashboard.running')}
                                             </span>
                                         </div>
                                         <p className="text-xs text-gray-400 font-mono">ID: {selectedStrategy.id.slice(0, 8)}...{selectedStrategy.id.slice(-4)}</p>
@@ -1804,15 +1798,15 @@ function DashboardContent() {
                                 {/* Key Metrics Grid */}
                                 <div className="grid grid-cols-3 gap-3">
                                     <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Target Yield</p>
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.targetYield')}</p>
                                         <p className="text-neon-cyan font-mono font-bold text-lg">{selectedStrategy.yield}</p>
                                     </div>
                                     <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Profit 24h</p>
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.profit24h')}</p>
                                         <p className="text-green-400 font-mono font-bold text-lg">+{(0.24).toFixed(2)} SUI</p>
                                     </div>
                                     <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Uptime</p>
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.uptime')}</p>
                                         <p className="text-white font-mono font-bold text-lg">{(Math.random() * 24).toFixed(1)}h</p>
                                     </div>
                                 </div>
@@ -1821,14 +1815,14 @@ function DashboardContent() {
                                 <div className="space-y-2">
                                     <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
                                         <Zap size={12} className="text-neon-cyan" />
-                                        Latest Execution
+                                        {t('dashboard.latestExecution')}
                                     </h3>
 
                                     <div className="bg-black/40 border border-white/10 rounded-xl p-4 space-y-3 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-neon-cyan/10 transition-colors"></div>
 
                                         <div className="relative z-10 flex justify-between items-center pb-3 border-b border-white/5">
-                                            <span className="text-xs text-gray-400">Transaction Hash</span>
+                                            <span className="text-xs text-gray-400">{t('dashboard.txHash')}</span>
                                             {selectedStrategy.tx_digest ? (
                                                 <a
                                                     href={`https://suiscan.xyz/testnet/tx/${selectedStrategy.tx_digest}`}
@@ -1840,17 +1834,17 @@ function DashboardContent() {
                                                     <ExternalLink size={10} />
                                                 </a>
                                             ) : (
-                                                <span className="text-xs text-gray-600 font-mono italic">Pending...</span>
+                                                <span className="text-xs text-gray-600 font-mono italic">{t('dashboard.pending')}</span>
                                             )}
                                         </div>
 
                                         <div className="relative z-10 grid grid-cols-2 gap-4 pt-1">
                                             <div>
-                                                <p className="text-[9px] text-gray-500 uppercase mb-0.5">Network</p>
-                                                <p className="text-xs text-white font-mono">Sui Testnet</p>
+                                                <p className="text-[9px] text-gray-500 uppercase mb-0.5">{t('dashboard.network')}</p>
+                                                <p className="text-xs text-white font-mono">{t('dashboard.suiTestnet')}</p>
                                             </div>
                                             <div className="text-right">
-                                                <p className="text-[9px] text-gray-500 uppercase mb-0.5">Protocol</p>
+                                                <p className="text-[9px] text-gray-500 uppercase mb-0.5">{t('dashboard.protocol')}</p>
                                                 <p className="text-xs text-white font-mono">
                                                     {selectedStrategy?.strategy_id?.includes('lending') || selectedStrategy?.strategy_id?.includes('loop') ? 'Navi / Scallop' :
                                                         selectedStrategy?.strategy_id?.includes('cetus') ? 'Cetus CLMM' :
@@ -1869,7 +1863,7 @@ function DashboardContent() {
                                 <div className="space-y-3">
                                     <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
                                         <Cpu size={12} className="text-purple-400" />
-                                        Installed Plugins
+                                        {t('dashboard.installedPlugins')}
                                     </h3>
 
                                     {isSkillsLoading ? (
@@ -1891,7 +1885,7 @@ function DashboardContent() {
                                                             <div className="flex items-center gap-2">
                                                                 <p className="text-xs font-bold text-white">{skill.name}</p>
                                                                 {skill.isGlobal && (
-                                                                    <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">GLOBAL</span>
+                                                                    <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">{t('nav.matrix')}</span>
                                                                 )}
                                                             </div>
                                                             <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
@@ -1909,7 +1903,7 @@ function DashboardContent() {
                                         </div>
                                     ) : (
                                         <div className="text-center py-4 bg-white/5 rounded-xl border border-dashed border-white/10">
-                                            <p className="text-[10px] text-gray-500 italic">No plugins installed on this unit.</p>
+                                            <p className="text-[10px] text-gray-500 italic">{t('dashboard.noPlugins')}</p>
                                         </div>
                                     )}
                                 </div>
@@ -1918,7 +1912,7 @@ function DashboardContent() {
                                 <div className="space-y-3">
                                     <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
                                         <Code size={12} className="text-neon-cyan" />
-                                        Installed Skills
+                                        {t('dashboard.installedSkills')}
                                     </h3>
 
                                     {isSkillsLoading ? (
@@ -1940,7 +1934,7 @@ function DashboardContent() {
                                                             <div className="flex items-center gap-2">
                                                                 <p className="text-xs font-bold text-white">{skill.name}</p>
                                                                 {skill.isGlobal && (
-                                                                    <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">GLOBAL</span>
+                                                                    <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">{t('nav.matrix')}</span>
                                                                 )}
                                                             </div>
                                                             <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
@@ -1958,7 +1952,7 @@ function DashboardContent() {
                                         </div>
                                     ) : (
                                         <div className="text-center py-4 bg-white/5 rounded-xl border border-dashed border-white/10">
-                                            <p className="text-[10px] text-gray-500 italic">No skills installed on this unit.</p>
+                                            <p className="text-[10px] text-gray-500 italic">{t('dashboard.noSkills')}</p>
                                         </div>
                                     )}
                                 </div>
@@ -1968,11 +1962,11 @@ function DashboardContent() {
                                     <div className="space-y-2">
                                         <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
                                             <Shield size={12} className="text-purple-400" />
-                                            Security Context
+                                            {t('dashboard.securityContext')}
                                         </h3>
                                         <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between">
                                             <div>
-                                                <p className="text-[10px] text-gray-400 uppercase">Agent Capability ID</p>
+                                                <p className="text-[10px] text-gray-400 uppercase">{t('dashboard.agentCapId')}</p>
                                                 <p className="text-xs font-mono text-gray-300 truncate max-w-[200px]">{selectedStrategy.agentCapId}</p>
                                             </div>
                                             <button
@@ -1995,7 +1989,7 @@ function DashboardContent() {
                                     onClick={() => setSelectedStrategy(null)}
                                     className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-white/5 hover:bg-white/10 text-gray-300 transition-colors border border-white/5"
                                 >
-                                    CLOSE VIEW
+                                    {t('dashboard.closeView')}
                                 </button>
                                 <button
                                     onClick={() => {
@@ -2005,7 +1999,7 @@ function DashboardContent() {
                                     className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 transition-colors flex items-center justify-center gap-2 group"
                                 >
                                     <Trash2 size={14} className="group-hover:scale-110 transition-transform" />
-                                    TERMINATE AGENT
+                                    {t('dashboard.terminateAgent')}
                                 </button>
                             </div>
                         </motion.div>
@@ -2053,7 +2047,7 @@ function DashboardContent() {
                                         onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
                                         className="flex-1 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all font-bold text-[10px]"
                                     >
-                                        DISMISS
+                                        {t('dashboard.dismiss')}
                                     </button>
                                     <button
                                         onClick={confirmConfig.onConfirm}
@@ -2075,18 +2069,18 @@ function DashboardContent() {
             {/* Real-Time Analytics Bar */}
             <div className="w-full max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 relative z-10">
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Secure Vault TVL</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.secureVaultTvl')}</h3>
                     <div className="text-xl font-mono text-white font-bold">
                         {vaultBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">{baseAsset}</span>
                     </div>
                     <div className="text-[10px] text-gray-500 mt-1 flex items-center gap-1.5 font-sans">
                         <div className="w-1 h-1 rounded-full bg-neon-cyan" />
-                        WALLET: {walletBalance.toFixed(3)} {baseAsset}
+                        {t('dashboard.walletBalanceLabel')} {walletBalance.toFixed(3)} {baseAsset}
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
                     <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">
-                        Market Alpha ({baseAsset} APY)
+                        {t('dashboard.marketAlpha')} ({baseAsset} APY)
                     </h3>
                     <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
                         {baseAsset === 'USDC'
@@ -2099,19 +2093,19 @@ function DashboardContent() {
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Projected Yield (24H)</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.projectedYield')}</h3>
                     <div className="text-xl font-mono text-white font-bold">
                         +{(vaultBalance * ((scallopData?.supplyApy || 0) / 100 / 365)).toFixed(4)} <span className="text-xs text-gray-500">{baseAsset}</span>
                     </div>
                 </div>
                 <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">Matrix Sentiment</h3>
+                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.matrixSentiment')}</h3>
                     <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
                         {activeStrategies.length > 5 ? 'EUPHORIC' : 'NEUTRAL'}
                         <TrendingUp className="w-4 h-4 text-green-400" />
                     </div>
                     <div className="text-[10px] text-gray-500 mt-1 font-mono">
-                        Global Neural Sync: 99.4%
+                        {t('dashboard.globalSync')} 99.4%
                     </div>
                 </div>
             </div>
@@ -2137,8 +2131,8 @@ function DashboardContent() {
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-3">
                                         <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                            Neural Security Enclave
-                                            {vaultId && <span className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-2 py-0.5 rounded-full border border-neon-cyan/20">ACTIVE</span>}
+                                            {t('dashboard.securityEnclave')}
+                                            {vaultId && <span className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-2 py-0.5 rounded-full border border-neon-cyan/20">{t('dashboard.active')}</span>}
                                         </h3>
                                         <div className="flex items-center bg-black/40 border border-white/10 rounded-lg p-1">
                                             <button
@@ -2156,18 +2150,18 @@ function DashboardContent() {
                                         </div>
                                     </div>
                                     <p className="text-xs text-gray-500 font-mono mt-1">
-                                        {vaultId ? `ID: ${vaultId.slice(0, 6)}...${vaultId.slice(-4)}` : 'Vault ID: Not Created'} • {vaultBalance.toFixed(2)} {baseAsset} Locked
+                                        {vaultId ? `ID: ${vaultId.slice(0, 6)}...${vaultId.slice(-4)}` : t('dashboard.vaultIdNotCreated')} • {vaultBalance.toFixed(2)} {baseAsset} {t('dashboard.locked')}
                                     </p>
                                     <div className="flex items-center gap-2 pt-1">
                                         {activeStrategies.length > 0 && vaultId ? (
                                             <span className="text-[10px] font-bold text-green-400 flex items-center gap-1.5 bg-green-500/5 px-2 py-1 rounded-lg border border-green-500/10">
                                                 <RefreshCw size={10} className="animate-spin-slow" />
-                                                AGENT ACCESS: GRANTED 🔓
+                                                {t('dashboard.agentAccessGranted')}
                                             </span>
                                         ) : (
                                             <span className="text-[10px] font-bold text-orange-400 flex items-center gap-1.5 bg-orange-500/5 px-2 py-1 rounded-lg border border-orange-500/10">
                                                 <Shield size={10} />
-                                                AGENT ACCESS: REVOKED 🔒
+                                                {t('dashboard.agentAccessRevoked')}
                                             </span>
                                         )}
                                         {vaultId && (
@@ -2189,7 +2183,7 @@ function DashboardContent() {
                                         onClick={handleCreateVault}
                                         className="bg-neon-cyan text-black font-bold text-xs px-6 py-3 rounded-xl hover:bg-neon-cyan/80 transition-all shadow-[0_0_20px_rgba(0,243,255,0.3)] animate-pulse"
                                     >
-                                        + INITIALIZE VAULT
+                                        {t('dashboard.initializeVault')}
                                     </button>
                                 ) : (
                                     <div className="flex gap-2">
@@ -2197,13 +2191,13 @@ function DashboardContent() {
                                             onClick={handleDeposit}
                                             className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-lg"
                                         >
-                                            Inject
+                                            {t('dashboard.inject')}
                                         </button>
                                         <button
                                             onClick={handleWithdraw}
                                             className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white text-xs font-bold transition-all hover:scale-105 active:scale-95"
                                         >
-                                            Extract
+                                            {t('dashboard.extract')}
                                         </button>
                                     </div>
                                 )}
@@ -2219,11 +2213,11 @@ function DashboardContent() {
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-sm text-gray-400 uppercase tracking-widest flex items-center gap-2">
                                 <RefreshCw size={14} className={activeStrategies.length > 0 ? "animate-spin-slow text-neon-cyan" : "text-gray-600"} />
-                                Neural Unit Fleet ({activeStrategies.length}/10)
+                                {t('dashboard.unitFleet')} ({activeStrategies.length}/10)
                             </h2>
                             {activeStrategies.length === 0 && (
                                 <button onClick={handleDeploy} className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
-                                    DEPLOY DEFAULT LOOP
+                                    {t('dashboard.deployDefault')}
                                 </button>
                             )}
                         </div>
@@ -2246,10 +2240,18 @@ function DashboardContent() {
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-2xl">{strat.emoji}</span>
                                                     <div>
-                                                        <h3 className="font-bold text-sm leading-tight text-white">{strat.name}</h3>
+                                                        <h3 className="font-bold text-sm leading-tight text-white">
+                                                            {t(`strategies.list.${strat.strategy_id}.name`) !== `strategies.list.${strat.strategy_id}.name`
+                                                                ? t(`strategies.list.${strat.strategy_id}.name`)
+                                                                : (t(`dashboard.strategies.${strat.strategy_id}`) !== `dashboard.strategies.${strat.strategy_id}`
+                                                                    ? t(`dashboard.strategies.${strat.strategy_id}`)
+                                                                    : (t(`dashboard.strategies.${strat.id}`) !== `dashboard.strategies.${strat.id}`
+                                                                        ? t(`dashboard.strategies.${strat.id}`)
+                                                                        : strat.name))}
+                                                        </h3>
                                                         <span className="text-[10px] text-green-400 font-mono flex items-center gap-1">
                                                             <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                                                            ACTIVE
+                                                            {t('dashboard.active')}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -2286,14 +2288,14 @@ function DashboardContent() {
                                                         <ExternalLink size={10} />
                                                     </a>
                                                 ) : (
-                                                    <span className="text-[10px] font-mono text-gray-500">Pending Execution...</span>
+                                                    <span className="text-[10px] font-mono text-gray-500">{t('dashboard.pendingExecution')}</span>
                                                 )}
 
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); stopStrategy(strat.id); }}
                                                     className="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] px-2.5 py-1.5 rounded-lg border border-red-500/10 transition-colors"
                                                 >
-                                                    STOP
+                                                    {t('dashboard.stop')}
                                                 </button>
                                             </div>
                                         </motion.div>
@@ -2307,8 +2309,8 @@ function DashboardContent() {
                                     💤
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-gray-400 font-medium">No agents currently deployed.</p>
-                                    <p className="text-xs text-gray-600 max-w-xs mx-auto">Initialize your Secure Vault and select a strategy to begin automated trading.</p>
+                                    <p className="text-gray-400 font-medium">{t('dashboard.noAgents')}</p>
+                                    <p className="text-xs text-gray-600 max-w-xs mx-auto">{t('dashboard.noAgentsDesc')}</p>
                                 </div>
                             </div>
                         )}
@@ -2335,8 +2337,8 @@ function DashboardContent() {
                         </div>
 
                         <h3 className="text-sm text-gray-400 uppercase tracking-widest mb-4 flex items-center justify-between">
-                            Neural Unit Registry
-                            <span className="text-neon-cyan font-mono text-xs">{activeStrategies.length} SYNCED</span>
+                            {t('dashboard.unitRegistry')}
+                            <span className="text-neon-cyan font-mono text-xs">{activeStrategies.length} {t('dashboard.synced')}</span>
                         </h3>
 
                         {activeStrategies.length === 0 ? (
@@ -2344,9 +2346,9 @@ function DashboardContent() {
                                 <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-gray-600">
                                     <span className="text-2xl">💤</span>
                                 </div>
-                                <p className="text-sm text-gray-400">No agents running.</p>
+                                <p className="text-sm text-gray-400">{t('dashboard.noAgents')}</p>
                                 <button onClick={handleDeploy} className="text-xs bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
-                                    Deploy Loop (v2.0)
+                                    {t('dashboard.deployDefault')} (v2.0)
                                 </button>
                             </div>
                         ) : (
@@ -2360,13 +2362,13 @@ function DashboardContent() {
                                                     <h4 className="text-xs font-bold text-white">{strat.name}</h4>
                                                     <span className="text-[10px] text-green-400 flex items-center gap-1 font-mono">
                                                         <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                                                        RUNNING
+                                                        {t('dashboard.running')}
                                                     </span>
                                                 </div>
                                             </div>
                                             <div className="text-right">
                                                 <div className="text-xs text-neon-cyan font-mono font-bold">{strat.yield}</div>
-                                                <div className="text-[9px] text-gray-500">TARGET APY</div>
+                                                <div className="text-[9px] text-gray-500">{t('dashboard.metrics.targetYield')}</div>
                                             </div>
                                         </div>
                                         <div className="flex gap-2 mt-2">
@@ -2374,13 +2376,13 @@ function DashboardContent() {
                                                 onClick={(e) => { e.stopPropagation(); setSelectedStrategy(strat); }}
                                                 className="flex-1 bg-white/5 hover:bg-white/10 text-[10px] py-1.5 rounded transition-colors text-gray-300 border border-transparent hover:border-white/10"
                                             >
-                                                DETAILS
+                                                {t('dashboard.details')}
                                             </button>
                                             <button
                                                 onClick={() => stopStrategy(strat.id)}
                                                 className="px-3 bg-red-500/10 hover:bg-red-500/20 text-[10px] py-1.5 rounded transition-colors text-red-400 border border-red-500/20"
                                             >
-                                                STOP
+                                                {t('dashboard.stop')}
                                             </button>
                                         </div>
                                     </div>
@@ -2393,13 +2395,13 @@ function DashboardContent() {
                             <Link href="/strategies" className="w-full">
                                 <button className="w-full bg-white/5 hover:bg-white/10 text-[11px] font-bold py-2 rounded-xl transition-all border border-white/10 text-gray-300 flex items-center justify-center gap-2">
                                     <Zap className="w-3 h-3 text-neon-cyan" />
-                                    DEPLOY MORE AGENTS
+                                    {t('dashboard.deployMore')}
                                 </button>
                             </Link>
                             <Link href="/strategies/builder" className="w-full">
                                 <button className="w-full bg-neon-cyan/10 hover:bg-neon-cyan/20 text-[11px] font-bold py-2 rounded-xl transition-all border border-neon-cyan/20 text-neon-cyan flex items-center justify-center gap-2">
                                     <Plus className="w-3 h-3" />
-                                    CREATE YOUR AGENT
+                                    {t('dashboard.createYourAgent')}
                                 </button>
                             </Link>
                         </div>
@@ -2412,18 +2414,18 @@ function DashboardContent() {
                         transition={{ delay: 0.15 }}
                         className="glass-panel p-4 rounded-xl border border-white/5"
                     >
-                        <h3 className="text-xs text-gray-400 uppercase tracking-widest mb-3">Matrix Liquidity Alpha</h3>
+                        <h3 className="text-xs text-gray-400 uppercase tracking-widest mb-3">{t('dashboard.liquidityAlpha')}</h3>
                         <div className="grid grid-cols-2 gap-3">
                             <div className="bg-white/5 p-2 rounded border border-white/5 hover:border-neon-cyan/30 transition-colors">
                                 <div className="text-[10px] text-neon-cyan font-bold mb-1 flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan"></span> NAVI
                                 </div>
                                 <div className="flex justify-between text-xs mb-1">
-                                    <span className="text-gray-400">Supply</span>
+                                    <span className="text-gray-400">{t('dashboard.supply')}</span>
                                     <span className="text-green-400 font-mono">{naviData?.supplyApy || '--'}%</span>
                                 </div>
                                 <div className="flex justify-between text-xs">
-                                    <span className="text-gray-400">Borrow</span>
+                                    <span className="text-gray-400">{t('dashboard.borrow')}</span>
                                     <span className="text-red-400 font-mono">{naviData?.borrowApy || '--'}%</span>
                                 </div>
                             </div>
@@ -2432,11 +2434,11 @@ function DashboardContent() {
                                     <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span> SCALLOP
                                 </div>
                                 <div className="flex justify-between text-xs mb-1">
-                                    <span className="text-gray-400">Supply</span>
+                                    <span className="text-gray-400">{t('dashboard.supply')}</span>
                                     <span className="text-green-400 font-mono">{scallopData?.supplyApy || '--'}%</span>
                                 </div>
                                 <div className="flex justify-between text-xs">
-                                    <span className="text-gray-400">Borrow</span>
+                                    <span className="text-gray-400">{t('dashboard.borrow')}</span>
                                     <span className="text-red-400 font-mono">{scallopData?.borrowApy || '--'}%</span>
                                 </div>
                             </div>
@@ -2464,13 +2466,14 @@ function DashboardContent() {
 }
 
 export default function Dashboard() {
+    const { t } = useLanguage();
     return (
         <main className="min-h-screen">
             <Suspense fallback={
                 <div className="min-h-screen flex items-center justify-center">
                     <div className="flex flex-col items-center gap-4">
                         <div className="w-12 h-12 border-4 border-neon-cyan border-t-transparent rounded-full animate-spin"></div>
-                        <p className="text-neon-cyan font-mono animate-pulse">Initializing Dashboard...</p>
+                        <p className="text-neon-cyan font-mono animate-pulse">{t('dashboard.initializing')}</p>
                     </div>
                 </div>
             }>
