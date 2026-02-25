@@ -1,0 +1,132 @@
+{
+    "nav": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "marketplace": "Marketplace",
+        "strategies": "Strategies",
+        "agents": "Agents",
+        "analytics": "Analytics",
+        "docs": "Docs",
+        "leaderboard": "Leaderboard",
+        "plugins": "Plugins",
+        "launch": "Launch App"
+    },
+    "footer": {
+        "tagline": "The decentralized Neural Matrix for Sui. Autonomous agent orchestration with on-chain ELO reputation, DeepBook V3 flash vectors, and Walrus forensic logging.",
+        "mainframe": "Neural Mainframe",
+        "intelligence": "Intelligence",
+        "stats": "Protocol Stats",
+        "links": {
+            "dashboard": "Neural Dashboard",
+            "analytics": "Matrix Analytics",
+            "strategies": "Neural Ops",
+            "builder": "Strategy Builder",
+            "marketplace": "Marketplace",
+            "plugins": "Plugins",
+            "agents": "Sentinel Console",
+            "manifesto": "Matrix Manifesto",
+            "howToUse": "How To Use",
+            "docs": "Technical Docs",
+            "terms": "Terms of Service",
+            "risk": "Risk Disclosure",
+            "source": "Kernel Source"
+        },
+        "copyright": "© 2026 SuiLoop Protocol. MIT License. Open-Source Software.",
+        "architect": "Architect: Vaiosx",
+        "legal": "Not a financial service. Non-custodial software only.",
+        "launch": "Launch Dashboard"
+    },
+    "legal": {
+        "banner": {
+            "title": "SuiLoop is open-source software, not a financial service.",
+            "body": "Non-custodial. No KYC. High risk — only use funds you can afford to lose.",
+            "terms": "Terms of Service",
+            "risk": "Risk Disclosure",
+            "cta": "I Understand"
+        }
+    },
+    "home": {
+        "hero": {
+            "badge": "Autonomous DeFi Protocol · Sui Network",
+            "title1": "The Neural",
+            "title2": "DeFi Matrix",
+            "description": "Institutional-grade autonomous AI agents that execute flash loans, arbitrage, and yield strategies — with mathematical safety enforced by Sui Move smart contracts.",
+            "launch": "Launch Dashboard",
+            "docs": "Read Docs"
+        },
+        "stats": {
+            "agents": "Active Agents",
+            "volume": "Flash Volume",
+            "uptime": "Uptime",
+            "apy": "Avg APY"
+        },
+        "features": {
+            "title": "Why SuiLoop?",
+            "nonCustodial": {
+                "title": "Non-Custodial Vaults",
+                "description": "Your funds are held in on-chain Vault objects. The agent can execute strategies, but only you can withdraw — enforced by immutable Move bytecode."
+            },
+            "flashLoans": {
+                "title": "Hot Potato Flash Loans",
+                "description": "Borrowed capital must be repaid in the same Programmable Transaction Block or it reverts atomically. Zero risk of debt, zero collateral required."
+            },
+            "agents": {
+                "title": "Autonomous AI Agents",
+                "description": "Deploy named agents (TITAN, ELIZA, WHALE) with on-chain ELO reputation. Each agent has a strategy profile, risk tolerance, and verifiable track record."
+            },
+            "verified": {
+                "title": "Move Prover Verified",
+                "description": "Smart contracts are formally verified with the Move Prover. Solvency invariants are mathematically proven, not just tested."
+            }
+        },
+        "cta": {
+            "title": "Ready to Deploy?",
+            "description": "Connect your Sui wallet and deploy your first autonomous agent in minutes.",
+            "button": "Start Now"
+        }
+    },
+    "dashboard": {
+        "legalNotice": "SuiLoop is open-source software, not a financial service.",
+        "nonCustodial": "Non-custodial. No KYC. High risk — only use funds you can afford to lose.",
+        "vault": {
+            "title": "Secure Vault",
+            "create": "Create Vault",
+            "destroy": "Destroy Vault",
+            "deposit": "Deposit",
+            "withdraw": "Withdraw",
+            "balance": "Vault Balance",
+            "agentAccess": "Agent Access",
+            "granted": "GRANTED",
+            "revoked": "REVOKED"
+        },
+        "strategy": {
+            "deploy": "Deploy Strategy",
+            "stop": "Stop",
+            "active": "Active Strategy"
+        }
+    },
+    "terms": {
+        "title": "Terms of Service",
+        "lastUpdated": "Last updated: February 25, 2026 · Effective upon use of the Protocol",
+        "warning": {
+            "title": "High Risk Disclosure",
+            "body": "DeFi strategies carry significant financial risk including total loss of deposited funds. SuiLoop is a software tool, not an investment service. You interact with blockchain smart contracts directly — no entity can reverse on-chain transactions. Only use funds you can afford to lose entirely."
+        }
+    },
+    "risk": {
+        "title": "Extended Risk Disclosure",
+        "warning": "Read this document carefully before using SuiLoop. By deploying a Vault or executing any on-chain strategy, you acknowledge you have read, understood, and accepted all risks described herein.",
+        "critical": "CRITICAL WARNING — READ BEFORE PROCEEDING",
+        "criticalBody": "DeFi is highly experimental. Only interact with SuiLoop using funds you can afford to lose entirely. SuiLoop is software infrastructure, not a financial product. No entity — including SuiLoop operators — can recover funds lost due to smart contract failures, market volatility, or user error. Transactions on Sui are irreversible."
+    },
+    "common": {
+        "connectWallet": "Connect Wallet",
+        "viewExplorer": "View on Explorer",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "close": "Close"
+    }
+}

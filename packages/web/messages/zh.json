@@ -1,0 +1,132 @@
+{
+    "nav": {
+        "home": "首页",
+        "dashboard": "控制台",
+        "marketplace": "市场",
+        "strategies": "策略",
+        "agents": "代理",
+        "analytics": "分析",
+        "docs": "文档",
+        "leaderboard": "排行榜",
+        "plugins": "插件",
+        "launch": "启动应用"
+    },
+    "footer": {
+        "tagline": "Sui 的去中心化神经矩阵。具备链上 ELO 声誉的自主代理编排、DeepBook V3 闪电向量和 Walrus 取证日志。",
+        "mainframe": "神经主机",
+        "intelligence": "智能",
+        "stats": "协议统计",
+        "links": {
+            "dashboard": "神经控制台",
+            "analytics": "矩阵分析",
+            "strategies": "神经操作",
+            "builder": "策略构建器",
+            "marketplace": "市场",
+            "plugins": "插件",
+            "agents": "哨兵控制台",
+            "manifesto": "矩阵宣言",
+            "howToUse": "使用方法",
+            "docs": "技术文档",
+            "terms": "服务条款",
+            "risk": "风险披露",
+            "source": "内核源码"
+        },
+        "copyright": "© 2026 SuiLoop 协议。MIT 许可证。开源软件。",
+        "architect": "架构师：Vaiosx",
+        "legal": "非金融服务。仅限非托管软件。",
+        "launch": "启动控制台"
+    },
+    "legal": {
+        "banner": {
+            "title": "SuiLoop 是开源软件，不是金融服务。",
+            "body": "非托管。无 KYC。高风险 — 仅使用您能承受损失的资金。",
+            "terms": "服务条款",
+            "risk": "风险披露",
+            "cta": "我已了解"
+        }
+    },
+    "home": {
+        "hero": {
+            "badge": "自主 DeFi 协议 · Sui 网络",
+            "title1": "神经",
+            "title2": "DeFi 矩阵",
+            "description": "机构级自主 AI 代理，执行闪电贷、套利和收益策略 — 由 Sui Move 智能合约强制执行数学安全保证。",
+            "launch": "启动控制台",
+            "docs": "阅读文档"
+        },
+        "stats": {
+            "agents": "活跃代理",
+            "volume": "闪电量",
+            "uptime": "正常运行时间",
+            "apy": "平均 APY"
+        },
+        "features": {
+            "title": "为什么选择 SuiLoop？",
+            "nonCustodial": {
+                "title": "非托管金库",
+                "description": "您的资金保存在链上 Vault 对象中。代理可以执行策略，但只有您才能提款 — 由不可变的 Move 字节码强制执行。"
+            },
+            "flashLoans": {
+                "title": "热土豆闪电贷",
+                "description": "借入的资本必须在同一个可编程交易块中偿还，否则原子回滚。零债务风险，无需抵押。"
+            },
+            "agents": {
+                "title": "自主 AI 代理",
+                "description": "部署具名代理（TITAN、ELIZA、WHALE），具备链上 ELO 声誉。每个代理都有策略配置文件、风险承受度和可验证的业绩记录。"
+            },
+            "verified": {
+                "title": "Move Prover 验证",
+                "description": "智能合约通过 Move Prover 正式验证。偿付性不变量经过数学证明，而不仅仅是测试。"
+            }
+        },
+        "cta": {
+            "title": "准备好部署了吗？",
+            "description": "连接您的 Sui 钱包，几分钟内即可部署您的第一个自主代理。",
+            "button": "立即开始"
+        }
+    },
+    "dashboard": {
+        "legalNotice": "SuiLoop 是开源软件，不是金融服务。",
+        "nonCustodial": "非托管。无 KYC。高风险 — 仅使用您能承受损失的资金。",
+        "vault": {
+            "title": "安全金库",
+            "create": "创建金库",
+            "destroy": "销毁金库",
+            "deposit": "存款",
+            "withdraw": "提款",
+            "balance": "金库余额",
+            "agentAccess": "代理访问",
+            "granted": "已授权",
+            "revoked": "已撤销"
+        },
+        "strategy": {
+            "deploy": "部署策略",
+            "stop": "停止",
+            "active": "活跃策略"
+        }
+    },
+    "terms": {
+        "title": "服务条款",
+        "lastUpdated": "最后更新：2026 年 2 月 25 日 · 使用本协议即生效",
+        "warning": {
+            "title": "高风险披露",
+            "body": "DeFi 策略存在重大财务风险，包括损失全部存入资金。SuiLoop 是一款软件工具，而非投资服务。您直接与区块链智能合约交互 — 没有任何实体可以撤销链上交易。仅使用您能承受完全损失的资金。"
+        }
+    },
+    "risk": {
+        "title": "扩展风险披露",
+        "warning": "在使用 SuiLoop 之前，请仔细阅读本文件。部署金库或执行任何链上策略即表示您已阅读、理解并接受此处描述的所有风险。",
+        "critical": "严重警告 — 继续前请阅读",
+        "criticalBody": "DeFi 具有高度实验性。仅使用您能承受完全损失的资金与 SuiLoop 交互。SuiLoop 是软件基础设施，而非金融产品。任何实体（包括 SuiLoop 运营商）均无法恢复因智能合约故障、市场波动或用户错误而损失的资金。Sui 上的交易是不可逆的。"
+    },
+    "common": {
+        "connectWallet": "连接钱包",
+        "viewExplorer": "在浏览器查看",
+        "loading": "加载中...",
+        "error": "错误",
+        "success": "成功",
+        "cancel": "取消",
+        "confirm": "确认",
+        "close": "关闭"
+    }
+}

@@ -6,6 +6,7 @@ import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
 import { Home, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package, Cpu, Trophy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -180,11 +181,13 @@ export default function Navbar() {
                             </div>
                         )}
 
+                        {/* Language Switcher */}
+                        <LanguageSwitcher />
+
                         {/* Connect Button - Responsive scaling */}
                         <div className="navbar-connect-btn scale-[0.85] xl:scale-100 origin-right">
                             <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-4 xl:!px-5 !py-2 !rounded-full !text-[11px] xl:!text-xs !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !whitespace-nowrap" />
                         </div>
-
 
                         {/* Mobile Menu Toggle - Visible on lg and below */}
                         <button

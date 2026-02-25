@@ -1,0 +1,132 @@
+{
+    "nav": {
+        "home": "Inicio",
+        "dashboard": "Panel",
+        "marketplace": "Mercado",
+        "strategies": "Estrategias",
+        "agents": "Agentes",
+        "analytics": "Análisis",
+        "docs": "Documentación",
+        "leaderboard": "Clasificación",
+        "plugins": "Plugins",
+        "launch": "Lanzar App"
+    },
+    "footer": {
+        "tagline": "La Matriz Neural descentralizada para Sui. Orquestación autónoma de agentes con reputación ELO on-chain, vectores flash de DeepBook V3 y registro forense en Walrus.",
+        "mainframe": "Mainframe Neural",
+        "intelligence": "Inteligencia",
+        "stats": "Estadísticas del Protocolo",
+        "links": {
+            "dashboard": "Panel Neural",
+            "analytics": "Análisis de Matriz",
+            "strategies": "Operaciones Neurales",
+            "builder": "Constructor de Estrategias",
+            "marketplace": "Mercado",
+            "plugins": "Plugins",
+            "agents": "Consola Centinela",
+            "manifesto": "Manifiesto de la Matriz",
+            "howToUse": "Cómo Usar",
+            "docs": "Documentación Técnica",
+            "terms": "Términos de Servicio",
+            "risk": "Divulgación de Riesgos",
+            "source": "Código Fuente"
+        },
+        "copyright": "© 2026 Protocolo SuiLoop. Licencia MIT. Software de Código Abierto.",
+        "architect": "Arquitecto: Vaiosx",
+        "legal": "No es un servicio financiero. Solo software sin custodia.",
+        "launch": "Lanzar Panel"
+    },
+    "legal": {
+        "banner": {
+            "title": "SuiLoop es software de código abierto, no un servicio financiero.",
+            "body": "Sin custodia. Sin KYC. Alto riesgo — solo usa fondos que puedas permitirte perder.",
+            "terms": "Términos de Servicio",
+            "risk": "Divulgación de Riesgos",
+            "cta": "Entendido"
+        }
+    },
+    "home": {
+        "hero": {
+            "badge": "Protocolo DeFi Autónomo · Red Sui",
+            "title1": "La Matriz",
+            "title2": "DeFi Neural",
+            "description": "Agentes de IA autónomos de grado institucional que ejecutan préstamos flash, arbitraje y estrategias de rendimiento — con garantías de seguridad matemática aplicadas por contratos inteligentes de Sui Move.",
+            "launch": "Lanzar Panel",
+            "docs": "Leer Documentación"
+        },
+        "stats": {
+            "agents": "Agentes Activos",
+            "volume": "Volumen Flash",
+            "uptime": "Disponibilidad",
+            "apy": "APY Promedio"
+        },
+        "features": {
+            "title": "¿Por qué SuiLoop?",
+            "nonCustodial": {
+                "title": "Bóvedas Sin Custodia",
+                "description": "Tus fondos se guardan en objetos Vault on-chain. El agente puede ejecutar estrategias, pero solo tú puedes retirar — aplicado por bytecode Move inmutable."
+            },
+            "flashLoans": {
+                "title": "Préstamos Flash Hot Potato",
+                "description": "El capital prestado debe reembolsarse en el mismo Bloque de Transacción Programable o se revierte atómicamente. Cero riesgo de deuda, cero colateral requerido."
+            },
+            "agents": {
+                "title": "Agentes de IA Autónomos",
+                "description": "Despliega agentes nombrados (TITAN, ELIZA, WHALE) con reputación ELO on-chain. Cada agente tiene un perfil de estrategia, tolerancia al riesgo y historial verificable."
+            },
+            "verified": {
+                "title": "Verificado con Move Prover",
+                "description": "Los contratos inteligentes están formalmente verificados con Move Prover. Los invariantes de solvencia están matemáticamente probados, no solo testeados."
+            }
+        },
+        "cta": {
+            "title": "¿Listo para Desplegar?",
+            "description": "Conecta tu cartera Sui y despliega tu primer agente autónomo en minutos.",
+            "button": "Comenzar Ahora"
+        }
+    },
+    "dashboard": {
+        "legalNotice": "SuiLoop es software de código abierto, no un servicio financiero.",
+        "nonCustodial": "Sin custodia. Sin KYC. Alto riesgo — solo usa fondos que puedas permitirte perder.",
+        "vault": {
+            "title": "Bóveda Segura",
+            "create": "Crear Bóveda",
+            "destroy": "Destruir Bóveda",
+            "deposit": "Depositar",
+            "withdraw": "Retirar",
+            "balance": "Saldo de Bóveda",
+            "agentAccess": "Acceso del Agente",
+            "granted": "CONCEDIDO",
+            "revoked": "REVOCADO"
+        },
+        "strategy": {
+            "deploy": "Desplegar Estrategia",
+            "stop": "Detener",
+            "active": "Estrategia Activa"
+        }
+    },
+    "terms": {
+        "title": "Términos de Servicio",
+        "lastUpdated": "Última actualización: 25 de febrero de 2026 · Vigente al usar el Protocolo",
+        "warning": {
+            "title": "Divulgación de Alto Riesgo",
+            "body": "Las estrategias DeFi conllevan un riesgo financiero significativo que incluye la pérdida total de los fondos depositados. SuiLoop es una herramienta de software, no un servicio de inversión. Interactúas directamente con contratos inteligentes blockchain — ninguna entidad puede revertir transacciones on-chain. Solo usa fondos que puedas permitirte perder totalmente."
+        }
+    },
+    "risk": {
+        "title": "Divulgación Extendida de Riesgos",
+        "warning": "Lee este documento cuidadosamente antes de usar SuiLoop. Al desplegar una Bóveda o ejecutar cualquier estrategia on-chain, reconoces que has leído, entendido y aceptado todos los riesgos descritos aquí.",
+        "critical": "ADVERTENCIA CRÍTICA — LEE ANTES DE CONTINUAR",
+        "criticalBody": "DeFi es altamente experimental. Solo interactúa con SuiLoop usando fondos que puedas permitirte perder totalmente. SuiLoop es infraestructura de software, no un producto financiero. Ninguna entidad — incluidos los operadores de SuiLoop — puede recuperar fondos perdidos por fallos de contratos inteligentes, volatilidad del mercado o errores del usuario. Las transacciones en Sui son irreversibles."
+    },
+    "common": {
+        "connectWallet": "Conectar Cartera",
+        "viewExplorer": "Ver en Explorador",
+        "loading": "Cargando...",
+        "error": "Error",
+        "success": "Éxito",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "close": "Cerrar"
+    }
+}
