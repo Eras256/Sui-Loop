@@ -15,9 +15,11 @@ const INTEL_LINKS = [
     { label: "Matrix Manifesto", href: "/manifesto" },
     { label: "How To Use", href: "/how-to-use" },
     { label: "Technical Docs", href: "/docs" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Risk Disclosure", href: "/risk-disclosure" },
     {
         label: "Kernel Source",
-        href: "https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0",
+        href: "https://suiscan.xyz/mainnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0",
         external: true,
     },
 ];
@@ -225,7 +227,7 @@ export default function Footer() {
             <div className="border-t border-white/5">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] text-gray-600 font-mono">
                     <div className="flex items-center gap-2">
-                        <span>© 2026 SuiLoop Autonomous Systems.</span>
+                        <span>© 2026 SuiLoop Protocol. MIT License. Open-Source Software.</span>
                         <span className="text-gray-700">•</span>
                         <a
                             href="https://t.me/Vaiosx"
@@ -236,16 +238,11 @@ export default function Footer() {
                             Architect: Vaiosx
                         </a>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <span className="text-gray-700">All transactions are atomic &amp; Move-verified.</span>
-                        <a
-                            href="https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 hover:text-neon-cyan transition-colors"
-                        >
-                            Package: 0x9451...dcb0 <ExternalLink className="w-2.5 h-2.5" />
-                        </a>
+                    <div className="flex items-center gap-4 flex-wrap justify-center">
+                        <Link href="/terms" className="hover:text-neon-cyan transition-colors">Terms of Service</Link>
+                        <Link href="/risk-disclosure" className="hover:text-neon-cyan transition-colors">Risk Disclosure</Link>
+                        <span className="text-gray-700 hidden sm:inline">•</span>
+                        <span className="text-gray-700 hidden sm:inline">Not a financial service. Non-custodial software only.</span>
                     </div>
                 </div>
             </div>

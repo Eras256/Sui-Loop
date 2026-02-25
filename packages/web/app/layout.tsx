@@ -5,6 +5,7 @@ import "./globals.css";
 import "@mysten/dapp-kit/dist/index.css";
 import { Providers } from "./providers";
 import Footer from "@/components/layout/Footer";
+import LegalBanner from "@/components/legal/LegalBanner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
 
                     {children}
                     <Footer />
+                    <LegalBanner />
                     <Toaster position="bottom-right" theme="dark" />
                 </Providers>
             </body>

@@ -1414,10 +1414,16 @@ function DashboardContent() {
                         <p className="text-[10px] text-gray-400 leading-relaxed font-mono">
                             • Generates unique <span className="text-white">OwnerCap</span><br />
                             • Enables automated agent trading<br />
-                            • Hot Potato security pattern active
+                            • Hot Potato security pattern active<br />
+                            • <span className="text-white">Only you can withdraw</span> via OwnerCap
                         </p>
                     </div>
-                    <p className="text-[9px] text-gray-500 italic">This transaction requires a small gas fee on Testnet.</p>
+                    <div className="bg-amber-500/5 border border-amber-500/20 p-2.5 rounded-xl text-left">
+                        <p className="text-[9px] text-amber-400/80 leading-relaxed font-mono">
+                            ⚠️ RISK: DeFi strategies carry financial risk. SuiLoop is software only — not a financial service. By confirming you accept our Terms of Service and Risk Disclosure.
+                        </p>
+                    </div>
+                    <p className="text-[9px] text-gray-500 italic">This transaction requires gas fees on Mainnet. Only use funds you can afford to lose.</p>
                 </div>
             ),
             icon: <Shield size={32} className="text-neon-cyan" />,
@@ -1676,6 +1682,21 @@ function DashboardContent() {
     return (
         <div className="min-h-screen pt-36 pb-12 px-4 md:px-8 relative overflow-hidden">
             <Navbar />
+
+            {/* Legal Disclaimer Strip */}
+            <div className="w-full max-w-7xl mx-auto mb-4 relative z-10">
+                <div className="flex flex-wrap items-center justify-between gap-2 bg-amber-500/5 border border-amber-500/15 rounded-xl px-4 py-2.5 text-[9px] font-mono">
+                    <div className="flex items-center gap-2 text-amber-400/80">
+                        <AlertTriangle size={10} className="shrink-0" />
+                        <span><span className="text-white font-bold">SuiLoop is open-source software, not a financial service.</span> Non-custodial. No KYC. High risk — only use funds you can afford to lose.</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">Terms</a>
+                        <span className="text-gray-700">|</span>
+                        <a href="/risk-disclosure" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">Risk Disclosure</a>
+                    </div>
+                </div>
+            </div>
 
             {/* Auto-Start Confirmation Modal */}
             <AnimatePresence>
