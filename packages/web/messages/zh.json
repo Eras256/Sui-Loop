@@ -1542,5 +1542,26 @@
       "monitor": "监控我的代理",
       "deploy": "部署新单元"
     }
+  },
+  "settings": {
+    "keyRequired": "Cloud AI 需要 API 密钥。",
+    "saved": "节点配置已安全更新。",
+    "localLinked": "矩阵已链接到本地硬件。",
+    "localFailed": "未在 Localhost:11434 上检测到 Ollama。",
+    "title": "节点与人工智能设置",
+    "byok": "自带密钥 (BYOK)",
+    "info": "密钥本地存储在您的浏览器中。它们仅在分派区块链任务时直接路由到您的操作代理。",
+    "cloudTitle": "云矩阵",
+    "cloudDesc": "OpenAI / Claude",
+    "localTitle": "本地模式",
+    "localDesc": "Ollama 去中心化",
+    "pinging": "正在 Ping Localhost:11434...",
+    "localActive": "本地链接处于活动状态",
+    "ollamaOffline": "Ollama 离线",
+    "localReady": "为 100% 隐私而去中心化推理准备就绪。",
+    "localError": "无法在端口 11434 上访问 Ollama API。",
+    "retryBtn": "重试连接",
+    "cancel": "取消",
+    "commit": "提交协议"
   }
 }

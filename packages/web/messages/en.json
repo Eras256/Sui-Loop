@@ -1542,5 +1542,26 @@
       "monitor": "Monitor My Agent",
       "deploy": "Deploy New Unit"
     }
+  },
+  "settings": {
+    "keyRequired": "API Key is required for Cloud AI.",
+    "saved": "Node configuration updated securely.",
+    "localLinked": "Matrix linked to local hardware.",
+    "localFailed": "Ollama not detected on Localhost:11434",
+    "title": "Node & AI Settings",
+    "byok": "Bring Your Own Key (BYOK)",
+    "info": "Keys are stored locally in your browser. They are explicitly routed to your operational agent when dispatching blockchain tasks.",
+    "cloudTitle": "Cloud Matrix",
+    "cloudDesc": "OpenAI / Claude",
+    "localTitle": "Local Mode",
+    "localDesc": "Ollama Decentralized",
+    "pinging": "Pinging Localhost:11434...",
+    "localActive": "Local Link Active",
+    "ollamaOffline": "Ollama Offline",
+    "localReady": "Ready for 100% private decentralized inference.",
+    "localError": "Could not reach Ollama API on port 11434.",
+    "retryBtn": "Retry Connection",
+    "cancel": "Cancel",
+    "commit": "Commit Protocol"
   }
 }

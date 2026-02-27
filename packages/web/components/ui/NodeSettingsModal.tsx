@@ -33,7 +33,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
 
     const handleSave = () => {
         if (provider !== 'ollama' && !apiKey) {
-            toast.error(t('settings?.keyRequired') || "API Key is required for Cloud AI.");
+            toast.error(t('settings.keyRequired') || "API Key is required for Cloud AI.");
             return;
         }
 
@@ -45,7 +45,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
             localStorage.removeItem("suiloop_api_key");
         }
 
-        toast.success(t('settings?.saved') || "Node configuration updated securely.");
+        toast.success(t('settings.saved') || "Node configuration updated securely.");
         setTimeout(() => onClose(), 500);
     };
 
@@ -56,10 +56,10 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
             const res = await fetch("http://localhost:11434/api/tags", { method: "GET" }).catch(() => null);
             if (res && res.ok) {
                 setIsLocalConnected(true);
-                toast.success("Matrix linked to local hardware.");
+                toast.success(t('settings.localLinked') || "Matrix linked to local hardware.");
             } else {
                 setIsLocalConnected(false);
-                toast.error("Ollama not detected on Localhost:11434");
+                toast.error(t('settings.localFailed') || "Ollama not detected on Localhost:11434");
                 setProvider('openai'); // fallback
             }
         } catch (error) {
@@ -97,10 +97,10 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                     <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-neon-cyan" />
                                 </div>
                                 <div>
-                                    <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">Node & AI Settings</h2>
+                                    <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">{t('settings.title') || "Node & AI Settings"}</h2>
                                     <p className="text-[10px] sm:text-sm text-gray-400 font-mono flex items-center gap-1.5">
                                         <Shield size={10} className="text-green-400" />
-                                        Bring Your Own Key (BYOK)
+                                        {t('settings.byok') || "Bring Your Own Key (BYOK)"}
                                     </p>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                         <div className="p-2 sm:p-3 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex gap-2 sm:gap-3 text-[10px] sm:text-sm leading-tight">
                             <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-neon-purple shrink-0 mt-0.5" />
                             <p className="text-gray-300">
-                                Keys are stored locally in your browser. They are explicitly routed to your operational agent when dispatching blockchain tasks.
+                                {t('settings.info') || "Keys are stored locally in your browser. They are explicitly routed to your operational agent when dispatching blockchain tasks."}
                             </p>
                         </div>
 
@@ -141,8 +141,8 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                     {provider !== 'ollama' && <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neon-cyan" />}
                                 </div>
                                 <div className="relative z-10">
-                                    <h3 className="text-white text-xs sm:text-base font-bold leading-none mt-1 sm:mt-0">Cloud Matrix</h3>
-                                    <p className="text-[10px] sm:text-xs text-gray-500 mt-1.5">OpenAI / Claude</p>
+                                    <h3 className="text-white text-xs sm:text-base font-bold leading-none mt-1 sm:mt-0">{t('settings.cloudTitle') || "Cloud Matrix"}</h3>
+                                    <p className="text-[10px] sm:text-xs text-gray-500 mt-1.5">{t('settings.cloudDesc') || "OpenAI / Claude"}</p>
                                 </div>
                             </button>
 
@@ -162,8 +162,8 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                     {provider === 'ollama' && <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" />}
                                 </div>
                                 <div className="relative z-10">
-                                    <h3 className="text-white text-xs sm:text-base font-bold leading-none mt-1 sm:mt-0">Local Mode</h3>
-                                    <p className="text-[10px] sm:text-xs text-gray-500 mt-1.5">Ollama Decentralized</p>
+                                    <h3 className="text-white text-xs sm:text-base font-bold leading-none mt-1 sm:mt-0">{t('settings.localTitle') || "Local Mode"}</h3>
+                                    <p className="text-[10px] sm:text-xs text-gray-500 mt-1.5">{t('settings.localDesc') || "Ollama Decentralized"}</p>
                                 </div>
                             </button>
                         </div>
@@ -220,9 +220,9 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                             <Activity className={`relative z-10 w-8 h-8 sm:w-10 sm:h-10 ${isTesting ? 'text-yellow-400 animate-pulse' : isLocalConnected ? 'text-green-400' : 'text-red-400'}`} />
                                         </div>
                                         <div>
-                                            <p className="text-white text-sm sm:text-lg font-bold tracking-tight">{isTesting ? 'Pinging Localhost:11434...' : isLocalConnected ? 'Local Link Active' : 'Ollama Offline'}</p>
+                                            <p className="text-white text-sm sm:text-lg font-bold tracking-tight">{isTesting ? (t('settings.pinging') || 'Pinging Localhost:11434...') : isLocalConnected ? (t('settings.localActive') || 'Local Link Active') : (t('settings.ollamaOffline') || 'Ollama Offline')}</p>
                                             <p className="text-[10px] sm:text-sm text-gray-400 mt-0.5 sm:mt-1 max-w-[250px] mx-auto leading-tight">
-                                                {isLocalConnected ? 'Ready for 100% private decentralized inference.' : 'Could not reach Ollama API on port 11434.'}
+                                                {isLocalConnected ? (t('settings.localReady') || 'Ready for 100% private decentralized inference.') : (t('settings.localError') || 'Could not reach Ollama API on port 11434.')}
                                             </p>
                                         </div>
                                         {!isLocalConnected && !isTesting && (
@@ -230,7 +230,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                                 onClick={testLocalConnection}
                                                 className="mt-1 sm:mt-2 px-4 py-1.5 sm:px-6 sm:py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-xs sm:text-sm font-bold text-white transition-all active:scale-95"
                                             >
-                                                Retry Connection
+                                                {t('settings.retryBtn') || "Retry Connection"}
                                             </button>
                                         )}
                                     </div>
@@ -245,7 +245,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                             onClick={onClose}
                             className="flex-1 px-4 py-2 sm:py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold transition-all text-xs sm:text-base"
                         >
-                            Cancel
+                            {t('settings.cancel') || "Cancel"}
                         </button>
                         <button
                             onClick={handleSave}
@@ -256,7 +256,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                             `}
                         >
                             <Zap size={16} className="sm:w-4 sm:h-4 w-3.5 h-3.5" />
-                            Commit Protocol
+                            {t('settings.commit') || "Commit Protocol"}
                         </button>
                     </div>
                 </motion.div>
