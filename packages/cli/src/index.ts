@@ -16,7 +16,7 @@ const AGENT_URL = process.env.AGENT_URL || 'http://localhost:3001';
 program
     .name('suiloop')
     .description('SuiLoop CLI — Command Center for your Atomic DeFi Agent')
-    .version('0.0.7');
+    .version('0.0.8');
 
 // ============================================================================
 // AGENT MANAGEMENT (Create)
@@ -309,9 +309,11 @@ program
             );
             if (data.success) {
                 spinner.succeed(chalk.green(`🎉 Execution SUCCESS`));
-                if (data.txHash) console.log(`  TX Hash: ${chalk.cyan(data.txHash)}`);
-                if (data.suiscanUrl) console.log(`  Suiscan: ${chalk.underline(data.suiscanUrl)}`);
-                if (data.profit) console.log(`  Profit:  ${chalk.green(data.profit + ' MIST')}`);
+                if (data.txHash) {
+                    console.log(`  TX Hash:  ${chalk.cyan(data.txHash)}`);
+                    console.log(`  SuiScan:  ${chalk.underline.blue('https://suiscan.xyz/testnet/tx/' + data.txHash)}`);
+                }
+                if (data.profit) console.log(`  Yield:    ${chalk.green(data.profit)}`);
             } else {
                 spinner.fail(chalk.yellow(`⚠️  Execution incomplete: ${data.error || 'Unknown'}`))
             }
