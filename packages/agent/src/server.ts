@@ -22,6 +22,7 @@ import { fromBase64 } from '@mysten/sui/utils';
 import { executeAtomicLeverage } from './actions/executeAtomicLeverage.js';
 import { executeBuilderStrategy } from './actions/executeBuilderStrategy.js';
 import { getSkillManager } from './services/skillManager.js';
+import { initializeLLMService } from './services/llmService.js';
 
 // Middleware
 import {
@@ -1131,6 +1132,24 @@ function initializeServices() {
     initializeSessionService();
     initializeQueueService();
     initializeGatewayService();
+
+    // Initialize LLM Service from environment variables
+    const openaiKey = process.env.OPENAI_API_KEY;
+    const anthropicKey = process.env.ANTHROPIC_API_KEY;
+    const ollamaUrl = process.env.OLLAMA_BASE_URL;
+
+    if (openaiKey && openaiKey !== 'sk-your-openai-key-here') {
+        initializeLLMService({ provider: 'openai', apiKey: openaiKey, model: process.env.OPENAI_MODEL || 'gpt-4o-mini' });
+        console.log('🧠 LLM Service initialized: OpenAI (' + (process.env.OPENAI_MODEL || 'gpt-4o-mini') + ')');
+    } else if (anthropicKey) {
+        initializeLLMService({ provider: 'anthropic', apiKey: anthropicKey, model: 'claude-3-5-haiku-latest' });
+        console.log('🧠 LLM Service initialized: Anthropic (claude-3-5-haiku-latest)');
+    } else if (ollamaUrl) {
+        initializeLLMService({ provider: 'ollama', baseUrl: ollamaUrl, model: process.env.OLLAMA_MODEL || 'llama3.2' });
+        console.log('🧠 LLM Service initialized: Ollama (' + (process.env.OLLAMA_MODEL || 'llama3.2') + ')');
+    } else {
+        console.warn('⚠️ No LLM API key found. Set OPENAI_API_KEY, ANTHROPIC_API_KEY, or OLLAMA_BASE_URL in .env');
+    }
 
     // Log strategy initialization or status
     console.log('Strategy manager initialized and ready.');
