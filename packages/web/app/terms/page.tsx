@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { TranslatedTerms } from "./translated-terms";
 
 export const metadata: Metadata = {
@@ -13,7 +12,6 @@ export default function TermsPage() {
         <div className="min-h-screen bg-[#030014] text-white">
             <Navbar />
             <TranslatedTerms />
-            <Footer />
         </div>
     );
 }

@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
 import { Activity, TrendingUp, DollarSign, Zap, Server, Wallet, Database } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -134,7 +133,7 @@ export default function AnalyticsPage() {
     const usdcStrategies = activeStrategies.filter(s => s.asset === 'USDC').length;
 
     return (
-        <main className="min-h-screen pt-36 px-4 pb-12 relative overflow-hidden flex flex-col">
+        <main className="min-h-screen pt-36 px-4 pb-0 relative overflow-hidden flex flex-col">
             <Navbar />
 
             {/* Background */}
@@ -143,7 +142,7 @@ export default function AnalyticsPage() {
                 <div className="absolute bottom-[-20%] left-[-20%] w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-[120px]"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto relative z-10 flex-1 w-full">
+            <div className="max-w-7xl mx-auto relative z-10 flex-1 w-full mb-32">
                 {/* Header */}
                 <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                     <div>
@@ -316,8 +315,6 @@ export default function AnalyticsPage() {
                     </div>
                 </div>
             </div>
-
-            <Footer />
         </main>
     );
 }

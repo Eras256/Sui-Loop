@@ -1,7 +1,6 @@
 'use client';
 
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import Link from "next/link";
 import { AlertTriangle, TrendingDown, Zap, Globe, Shield, BarChart2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -150,8 +149,6 @@ export default function RiskDisclosurePage() {
                     </Link>
                 </div>
             </div>
-
-            <Footer />
         </div>
     );
 }

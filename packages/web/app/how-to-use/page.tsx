@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Footer from "@/components/layout/Footer";
 
 export default function HowToUsePage() {
     return (
@@ -157,8 +156,6 @@ export default function HowToUsePage() {
                     </div>
                 </div>
             </div>
-
-            <Footer />
         </main>
     );
 }
