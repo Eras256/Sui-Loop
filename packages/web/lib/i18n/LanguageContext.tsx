@@ -20,11 +20,17 @@ const STORAGE_KEY = 'suiloop-locale';
 // Cache loaded JSON so we don't re-fetch
 const cache: Record<string, Messages> = {};
 
+const messageLoaders: Record<Locale, () => Promise<Messages>> = {
+    en: () => import('../../messages/en.json').then(m => m.default || m),
+    es: () => import('../../messages/es.json').then(m => m.default || m),
+    zh: () => import('../../messages/zh.json').then(m => m.default || m)
+};
+
 async function fetchMessages(locale: Locale): Promise<Messages> {
     if (cache[locale]) return cache[locale];
     try {
-        const mod = await import(`../../messages/${locale}.json`);
-        cache[locale] = mod.default || mod;
+        const msgs = await messageLoaders[locale]();
+        cache[locale] = msgs;
         return cache[locale];
     } catch (e) {
         console.warn(`[i18n] Failed to load ${locale}`, e);
