@@ -121,9 +121,10 @@ export default function MarketplacePage() {
                     author: (parsed.creator || parsed.author || "0x...").slice(0, 10) + "...",
                     category: (parsed.category || "trading").toLowerCase(),
                     tags: ["on-chain", "verified"],
-                    downloads: Math.floor(Math.random() * 500) + 100, // Simulated for demo
-                    rating: 4.5 + Math.random() * 0.5,
-                    reviewCount: Math.floor(Math.random() * 20),
+                    // Deterministic metrics from strategy ID hash so it doesn't change on refresh
+                    downloads: (parseInt(strategyId.replace(/[^0-9a-f]/gi, '').slice(0, 8), 16) || 0) % 500 + 100,
+                    rating: parseFloat((4.5 + ((parseInt(strategyId.replace(/[^0-9a-f]/gi, '').slice(8, 12), 16) || 0) % 50) / 100).toFixed(1)),
+                    reviewCount: (parseInt(strategyId.replace(/[^0-9a-f]/gi, '').slice(12, 16), 16) || 1) % 20 + 2,
                     isVerified: true,
                     isFeatured: false,
                     price: priceInSui

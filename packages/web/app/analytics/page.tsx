@@ -73,8 +73,9 @@ function generateHistory(points: number, hoursBack: number, baseBalance: number)
         const base = baseBalance > 0 ? baseBalance : 1000;
         return {
             name: label,
-            value: parseFloat((base * (1 + i * 0.0008 + Math.random() * 0.001)).toFixed(2)),
-            apy: parseFloat((10 + Math.random() * 2).toFixed(2))
+            // Deterministic curve instead of random
+            value: parseFloat((base * (1 + i * 0.001 + Math.sin(i) * 0.0005)).toFixed(2)),
+            apy: parseFloat((10 + Math.sin(i) * 1).toFixed(2))
         };
     });
 }
@@ -122,8 +123,9 @@ export default function AnalyticsPage() {
             setActiveStrategies([]);
         }
 
-        const mockDiff = (Math.random() * 0.5).toFixed(2);
-        setScallopData({ supplyApy: 11.45 + Number(mockDiff), borrowApy: 8.2 });
+        // Deterministic mock data instead of random
+        const mockDiff = Math.sin(new Date().getHours()) * 0.5;
+        setScallopData({ supplyApy: 11.45 + mockDiff, borrowApy: 8.2 });
     }, [account?.address]);
 
     // Derived metrics

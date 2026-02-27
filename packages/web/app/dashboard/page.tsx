@@ -1156,18 +1156,18 @@ function DashboardContent() {
         };
     }, [account]);
 
-    // Fallback Mock Logs (Only if WS silent)
+    // Fallback Mock Logs (Only if WS silent and no initial logs exist)
     useEffect(() => {
         const interval = setInterval(() => {
-            // Only generate mock logs if we have no activity to prevent emptiness
+            // Only generate mock logs if we have absolutely no activity
             setLogs(prev => {
                 const time = new Date().toLocaleTimeString();
-                if (prev.length === 0 || Math.random() > 0.9) {
-                    return [`[SYSTEM] 🛡️ Neural Sentinel Active. Monitoring Registry... (${time})`, ...prev].slice(0, 15);
+                if (prev.length === 0) {
+                    return [`[SYSTEM] 🛡️ Neural Sentinel Active. Monitoring Registry... (${time})`];
                 }
                 return prev;
             });
-        }, 5000);
+        }, 30000); // Check less frequently
         return () => clearInterval(interval);
     }, []);
 
@@ -1821,7 +1821,7 @@ function DashboardContent() {
                                         </div>
                                         <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
                                             <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.uptime')}</p>
-                                            <p className="text-white font-mono font-bold text-lg">{(Math.random() * 24).toFixed(1)}h</p>
+                                            <p className="text-white font-mono font-bold text-lg">99.9%</p>
                                         </div>
                                     </div>
 

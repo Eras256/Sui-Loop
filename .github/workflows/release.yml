@@ -74,14 +74,21 @@ jobs:
           releaseName: 'SuiLoop Companion ${{ github.ref_name }}'
           releaseBody: |
             ## SuiLoop Companion App
-            
+
             Desktop companion for monitoring your autonomous trading agents.
-            
+
+            ### ✨ What's New in v0.0.8
+            - **Real Yield Display**: Shows live profit from on-chain `LoopExecuted` events
+            - **SuiScan Integration**: One-click button to open every transaction on SuiScan Testnet
+            - **LLM Status Indicator**: Visual badge showing when the AI is actively validating trades
+            - **USDC Pool Monitor**: Live status of the USDC MockPool (20 USDC pool)
+            - **Real Log Feed**: WebSocket now streams real backend agent logs
+
             ### Downloads
             - **Linux**: `.AppImage` or `.deb`
-            - **macOS**: `.dmg` (Universal Binary - Intel + Apple Silicon)
+            - **macOS**: `.dmg` (Universal Binary — Intel + Apple Silicon)
             - **Windows**: `.exe` or `.msi`
-            
+
             See [documentation](https://github.com/Eras256/Sui-Loop) for setup instructions.
           releaseDraft: false
           prerelease: false

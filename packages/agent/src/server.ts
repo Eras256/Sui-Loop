@@ -490,11 +490,18 @@ app.post('/api/execute-demo', standardRateLimiter, async (req: Request, res: Res
             const txHash = result.digest;
 
             // Calculate Profit Visualization
-            const profitDisplay = '0.997 SUI (Simulated Yield)';
+            let profitDisplay = '0 (Simulated Yield)';
+            const events = result.events || [];
+            const loopEvent = events.find(e => e.type.includes('LoopExecuted'));
+            if (loopEvent) {
+                const parsed = loopEvent.parsedJson as any;
+                const profitInMist = Number(parsed.profit);
+                profitDisplay = profitInMist > 0 ? `${(profitInMist / 1e9).toFixed(5)} SUI` : `${profitInMist} MIST`;
+            }
 
             broadcastLog('success', `🚀 Transaction Confirmed on Testnet!`);
             broadcastLog('success', `🔗 Hash: ${txHash}`);
-            broadcastLog('success', `💰 Atomic Loop Executed Successfully`);
+            broadcastLog('success', `💰 Atomic Loop Executed! Yield: ${profitDisplay}`);
 
             await triggerWebhooks('execution.completed', {
                 strategy,

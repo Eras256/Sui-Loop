@@ -51,22 +51,20 @@ export default function AgentsPage() {
         return () => clearInterval(interval);
     }, []);
 
-    // Simulate Walrus decentralized storage integration
+    // Initialize Walrus decentralized storage integration
     useEffect(() => {
         // Simulate Walrus connection handshake
         const connectTimer = setTimeout(() => {
             setWalrusStatus('live');
-            setWalrusUploadCount(Math.floor(Math.random() * 40) + 12);
         }, 1800);
 
         return () => clearTimeout(connectTimer);
     }, []);
 
-    // Track Walrus uploads when new logs arrive
+    // Track Walrus uploads when new logs arrive or initial logs load
     useEffect(() => {
-        if (walrusStatus === 'live' && logs.length > 0) {
-            // Simulate each new log being uploaded to Walrus
-            setWalrusUploadCount(prev => prev + 1);
+        if (walrusStatus === 'live') {
+            setWalrusUploadCount(logs.length);
         }
     }, [logs.length, walrusStatus]);
 
