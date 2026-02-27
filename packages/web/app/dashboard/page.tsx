@@ -1682,7 +1682,7 @@ function DashboardContent() {
 
     return (
         <>
-            <div className="min-h-screen pt-36 pb-12 px-4 md:px-8 relative overflow-hidden">
+            <div className="min-h-screen pt-36 pb-32 px-4 md:px-8 relative overflow-hidden">
                 <Navbar />
 
                 {/* Legal Disclaimer Strip */}
@@ -2490,7 +2490,7 @@ function DashboardContent() {
                         </motion.div>
 
                         {/* Agent Logs > Replacement OpsConsole */}
-                        <div className="rounded-2xl h-[300px] flex flex-col relative">
+                        <div className="rounded-2xl h-[300px] flex flex-col relative mb-12">
                             <OpsConsole
                                 isExpanded={expandConsole}
                                 onToggleExpand={() => setExpandConsole(!expandConsole)}
