@@ -54,7 +54,7 @@ export default function Home() {
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
-            // Create a self-transfer of 1000 MIST (0.000001 SUI) to simulate "Activation Cost"
+            // Create a self-transfer of 1000 MIST (0.000001 SUI) to simulate"Activation Cost"
             const [coin] = tx.splitCoins(tx.gas, [1000]);
             tx.transferObjects([coin], account.address);
 
@@ -113,7 +113,6 @@ export default function Home() {
                         {/* Mainnet Ready Badge */}
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-neon-cyan/10 border border-neon-cyan/30 rounded-full mb-4 mx-auto lg:mx-0 w-fit">
                             <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan"></span>
                             </span>
                             <span className="text-[10px] uppercase tracking-wider font-bold text-neon-cyan whitespace-nowrap">
@@ -138,14 +137,14 @@ export default function Home() {
                                 {log}
                             </div>
                         ))}
-                        <div className="animate-pulse text-neon-purple mt-2">_</div>
+                        <div className="text-neon-purple mt-2">_</div>
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <button onClick={handleDeploy} className="bg-neon-cyan text-black font-bold px-8 py-3 md:py-4 rounded-lg hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all w-full sm:w-auto text-center flex items-center justify-center text-sm md:text-base cursor-pointer">
+                        <button onClick={handleDeploy} className="bg-neon-cyan text-black font-bold px-8 py-3 md:py-4 rounded-lg w-full sm:w-auto text-center flex items-center justify-center text-sm md:text-base cursor-pointer">
                             {t('home.hero.launch')}
                         </button>
-                        <Link href="/docs" className="glass-panel px-8 py-3 md:py-4 rounded-lg hover:bg-white/5 transition-all w-full sm:w-auto text-sm md:text-base flex items-center justify-center">
+                        <Link href="/docs" className="glass-panel px-8 py-3 md:py-4 rounded-lg w-full sm:w-auto text-sm md:text-base flex items-center justify-center">
                             {t('home.hero.docs')}
                         </Link>
                     </div>
@@ -167,41 +166,47 @@ export default function Home() {
             </div>
 
             {/* --- INTEGRATIONS BAR --- */}
-            <div className="w-full border-y border-white/5 bg-black/40 backdrop-blur-sm mb-32 section-lift">
+            <div className="w-full border-y border-white/5 bg-black/40 mb-32">
                 <div className="max-w-7xl mx-auto px-4 py-8">
                     <p className="text-center text-xs font-mono text-gray-500 mb-6 tracking-[0.2em]">{t('home.sections.poweredBy')}</p>
-                    <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                    <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-70 grayscale">
+
                         {/* Navi */}
-                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                        <div className="flex items-center gap-2 cursor-pointer">
                             <Landmark className="text-neon-cyan" size={24} />
-                            <span className="text-xl font-bold text-white group-hover:text-neon-cyan transition-colors">NAVI Protocol</span>
+                            <span className="text-xl font-bold text-white">
+                                NAVI Protocol</span>
                         </div>
                         {/* DeepBook */}
-                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                        <div className="flex items-center gap-2 cursor-pointer">
                             <BookOpen className="text-blue-500" size={24} />
-                            <span className="text-xl font-bold text-white group-hover:text-blue-500 transition-colors">DeepBook V3</span>
+                            <span className="text-xl font-bold text-white">
+                                DeepBook V3</span>
                         </div>
                         {/* Eliza */}
-                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                        <div className="flex items-center gap-2 cursor-pointer">
                             <Bot className="text-orange-500" size={24} />
-                            <span className="text-xl font-bold text-white group-hover:text-orange-500 transition-colors">ElizaOS</span>
+                            <span className="text-xl font-bold text-white">
+                                ElizaOS</span>
                         </div>
                         {/* Cetus */}
-                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                        <div className="flex items-center gap-2 cursor-pointer">
                             <Database className="text-teal-400" size={24} />
-                            <span className="text-xl font-bold text-white group-hover:text-teal-400 transition-colors">Cetus</span>
+                            <span className="text-xl font-bold text-white">
+                                Cetus</span>
                         </div>
                         {/* Walrus */}
-                        <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                        <div className="flex items-center gap-2 cursor-pointer">
                             <HardDrive className="text-pink-500" size={24} />
-                            <span className="text-xl font-bold text-white group-hover:text-pink-500 transition-colors">Walrus</span>
+                            <span className="text-xl font-bold text-white">
+                                Walrus</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* --- AUDIENCE SPLITTER --- */}
-            <div className="w-full max-w-7xl mx-auto px-4 mb-32 relative z-20 section-lift">
+            <div className="w-full max-w-7xl mx-auto px-4 mb-32 relative z-20">
                 <div className="text-center mb-12">
                     <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-4">{t('home.sections.interface.title')} <span className="text-neon-cyan">{t('home.sections.interface.subtitle')}</span></h2>
                     <p className="text-gray-400 max-w-2xl mx-auto">
@@ -210,8 +215,8 @@ export default function Home() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* For Humans */}
-                    <Link href="/dashboard" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between min-h-[240px] hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] cursor-pointer">
-                        <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Link href="/dashboard" className=" relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 p-8 flex flex-col justify-between min-h-[240px] cursor-pointer">
+
                         <div className="relative z-10">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="p-2 bg-white/5 rounded-lg text-neon-purple">
@@ -225,14 +230,15 @@ export default function Home() {
                                 {t('home.sections.interface.human.desc2')}<strong>{t('home.sections.interface.human.desc3')}</strong>{t('home.sections.interface.human.desc4')}
                             </p>
                         </div>
-                        <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
+                        <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white">
+
                             {t('home.sections.interface.human.cta')} <ArrowRight size={16} />
                         </div>
                     </Link>
 
                     {/* For Agents */}
-                    <Link href="/agents" className="group relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-all p-8 flex flex-col justify-between min-h-[240px] hover:shadow-[0_0_30px_rgba(0,243,255,0.15)] cursor-pointer">
-                        <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Link href="/agents" className=" relative overflow-hidden rounded-2xl bg-[#0A0A0A] border border-white/10 p-8 flex flex-col justify-between min-h-[240px] cursor-pointer">
+
                         <div className="relative z-10">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="p-2 bg-white/5 rounded-lg text-neon-cyan">
@@ -246,7 +252,8 @@ export default function Home() {
                                 {t('home.sections.interface.agent.desc2')}
                             </p>
                         </div>
-                        <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white group-hover:translate-x-1 transition-transform">
+                        <div className="relative z-10 flex items-center gap-2 text-sm font-bold text-white">
+
                             {t('home.sections.interface.agent.cta')} <ArrowRight size={16} />
                         </div>
                     </Link>
@@ -254,7 +261,7 @@ export default function Home() {
             </div>
 
             {/* --- QUICK START (TERMINAL) --- */}
-            <div className="w-full max-w-4xl mx-auto px-4 mb-32 relative z-20 section-lift">
+            <div className="w-full max-w-4xl mx-auto px-4 mb-32 relative z-20">
                 <div className="flex items-center gap-3 mb-6">
                     <ChevronRight className="text-neon-cyan" size={24} />
                     <h2 className="text-2xl font-bold text-white tracking-tight">{t('home.quickStart.title')}</h2>
@@ -274,7 +281,8 @@ export default function Home() {
                     </div>
 
                     {/* Terminal Content */}
-                    <div className="p-6 md:p-8 font-mono relative group">
+                    <div className="p-6 md:p-8 font-mono relative">
+
                         <div className="text-gray-500 select-none mb-4 font-mono text-sm"># Initialize the Neural Matrix (Linux/Mac)</div>
                         <div className="flex flex-col gap-2 text-lg md:text-xl font-mono overflow-x-auto">
                             <div className="flex items-center gap-3">
@@ -284,7 +292,8 @@ export default function Home() {
                             <div className="text-base text-gray-500 mt-2 font-mono">
                                 [SYSTEM] <span className="text-green-400">Registry Connection: SECURE</span><br />
                                 [SYSTEM] <span className="text-green-400">Kernel Version: 0.0.7-Neural</span><br />
-                                <span className="text-neon-purple mt-2 block animate-pulse">Connecting to Neural Matrix Uplink...</span>
+                                <span className="text-neon-purple mt-2 block">
+                                    Connecting to Neural Matrix Uplink...</span>
                             </div>
                         </div>
 
@@ -293,7 +302,7 @@ export default function Home() {
                                 navigator.clipboard.writeText("./suiloop sync");
                                 toast.success(t('home.toasts.copied'));
                             }}
-                            className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
+                            className="absolute top-6 right-6 p-2 bg-white/5 rounded-lg text-gray-400"
                         >
                             <Copy size={20} />
                         </button>
@@ -307,7 +316,7 @@ export default function Home() {
             </div>
 
             {/* --- COMPANION APP --- */}
-            <div className="w-full max-w-4xl mx-auto px-4 mb-40 relative z-20 text-center section-lift">
+            <div className="w-full max-w-4xl mx-auto px-4 mb-40 relative z-20 text-center">
                 <h3 className="text-xl font-bold text-white mb-4">{t('home.companion.title')}</h3>
                 <p className="text-gray-400 mb-8 max-w-lg mx-auto">
                     {t('home.companion.desc')}
@@ -317,12 +326,12 @@ export default function Home() {
                         href="https://github.com/Eras256/Sui-Loop/releases/latest"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group relative overflow-hidden bg-black/40 backdrop-blur-xl border border-white/10 hover:border-neon-cyan/50 text-white font-bold py-6 px-10 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(6,182,212,0.3)] transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-4 mx-auto min-w-[320px]"
+                        className=" relative overflow-hidden bg-black/40 border border-white/10 text-white font-bold py-6 px-10 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] flex items-center justify-center gap-4 mx-auto min-w-[320px]"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/20 via-transparent to-neon-purple/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         <div className="relative flex items-center gap-4">
-                            <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-neon-cyan/30 transition-colors">
-                                <Download size={24} className="text-gray-300 group-hover:text-neon-cyan transition-colors" />
+                            <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+
+                                <Download size={24} className="text-gray-300" />
                             </div>
                             <div className="text-left">
                                 <span className="block text-xs uppercase tracking-widest text-neon-cyan/80 mb-0.5">{t('home.companion.available')}</span>
@@ -333,13 +342,16 @@ export default function Home() {
 
                     <div className="mt-6 flex items-center gap-6 text-sm text-gray-400 font-mono">
                         <span className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span> macOS
+                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan">
+                            </span> macOS
                         </span>
                         <span className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span> Windows
+                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan">
+                            </span> Windows
                         </span>
                         <span className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span> Linux
+                            <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan">
+                            </span> Linux
                         </span>
                     </div>
                 </div>
@@ -347,8 +359,8 @@ export default function Home() {
 
 
             {/* --- TECH STACK MARQUEE --- */}
-            <div className="w-full border-y border-white/5 bg-black/20 backdrop-blur-sm overflow-hidden py-10">
-                <div className="flex gap-12 md:gap-24 items-center justify-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500 flex-wrap px-4">
+            <div className="w-full border-y border-white/5 bg-black/20 overflow-hidden py-10">
+                <div className="flex gap-12 md:gap-24 items-center justify-center opacity-70 grayscale flex-wrap px-4">
                     {[
                         { label: t('home.marquee.tvl'), value: '$1.4B', color: 'text-green-400' },
                         { label: t('home.marquee.synced'), value: '2,890', color: 'text-neon-cyan' },
@@ -394,7 +406,8 @@ export default function Home() {
                     {t('home.progressive.desc')} <strong className="text-white">{t('home.progressive.desc_hl')}</strong>
                 </p>
                 <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-black/40 p-6 rounded-xl border border-neon-purple/30 hover:border-neon-purple/50 transition-colors">
+                    <div className="bg-black/40 p-6 rounded-xl border border-neon-purple/30">
+
                         <h3 className="text-xl font-bold text-neon-purple mb-4 flex items-center gap-2">
                             <Shield className="w-5 h-5" />
                             {t('home.progressive.copilot.title')}
@@ -406,7 +419,8 @@ export default function Home() {
                             <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> {t('home.progressive.copilot.l4')}</li>
                         </ul>
                     </div>
-                    <div className="bg-black/40 p-6 rounded-xl border border-neon-cyan/30 hover:border-neon-cyan/50 transition-colors">
+                    <div className="bg-black/40 p-6 rounded-xl border border-neon-cyan/30">
+
                         <h3 className="text-xl font-bold text-neon-cyan mb-4 flex items-center gap-2">
                             <Zap className="w-5 h-5" />
                             {t('home.progressive.autonomous.title')}
@@ -422,8 +436,7 @@ export default function Home() {
             </section>
 
             {/* --- DIGITAL TEAM CONCEPT --- */}
-            <section className="py-24 border-b border-white/5 relative overflow-hidden section-lift">
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-[120px] pointer-events-none"></div>
+            <section className="py-24 border-b border-white/5 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <div className="text-center mb-16">
                         <span className="text-neon-cyan text-sm font-bold tracking-widest uppercase mb-2 block">{t('home.workforce.badge')}</span>
@@ -472,8 +485,6 @@ export default function Home() {
 
             {/* --- FEATURES GRID --- */}
             <section className="max-w-7xl mx-auto px-4 py-24 relative z-10">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-purple/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
-
                 <div className="text-center mb-16 space-y-4">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter">{t('home.architecture.title')} <span className="text-gradient">{t('home.architecture.subtitle')}</span> {t('home.architecture.suffix')}</h2>
                     <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">
@@ -493,8 +504,8 @@ export default function Home() {
                         { icon: TerminalIcon, title: t('home.architecture.f8.title'), desc: t('home.architecture.f8.desc'), color: 'text-gray-400' },
                         { icon: Zap, title: t('home.architecture.f9.title'), desc: t('home.architecture.f9.desc'), color: 'text-green-500' }
                     ].map((feature, i) => (
-                        <div key={i} className="glass-panel p-6 rounded-xl hover:bg-white/5 transition-all group border border-white/5">
-                            <div className={`w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-4 ${feature.color} group-hover:scale-110 transition-transform`}>
+                        <div key={i} className="glass-panel p-6 rounded-xl border border-white/5">
+                            <div className={`w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-4 ${feature.color}`}>
                                 <feature.icon size={24} />
                             </div>
                             <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
@@ -505,8 +516,6 @@ export default function Home() {
             </section>
 
             <section className="border-t border-white/5 bg-black/40 py-24 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-cyan/5 rounded-full blur-[100px] pointer-events-none"></div>
-
                 <div className="max-w-7xl mx-auto px-4 z-10 relative">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-5xl font-black tracking-tighter">{t('home.loop.title')} <span className="text-neon-cyan">{t('home.loop.subtitle')}</span></h2>
@@ -520,12 +529,15 @@ export default function Home() {
                             { step: "03", title: t('home.loop.s3.title'), desc: t('home.loop.s3.desc') },
                             { step: "04", title: t('home.loop.s4.title'), desc: t('home.loop.s4.desc') }
                         ].map((s, i) => (
-                            <div key={i} className="relative z-10 flex flex-col items-center text-center group">
-                                <div className="text-6xl md:text-8xl font-black text-white/5 mb-4 select-none group-hover:text-neon-cyan/10 transition-colors">{s.step}</div>
-                                <div className="w-4 h-4 rounded-full bg-neon-cyan mb-6 animate-pulse shadow-[0_0_15px_rgba(0,243,255,0.5)]"></div>
+                            <div key={i} className="relative z-10 flex flex-col items-center text-center">
+
+                                <div className="text-6xl md:text-8xl font-black text-white/5 mb-4 select-none">
+                                    {s.step}</div>
+                                <div className="w-4 h-4 rounded-full bg-neon-cyan mb-6">
+                                </div>
                                 <h3 className="text-xl font-bold mb-3">{s.title}</h3>
                                 <p className="text-gray-400 text-sm max-w-[200px]">{s.desc}</p>
-                                {i < 3 && <div className="hidden md:block absolute top-[110px] left-1/2 w-full h-[2px] bg-gradient-to-r from-neon-cyan/30 to-transparent -z-10 transform translate-x-1/2"></div>}
+                                {i < 3 && <div className="hidden md:block absolute top-[110px] left-1/2 w-full h-[2px] bg-gradient-to-r from-neon-cyan/30 to-transparent -z-10 translate-x-1/2"></div>}
                             </div>
                         ))}
                     </div>
@@ -534,13 +546,12 @@ export default function Home() {
 
             {/* --- BUILDER HIGHLIGHT --- */}
             <section className="py-24 px-4 relative overflow-hidden border-t border-white/5">
-                <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-neon-purple/10 rounded-full blur-[150px] pointer-events-none"></div>
-
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     {/* Left: Description */}
                     <div className="space-y-6 z-10">
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-neon-purple/10 border border-neon-purple/30 rounded-full text-neon-purple text-sm font-mono">
-                            <span className="w-2 h-2 bg-neon-purple rounded-full animate-pulse"></span>
+                            <span className="w-2 h-2 bg-neon-purple rounded-full">
+                            </span>
                             {t('home.builderHighlight.badge')}
                         </div>
                         <h2 className="text-3xl md:text-5xl font-black tracking-tighter">
@@ -566,7 +577,7 @@ export default function Home() {
                         </ul>
                         <Link
                             href="/strategies/builder"
-                            className="inline-flex items-center gap-2 bg-gradient-to-r from-neon-purple to-neon-cyan text-black font-bold px-8 py-3 rounded-full hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all"
+                            className="inline-flex items-center gap-2 bg-gradient-to-r from-neon-purple to-neon-cyan text-black font-bold px-8 py-3 rounded-full"
                         >
                             <Layers size={18} />
                             {t('home.builderHighlight.cta')}
@@ -630,21 +641,26 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {/* CLI */}
-                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8 hover:border-neon-cyan/30 transition-colors group">
-                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8">
+
+                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
+
                                 <TerminalIcon className="text-neon-cyan" size={24} />
                             </div>
                             <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.cli.title')}</h3>
                             <p className="text-gray-400 text-sm mb-6 h-10">{t('home.devTools.cli.desc')}</p>
                             <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-neon-cyan flex justify-between items-center">
                                 <span>./install.sh</span>
-                                <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></div>
+                                <div className="w-2 h-2 rounded-full bg-neon-cyan">
+                                </div>
                             </div>
                         </div>
 
                         {/* TS SDK */}
-                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8 hover:border-blue-500/30 transition-colors group">
-                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8">
+
+                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
+
                                 <Cpu className="text-blue-500" size={24} />
                             </div>
                             <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.ts.title')}</h3>
@@ -655,8 +671,10 @@ export default function Home() {
                         </div>
 
                         {/* Python SDK */}
-                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8 hover:border-yellow-500/30 transition-colors group">
-                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8">
+
+                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
+
                                 <Activity className="text-yellow-500" size={24} />
                             </div>
                             <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.py.title')}</h3>
@@ -668,7 +686,7 @@ export default function Home() {
                     </div>
 
                     <div className="mt-12 text-center">
-                        <Link href="https://x.com/Vaiosx" className="text-gray-400 hover:text-white transition-colors underline underline-offset-4 decoration-neon-cyan/50 text-sm">
+                        <Link href="https://x.com/Vaiosx" className="text-gray-400 underline underline-offset-4 decoration-neon-cyan/50 text-sm">
                             {t('home.devTools.cta')} <ArrowRight className="w-4 h-4" />
                         </Link>
                     </div>
@@ -680,19 +698,19 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-neon-purple/10 pointer-events-none"></div>
                 <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">{t('home.cta.title')}</h2>
                 <div className="flex flex-wrap justify-center gap-4">
-                    <Link href="/strategies" className="bg-neon-cyan text-black font-bold px-10 py-4 rounded-full hover:shadow-[0_0_40px_rgba(0,243,255,0.4)] transition-all text-lg scale-100 hover:scale-105 active:scale-95 duration-200 cursor-pointer">
+                    <Link href="/strategies" className="bg-neon-cyan text-black font-bold px-10 py-4 rounded-full text-lg active: cursor-pointer">
                         {t('home.ctaLinks.browse')}
                     </Link>
-                    <Link href="/strategies/builder" className="border border-neon-purple text-neon-purple font-bold px-10 py-4 rounded-full hover:bg-neon-purple/10 transition-all text-lg cursor-pointer">
+                    <Link href="/strategies/builder" className="border border-neon-purple text-neon-purple font-bold px-10 py-4 rounded-full text-lg cursor-pointer">
                         {t('home.ctaLinks.builder')}
                     </Link>
-                    <Link href="/marketplace" className="border border-blue-500/50 text-blue-400 font-bold px-10 py-4 rounded-full hover:bg-blue-500/10 transition-all text-lg cursor-pointer">
+                    <Link href="/marketplace" className="border border-blue-500/50 text-blue-400 font-bold px-10 py-4 rounded-full text-lg cursor-pointer">
                         {t('home.ctaLinks.marketplace')}
                     </Link>
-                    <Link href="/plugins" className="border border-pink-500/50 text-pink-400 font-bold px-10 py-4 rounded-full hover:bg-pink-500/10 transition-all text-lg cursor-pointer">
+                    <Link href="/plugins" className="border border-pink-500/50 text-pink-400 font-bold px-10 py-4 rounded-full text-lg cursor-pointer">
                         {t('home.ctaLinks.plugins')}
                     </Link>
-                    <Link href="/docs" className="border border-white/10 text-white font-bold px-10 py-4 rounded-full hover:bg-white/5 transition-all text-lg cursor-pointer">
+                    <Link href="/docs" className="border border-white/10 text-white font-bold px-10 py-4 rounded-full text-lg cursor-pointer">
                         {t('home.ctaLinks.docs')}
                     </Link>
                 </div>

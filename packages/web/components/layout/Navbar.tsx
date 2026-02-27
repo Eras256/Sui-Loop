@@ -80,26 +80,28 @@ export default function Navbar() {
                 {/* Main navbar container */}
                 <div
                     className={`
-                        pointer-events-auto w-[98%] 2xl:w-[96%] mx-auto 
-                        backdrop-blur-md border border-white/10 
-                        rounded-2xl sm:rounded-full 
-                        px-4 xl:px-8 py-2 xl:py-3
-                        flex items-center justify-between 
-                        shadow-[0_4px_30px_rgba(0,0,0,0.1)]
-                        transition-all duration-300
-                        ${scrolled ? "bg-black/60" : "bg-black/40"}
-                    `}
+ pointer-events-auto w-[98%] 2xl:w-[96%] mx-auto 
+ border border-white/10 
+ rounded-2xl sm:rounded-full 
+ px-4 xl:px-8 py-2 xl:py-3
+ flex items-center justify-between 
+ shadow-[0_4px_30px_rgba(0,0,0,0.1)]
+ 
+ ${scrolled ? "bg-black/60" : "bg-black/40"}
+ `}
                 >
                     {/* Left side: Logo + Badge */}
                     <div className="flex items-center gap-4 xl:gap-8 min-w-0 shrink-0">
                         {/* Logo Section - Responsive */}
-                        <Link href="/" className="flex items-center gap-2 group shrink-0">
-                            <div className="relative flex items-center justify-center w-8 h-8 xl:w-10 xl:h-10 group-hover:scale-110 transition-transform">
+                        <Link href="/" className="flex items-center gap-2 shrink-0">
+                            <div className="relative flex items-center justify-center w-8 h-8 xl:w-10 xl:h-10">
+
                                 <img src="/logo_transparent.png" alt="SuiLoop Logo" className="w-full h-full object-contain object-center scale-[1.3] drop-shadow-[0_0_10px_rgba(189,0,255,0.4)]" />
                             </div>
                             {/* Logo text - Optimized visibility */}
                             <div className="hidden sm:flex flex-col">
-                                <span className="font-bold text-white tracking-tighter leading-none text-[10px] xl:text-lg group-hover:text-neon-cyan transition-colors">
+                                <span className="font-bold text-white tracking-tighter leading-none text-[10px] xl:text-lg">
+
                                     SUILOOP
                                 </span>
                                 <span className="hidden min-[1280px]:block text-[9px] text-gray-500 font-mono tracking-widest leading-none">
@@ -111,7 +113,8 @@ export default function Navbar() {
 
                     {/* Center: Desktop Navigation - visible on laptop (lg) and up */}
                     <div className="hidden lg:flex items-center gap-0.5 flex-1 justify-center mx-1 xl:mx-2">
-                        <div className="flex items-center gap-0.5 p-0.5 bg-white/[0.03] border border-white/5 rounded-full backdrop-blur-md">
+                        <div className="flex items-center gap-0.5 p-0.5 bg-white/[0.03] border border-white/5 rounded-full">
+
                             {navLinks.map((link) => {
                                 const isActive = pathname === link.href;
                                 const Icon = link.icon;
@@ -120,10 +123,10 @@ export default function Navbar() {
                                         key={link.name}
                                         href={link.href}
                                         className={`
-                                            relative px-1.5 xl:px-2.5 py-1.5 rounded-full text-[8.5px] xl:text-[10px] font-bold 
-                                            transition-colors duration-300 flex items-center gap-1 xl:gap-1.5 whitespace-nowrap group
-                                            ${isActive ? "text-white" : "text-gray-400 hover:text-white"}
-                                        `}
+ relative px-1.5 xl:px-2.5 py-1.5 rounded-full text-[8.5px] xl:text-[10px] font-bold 
+ flex items-center gap-1 xl:gap-1.5 whitespace-nowrap 
+ ${isActive ? "text-white" : "text-gray-400"}
+ `}
                                     >
                                         {/* Shared Layout Background Animation */}
                                         {isActive && (
@@ -135,20 +138,20 @@ export default function Navbar() {
                                         )}
 
                                         <Icon className={`
-                                            relative z-10 w-3 h-3 xl:w-3.5 xl:h-3.5 transition-transform group-hover:scale-110
-                                            ${isActive ? "text-neon-cyan" : "text-gray-500"}
-                                        `} />
+ relative z-10 w-3 h-3 xl:w-3.5 xl:h-3.5 
+ ${isActive ? "text-neon-cyan" : "text-gray-500"}
+ `} />
 
                                         <span className={`
-                                            relative z-10
-                                            ${isActive ? "inline" : "inline"}
-                                        `}>
+ relative z-10
+ ${isActive ? "inline" : "inline"}
+ `}>
                                             {link.name}
                                         </span>
 
                                         {/* Hover Label Tooltip - below the pill */}
                                         {!isActive && (
-                                            <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/80 backdrop-blur-md border border-white/10 rounded text-[8px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+                                            <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/80 border border-white/10 rounded text-[8px] opacity-0 pointer-events-none whitespace-nowrap z-50">
                                                 {link.name}
                                             </span>
                                         )}
@@ -173,13 +176,13 @@ export default function Navbar() {
                         <LanguageSwitcher />
 
                         {/* Connect Button - Responsive scaling */}
-                        <div className="navbar-connect-btn scale-[0.85] xl:scale-100 origin-right">
-                            <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-4 xl:!px-5 !py-2 !rounded-full !text-[11px] xl:!text-xs !hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] !transition-all !whitespace-nowrap" />
+                        <div className="navbar-connect-btn scale-[0.85] origin-right">
+                            <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-4 xl:!px-5 !py-2 !rounded-full !text-[11px] xl:!text-xs !shadow-[0_0_20px_rgba(0,243,255,0.4)] !whitespace-nowrap" />
                         </div>
 
                         {/* Mobile Menu Toggle - Visible on lg and below */}
                         <button
-                            className="lg:hidden shrink-0 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-neon-cyan/10 transition-colors ml-1 group"
+                            className="lg:hidden shrink-0 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/5 active:bg-neon-cyan/10 ml-1"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                             aria-expanded={mobileMenuOpen}
@@ -187,7 +190,7 @@ export default function Navbar() {
                             <motion.div
                                 animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
                                 transition={{ duration: 0.2 }}
-                                className="text-gray-400 group-hover:text-white"
+                                className="text-gray-400 -"
                             >
                                 {mobileMenuOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <Menu size={20} className="sm:w-6 sm:h-6" />}
                             </motion.div>
@@ -206,7 +209,7 @@ export default function Navbar() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 xl:hidden"
+                            className="fixed inset-0 bg-black/50 z-40 xl:hidden"
                             onClick={closeMobileMenu}
                             aria-hidden="true"
                         />
@@ -225,7 +228,7 @@ export default function Navbar() {
                                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
                                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/5">
                                         <span className="relative flex h-2 w-2">
-                                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? 'bg-green-400' : 'bg-gray-400'}`}></span>
+                                            <span className={` absolute inline-flex h-full w-full rounded-full opacity-75 ${account ? 'bg-green-400' : 'bg-gray-400'}`}></span>
                                             <span className={`relative inline-flex rounded-full h-2 w-2 ${account ? 'bg-green-500' : 'bg-gray-500'}`}></span>
                                         </span>
                                         <span className="text-[10px] text-gray-400 font-mono">
@@ -258,18 +261,18 @@ export default function Navbar() {
                                                 href={link.href}
                                                 onClick={closeMobileMenu}
                                                 className={`
-                                                    min-h-[48px] p-3 sm:p-4 rounded-xl flex items-center gap-3 sm:gap-4 
-                                                    transition-all duration-200 active:scale-[0.98]
-                                                    ${isActive
+ min-h-[48px] p-3 sm:p-4 rounded-xl flex items-center gap-3 sm:gap-4 
+ active:scale-[0.98]
+ ${isActive
                                                         ? "bg-white/10 text-white border border-neon-cyan/30"
-                                                        : "hover:bg-white/5 text-gray-300 hover:text-white"
+                                                        : " text-gray-300"
                                                     }
-                                                `}
+ `}
                                             >
                                                 <div className={`
-                                                    w-10 h-10 rounded-lg flex items-center justify-center
-                                                    ${isActive ? "bg-neon-cyan/20" : "bg-white/5"}
-                                                `}>
+ w-10 h-10 rounded-lg flex items-center justify-center
+ ${isActive ? "bg-neon-cyan/20" : "bg-white/5"}
+ `}>
                                                     <Icon
                                                         size={20}
                                                         className={isActive ? "text-neon-cyan" : "text-gray-400"}
@@ -299,7 +302,7 @@ export default function Navbar() {
                                 <Link
                                     href="/strategies"
                                     onClick={closeMobileMenu}
-                                    className="min-h-[52px] p-4 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-bold border border-white/20 flex items-center justify-center gap-3 hover:opacity-90 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(0,243,255,0.3)]"
+                                    className="min-h-[52px] p-4 rounded-xl bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-bold border border-white/20 flex items-center justify-center gap-3 active:scale-[0.98] shadow-[0_0_20px_rgba(0,243,255,0.3)]"
                                 >
                                     <Zap size={20} className="text-black" />
                                     <span className="text-sm sm:text-base">{t('nav.matrixUplink')}</span>
@@ -317,7 +320,7 @@ export default function Navbar() {
                                 <Link
                                     href="/strategies/builder"
                                     onClick={closeMobileMenu}
-                                    className="min-h-[48px] p-4 rounded-xl bg-white/5 border border-neon-purple/30 text-neon-purple font-bold flex items-center justify-center gap-3 hover:bg-neon-purple/10 transition-all active:scale-[0.98]"
+                                    className="min-h-[48px] p-4 rounded-xl bg-white/5 border border-neon-purple/30 text-neon-purple font-bold flex items-center justify-center gap-3 active:scale-[0.98]"
                                 >
                                     <Cpu size={18} />
                                     <span className="text-sm sm:text-base">{t('nav.strategyBuilder')}</span>

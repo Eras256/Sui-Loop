@@ -67,7 +67,7 @@ export default function Footer() {
                     <div className="flex items-center gap-3 sm:gap-6 text-[9px] sm:text-[10px] font-mono whitespace-nowrap overflow-x-auto custom-scrollbar-hidden py-1">
                         <span className="flex items-center gap-1.5 text-green-400 shrink-0">
                             <span className="relative flex h-1.5 w-1.5">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                                <span className=" absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
                             </span>
                             {t('footer.status.uplink')}
@@ -94,12 +94,14 @@ export default function Footer() {
 
                 {/* Brand Column */}
                 <div className="sm:col-span-2 lg:col-span-1 space-y-5">
-                    <Link href="/" className="flex items-center gap-2.5 group w-fit">
-                        <div className="relative flex items-center justify-center w-9 h-9 group-hover:scale-110 transition-transform">
+                    <Link href="/" className="flex items-center gap-2.5 w-fit">
+                        <div className="relative flex items-center justify-center w-9 h-9 -">
+
                             <img src="/logo_transparent.png" alt="SuiLoop Logo" className="w-full h-full object-contain object-center scale-[1.3] drop-shadow-[0_0_10px_rgba(189,0,255,0.4)]" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-bold text-white tracking-tighter text-lg leading-none group-hover:text-neon-cyan transition-colors">SUILOOP</span>
+                            <span className="font-bold text-white tracking-tighter text-lg leading-none -">
+                                SUILOOP</span>
                             <span className="text-[9px] text-gray-500 font-mono tracking-widest leading-none">NEURAL MATRIX</span>
                         </div>
                     </Link>
@@ -126,8 +128,7 @@ export default function Footer() {
                             href="https://x.com/Vaiosx"
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="X / Twitter"
-                            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black transition-all hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+                            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400"
                         >
                             <svg viewBox="0 0 24 24" aria-hidden="true" className="w-4 h-4 fill-current">
                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -146,9 +147,9 @@ export default function Footer() {
                             <li key={link.href}>
                                 <Link
                                     href={link.href}
-                                    className="text-sm text-gray-400 hover:text-neon-cyan transition-colors flex items-center gap-1.5 group"
+                                    className="text-sm text-gray-400 flex items-center gap-1.5"
                                 >
-                                    <span className="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-neon-cyan transition-colors" />
+                                    <span className="w-1 h-1 rounded-full bg-gray-700 -" />
                                     {t(link.key)}
                                 </Link>
                             </li>
@@ -169,18 +170,18 @@ export default function Footer() {
                                         href={link.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-sm text-gray-400 hover:text-neon-cyan transition-colors flex items-center gap-1.5 group"
+                                        className="text-sm text-gray-400 flex items-center gap-1.5"
                                     >
-                                        <span className="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-neon-cyan transition-colors" />
+                                        <span className="w-1 h-1 rounded-full bg-gray-700 -" />
                                         {t(link.key)}
-                                        <ExternalLink className="w-2.5 h-2.5 opacity-40 group-hover:opacity-80" />
+                                        <ExternalLink className="w-2.5 h-2.5 opacity-40 -" />
                                     </a>
                                 ) : (
                                     <Link
                                         href={link.href}
-                                        className="text-sm text-gray-400 hover:text-neon-cyan transition-colors flex items-center gap-1.5 group"
+                                        className="text-sm text-gray-400 flex items-center gap-1.5"
                                     >
-                                        <span className="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-neon-cyan transition-colors" />
+                                        <span className="w-1 h-1 rounded-full bg-gray-700 -" />
                                         {t(link.key)}
                                     </Link>
                                 )}
@@ -218,9 +219,9 @@ export default function Footer() {
                     {/* CTA */}
                     <Link
                         href="/dashboard"
-                        className="mt-4 flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-neon-cyan/10 to-neon-purple/10 border border-neon-cyan/20 rounded-xl text-xs font-bold text-neon-cyan font-mono hover:bg-neon-cyan/20 transition-all hover:shadow-[0_0_20px_rgba(0,243,255,0.2)] group"
+                        className="mt-4 flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-neon-cyan/10 to-neon-purple/10 border border-neon-cyan/20 rounded-xl text-xs font-bold text-neon-cyan font-mono"
                     >
-                        <Zap className="w-3.5 h-3.5 group-hover:animate-pulse" />
+                        <Zap className="w-3.5 h-3.5" />
                         {t('footer.launch')}
                     </Link>
                 </div>
@@ -236,14 +237,16 @@ export default function Footer() {
                             href="https://t.me/Vaiosx"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-neon-cyan hover:text-white transition-colors"
+                            className="text-neon-cyan"
                         >
                             {t('footer.architect')}
                         </a>
                     </div>
                     <div className="flex items-center gap-4 flex-wrap justify-center">
-                        <Link href="/terms" className="hover:text-neon-cyan transition-colors">{t('footer.links.terms')}</Link>
-                        <Link href="/risk-disclosure" className="hover:text-neon-cyan transition-colors">{t('footer.links.risk')}</Link>
+                        <Link href="/terms" className="">
+                            {t('footer.links.terms')}</Link>
+                        <Link href="/risk-disclosure" className="">
+                            {t('footer.links.risk')}</Link>
                         <span className="text-gray-700 hidden sm:inline">•</span>
                         <span className="text-gray-700 hidden sm:inline">{t('footer.legal')}</span>
                     </div>
