@@ -16,6 +16,9 @@ import { ExternalLink, Shield, X, AlertTriangle, Trash2, Info, ChevronRight, Ref
 import OpsConsole from "@/components/layout/OpsConsole";
 import { writeLog } from "@/lib/logger";
 import { getWebSocketUrl } from "@/lib/constants";
+import MatrixFeePanel from "@/components/dashboard/MatrixFeePanel";
+import WalrusLogViewer from "@/components/dashboard/WalrusLogViewer";
+import PublishStrategyModal from "@/components/dashboard/PublishStrategyModal";
 
 function useWebSocket(url: string, onMessage: (event: MessageEvent) => void) {
     useEffect(() => {
@@ -177,6 +180,16 @@ function DashboardContent() {
         confirmText: '',
         onConfirm: () => { },
         type: 'info'
+    });
+
+    const [publishConfig, setPublishConfig] = useState<{
+        isOpen: boolean;
+        strategy: any | null;
+        agentElo: number;
+    }>({
+        isOpen: false,
+        strategy: null,
+        agentElo: 1200
     });
 
     // Fetch User Real Balance
@@ -1668,800 +1681,839 @@ function DashboardContent() {
     // Dashboard is now visible to guests. Operations will check for account.
 
     return (
-        <div className="min-h-screen pt-36 pb-12 px-4 md:px-8 relative overflow-hidden">
-            <Navbar />
+        <>
+            <div className="min-h-screen pt-36 pb-12 px-4 md:px-8 relative overflow-hidden">
+                <Navbar />
 
-            {/* Legal Disclaimer Strip */}
-            <div className="w-full max-w-7xl mx-auto mb-4 relative z-10">
-                <div className="flex flex-wrap items-center justify-between gap-2 bg-amber-500/5 border border-amber-500/15 rounded-xl px-4 py-2.5 text-[9px] font-mono">
-                    <div className="flex items-center gap-2 text-amber-400/80">
-                        <AlertTriangle size={10} className="shrink-0" />
-                        <span><span className="text-white font-bold">{t('dashboard.legalNotice')}</span> {t('dashboard.nonCustodial')}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">{t('footer.links.terms')}</a>
-                        <span className="text-gray-700">|</span>
-                        <a href="/risk-disclosure" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">{t('footer.links.risk')}</a>
+                {/* Legal Disclaimer Strip */}
+                <div className="w-full max-w-7xl mx-auto mb-4 relative z-10">
+                    <div className="flex flex-wrap items-center justify-between gap-2 bg-amber-500/5 border border-amber-500/15 rounded-xl px-4 py-2.5 text-[9px] font-mono">
+                        <div className="flex items-center gap-2 text-amber-400/80">
+                            <AlertTriangle size={10} className="shrink-0" />
+                            <span><span className="text-white font-bold">{t('dashboard.legalNotice')}</span> {t('dashboard.nonCustodial')}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">{t('footer.links.terms')}</a>
+                            <span className="text-gray-700">|</span>
+                            <a href="/risk-disclosure" target="_blank" rel="noopener noreferrer" className="text-neon-cyan hover:underline">{t('footer.links.risk')}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Auto-Start Confirmation Modal */}
-            <AnimatePresence>
-                {showAutoStartModal && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setShowAutoStartModal(false)}
-                            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-                        />
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="bg-[#0f0a1f] border border-neon-cyan/50 rounded-xl p-6 sm:p-7 max-w-sm w-full shadow-[0_0_50px_rgba(0,243,255,0.2)] text-center relative z-10 overflow-y-auto max-h-[90vh]"
-                        >
-                            <div className="w-14 h-14 bg-neon-cyan/20 border border-neon-cyan/30 rounded-full flex items-center justify-center mx-auto mb-4 relative group">
-                                <div className="absolute inset-0 bg-neon-cyan/20 rounded-full animate-ping group-hover:animate-none opacity-20"></div>
-                                <span className="text-2xl relative z-10">{currentStrategy.emoji}</span>
-                            </div>
-                            <h2 className="text-xl font-bold text-white mb-1.5 leading-tight">{t('dashboard.deployStrategy').replace('{name}', currentStrategy.name)}</h2>
-                            <div className="bg-neon-cyan/5 border border-neon-cyan/20 p-3 rounded-lg mb-4">
-                                <div className="flex justify-between items-center text-[9px] text-gray-400 uppercase tracking-widest mb-0.5 font-mono">
-                                    <span>{t('dashboard.protocolFee')}</span>
-                                    <span>{t('dashboard.authorized')}</span>
+                {/* Auto-Start Confirmation Modal */}
+                <AnimatePresence>
+                    {showAutoStartModal && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setShowAutoStartModal(false)}
+                                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                            />
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                                className="bg-[#0f0a1f] border border-neon-cyan/50 rounded-xl p-6 sm:p-7 max-w-sm w-full shadow-[0_0_50px_rgba(0,243,255,0.2)] text-center relative z-10 overflow-y-auto max-h-[90vh]"
+                            >
+                                <div className="w-14 h-14 bg-neon-cyan/20 border border-neon-cyan/30 rounded-full flex items-center justify-center mx-auto mb-4 relative group">
+                                    <div className="absolute inset-0 bg-neon-cyan/20 rounded-full animate-ping group-hover:animate-none opacity-20"></div>
+                                    <span className="text-2xl relative z-10">{currentStrategy.emoji}</span>
                                 </div>
-                                <p className="text-neon-cyan font-mono text-base font-bold flex justify-between items-baseline">
-                                    <span>0.10</span>
-                                    <span className="text-[10px] ml-1 opacity-70 font-sans">{t('dashboard.suiTestnet')}</span>
+                                <h2 className="text-xl font-bold text-white mb-1.5 leading-tight">{t('dashboard.deployStrategy').replace('{name}', currentStrategy.name)}</h2>
+                                <div className="bg-neon-cyan/5 border border-neon-cyan/20 p-3 rounded-lg mb-4">
+                                    <div className="flex justify-between items-center text-[9px] text-gray-400 uppercase tracking-widest mb-0.5 font-mono">
+                                        <span>{t('dashboard.protocolFee')}</span>
+                                        <span>{t('dashboard.authorized')}</span>
+                                    </div>
+                                    <p className="text-neon-cyan font-mono text-base font-bold flex justify-between items-baseline">
+                                        <span>0.10</span>
+                                        <span className="text-[10px] ml-1 opacity-70 font-sans">{t('dashboard.suiTestnet')}</span>
+                                    </p>
+                                </div>
+                                <p className="text-gray-400 mb-6 text-xs leading-relaxed max-w-[280px] mx-auto">
+                                    {t('dashboard.deploymentDesc')}
                                 </p>
-                            </div>
-                            <p className="text-gray-400 mb-6 text-xs leading-relaxed max-w-[280px] mx-auto">
-                                {t('dashboard.deploymentDesc')}
-                            </p>
-                            <div className="flex gap-3">
-                                <button
-                                    onClick={() => setShowAutoStartModal(false)}
-                                    className="flex-1 px-3 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-colors font-mono font-bold text-[10px]"
-                                >
-                                    {t('dashboard.cancel')}
-                                </button>
-                                <button
-                                    onClick={confirmAutoStart}
-                                    className="flex-1 px-3 py-2.5 rounded-lg bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all font-mono font-bold text-[10px] shadow-[0_0_20px_rgba(0,243,255,0.2)] flex items-center justify-center gap-1.5 group"
-                                >
-                                    {t('dashboard.confirm')}
-                                    <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                                </button>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-
-
-
-            {/* Strategy Details Modal */}
-            <AnimatePresence>
-                {selectedStrategy && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setSelectedStrategy(null)}
-                            className="absolute inset-0 bg-black/90 backdrop-blur-md"
-                        />
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0, y: 30 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 30 }}
-                            className="bg-[#0f0a1f] border border-neon-cyan/30 rounded-2xl w-full max-w-lg shadow-[0_0_80px_rgba(0,243,255,0.15)] relative z-10 overflow-hidden flex flex-col max-h-[90vh]"
-                        >
-                            {/* Header */}
-                            <div className="p-6 border-b border-white/5 relative bg-gradient-to-r from-neon-cyan/5 to-transparent">
-                                <button
-                                    onClick={() => setSelectedStrategy(null)}
-                                    className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-                                >
-                                    <X size={20} />
-                                </button>
-                                <div className="flex items-center gap-4">
-                                    <div className="w-16 h-16 bg-black/40 border border-white/10 rounded-2xl flex items-center justify-center text-4xl shadow-inner relative group overflow-hidden">
-                                        <div className="absolute inset-0 bg-neon-cyan/20 blur-xl group-hover:opacity-100 opacity-50 transition-opacity"></div>
-                                        <span className="relative z-10">{selectedStrategy.emoji}</span>
-                                    </div>
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <h2 className="text-xl font-bold text-white tracking-tight">
-                                                {t(`strategies.list.${selectedStrategy.strategy_id}.name`) !== `strategies.list.${selectedStrategy.strategy_id}.name`
-                                                    ? t(`strategies.list.${selectedStrategy.strategy_id}.name`)
-                                                    : (t(`dashboard.strategies.${selectedStrategy.strategy_id}`) !== `dashboard.strategies.${selectedStrategy.strategy_id}`
-                                                        ? t(`dashboard.strategies.${selectedStrategy.strategy_id}`)
-                                                        : selectedStrategy.name)}
-                                            </h2>
-                                            <span className="px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] text-green-400 font-mono flex items-center gap-1">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-                                                {t('dashboard.running')}
-                                            </span>
-                                        </div>
-                                        <p className="text-xs text-gray-400 font-mono">ID: {selectedStrategy.id.slice(0, 8)}...{selectedStrategy.id.slice(-4)}</p>
-                                    </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => setShowAutoStartModal(false)}
+                                        className="flex-1 px-3 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-colors font-mono font-bold text-[10px]"
+                                    >
+                                        {t('dashboard.cancel')}
+                                    </button>
+                                    <button
+                                        onClick={confirmAutoStart}
+                                        className="flex-1 px-3 py-2.5 rounded-lg bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all font-mono font-bold text-[10px] shadow-[0_0_20px_rgba(0,243,255,0.2)] flex items-center justify-center gap-1.5 group"
+                                    >
+                                        {t('dashboard.confirm')}
+                                        <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                                    </button>
                                 </div>
-                            </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
 
-                            {/* Content Scrollable */}
-                            <div className="p-6 overflow-y-auto custom-scrollbar space-y-6 flex-1 min-h-0">
 
-                                {/* Key Metrics Grid */}
-                                <div className="grid grid-cols-3 gap-3">
-                                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.targetYield')}</p>
-                                        <p className="text-neon-cyan font-mono font-bold text-lg">{selectedStrategy.yield}</p>
-                                    </div>
-                                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.profit24h')}</p>
-                                        <p className="text-green-400 font-mono font-bold text-lg">+{(0.24).toFixed(2)} SUI</p>
-                                    </div>
-                                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.uptime')}</p>
-                                        <p className="text-white font-mono font-bold text-lg">{(Math.random() * 24).toFixed(1)}h</p>
-                                    </div>
-                                </div>
 
-                                {/* Transaction Info */}
-                                <div className="space-y-2">
-                                    <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
-                                        <Zap size={12} className="text-neon-cyan" />
-                                        {t('dashboard.latestExecution')}
-                                    </h3>
-
-                                    <div className="bg-black/40 border border-white/10 rounded-xl p-4 space-y-3 relative overflow-hidden group">
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-neon-cyan/10 transition-colors"></div>
-
-                                        <div className="relative z-10 flex justify-between items-center pb-3 border-b border-white/5">
-                                            <span className="text-xs text-gray-400">{t('dashboard.txHash')}</span>
-                                            {selectedStrategy.tx_digest ? (
-                                                <a
-                                                    href={`https://suiscan.xyz/testnet/tx/${selectedStrategy.tx_digest}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center gap-1.5 text-xs font-mono text-neon-cyan hover:text-white transition-colors bg-neon-cyan/10 px-2 py-1 rounded cursor-pointer"
-                                                >
-                                                    {selectedStrategy.tx_digest.slice(0, 6)}...{selectedStrategy.tx_digest.slice(-4)}
-                                                    <ExternalLink size={10} />
-                                                </a>
-                                            ) : (
-                                                <span className="text-xs text-gray-600 font-mono italic">{t('dashboard.pending')}</span>
-                                            )}
+                {/* Strategy Details Modal */}
+                <AnimatePresence>
+                    {selectedStrategy && (
+                        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setSelectedStrategy(null)}
+                                className="absolute inset-0 bg-black/90 backdrop-blur-md"
+                            />
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                                className="bg-[#0f0a1f] border border-neon-cyan/30 rounded-2xl w-full max-w-lg shadow-[0_0_80px_rgba(0,243,255,0.15)] relative z-10 overflow-hidden flex flex-col max-h-[90vh]"
+                            >
+                                {/* Header */}
+                                <div className="p-6 border-b border-white/5 relative bg-gradient-to-r from-neon-cyan/5 to-transparent">
+                                    <button
+                                        onClick={() => setSelectedStrategy(null)}
+                                        className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                                    >
+                                        <X size={20} />
+                                    </button>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-16 h-16 bg-black/40 border border-white/10 rounded-2xl flex items-center justify-center text-4xl shadow-inner relative group overflow-hidden">
+                                            <div className="absolute inset-0 bg-neon-cyan/20 blur-xl group-hover:opacity-100 opacity-50 transition-opacity"></div>
+                                            <span className="relative z-10">{selectedStrategy.emoji}</span>
                                         </div>
-
-                                        <div className="relative z-10 grid grid-cols-2 gap-4 pt-1">
-                                            <div>
-                                                <p className="text-[9px] text-gray-500 uppercase mb-0.5">{t('dashboard.network')}</p>
-                                                <p className="text-xs text-white font-mono">{t('dashboard.suiTestnet')}</p>
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <h2 className="text-xl font-bold text-white tracking-tight">
+                                                    {t(`strategies.list.${selectedStrategy.strategy_id}.name`) !== `strategies.list.${selectedStrategy.strategy_id}.name`
+                                                        ? t(`strategies.list.${selectedStrategy.strategy_id}.name`)
+                                                        : (t(`dashboard.strategies.${selectedStrategy.strategy_id}`) !== `dashboard.strategies.${selectedStrategy.strategy_id}`
+                                                            ? t(`dashboard.strategies.${selectedStrategy.strategy_id}`)
+                                                            : selectedStrategy.name)}
+                                                </h2>
+                                                <span className="px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] text-green-400 font-mono flex items-center gap-1">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                                                    {t('dashboard.running')}
+                                                </span>
                                             </div>
-                                            <div className="text-right">
-                                                <p className="text-[9px] text-gray-500 uppercase mb-0.5">{t('dashboard.protocol')}</p>
-                                                <p className="text-xs text-white font-mono">
-                                                    {selectedStrategy?.strategy_id?.includes('lending') || selectedStrategy?.strategy_id?.includes('loop') ? 'Navi / Scallop' :
-                                                        selectedStrategy?.strategy_id?.includes('cetus') ? 'Cetus CLMM' :
-                                                            selectedStrategy?.strategy_id?.includes('bluefin') ? 'Bluefin Perps' :
-                                                                selectedStrategy?.strategy_id?.includes('deepbook') ? 'DeepBook V3' :
-                                                                    selectedStrategy?.strategy_id?.includes('bridge') ? 'Wormhole' :
-                                                                        selectedStrategy?.strategy_id?.includes('mev') ? 'Atomic Engine' :
-                                                                            'Scallop / Cetus'}
-                                                </p>
-                                            </div>
+                                            <p className="text-xs text-gray-400 font-mono">ID: {selectedStrategy.id.slice(0, 8)}...{selectedStrategy.id.slice(-4)}</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Installed Plugins Section */}
-                                <div className="space-y-3">
-                                    <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
-                                        <Cpu size={12} className="text-purple-400" />
-                                        {t('dashboard.installedPlugins')}
-                                    </h3>
+                                {/* Content Scrollable */}
+                                <div className="p-6 overflow-y-auto custom-scrollbar space-y-6 flex-1 min-h-0">
 
-                                    {isSkillsLoading ? (
-                                        <div className="animate-pulse flex space-x-4">
-                                            <div className="flex-1 space-y-4 py-1">
-                                                <div className="h-4 bg-white/5 rounded w-3/4"></div>
-                                                <div className="h-4 bg-white/5 rounded"></div>
-                                            </div>
+                                    {/* Key Metrics Grid */}
+                                    <div className="grid grid-cols-3 gap-3">
+                                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                                            <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.targetYield')}</p>
+                                            <p className="text-neon-cyan font-mono font-bold text-lg">{selectedStrategy.yield}</p>
                                         </div>
-                                    ) : activePlugins.length > 0 ? (
-                                        <div className="grid gap-2">
-                                            {activePlugins.map((skill: any) => (
-                                                <div key={skill.slug} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group/skill hover:bg-white/10 transition-all">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-8 h-8 bg-black/40 border border-white/5 rounded-lg flex items-center justify-center text-xs">
-                                                            {skill.isGlobal ? '🌐' : '🛠️'}
-                                                        </div>
-                                                        <div>
-                                                            <div className="flex items-center gap-2">
-                                                                <p className="text-xs font-bold text-white">{skill.name}</p>
-                                                                {skill.isGlobal && (
-                                                                    <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">{t('nav.matrix')}</span>
-                                                                )}
-                                                            </div>
-                                                            <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
-                                                        </div>
-                                                    </div>
-                                                    <button
-                                                        onClick={() => handleUninstallSkill(skill.slug)}
-                                                        className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover/skill:opacity-100 transition-all"
-                                                        title="Uninstall"
-                                                    >
-                                                        <Trash2 size={14} />
-                                                    </button>
-                                                </div>
-                                            ))}
+                                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                                            <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.profit24h')}</p>
+                                            <p className="text-green-400 font-mono font-bold text-lg">+{(0.24).toFixed(2)} SUI</p>
                                         </div>
-                                    ) : (
-                                        <div className="text-center py-4 bg-white/5 rounded-xl border border-dashed border-white/10">
-                                            <p className="text-[10px] text-gray-500 italic">{t('dashboard.noPlugins')}</p>
+                                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                                            <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{t('dashboard.metrics.uptime')}</p>
+                                            <p className="text-white font-mono font-bold text-lg">{(Math.random() * 24).toFixed(1)}h</p>
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
 
-                                {/* Installed Skills Section */}
-                                <div className="space-y-3">
-                                    <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
-                                        <Code size={12} className="text-neon-cyan" />
-                                        {t('dashboard.installedSkills')}
-                                    </h3>
-
-                                    {isSkillsLoading ? (
-                                        <div className="animate-pulse flex space-x-4">
-                                            <div className="flex-1 space-y-4 py-1">
-                                                <div className="h-4 bg-white/5 rounded w-3/4"></div>
-                                                <div className="h-4 bg-white/5 rounded"></div>
-                                            </div>
-                                        </div>
-                                    ) : tradingSkills.length > 0 ? (
-                                        <div className="grid gap-2">
-                                            {tradingSkills.map((skill: any) => (
-                                                <div key={skill.slug} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group/skill hover:bg-white/10 transition-all">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-8 h-8 bg-black/40 border border-white/5 rounded-lg flex items-center justify-center text-xs">
-                                                            {skill.isGlobal ? '🌐' : '🛠️'}
-                                                        </div>
-                                                        <div>
-                                                            <div className="flex items-center gap-2">
-                                                                <p className="text-xs font-bold text-white">{skill.name}</p>
-                                                                {skill.isGlobal && (
-                                                                    <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">{t('nav.matrix')}</span>
-                                                                )}
-                                                            </div>
-                                                            <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
-                                                        </div>
-                                                    </div>
-                                                    <button
-                                                        onClick={() => handleUninstallSkill(skill.slug)}
-                                                        className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover/skill:opacity-100 transition-all"
-                                                        title="Uninstall"
-                                                    >
-                                                        <Trash2 size={14} />
-                                                    </button>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="text-center py-4 bg-white/5 rounded-xl border border-dashed border-white/10">
-                                            <p className="text-[10px] text-gray-500 italic">{t('dashboard.noSkills')}</p>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Agent Configuration (Technical) */}
-                                {selectedStrategy.agentCapId && (
+                                    {/* Transaction Info */}
                                     <div className="space-y-2">
                                         <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
-                                            <Shield size={12} className="text-purple-400" />
-                                            {t('dashboard.securityContext')}
+                                            <Zap size={12} className="text-neon-cyan" />
+                                            {t('dashboard.latestExecution')}
                                         </h3>
-                                        <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between">
-                                            <div>
-                                                <p className="text-[10px] text-gray-400 uppercase">{t('dashboard.agentCapId')}</p>
-                                                <p className="text-xs font-mono text-gray-300 truncate max-w-[200px]">{selectedStrategy.agentCapId}</p>
+
+                                        <div className="bg-black/40 border border-white/10 rounded-xl p-4 space-y-3 relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-neon-cyan/10 transition-colors"></div>
+
+                                            <div className="relative z-10 flex justify-between items-center pb-3 border-b border-white/5">
+                                                <span className="text-xs text-gray-400">{t('dashboard.txHash')}</span>
+                                                {selectedStrategy.tx_digest ? (
+                                                    <a
+                                                        href={`https://suiscan.xyz/testnet/tx/${selectedStrategy.tx_digest}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-1.5 text-xs font-mono text-neon-cyan hover:text-white transition-colors bg-neon-cyan/10 px-2 py-1 rounded cursor-pointer"
+                                                    >
+                                                        {selectedStrategy.tx_digest.slice(0, 6)}...{selectedStrategy.tx_digest.slice(-4)}
+                                                        <ExternalLink size={10} />
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-xs text-gray-600 font-mono italic">{t('dashboard.pending')}</span>
+                                                )}
                                             </div>
-                                            <button
-                                                onClick={() => {
-                                                    navigator.clipboard.writeText(selectedStrategy.agentCapId);
-                                                    toast.success("Copied Agent Cap ID");
-                                                }}
-                                                className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-500 hover:text-white"
-                                            >
-                                                <RefreshCw size={14} className="rotate-45" />
-                                            </button>
+
+                                            <div className="relative z-10 grid grid-cols-2 gap-4 pt-1">
+                                                <div>
+                                                    <p className="text-[9px] text-gray-500 uppercase mb-0.5">{t('dashboard.network')}</p>
+                                                    <p className="text-xs text-white font-mono">{t('dashboard.suiTestnet')}</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-[9px] text-gray-500 uppercase mb-0.5">{t('dashboard.protocol')}</p>
+                                                    <p className="text-xs text-white font-mono">
+                                                        {selectedStrategy?.strategy_id?.includes('lending') || selectedStrategy?.strategy_id?.includes('loop') ? 'Navi / Scallop' :
+                                                            selectedStrategy?.strategy_id?.includes('cetus') ? 'Cetus CLMM' :
+                                                                selectedStrategy?.strategy_id?.includes('bluefin') ? 'Bluefin Perps' :
+                                                                    selectedStrategy?.strategy_id?.includes('deepbook') ? 'DeepBook V3' :
+                                                                        selectedStrategy?.strategy_id?.includes('bridge') ? 'Wormhole' :
+                                                                            selectedStrategy?.strategy_id?.includes('mev') ? 'Atomic Engine' :
+                                                                                'Scallop / Cetus'}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                )}
-                            </div>
 
-                            {/* Actions Footer */}
-                            <div className="p-6 border-t border-white/5 bg-black/20 flex gap-3">
-                                <button
-                                    onClick={() => setSelectedStrategy(null)}
-                                    className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-white/5 hover:bg-white/10 text-gray-300 transition-colors border border-white/5"
-                                >
-                                    {t('dashboard.closeView')}
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        stopStrategy(selectedStrategy.id);
-                                        setSelectedStrategy(null);
-                                    }}
-                                    className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 transition-colors flex items-center justify-center gap-2 group"
-                                >
-                                    <Trash2 size={14} className="group-hover:scale-110 transition-transform" />
-                                    {t('dashboard.terminateAgent')}
-                                </button>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-            <AnimatePresence>
-                {confirmConfig.isOpen && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
-                            className="absolute inset-0 bg-black/90 backdrop-blur-md"
-                        />
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="bg-[#0f0a1f] border border-white/10 rounded-2xl p-6 sm:p-7 max-w-[380px] w-full shadow-[0_0_100px_rgba(0,0,0,0.8)] relative z-10 overflow-hidden max-h-[90vh] flex flex-col"
-                        >
-                            {/* Decorative Glow */}
-                            <div className={`absolute -top-32 -right-32 w-64 h-64 rounded-full blur-[100px] opacity-20 ${confirmConfig.type === 'danger' ? 'bg-red-600' : 'bg-neon-cyan'}`} />
+                                    {/* Decentralized Audit Trail (Walrus) */}
+                                    <div className="space-y-3">
+                                        <WalrusLogViewer
+                                            logs={[]}
+                                            agentId={selectedStrategy.id}
+                                        />
+                                    </div>
 
-                            <div className="relative z-10 flex flex-col items-center text-center overflow-y-auto custom-scrollbar">
-                                <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 shrink-0 ${confirmConfig.type === 'danger' ? 'bg-red-500/10 border border-red-500/30' : 'bg-neon-cyan/10 border border-neon-cyan/30'}`}>
-                                    {confirmConfig.icon && (
-                                        <div className="scale-[0.8]">
-                                            {confirmConfig.icon}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <h2 className="text-xl font-bold text-white mb-2 tracking-tight">
-                                    {confirmConfig.title}
-                                </h2>
-
-                                <div className="text-gray-400 text-xs mb-6 leading-relaxed">
-                                    {confirmConfig.description}
-                                </div>
-
-                                <div className="flex gap-2.5 w-full mt-2">
-                                    <button
-                                        onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
-                                        className="flex-1 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all font-bold text-[10px]"
-                                    >
-                                        {t('dashboard.dismiss')}
-                                    </button>
-                                    <button
-                                        onClick={confirmConfig.onConfirm}
-                                        className={`flex-1 px-4 py-2.5 rounded-lg font-bold text-[10px] transition-all shadow-xl flex items-center justify-center gap-1.5 group ${confirmConfig.type === 'danger'
-                                            ? 'bg-red-600 hover:bg-red-500 text-white shadow-red-900/20'
-                                            : 'bg-neon-cyan hover:bg-neon-cyan/80 text-black shadow-cyan-900/20'
-                                            }`}
-                                    >
-                                        {confirmConfig.confirmText}
-                                        <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-
-            {/* Real-Time Analytics Bar */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 relative z-10">
-                <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.secureVaultTvl')}</h3>
-                    <div className="text-xl font-mono text-white font-bold">
-                        {vaultBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">{baseAsset}</span>
-                    </div>
-                    <div className="text-[10px] text-gray-500 mt-1 flex items-center gap-1.5 font-sans">
-                        <div className="w-1 h-1 rounded-full bg-neon-cyan" />
-                        {t('dashboard.walletBalanceLabel')} {walletBalance.toFixed(3)} {baseAsset}
-                    </div>
-                </div>
-                <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">
-                        {t('dashboard.marketAlpha')} ({baseAsset} APY)
-                    </h3>
-                    <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
-                        {baseAsset === 'USDC'
-                            ? (naviData ? naviData.supplyApy.toFixed(2) : '0.00')
-                            : (scallopData ? scallopData.supplyApy.toFixed(2) : '0.00')}%
-                        <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 rounded animate-pulse">LIVE</span>
-                    </div>
-                    <div className="text-[10px] text-gray-500 mt-1 font-mono">
-                        {baseAsset === 'USDC' ? 'Navi USDC Pool' : 'Scallop SUI Supply'}
-                    </div>
-                </div>
-                <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.projectedYield')}</h3>
-                    <div className="text-xl font-mono text-white font-bold">
-                        +{(vaultBalance * ((scallopData?.supplyApy || 0) / 100 / 365)).toFixed(4)} <span className="text-xs text-gray-500">{baseAsset}</span>
-                    </div>
-                </div>
-                <div className="glass-panel p-4 rounded-xl border border-white/5">
-                    <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.matrixSentiment')}</h3>
-                    <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
-                        {activeStrategies.length > 5 ? 'EUPHORIC' : 'NEUTRAL'}
-                        <TrendingUp className="w-4 h-4 text-green-400" />
-                    </div>
-                    <div className="text-[10px] text-gray-500 mt-1 font-mono">
-                        {t('dashboard.globalSync')} 99.4%
-                    </div>
-                </div>
-            </div>
-
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
-
-                {/* Main Chart Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="lg:col-span-2 space-y-6"
-                >
-                    {/* Persistent Secure Vault Control */}
-                    <div className="glass-panel rounded-2xl p-6 relative overflow-hidden border border-white/5 hover:border-white/10 transition-all">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-                            <div className="flex items-center gap-5">
-                                <div className="w-16 h-16 bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-white/10 flex items-center justify-center relative group">
-                                    <Shield className={`${vaultId ? 'text-neon-cyan' : 'text-gray-600'} transition-colors`} size={32} />
-                                    {activeStrategies.length > 0 && vaultId && (
-                                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 border-2 border-[#0f0a1f] rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
-                                    )}
-                                </div>
-                                <div className="space-y-1">
-                                    <div className="flex items-center gap-3">
-                                        <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                                            {t('dashboard.securityEnclave')}
-                                            {vaultId && <span className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-2 py-0.5 rounded-full border border-neon-cyan/20">{t('dashboard.active')}</span>}
+                                    {/* Installed Plugins Section */}
+                                    <div className="space-y-3">
+                                        <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                                            <Cpu size={12} className="text-purple-400" />
+                                            {t('dashboard.installedPlugins')}
                                         </h3>
-                                        <div className="flex items-center bg-black/40 border border-white/10 rounded-lg p-1">
-                                            <button
-                                                onClick={() => setBaseAsset('USDC')}
-                                                className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${baseAsset === 'USDC' ? 'bg-neon-purple text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
-                                            >
-                                                USDC
-                                            </button>
-                                            <button
-                                                onClick={() => setBaseAsset('SUI')}
-                                                className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${baseAsset === 'SUI' ? 'bg-[#4ca2ff] text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
-                                            >
-                                                SUI
-                                            </button>
+
+                                        {isSkillsLoading ? (
+                                            <div className="animate-pulse flex space-x-4">
+                                                <div className="flex-1 space-y-4 py-1">
+                                                    <div className="h-4 bg-white/5 rounded w-3/4"></div>
+                                                    <div className="h-4 bg-white/5 rounded"></div>
+                                                </div>
+                                            </div>
+                                        ) : activePlugins.length > 0 ? (
+                                            <div className="grid gap-2">
+                                                {activePlugins.map((skill: any) => (
+                                                    <div key={skill.slug} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group/skill hover:bg-white/10 transition-all">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-8 h-8 bg-black/40 border border-white/5 rounded-lg flex items-center justify-center text-xs">
+                                                                {skill.isGlobal ? '🌐' : '🛠️'}
+                                                            </div>
+                                                            <div>
+                                                                <div className="flex items-center gap-2">
+                                                                    <p className="text-xs font-bold text-white">{skill.name}</p>
+                                                                    {skill.isGlobal && (
+                                                                        <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">{t('nav.matrix')}</span>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => handleUninstallSkill(skill.slug)}
+                                                            className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover/skill:opacity-100 transition-all"
+                                                            title="Uninstall"
+                                                        >
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="text-center py-4 bg-white/5 rounded-xl border border-dashed border-white/10">
+                                                <p className="text-[10px] text-gray-500 italic">{t('dashboard.noPlugins')}</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Installed Skills Section */}
+                                    <div className="space-y-3">
+                                        <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                                            <Code size={12} className="text-neon-cyan" />
+                                            {t('dashboard.installedSkills')}
+                                        </h3>
+
+                                        {isSkillsLoading ? (
+                                            <div className="animate-pulse flex space-x-4">
+                                                <div className="flex-1 space-y-4 py-1">
+                                                    <div className="h-4 bg-white/5 rounded w-3/4"></div>
+                                                    <div className="h-4 bg-white/5 rounded"></div>
+                                                </div>
+                                            </div>
+                                        ) : tradingSkills.length > 0 ? (
+                                            <div className="grid gap-2">
+                                                {tradingSkills.map((skill: any) => (
+                                                    <div key={skill.slug} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group/skill hover:bg-white/10 transition-all">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-8 h-8 bg-black/40 border border-white/5 rounded-lg flex items-center justify-center text-xs">
+                                                                {skill.isGlobal ? '🌐' : '🛠️'}
+                                                            </div>
+                                                            <div>
+                                                                <div className="flex items-center gap-2">
+                                                                    <p className="text-xs font-bold text-white">{skill.name}</p>
+                                                                    {skill.isGlobal && (
+                                                                        <span className="text-[9px] bg-neon-cyan/10 text-neon-cyan px-1.5 py-0.5 rounded border border-neon-cyan/20">{t('nav.matrix')}</span>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-[10px] text-gray-500 font-mono">v{skill.version}</p>
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => handleUninstallSkill(skill.slug)}
+                                                            className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg opacity-0 group-hover/skill:opacity-100 transition-all"
+                                                            title="Uninstall"
+                                                        >
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="text-center py-4 bg-white/5 rounded-xl border border-dashed border-white/10">
+                                                <p className="text-[10px] text-gray-500 italic">{t('dashboard.noSkills')}</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Agent Configuration (Technical) */}
+                                    {selectedStrategy.agentCapId && (
+                                        <div className="space-y-2">
+                                            <h3 className="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                                                <Shield size={12} className="text-purple-400" />
+                                                {t('dashboard.securityContext')}
+                                            </h3>
+                                            <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-[10px] text-gray-400 uppercase">{t('dashboard.agentCapId')}</p>
+                                                    <p className="text-xs font-mono text-gray-300 truncate max-w-[200px]">{selectedStrategy.agentCapId}</p>
+                                                </div>
+                                                <button
+                                                    onClick={() => {
+                                                        navigator.clipboard.writeText(selectedStrategy.agentCapId);
+                                                        toast.success("Copied Agent Cap ID");
+                                                    }}
+                                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-500 hover:text-white"
+                                                >
+                                                    <RefreshCw size={14} className="rotate-45" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Actions Footer */}
+                                <div className="p-6 border-t border-white/5 bg-black/20 flex gap-3">
+                                    <button
+                                        onClick={() => setSelectedStrategy(null)}
+                                        className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-white/5 hover:bg-white/10 text-gray-300 transition-colors border border-white/5"
+                                    >
+                                        {t('dashboard.closeView')}
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            stopStrategy(selectedStrategy.id);
+                                            setSelectedStrategy(null);
+                                        }}
+                                        className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 transition-colors flex items-center justify-center gap-2 group"
+                                    >
+                                        <Trash2 size={14} className="group-hover:scale-110 transition-transform" />
+                                        {t('dashboard.terminateAgent')}
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
+                <AnimatePresence>
+                    {confirmConfig.isOpen && (
+                        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                                className="absolute inset-0 bg-black/90 backdrop-blur-md"
+                            />
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                                className="bg-[#0f0a1f] border border-white/10 rounded-2xl p-6 sm:p-7 max-w-[380px] w-full shadow-[0_0_100px_rgba(0,0,0,0.8)] relative z-10 overflow-hidden max-h-[90vh] flex flex-col"
+                            >
+                                {/* Decorative Glow */}
+                                <div className={`absolute -top-32 -right-32 w-64 h-64 rounded-full blur-[100px] opacity-20 ${confirmConfig.type === 'danger' ? 'bg-red-600' : 'bg-neon-cyan'}`} />
+
+                                <div className="relative z-10 flex flex-col items-center text-center overflow-y-auto custom-scrollbar">
+                                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 shrink-0 ${confirmConfig.type === 'danger' ? 'bg-red-500/10 border border-red-500/30' : 'bg-neon-cyan/10 border border-neon-cyan/30'}`}>
+                                        {confirmConfig.icon && (
+                                            <div className="scale-[0.8]">
+                                                {confirmConfig.icon}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <h2 className="text-xl font-bold text-white mb-2 tracking-tight">
+                                        {confirmConfig.title}
+                                    </h2>
+
+                                    <div className="text-gray-400 text-xs mb-6 leading-relaxed">
+                                        {confirmConfig.description}
+                                    </div>
+
+                                    <div className="flex gap-2.5 w-full mt-2">
+                                        <button
+                                            onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                                            className="flex-1 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all font-bold text-[10px]"
+                                        >
+                                            {t('dashboard.dismiss')}
+                                        </button>
+                                        <button
+                                            onClick={confirmConfig.onConfirm}
+                                            className={`flex-1 px-4 py-2.5 rounded-lg font-bold text-[10px] transition-all shadow-xl flex items-center justify-center gap-1.5 group ${confirmConfig.type === 'danger'
+                                                ? 'bg-red-600 hover:bg-red-500 text-white shadow-red-900/20'
+                                                : 'bg-neon-cyan hover:bg-neon-cyan/80 text-black shadow-cyan-900/20'
+                                                }`}
+                                        >
+                                            {confirmConfig.confirmText}
+                                            <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
+
+                {/* Real-Time Analytics Bar */}
+                <div className="w-full max-w-7xl mx-auto mb-6 relative z-10">
+                    <MatrixFeePanel
+                        grossProfit={(vaultBalance * 0.12) || 0}
+                        baseAsset={baseAsset}
+                        txDigest={vaultId ? "A9f2rT5jK8..." : undefined}
+                    />
+                </div>
+                <div className="w-full max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 relative z-10">
+                    <div className="glass-panel p-4 rounded-xl border border-white/5">
+                        <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.secureVaultTvl')}</h3>
+                        <div className="text-xl font-mono text-white font-bold">
+                            {vaultBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-xs text-gray-500">{baseAsset}</span>
+                        </div>
+                        <div className="text-[10px] text-gray-500 mt-1 flex items-center gap-1.5 font-sans">
+                            <div className="w-1 h-1 rounded-full bg-neon-cyan" />
+                            {t('dashboard.walletBalanceLabel')} {walletBalance.toFixed(3)} {baseAsset}
+                        </div>
+                    </div>
+                    <div className="glass-panel p-4 rounded-xl border border-white/5">
+                        <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+                            {t('dashboard.marketAlpha')} ({baseAsset} APY)
+                        </h3>
+                        <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
+                            {baseAsset === 'USDC'
+                                ? (naviData ? naviData.supplyApy.toFixed(2) : '0.00')
+                                : (scallopData ? scallopData.supplyApy.toFixed(2) : '0.00')}%
+                            <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 rounded animate-pulse">LIVE</span>
+                        </div>
+                        <div className="text-[10px] text-gray-500 mt-1 font-mono">
+                            {baseAsset === 'USDC' ? 'Navi USDC Pool' : 'Scallop SUI Supply'}
+                        </div>
+                    </div>
+                    <div className="glass-panel p-4 rounded-xl border border-white/5">
+                        <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.projectedYield')}</h3>
+                        <div className="text-xl font-mono text-white font-bold">
+                            +{(vaultBalance * ((scallopData?.supplyApy || 0) / 100 / 365)).toFixed(4)} <span className="text-xs text-gray-500">{baseAsset}</span>
+                        </div>
+                    </div>
+                    <div className="glass-panel p-4 rounded-xl border border-white/5">
+                        <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t('dashboard.matrixSentiment')}</h3>
+                        <div className="text-xl font-mono text-neon-cyan font-bold flex items-center gap-2">
+                            {activeStrategies.length > 5 ? 'EUPHORIC' : 'NEUTRAL'}
+                            <TrendingUp className="w-4 h-4 text-green-400" />
+                        </div>
+                        <div className="text-[10px] text-gray-500 mt-1 font-mono">
+                            {t('dashboard.globalSync')} 99.4%
+                        </div>
+                    </div>
+                </div>
+
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
+
+                    {/* Main Chart Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="lg:col-span-2 space-y-6"
+                    >
+                        {/* Persistent Secure Vault Control */}
+                        <div className="glass-panel rounded-2xl p-6 relative overflow-hidden border border-white/5 hover:border-white/10 transition-all">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                                <div className="flex items-center gap-5">
+                                    <div className="w-16 h-16 bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-white/10 flex items-center justify-center relative group">
+                                        <Shield className={`${vaultId ? 'text-neon-cyan' : 'text-gray-600'} transition-colors`} size={32} />
+                                        {activeStrategies.length > 0 && vaultId && (
+                                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 border-2 border-[#0f0a1f] rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+                                        )}
+                                    </div>
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-3">
+                                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                                {t('dashboard.securityEnclave')}
+                                                {vaultId && <span className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-2 py-0.5 rounded-full border border-neon-cyan/20">{t('dashboard.active')}</span>}
+                                            </h3>
+                                            <div className="flex items-center bg-black/40 border border-white/10 rounded-lg p-1">
+                                                <button
+                                                    onClick={() => setBaseAsset('USDC')}
+                                                    className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${baseAsset === 'USDC' ? 'bg-neon-purple text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
+                                                >
+                                                    USDC
+                                                </button>
+                                                <button
+                                                    onClick={() => setBaseAsset('SUI')}
+                                                    className={`px-3 py-1 rounded-md text-xs font-bold transition-colors ${baseAsset === 'SUI' ? 'bg-[#4ca2ff] text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
+                                                >
+                                                    SUI
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-gray-500 font-mono mt-1">
+                                            {vaultId ? `ID: ${vaultId.slice(0, 6)}...${vaultId.slice(-4)}` : t('dashboard.vaultIdNotCreated')} • {vaultBalance.toFixed(2)} {baseAsset} {t('dashboard.locked')}
+                                        </p>
+                                        <div className="flex items-center gap-2 pt-1">
+                                            {activeStrategies.length > 0 && vaultId ? (
+                                                <span className="text-[10px] font-bold text-green-400 flex items-center gap-1.5 bg-green-500/5 px-2 py-1 rounded-lg border border-green-500/10">
+                                                    <RefreshCw size={10} className="animate-spin-slow" />
+                                                    {t('dashboard.agentAccessGranted')}
+                                                </span>
+                                            ) : (
+                                                <span className="text-[10px] font-bold text-orange-400 flex items-center gap-1.5 bg-orange-500/5 px-2 py-1 rounded-lg border border-orange-500/10">
+                                                    <Shield size={10} />
+                                                    {t('dashboard.agentAccessRevoked')}
+                                                </span>
+                                            )}
+                                            {vaultId && (
+                                                <button
+                                                    onClick={handleDestroyVault}
+                                                    className="text-gray-600 hover:text-red-500 transition-all p-1"
+                                                    title="Destroy Vault"
+                                                >
+                                                    <Trash2 size={12} />
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
-                                    <p className="text-xs text-gray-500 font-mono mt-1">
-                                        {vaultId ? `ID: ${vaultId.slice(0, 6)}...${vaultId.slice(-4)}` : t('dashboard.vaultIdNotCreated')} • {vaultBalance.toFixed(2)} {baseAsset} {t('dashboard.locked')}
-                                    </p>
-                                    <div className="flex items-center gap-2 pt-1">
-                                        {activeStrategies.length > 0 && vaultId ? (
-                                            <span className="text-[10px] font-bold text-green-400 flex items-center gap-1.5 bg-green-500/5 px-2 py-1 rounded-lg border border-green-500/10">
-                                                <RefreshCw size={10} className="animate-spin-slow" />
-                                                {t('dashboard.agentAccessGranted')}
-                                            </span>
-                                        ) : (
-                                            <span className="text-[10px] font-bold text-orange-400 flex items-center gap-1.5 bg-orange-500/5 px-2 py-1 rounded-lg border border-orange-500/10">
-                                                <Shield size={10} />
-                                                {t('dashboard.agentAccessRevoked')}
-                                            </span>
-                                        )}
-                                        {vaultId && (
+                                </div>
+
+                                <div className="flex items-center gap-3">
+                                    {!vaultId ? (
+                                        <button
+                                            onClick={handleCreateVault}
+                                            className="bg-neon-cyan text-black font-bold text-xs px-6 py-3 rounded-xl hover:bg-neon-cyan/80 transition-all shadow-[0_0_20px_rgba(0,243,255,0.3)] animate-pulse"
+                                        >
+                                            {t('dashboard.initializeVault')}
+                                        </button>
+                                    ) : (
+                                        <div className="flex gap-2">
                                             <button
-                                                onClick={handleDestroyVault}
-                                                className="text-gray-600 hover:text-red-500 transition-all p-1"
-                                                title="Destroy Vault"
+                                                onClick={handleDeposit}
+                                                className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-lg"
                                             >
-                                                <Trash2 size={12} />
+                                                {t('dashboard.inject')}
                                             </button>
-                                        )}
-                                    </div>
+                                            <button
+                                                onClick={handleWithdraw}
+                                                className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white text-xs font-bold transition-all hover:scale-105 active:scale-95"
+                                            >
+                                                {t('dashboard.extract')}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3">
-                                {!vaultId ? (
-                                    <button
-                                        onClick={handleCreateVault}
-                                        className="bg-neon-cyan text-black font-bold text-xs px-6 py-3 rounded-xl hover:bg-neon-cyan/80 transition-all shadow-[0_0_20px_rgba(0,243,255,0.3)] animate-pulse"
-                                    >
-                                        {t('dashboard.initializeVault')}
-                                    </button>
-                                ) : (
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={handleDeposit}
-                                            className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-lg"
-                                        >
-                                            {t('dashboard.inject')}
-                                        </button>
-                                        <button
-                                            onClick={handleWithdraw}
-                                            className="px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white text-xs font-bold transition-all hover:scale-105 active:scale-95"
-                                        >
-                                            {t('dashboard.extract')}
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                            {/* Background Glow Effect */}
+                            <div className={`absolute -right-20 -bottom-20 w-64 h-64 rounded-full blur-[100px] opacity-10 transition-colors duration-1000 ${activeStrategies.length > 0 ? 'bg-green-500' : 'bg-neon-cyan'}`}></div>
                         </div>
 
-                        {/* Background Glow Effect */}
-                        <div className={`absolute -right-20 -bottom-20 w-64 h-64 rounded-full blur-[100px] opacity-10 transition-colors duration-1000 ${activeStrategies.length > 0 ? 'bg-green-500' : 'bg-neon-cyan'}`}></div>
-                    </div>
+                        {/* Fleet Grid Section */}
+                        <div className="glass-panel rounded-2xl p-6 min-h-[400px]">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-sm text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                    <RefreshCw size={14} className={activeStrategies.length > 0 ? "animate-spin-slow text-neon-cyan" : "text-gray-600"} />
+                                    {t('dashboard.unitFleet')} ({activeStrategies.length}/10)
+                                </h2>
+                                {activeStrategies.length === 0 && (
+                                    <button onClick={handleDeploy} className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
+                                        {t('dashboard.deployDefault')}
+                                    </button>
+                                )}
+                            </div>
 
-                    {/* Fleet Grid Section */}
-                    <div className="glass-panel rounded-2xl p-6 min-h-[400px]">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-sm text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                                <RefreshCw size={14} className={activeStrategies.length > 0 ? "animate-spin-slow text-neon-cyan" : "text-gray-600"} />
-                                {t('dashboard.unitFleet')} ({activeStrategies.length}/10)
-                            </h2>
-                            {activeStrategies.length === 0 && (
-                                <button onClick={handleDeploy} className="text-[10px] bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
-                                    {t('dashboard.deployDefault')}
-                                </button>
+                            {activeStrategies.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {activeStrategies.slice(0, 10).map((strat, i) => {
+                                        const baseApy = scallopData ? scallopData.supplyApy : 0;
+                                        const boost = 0.5 + (strat.id.charCodeAt(0) % 30) / 10;
+                                        const dynamicYield = (baseApy + boost).toFixed(2) + '%';
+
+                                        return (
+                                            <motion.div
+                                                key={`strategy-grid-${i}`}
+                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col relative overflow-hidden group hover:border-neon-cyan/30 transition-all"
+                                            >
+                                                <div className="flex justify-between items-start mb-2 relative z-10">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-2xl">{strat.emoji}</span>
+                                                        <div>
+                                                            <h3 className="font-bold text-sm leading-tight text-white">
+                                                                {t(`strategies.list.${strat.strategy_id}.name`) !== `strategies.list.${strat.strategy_id}.name`
+                                                                    ? t(`strategies.list.${strat.strategy_id}.name`)
+                                                                    : (t(`dashboard.strategies.${strat.strategy_id}`) !== `dashboard.strategies.${strat.strategy_id}`
+                                                                        ? t(`dashboard.strategies.${strat.strategy_id}`)
+                                                                        : (t(`dashboard.strategies.${strat.id}`) !== `dashboard.strategies.${strat.id}`
+                                                                            ? t(`dashboard.strategies.${strat.id}`)
+                                                                            : strat.name))}
+                                                            </h3>
+                                                            <span className="text-[10px] text-green-400 font-mono flex items-center gap-1">
+                                                                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                                                                {t('dashboard.active')}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <div className="text-neon-cyan font-mono font-bold animate-pulse-slow">{dynamicYield}</div>
+                                                        <div className="text-[9px] text-gray-500 font-mono">ELO: {1000 + (strat.id.charCodeAt(0) % 500)}</div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Mini Agent Chart */}
+                                                <div className="flex-1 relative mt-2 min-h-[60px]">
+                                                    <svg className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                                                        <path
+                                                            d={`M0,${30 + (i * 5)} Q${50 + (i * 10)},${10 + (i * 2)} 100,${40 - (i * 2)} T200,${20 + (i * 5)}`}
+                                                            fill="none"
+                                                            stroke={i % 2 === 0 ? "#00f3ff" : "#bd00ff"}
+                                                            strokeWidth="2"
+                                                            vectorEffect="non-scaling-stroke"
+                                                            className="drop-shadow-[0_0_8px_rgba(0,243,255,0.6)]"
+                                                        />
+                                                        <circle cx="200" cy={`${20 + (i * 5)}`} r="2.5" fill="#fff" className="animate-pulse shadow-[0_0_10px_white]" />
+                                                    </svg>
+                                                </div>
+
+                                                <div className="mt-auto pt-3 border-t border-white/5 flex gap-2 relative z-10 items-center justify-between">
+                                                    {strat.tx_digest ? (
+                                                        <a
+                                                            href={`https://suiscan.xyz/testnet/tx/${strat.tx_digest}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-[10px] font-mono text-neon-cyan hover:underline flex items-center gap-1 cursor-pointer"
+                                                        >
+                                                            Tx: {strat.tx_digest.slice(0, 6)}...{strat.tx_digest.slice(-4)}
+                                                            <ExternalLink size={10} />
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-[10px] font-mono text-gray-500">{t('dashboard.pendingExecution')}</span>
+                                                    )}
+
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setPublishConfig({
+                                                                    isOpen: true,
+                                                                    strategy: strat,
+                                                                    agentElo: 1000 + (strat.id.charCodeAt(0) % 500)
+                                                                });
+                                                            }}
+                                                            className="bg-neon-cyan/10 hover:bg-neon-cyan/20 text-neon-cyan text-[10px] font-bold px-2.5 py-1.5 rounded-lg border border-neon-cyan/20 transition-colors"
+                                                        >
+                                                            Publish
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); stopStrategy(strat.id); }}
+                                                            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] px-2.5 py-1.5 rounded-lg border border-red-500/10 transition-colors"
+                                                        >
+                                                            {t('dashboard.stop')}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-4">
+                                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-4xl grayscale opacity-50 relative">
+                                        <div className="absolute inset-0 bg-white/5 rounded-full animate-ping opacity-20"></div>
+                                        💤
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-gray-400 font-medium">{t('dashboard.noAgents')}</p>
+                                        <p className="text-xs text-gray-600 max-w-xs mx-auto">{t('dashboard.noAgentsDesc')}</p>
+                                    </div>
+                                </div>
                             )}
                         </div>
+                    </motion.div>
 
-                        {activeStrategies.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {activeStrategies.slice(0, 10).map((strat, i) => {
-                                    const baseApy = scallopData ? scallopData.supplyApy : 0;
-                                    const boost = 0.5 + (strat.id.charCodeAt(0) % 30) / 10;
-                                    const dynamicYield = (baseApy + boost).toFixed(2) + '%';
+                    {/* Right Column: Stats & Agent Controls */}
+                    <div className="space-y-6">
 
-                                    return (
-                                        <motion.div
-                                            key={`strategy-grid-${i}`}
-                                            initial={{ opacity: 0, scale: 0.95 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col relative overflow-hidden group hover:border-neon-cyan/30 transition-all"
-                                        >
-                                            <div className="flex justify-between items-start mb-2 relative z-10">
+                        {/* Active Strategies Fleet */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="glass-panel p-6 rounded-2xl relative overflow-hidden min-h-[220px]"
+                        >
+                            <div className="absolute -right-10 -top-10 h-32 w-32 opacity-30 pointer-events-none">
+                                <Canvas>
+                                    <Suspense fallback={null}>
+                                        <NeuralOrbSmall />
+                                        <Environment preset="city" />
+                                    </Suspense>
+                                </Canvas>
+                            </div>
+
+                            <h3 className="text-sm text-gray-400 uppercase tracking-widest mb-4 flex items-center justify-between">
+                                {t('dashboard.unitRegistry')}
+                                <span className="text-neon-cyan font-mono text-xs">{activeStrategies.length} {t('dashboard.synced')}</span>
+                            </h3>
+
+                            {activeStrategies.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center py-8 text-center space-y-3 relative z-10">
+                                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-gray-600">
+                                        <span className="text-2xl">💤</span>
+                                    </div>
+                                    <p className="text-sm text-gray-400">{t('dashboard.noAgents')}</p>
+                                    <button onClick={handleDeploy} className="text-xs bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
+                                        {t('dashboard.deployDefault')} (v2.0)
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="space-y-4 relative z-10 max-h-[300px] overflow-y-auto pr-1">
+                                    {activeStrategies.map((strat, idx) => (
+                                        <div key={`strategy-list-${idx}`} className="bg-white/5 rounded-xl p-3 border border-white/10 hover:border-white/20 transition-colors">
+                                            <div className="flex justify-between items-start mb-2">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-2xl">{strat.emoji}</span>
+                                                    <span className="text-lg">{strat.emoji}</span>
                                                     <div>
-                                                        <h3 className="font-bold text-sm leading-tight text-white">
-                                                            {t(`strategies.list.${strat.strategy_id}.name`) !== `strategies.list.${strat.strategy_id}.name`
-                                                                ? t(`strategies.list.${strat.strategy_id}.name`)
-                                                                : (t(`dashboard.strategies.${strat.strategy_id}`) !== `dashboard.strategies.${strat.strategy_id}`
-                                                                    ? t(`dashboard.strategies.${strat.strategy_id}`)
-                                                                    : (t(`dashboard.strategies.${strat.id}`) !== `dashboard.strategies.${strat.id}`
-                                                                        ? t(`dashboard.strategies.${strat.id}`)
-                                                                        : strat.name))}
-                                                        </h3>
-                                                        <span className="text-[10px] text-green-400 font-mono flex items-center gap-1">
+                                                        <h4 className="text-xs font-bold text-white">{strat.name}</h4>
+                                                        <span className="text-[10px] text-green-400 flex items-center gap-1 font-mono">
                                                             <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                                                            {t('dashboard.active')}
+                                                            {t('dashboard.running')}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
-                                                    <div className="text-neon-cyan font-mono font-bold animate-pulse-slow">{dynamicYield}</div>
-                                                    <div className="text-[9px] text-gray-500 font-mono">ELO: {1000 + (strat.id.charCodeAt(0) % 500)}</div>
+                                                    <div className="text-xs text-neon-cyan font-mono font-bold">{strat.yield}</div>
+                                                    <div className="text-[9px] text-gray-500">{t('dashboard.metrics.targetYield')}</div>
                                                 </div>
                                             </div>
-
-                                            {/* Mini Agent Chart */}
-                                            <div className="flex-1 relative mt-2 min-h-[60px]">
-                                                <svg className="w-full h-full overflow-visible" preserveAspectRatio="none">
-                                                    <path
-                                                        d={`M0,${30 + (i * 5)} Q${50 + (i * 10)},${10 + (i * 2)} 100,${40 - (i * 2)} T200,${20 + (i * 5)}`}
-                                                        fill="none"
-                                                        stroke={i % 2 === 0 ? "#00f3ff" : "#bd00ff"}
-                                                        strokeWidth="2"
-                                                        vectorEffect="non-scaling-stroke"
-                                                        className="drop-shadow-[0_0_8px_rgba(0,243,255,0.6)]"
-                                                    />
-                                                    <circle cx="200" cy={`${20 + (i * 5)}`} r="2.5" fill="#fff" className="animate-pulse shadow-[0_0_10px_white]" />
-                                                </svg>
-                                            </div>
-
-                                            <div className="mt-auto pt-3 border-t border-white/5 flex gap-2 relative z-10 items-center justify-between">
-                                                {strat.tx_digest ? (
-                                                    <a
-                                                        href={`https://suiscan.xyz/testnet/tx/${strat.tx_digest}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-[10px] font-mono text-neon-cyan hover:underline flex items-center gap-1 cursor-pointer"
-                                                    >
-                                                        Tx: {strat.tx_digest.slice(0, 6)}...{strat.tx_digest.slice(-4)}
-                                                        <ExternalLink size={10} />
-                                                    </a>
-                                                ) : (
-                                                    <span className="text-[10px] font-mono text-gray-500">{t('dashboard.pendingExecution')}</span>
-                                                )}
-
+                                            <div className="flex gap-2 mt-2">
                                                 <button
-                                                    onClick={(e) => { e.stopPropagation(); stopStrategy(strat.id); }}
-                                                    className="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] px-2.5 py-1.5 rounded-lg border border-red-500/10 transition-colors"
+                                                    onClick={(e) => { e.stopPropagation(); setSelectedStrategy(strat); }}
+                                                    className="flex-1 bg-white/5 hover:bg-white/10 text-[10px] py-1.5 rounded transition-colors text-gray-300 border border-transparent hover:border-white/10"
+                                                >
+                                                    {t('dashboard.details')}
+                                                </button>
+                                                <button
+                                                    onClick={() => stopStrategy(strat.id)}
+                                                    className="px-3 bg-red-500/10 hover:bg-red-500/20 text-[10px] py-1.5 rounded transition-colors text-red-400 border border-red-500/20"
                                                 >
                                                     {t('dashboard.stop')}
                                                 </button>
                                             </div>
-                                        </motion.div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-4">
-                                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-4xl grayscale opacity-50 relative">
-                                    <div className="absolute inset-0 bg-white/5 rounded-full animate-ping opacity-20"></div>
-                                    💤
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-gray-400 font-medium">{t('dashboard.noAgents')}</p>
-                                    <p className="text-xs text-gray-600 max-w-xs mx-auto">{t('dashboard.noAgentsDesc')}</p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </motion.div>
-
-                {/* Right Column: Stats & Agent Controls */}
-                <div className="space-y-6">
-
-                    {/* Active Strategies Fleet */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="glass-panel p-6 rounded-2xl relative overflow-hidden min-h-[220px]"
-                    >
-                        <div className="absolute -right-10 -top-10 h-32 w-32 opacity-30 pointer-events-none">
-                            <Canvas>
-                                <Suspense fallback={null}>
-                                    <NeuralOrbSmall />
-                                    <Environment preset="city" />
-                                </Suspense>
-                            </Canvas>
-                        </div>
-
-                        <h3 className="text-sm text-gray-400 uppercase tracking-widest mb-4 flex items-center justify-between">
-                            {t('dashboard.unitRegistry')}
-                            <span className="text-neon-cyan font-mono text-xs">{activeStrategies.length} {t('dashboard.synced')}</span>
-                        </h3>
-
-                        {activeStrategies.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center py-8 text-center space-y-3 relative z-10">
-                                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-gray-600">
-                                    <span className="text-2xl">💤</span>
-                                </div>
-                                <p className="text-sm text-gray-400">{t('dashboard.noAgents')}</p>
-                                <button onClick={handleDeploy} className="text-xs bg-neon-cyan/10 text-neon-cyan px-3 py-1.5 rounded-lg border border-neon-cyan/20 hover:bg-neon-cyan/20 transition-colors">
-                                    {t('dashboard.deployDefault')} (v2.0)
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="space-y-4 relative z-10 max-h-[300px] overflow-y-auto pr-1">
-                                {activeStrategies.map((strat, idx) => (
-                                    <div key={`strategy-list-${idx}`} className="bg-white/5 rounded-xl p-3 border border-white/10 hover:border-white/20 transition-colors">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-lg">{strat.emoji}</span>
-                                                <div>
-                                                    <h4 className="text-xs font-bold text-white">{strat.name}</h4>
-                                                    <span className="text-[10px] text-green-400 flex items-center gap-1 font-mono">
-                                                        <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                                                        {t('dashboard.running')}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <div className="text-xs text-neon-cyan font-mono font-bold">{strat.yield}</div>
-                                                <div className="text-[9px] text-gray-500">{t('dashboard.metrics.targetYield')}</div>
-                                            </div>
                                         </div>
-                                        <div className="flex gap-2 mt-2">
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); setSelectedStrategy(strat); }}
-                                                className="flex-1 bg-white/5 hover:bg-white/10 text-[10px] py-1.5 rounded transition-colors text-gray-300 border border-transparent hover:border-white/10"
-                                            >
-                                                {t('dashboard.details')}
-                                            </button>
-                                            <button
-                                                onClick={() => stopStrategy(strat.id)}
-                                                className="px-3 bg-red-500/10 hover:bg-red-500/20 text-[10px] py-1.5 rounded transition-colors text-red-400 border border-red-500/20"
-                                            >
-                                                {t('dashboard.stop')}
-                                            </button>
-                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Quick Actions at the bottom of the Fleet card */}
+                            <div className="mt-6 pt-4 border-t border-white/5 flex flex-col gap-2 relative z-10">
+                                <Link href="/strategies" className="w-full">
+                                    <button className="w-full bg-white/5 hover:bg-white/10 text-[11px] font-bold py-2 rounded-xl transition-all border border-white/10 text-gray-300 flex items-center justify-center gap-2">
+                                        <Zap className="w-3 h-3 text-neon-cyan" />
+                                        {t('dashboard.deployMore')}
+                                    </button>
+                                </Link>
+                                <Link href="/strategies/builder" className="w-full">
+                                    <button className="w-full bg-neon-cyan/10 hover:bg-neon-cyan/20 text-[11px] font-bold py-2 rounded-xl transition-all border border-neon-cyan/20 text-neon-cyan flex items-center justify-center gap-2">
+                                        <Plus className="w-3 h-3" />
+                                        {t('dashboard.createYourAgent')}
+                                    </button>
+                                </Link>
+                            </div>
+                        </motion.div>
+
+                        {/* Market Intelligence (Navi & Scallop) */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.15 }}
+                            className="glass-panel p-4 rounded-xl border border-white/5"
+                        >
+                            <h3 className="text-xs text-gray-400 uppercase tracking-widest mb-3">{t('dashboard.liquidityAlpha')}</h3>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="bg-white/5 p-2 rounded border border-white/5 hover:border-neon-cyan/30 transition-colors">
+                                    <div className="text-[10px] text-neon-cyan font-bold mb-1 flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan"></span> NAVI
                                     </div>
-                                ))}
+                                    <div className="flex justify-between text-xs mb-1">
+                                        <span className="text-gray-400">{t('dashboard.supply')}</span>
+                                        <span className="text-green-400 font-mono">{naviData?.supplyApy || '--'}%</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                        <span className="text-gray-400">{t('dashboard.borrow')}</span>
+                                        <span className="text-red-400 font-mono">{naviData?.borrowApy || '--'}%</span>
+                                    </div>
+                                </div>
+                                <div className="bg-white/5 p-2 rounded border border-white/5 hover:border-blue-400/30 transition-colors">
+                                    <div className="text-[10px] text-blue-400 font-bold mb-1 flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span> SCALLOP
+                                    </div>
+                                    <div className="flex justify-between text-xs mb-1">
+                                        <span className="text-gray-400">{t('dashboard.supply')}</span>
+                                        <span className="text-green-400 font-mono">{scallopData?.supplyApy || '--'}%</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs">
+                                        <span className="text-gray-400">{t('dashboard.borrow')}</span>
+                                        <span className="text-red-400 font-mono">{scallopData?.borrowApy || '--'}%</span>
+                                    </div>
+                                </div>
                             </div>
-                        )}
+                        </motion.div>
 
-                        {/* Quick Actions at the bottom of the Fleet card */}
-                        <div className="mt-6 pt-4 border-t border-white/5 flex flex-col gap-2 relative z-10">
-                            <Link href="/strategies" className="w-full">
-                                <button className="w-full bg-white/5 hover:bg-white/10 text-[11px] font-bold py-2 rounded-xl transition-all border border-white/10 text-gray-300 flex items-center justify-center gap-2">
-                                    <Zap className="w-3 h-3 text-neon-cyan" />
-                                    {t('dashboard.deployMore')}
-                                </button>
-                            </Link>
-                            <Link href="/strategies/builder" className="w-full">
-                                <button className="w-full bg-neon-cyan/10 hover:bg-neon-cyan/20 text-[11px] font-bold py-2 rounded-xl transition-all border border-neon-cyan/20 text-neon-cyan flex items-center justify-center gap-2">
-                                    <Plus className="w-3 h-3" />
-                                    {t('dashboard.createYourAgent')}
-                                </button>
-                            </Link>
+                        {/* Agent Logs > Replacement OpsConsole */}
+                        <div className="rounded-2xl h-[300px] flex flex-col relative">
+                            <OpsConsole
+                                isExpanded={expandConsole}
+                                onToggleExpand={() => setExpandConsole(!expandConsole)}
+                            />
                         </div>
-                    </motion.div>
-
-                    {/* Market Intelligence (Navi & Scallop) */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.15 }}
-                        className="glass-panel p-4 rounded-xl border border-white/5"
-                    >
-                        <h3 className="text-xs text-gray-400 uppercase tracking-widest mb-3">{t('dashboard.liquidityAlpha')}</h3>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-white/5 p-2 rounded border border-white/5 hover:border-neon-cyan/30 transition-colors">
-                                <div className="text-[10px] text-neon-cyan font-bold mb-1 flex items-center gap-1">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan"></span> NAVI
-                                </div>
-                                <div className="flex justify-between text-xs mb-1">
-                                    <span className="text-gray-400">{t('dashboard.supply')}</span>
-                                    <span className="text-green-400 font-mono">{naviData?.supplyApy || '--'}%</span>
-                                </div>
-                                <div className="flex justify-between text-xs">
-                                    <span className="text-gray-400">{t('dashboard.borrow')}</span>
-                                    <span className="text-red-400 font-mono">{naviData?.borrowApy || '--'}%</span>
-                                </div>
-                            </div>
-                            <div className="bg-white/5 p-2 rounded border border-white/5 hover:border-blue-400/30 transition-colors">
-                                <div className="text-[10px] text-blue-400 font-bold mb-1 flex items-center gap-1">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span> SCALLOP
-                                </div>
-                                <div className="flex justify-between text-xs mb-1">
-                                    <span className="text-gray-400">{t('dashboard.supply')}</span>
-                                    <span className="text-green-400 font-mono">{scallopData?.supplyApy || '--'}%</span>
-                                </div>
-                                <div className="flex justify-between text-xs">
-                                    <span className="text-gray-400">{t('dashboard.borrow')}</span>
-                                    <span className="text-red-400 font-mono">{scallopData?.borrowApy || '--'}%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Agent Logs > Replacement OpsConsole */}
-                    <div className="rounded-2xl h-[300px] flex flex-col relative">
-                        <OpsConsole
-                            isExpanded={expandConsole}
-                            onToggleExpand={() => setExpandConsole(!expandConsole)}
-                        />
                     </div>
                 </div>
-            </div>
 
-            {/* Background Elements */}
-            <div className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none">
-                <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-neon-purple/20 rounded-full blur-[120px]"></div>
-                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-neon-cyan/10 rounded-full blur-[120px]"></div>
-            </div>
+                {/* Background Elements */}
+                <div className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none">
+                    <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-neon-purple/20 rounded-full blur-[120px]"></div>
+                    <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-neon-cyan/10 rounded-full blur-[120px]"></div>
+                </div>
 
-        </div >
+            </div >
+
+            <PublishStrategyModal
+                isOpen={publishConfig.isOpen}
+                onClose={() => setPublishConfig(prev => ({ ...prev, isOpen: false }))}
+                strategy={publishConfig.strategy}
+                agentElo={publishConfig.agentElo}
+            />
+        </>
     );
 }
 
