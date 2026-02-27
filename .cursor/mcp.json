@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+        "suiloop": {
+            "command": "node",
+            "args": [
+                "packages/mcp/dist/index.js"
+            ],
+            "env": {
+                "SUILOOP_AGENT_URL": "http://localhost:3001",
+                "SUILOOP_API_KEY": "sk_live_your_key_here"
+            }
+        }
+    }
+}
