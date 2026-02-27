@@ -23,7 +23,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
             const savedProvider = localStorage.getItem("suiloop_llm_provider");
             if (savedKey) setApiKey(savedKey);
             if (savedProvider) setProvider(savedProvider as any);
-            
+
             // If ollama is default, test conn automatically
             if (savedProvider === 'ollama') {
                 testLocalConnection();
@@ -38,7 +38,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
         }
 
         localStorage.setItem("suiloop_llm_provider", provider);
-        
+
         if (provider !== 'ollama') {
             localStorage.setItem("suiloop_api_key", apiKey);
         } else {
@@ -75,12 +75,12 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
     return (
         <AnimatePresence>
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                <motion.div 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
-                    exit={{ opacity: 0 }} 
-                    className="absolute inset-0 bg-black/80 backdrop-blur-sm" 
-                    onClick={onClose} 
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                    onClick={onClose}
                 />
 
                 <motion.div
@@ -90,7 +90,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                     className="relative w-full max-w-lg bg-black border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(189,0,255,0.1)]"
                 >
                     {/* Header */}
-                    <div className="p-6 border-b border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent">
+                    <div className="p-4 sm:p-5 border-b border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-neon-cyan/20 rounded-xl border border-neon-cyan/30">
@@ -104,7 +104,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                     </p>
                                 </div>
                             </div>
-                            <button 
+                            <button
                                 onClick={onClose}
                                 className="p-2 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors"
                             >
@@ -114,9 +114,9 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                     </div>
 
                     {/* Content */}
-                    <div className="p-6 space-y-6">
+                    <div className="p-4 sm:p-5 space-y-4 sm:space-y-5">
                         {/* Information Banner */}
-                        <div className="p-4 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex gap-3 text-sm">
+                        <div className="p-3 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex gap-3 text-xs sm:text-sm">
                             <Shield className="w-5 h-5 text-neon-purple shrink-0 mt-0.5" />
                             <p className="text-gray-300">
                                 Keys are stored locally in your browser. They are explicitly routed to your operational agent when dispatching blockchain tasks.
@@ -126,10 +126,10 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                         {/* Top Toggles Container */}
                         <div className="grid grid-cols-2 gap-3">
                             {/* Cloud Section */}
-                            <button 
+                            <button
                                 onClick={() => { setProvider('openai'); setIsLocalConnected(false); }}
                                 className={`
-                                    p-4 rounded-xl border transition-all text-left flex flex-col gap-2 relative overflow-hidden
+                                    p-3 sm:p-4 rounded-xl border transition-all text-left flex flex-col gap-2 relative overflow-hidden
                                     ${provider !== 'ollama' ? 'border-neon-cyan bg-neon-cyan/5 shadow-[0_0_20px_rgba(0,243,255,0.1)]' : 'border-white/10 bg-white/5 hover:bg-white/10'}
                                 `}
                             >
@@ -147,10 +147,10 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                             </button>
 
                             {/* Local Section */}
-                            <button 
+                            <button
                                 onClick={() => { setProvider('ollama'); testLocalConnection(); }}
                                 className={`
-                                    p-4 rounded-xl border transition-all text-left flex flex-col gap-2 relative overflow-hidden
+                                    p-3 sm:p-4 rounded-xl border transition-all text-left flex flex-col gap-2 relative overflow-hidden
                                     ${provider === 'ollama' ? 'border-green-500 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]' : 'border-white/10 bg-white/5 hover:bg-white/10'}
                                 `}
                             >
@@ -171,7 +171,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                         {/* Hardware Specific Configs */}
                         <AnimatePresence mode="popLayout">
                             {provider !== 'ollama' ? (
-                                <motion.div 
+                                <motion.div
                                     key="cloud"
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
@@ -181,13 +181,13 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                 >
                                     {/* Selector Cloud Type */}
                                     <div className="flex gap-2">
-                                        <button 
+                                        <button
                                             onClick={() => setProvider('openai')}
                                             className={`px-4 py-2 text-xs font-mono font-bold rounded flex-1 border transition-colors ${provider === 'openai' ? 'border-neon-cyan bg-neon-cyan/20 text-white' : 'border-white/10 bg-black text-gray-500 hover:text-white hover:bg-white/5'}`}
                                         >
                                             OPEN_AI_KEY
                                         </button>
-                                        <button 
+                                        <button
                                             onClick={() => setProvider('anthropic')}
                                             className={`px-4 py-2 text-xs font-mono font-bold rounded flex-1 border transition-colors ${provider === 'anthropic' ? 'border-neon-cyan bg-neon-cyan/20 text-white' : 'border-white/10 bg-black text-gray-500 hover:text-white hover:bg-white/5'}`}
                                         >
@@ -196,17 +196,17 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                     </div>
                                     <div className="relative">
                                         <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                                        <input 
+                                        <input
                                             type="password"
                                             value={apiKey}
                                             onChange={(e) => setApiKey(e.target.value)}
                                             placeholder={`sk-...${provider === 'openai' ? 'proj-XXXX' : 'ant-api-XXXX'}`}
-                                            className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-neon-cyan focus:bg-neon-cyan/5 transition-all placeholder:text-gray-600 font-mono shadow-inner"
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white text-[13px] sm:text-sm focus:outline-none focus:border-neon-cyan focus:bg-neon-cyan/5 transition-all placeholder:text-gray-600 font-mono shadow-inner"
                                         />
                                     </div>
                                 </motion.div>
                             ) : (
-                                <motion.div 
+                                <motion.div
                                     key="local"
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
@@ -214,7 +214,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                     transition={{ duration: 0.2 }}
                                     className="pt-2"
                                 >
-                                    <div className={`p-6 rounded-xl border flex flex-col items-center justify-center gap-4 text-center transition-colors ${isLocalConnected ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20'}`}>
+                                    <div className={`p-4 sm:p-6 rounded-xl border flex flex-col items-center justify-center gap-3 sm:gap-4 text-center transition-colors ${isLocalConnected ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20'}`}>
                                         <div className="relative">
                                             <div className={`absolute inset-0 rounded-full blur-xl opacity-60 ${isTesting ? 'bg-yellow-500 animate-pulse' : isLocalConnected ? 'bg-green-500' : 'bg-red-500'}`} />
                                             <Activity className={`relative z-10 w-10 h-10 ${isTesting ? 'text-yellow-400 animate-pulse' : isLocalConnected ? 'text-green-400' : 'text-red-400'}`} />
@@ -226,7 +226,7 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                             </p>
                                         </div>
                                         {!isLocalConnected && !isTesting && (
-                                            <button 
+                                            <button
                                                 onClick={testLocalConnection}
                                                 className="mt-2 px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-sm font-bold text-white transition-all active:scale-95"
                                             >
@@ -240,18 +240,18 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                     </div>
 
                     {/* Footer Actions */}
-                    <div className="p-6 border-t border-white/5 flex gap-3 bg-black/50">
-                        <button 
+                    <div className="p-4 sm:p-5 border-t border-white/5 flex gap-3 bg-black/50">
+                        <button
                             onClick={onClose}
-                            className="flex-1 px-4 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold transition-all"
+                            className="flex-1 px-4 py-2.5 sm:py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold transition-all text-sm sm:text-base"
                         >
                             Cancel
                         </button>
-                        <button 
+                        <button
                             onClick={handleSave}
                             disabled={provider === 'ollama' && !isLocalConnected}
                             className={`
-                                flex-1 px-4 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-[0_4px_20px_rgba(0,243,255,0.3)]
+                                flex-1 px-4 py-2.5 sm:py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-[0_4px_20px_rgba(0,243,255,0.3)] text-sm sm:text-base
                                 ${provider === 'ollama' && !isLocalConnected ? 'opacity-50 cursor-not-allowed bg-white/5 text-gray-500 border border-white/10 shadow-none' : 'bg-gradient-to-r from-neon-cyan to-blue-500 hover:opacity-90 text-black'}
                             `}
                         >
