@@ -512,11 +512,26 @@ export default function LeaderboardPage() {
 
                                             {/* Trust Score */}
                                             <td className="py-8 px-6">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="text-xl font-bold font-mono tracking-tighter">
-                                                        {agent.elo} <span className="text-[10px] text-gray-600 font-light ml-1">{t('leaderboard.table.stats.elo')}</span>
+                                                <div className="flex flex-col gap-1.5">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="text-xl font-bold font-mono tracking-tighter">
+                                                            {agent.elo} <span className="text-[10px] text-gray-600 font-light ml-1">{t('leaderboard.table.stats.elo')}</span>
+                                                        </div>
+                                                        <TrendingUp className="w-4 h-4 text-green-500/50" />
                                                     </div>
-                                                    <TrendingUp className="w-4 h-4 text-green-500/50" />
+                                                    <div className="flex items-center">
+                                                        {(() => {
+                                                            const tier = agent.elo >= 2000 ? { name: "Matrix", color: "text-neon-cyan", bg: "bg-neon-cyan/10 border-neon-cyan/30" } :
+                                                                agent.elo >= 1600 ? { name: "Gold", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/30" } :
+                                                                    agent.elo >= 1200 ? { name: "Silver", color: "text-gray-300", bg: "bg-gray-500/10 border-gray-500/30" } :
+                                                                        { name: "Bronze", color: "text-amber-700", bg: "bg-amber-700/10 border-amber-700/30" };
+                                                            return (
+                                                                <span className={`text-[9px] px-2 py-0.5 rounded-full border ${tier.bg} ${tier.color} font-mono uppercase tracking-widest flex items-center gap-1 w-max`}>
+                                                                    {tier.name}
+                                                                </span>
+                                                            );
+                                                        })()}
+                                                    </div>
                                                 </div>
                                             </td>
 
