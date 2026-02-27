@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
-import { Home, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package, Cpu, Trophy } from "lucide-react";
+import { Home, LayoutDashboard, Compass, BarChart2, FileText, Menu, X, Rocket, Zap, Bot, Package, Cpu, Trophy, Settings } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import NodeSettingsModal from "@/components/ui/NodeSettingsModal";
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -16,6 +17,7 @@ export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const [settingsOpen, setSettingsOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -175,6 +177,15 @@ export default function Navbar() {
                         {/* Language Switcher */}
                         <LanguageSwitcher />
 
+                        {/* Settings Button */}
+                        <button
+                            onClick={() => setSettingsOpen(true)}
+                            className="p-1.5 sm:p-2 rounded-full hidden sm:flex items-center justify-center bg-white/5 hover:bg-neon-cyan/20 border border-transparent hover:border-neon-cyan/30 text-gray-400 hover:text-neon-cyan transition-all"
+                            aria-label="Node Settings"
+                        >
+                            <Settings className="w-4 h-4" />
+                        </button>
+
                         {/* Connect Button - Responsive scaling */}
                         <div className="navbar-connect-btn scale-[0.85] origin-right">
                             <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-4 xl:!px-5 !py-2 !rounded-full !text-[11px] xl:!text-xs !shadow-[0_0_20px_rgba(0,243,255,0.4)] !whitespace-nowrap" />
@@ -326,10 +337,31 @@ export default function Navbar() {
                                     <span className="text-sm sm:text-base">{t('nav.strategyBuilder')}</span>
                                 </Link>
                             </motion.div>
+
+                            {/* Node Settings — mobile only (hidden sm:flex on desktop) */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4 }}
+                                className="mt-2 sm:hidden"
+                            >
+                                <button
+                                    onClick={() => { closeMobileMenu(); setSettingsOpen(true); }}
+                                    className="w-full min-h-[48px] p-4 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-bold flex items-center justify-center gap-3 active:scale-[0.98]"
+                                >
+                                    <Settings size={18} />
+                                    <span className="text-sm">Node & AI Settings</span>
+                                </button>
+                            </motion.div>
                         </motion.div>
                     </>
                 )}
             </AnimatePresence >
+
+            <NodeSettingsModal
+                isOpen={settingsOpen}
+                onClose={() => setSettingsOpen(false)}
+            />
         </>
     );
 }
