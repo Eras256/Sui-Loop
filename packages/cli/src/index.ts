@@ -222,14 +222,17 @@ program
                 headers: { 'x-api-key': apiKey }
             });
             spinner.stop();
+            // Normalize: server returns { success, market: {...} } shape
+            const m = data.market || data;
             console.log(chalk.bold('\n📊 SuiLoop Live Market State'));
             console.log(chalk.gray('─'.repeat(38)));
-            console.log(`  SUI Price:         ${chalk.cyan('$' + (data.suiPrice || 'N/A'))}`);
-            console.log(`  Gas:               ${chalk.yellow(data.gasPrice + ' MIST')}`);
-            console.log(`  DeepBook Liq:      ${chalk.green('$' + (data.deepBookLiquidity || 0).toLocaleString())}`);
-            console.log(`  Scallop SUI APY:   ${chalk.magenta((data.scallopApy?.supply || 'N/A') + '% supply / ' + (data.scallopApy?.borrow || 'N/A') + '% borrow')}`);
-            console.log(`  Navi USDC APY:     ${chalk.blue((data.naviUsdcApy?.supply || 'N/A') + '% supply / ' + (data.naviUsdcApy?.borrow || 'N/A') + '% borrow')}`);
-            console.log(`  Last Update:       ${new Date(data.lastUpdate).toLocaleTimeString()}`);
+            console.log(`  SUI Price:         ${chalk.cyan('$' + (m.suiPrice || 'N/A'))}`);
+            console.log(`  Gas:               ${chalk.yellow((m.gasPrice || 'N/A') + ' MIST')}`);
+            console.log(`  DeepBook Liq:      ${chalk.green('$' + (m.deepBookLiquidity || 0).toLocaleString())}`);
+            console.log(`  Scallop SUI APY:   ${chalk.magenta((m.scallopApy?.supply || 'N/A') + '% supply / ' + (m.scallopApy?.borrow || 'N/A') + '% borrow')}`);
+            console.log(`  Navi USDC APY:     ${chalk.blue((m.naviUsdcApy?.supply || 'N/A') + '% supply / ' + (m.naviUsdcApy?.borrow || 'N/A') + '% borrow')}`);
+            console.log(`  LLM Engine:        ${m.llmEnabled ? chalk.green('ACTIVE ✅') : chalk.gray('offline')}`);
+            console.log(`  Last Update:       ${m.lastUpdate ? new Date(m.lastUpdate).toLocaleTimeString() : 'N/A'}`);
             console.log('');
         } catch (error: any) {
             spinner.fail(chalk.red('Market data unavailable — is the agent running?'));
