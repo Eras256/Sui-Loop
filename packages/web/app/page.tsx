@@ -69,9 +69,16 @@ export default function Home() {
             }, 2000);
         } catch (e: any) {
             toast.dismiss(toastId);
-            toast.error(t('home.toasts.txFailed'), {
-                description: e?.message || t('home.toasts.txFailedDesc')
-            });
+            const msg = e?.message || String(e);
+            if (msg.includes("reject") || msg.includes("Reject") || msg.includes("User canceled") || msg.includes("-4005")) {
+                toast.error("Transaction Rejected", {
+                    description: "You rejected the transaction in your wallet."
+                });
+            } else {
+                toast.error(t('home.toasts.txFailed'), {
+                    description: msg.slice(0, 100) || t('home.toasts.txFailedDesc')
+                });
+            }
         }
     };
 

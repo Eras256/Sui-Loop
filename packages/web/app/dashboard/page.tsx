@@ -887,10 +887,19 @@ function DashboardContent() {
                     }, (i + 1) * 2000);
                 });
             }
-        } catch (e) {
+        } catch (e: any) {
             console.error(e);
             toast.dismiss(toastId);
-            toast.error(t('home.toasts.txFailed'));
+            const msg = e?.message || String(e);
+            if (msg.includes("reject") || msg.includes("Reject") || msg.includes("User canceled") || msg.includes("-4005")) {
+                toast.error(t('common.toasts.txFailed') || "Transaction Rejected", {
+                    description: "You rejected the transaction in your wallet."
+                });
+            } else {
+                toast.error(t('common.toasts.txFailed') || "Execution Failed", {
+                    description: msg.slice(0, 100)
+                });
+            }
         }
     };
 
@@ -1019,7 +1028,7 @@ function DashboardContent() {
             console.warn("Agent stop error:", e);
             const msg = e.message || String(e);
 
-            if (msg.includes("Rejected")) return;
+            if (msg.includes("reject") || msg.includes("Reject") || msg.includes("User canceled") || msg.includes("-4005")) return;
 
             // If it's a network error (502) or the object doesn't exist, offer "Force Remove"
             toast.error("Protocol Sync Failed", {
@@ -1307,10 +1316,19 @@ function DashboardContent() {
                     onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
                 }
             });
-        } catch (e) {
+        } catch (e: any) {
             console.error(e);
             toast.dismiss(toastId);
-            toast.error(t('dashboard.toasts.vault.deployFailed').replace('{error}', ''));
+            const msg = e?.message || String(e);
+            if (msg.includes("reject") || msg.includes("Reject") || msg.includes("User canceled") || msg.includes("-4005")) {
+                toast.error("Transaction Rejected", {
+                    description: "You rejected the transaction in your wallet."
+                });
+            } else {
+                toast.error(t('dashboard.toasts.vault.deployFailed').replace('{error}', ''), {
+                    description: msg.slice(0, 100)
+                });
+            }
         }
     };
 
@@ -1395,10 +1413,19 @@ function DashboardContent() {
                     onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
                 }
             });
-        } catch (e) {
+        } catch (e: any) {
             console.error(e);
             toast.dismiss(toastId);
-            toast.error("Withdrawal Failed");
+            const msg = e?.message || String(e);
+            if (msg.includes("reject") || msg.includes("Reject") || msg.includes("User canceled") || msg.includes("-4005")) {
+                toast.error("Transaction Rejected", {
+                    description: "You rejected the transaction in your wallet."
+                });
+            } else {
+                toast.error("Withdrawal Failed", {
+                    description: msg.slice(0, 100)
+                });
+            }
         }
     };
 
@@ -1518,7 +1545,14 @@ function DashboardContent() {
         } catch (e: any) {
             toast.dismiss(toastId);
             console.error("Vault Creation Error:", e);
-            toast.error("Deployment Failed: " + (e?.message || String(e)));
+            const msg = e?.message || String(e);
+            if (msg.includes("reject") || msg.includes("Reject") || msg.includes("User canceled") || msg.includes("-4005")) {
+                toast.error("Transaction Rejected", {
+                    description: "You rejected the transaction in your wallet."
+                });
+            } else {
+                toast.error("Deployment Failed: " + msg.slice(0, 100));
+            }
         }
     };
 
@@ -1646,10 +1680,17 @@ function DashboardContent() {
                 },
                 duration: 8000
             });
-        } catch (error) {
+        } catch (error: any) {
             toast.dismiss(toastId);
             console.error("Destroy Vault Error:", error);
-            toast.error("Failed to destroy vault: " + (error as any).message);
+            const msg = error?.message || String(error);
+            if (msg.includes("reject") || msg.includes("Reject") || msg.includes("User canceled") || msg.includes("-4005")) {
+                toast.error("Transaction Rejected", {
+                    description: "You rejected the transaction in your wallet."
+                });
+            } else {
+                toast.error("Failed to destroy vault: " + msg.slice(0, 100));
+            }
         }
     };
 
