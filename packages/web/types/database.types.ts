@@ -12,58 +12,64 @@ export interface Database {
             profiles: {
                 Row: {
                     id: string
-                    wallet_address: string | null
+                    wallet_address: string
                     username: string | null
                     avatar_url: string | null
                     created_at: string
                 }
                 Insert: {
-                    id: string
-                    wallet_address?: string | null
+                    id?: string
+                    wallet_address: string
                     username?: string | null
                     avatar_url?: string | null
                     created_at?: string
                 }
                 Update: {
                     id?: string
-                    wallet_address?: string | null
+                    wallet_address?: string
                     username?: string | null
                     avatar_url?: string | null
                     created_at?: string
                 }
-            }
+            },
             strategies: {
                 Row: {
                     id: string
-                    user_id: string
+                    user_id: string | null
+                    wallet_owner: string
                     name: string
                     description: string | null
                     config: Json
                     status: string
+                    apy: string
                     created_at: string
                     updated_at: string
                 }
                 Insert: {
                     id?: string
-                    user_id: string
+                    user_id?: string | null
+                    wallet_owner: string
                     name: string
                     description?: string | null
-                    config: Json
+                    config?: Json
                     status?: string
+                    apy?: string
                     created_at?: string
                     updated_at?: string
                 }
                 Update: {
                     id?: string
-                    user_id?: string
+                    user_id?: string | null
+                    wallet_owner?: string
                     name?: string
                     description?: string | null
                     config?: Json
                     status?: string
+                    apy?: string
                     created_at?: string
                     updated_at?: string
                 }
-            }
+            },
             agent_logs: {
                 Row: {
                     id: string

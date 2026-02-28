@@ -25,7 +25,7 @@ import {
     LayoutGrid, Cpu, History, Clock, Landmark, Coins, Shield, Database,
     Twitter, MessageSquare, Bell, Share2, BarChart3, Fingerprint, Lock, Repeat, RefreshCw,
     Layers, MousePointer2, Info, ChevronRight, Download, X, Menu, Bolt,
-    FlaskConical, KeyRound, TrendingUp
+    FlaskConical, KeyRound, TrendingUp, Signal
 } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCurrentAccount } from '@mysten/dapp-kit';
@@ -41,7 +41,7 @@ const ICON_MAP: any = {
     Settings, Search, ZoomIn, ZoomOut, Undo, Redo,
     LayoutGrid, Cpu, History, Clock, Landmark, Coins, Shield, Database,
     Twitter, MessageSquare, Bell, Share2, BarChart3, Fingerprint, Lock, Repeat, RefreshCw,
-    Layers, MousePointer2, Info, ChevronRight, Download, Bolt, FlaskConical, KeyRound, TrendingUp
+    Layers, MousePointer2, Info, ChevronRight, Download, Bolt, FlaskConical, KeyRound, TrendingUp, Signal
 };
 
 const nodeTypes: any = { suiNode: CustomNode };
@@ -436,7 +436,7 @@ function StrategyBuilderInner() {
                     <div className="flex items-center justify-between">
                         <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">{t('builder.lab')}</h2>
                         <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono text-neon-cyan/50">v0.0.7</span>
+                            <span className="text-[10px] font-mono text-neon-cyan/50">v1.0.0</span>
                             <button
                                 onClick={() => setSidebarOpen(false)}
                                 className="md:hidden p-1 hover:bg-white/5 rounded-lg text-gray-500 hover:text-white"
@@ -710,7 +710,7 @@ function StrategyBuilderInner() {
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center gap-3 text-[9px] text-gray-500 font-mono">
-                                                    <span className="flex items-center gap-1"><Clock size={10} /> {new Date(strat.created_at).toLocaleDateString()}</span>
+                                                    <span className="flex items-center gap-1"><Clock size={10} /> {new Date(strat.created_at).toLocaleDateString()} {new Date(strat.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                                     <span className="flex items-center gap-1 font-bold text-neon-cyan/60">{strat.yield} APIA</span>
                                                 </div>
                                             </div>

@@ -72,7 +72,7 @@ export default function Footer() {
                             </span>
                             {t('footer.status.uplink')}
                         </span>
-                        <span className="text-gray-600 shrink-0 uppercase tracking-tighter">{t('footer.status.kernel')} v0.0.7-Neural</span>
+                        <span className="text-gray-600 shrink-0 uppercase tracking-tighter">{t('footer.status.kernel')} v1.0.0-Neural</span>
                         <span className="hidden sm:flex items-center gap-1.5 text-blue-400">
                             <Shield className="w-3 h-3" />
                             {t('footer.status.verified')}
@@ -200,9 +200,9 @@ export default function Footer() {
                         {[
                             { label: t('footer.statsLabels.synced'), value: "2,890+", color: "text-neon-cyan", dot: "bg-neon-cyan" },
                             { label: t('footer.statsLabels.elo'), value: "1,120", color: "text-neon-purple", dot: "bg-neon-purple" },
-                            { label: t('footer.statsLabels.network'), value: "Sui Mainnet", color: "text-green-400", dot: "bg-green-400" },
+                            { label: t('footer.statsLabels.network'), value: "Mainnet Ready", color: "text-green-400", dot: "bg-green-400" },
                             { label: t('footer.statsLabels.assets'), value: "SUI + USDC", color: "text-blue-400", dot: "bg-blue-400" },
-                            { label: t('footer.statsLabels.kernel'), value: "v0.0.7-N", color: "text-gray-400", dot: "bg-gray-400" },
+                            { label: t('footer.statsLabels.kernel'), value: "v1.0.0-N", color: "text-gray-400", dot: "bg-gray-400" },
                             { label: t('footer.statsLabels.walrus'), value: "ARCHIVING ◉", color: "text-pink-400", dot: "bg-pink-400" },
                             { label: t('footer.statsLabels.uptime'), value: "99.9%", color: "text-yellow-400", dot: "bg-yellow-400" },
                         ].map((stat) => (

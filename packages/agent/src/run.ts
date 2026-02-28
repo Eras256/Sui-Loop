@@ -59,14 +59,14 @@ async function main() {
 
     console.log(`
 ╔══════════════════════════════════════════════════════════════╗
-║           🚀 SUILOOP AGENT RUNNER v0.0.7                    ║
-║     Atomic Flash Loans · SUI/USDC · Sui Testnet             ║
+║           🚀 SUILOOP AGENT RUNNER v1.0.0                    ║
+║     Atomic Flash Loans · SUI/USDC · Mainnet Ready           ║
 ╚══════════════════════════════════════════════════════════════╝
     `);
 
     console.log("📋 Configuration Check:");
     console.log(`   • Private Key:  ${privateKey ? "✅ Configured" : "❌ MISSING — set SUI_PRIVATE_KEY in .env"}`);
-    console.log(`   • Package ID:   ${packageId ? `✅ ${packageId.slice(0, 20)}...` : "⚙️  Using default (v0.0.7)"}`);
+    console.log(`   • Package ID:   ${packageId ? `✅ ${packageId.slice(0, 20)}...` : "⚙️  Using default (v1.0.0)"}`);
     console.log(`   • Pool ID:      ${poolId ? `✅ ${poolId.slice(0, 20)}...` : "⚙️  Using default (MockPool)"}`);
     console.log(`   • Network:      ${network === 'testnet' ? '🟡' : '🔴'} ${network.toUpperCase()}`);
     console.log(`   • Asset:        ${assetLabel}`);

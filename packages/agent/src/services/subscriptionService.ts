@@ -7,6 +7,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import crypto from 'crypto';
 import { triggerWebhooks, WebhookEvent } from './webhookService.js';
 import { agentRegistryService } from './agentRegistryService.js';
+import { supabase } from './supabaseService.js';
 
 // Signal types
 export type SignalType =
@@ -469,22 +470,32 @@ async function uploadLogsToWalrus() {
 /**
  * Broadcast a system log to all connected clients
  */
-export function broadcastLog(level: 'info' | 'warn' | 'error' | 'success' | 'system', message: string, details?: any) {
+export function broadcastLog(
+    level: 'info' | 'warn' | 'error' | 'success' | 'system',
+    message: string,
+    details?: any,
+    strategyId?: string,
+    asset?: string
+) {
     if (!wss) return;
+
+    const logEntry = {
+        id: `log_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        timestamp: new Date().toISOString(),
+        level,
+        message,
+        details: details || {},
+        strategy_id: strategyId,
+        asset: asset
+    };
 
     const logMessage = JSON.stringify({
         type: 'system_log',
-        log: {
-            id: `log_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            timestamp: new Date().toISOString(),
-            level,
-            message,
-            details
-        }
+        log: logEntry
     });
 
     // Store in history
-    systemLogs.push(JSON.parse(logMessage));
+    systemLogs.push(logEntry);
     if (systemLogs.length > MAX_RECENT_LOGS) {
         systemLogs.shift();
     }
@@ -494,4 +505,17 @@ export function broadcastLog(level: 'info' | 'warn' | 'error' | 'success' | 'sys
             client.send(logMessage);
         }
     });
+
+    // Mirror to Supabase for persistence and frontend "Audit" view
+    if (supabase) {
+        (supabase.from('agent_logs') as any).insert({
+            level: level,
+            message: message,
+            details: details || {},
+            strategy_id: strategyId,
+            asset: asset
+        }).then(({ error }: { error: any }) => {
+            if (error) console.error('Failed to persist log to Supabase:', error.message);
+        });
+    }
 }

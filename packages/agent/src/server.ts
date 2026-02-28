@@ -12,7 +12,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
 import * as dotenv from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from './services/supabaseService.js';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
@@ -80,11 +80,7 @@ import { Database } from './types/database.types';
 dotenv.config();
 
 // Initialize Supabase Client
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
-const supabase = (supabaseUrl && supabaseKey)
-    ? createClient<Database>(supabaseUrl, supabaseKey)
-    : null;
+// Supabase client is now imported from supabaseService.js
 
 // Express app
 const app = express();
@@ -1082,9 +1078,9 @@ function startSystem() {
     ║   ███████╗██║   ██║██║██║     ██║   ██║██║   ██║██████╔╝                       ║
     ║   ╚════██║██║   ██║██║██║     ██║   ██║██║   ██║██╔═══╝                        ║
     ║   ███████║╚██████╔╝██║███████╗╚██████╔╝╚██████╔╝██║                            ║
-    ║   ╚══════╝ ╚═════╝ ╚═╝╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  v0.0.7                    ║
+    ║   ╚══════╝ ╚═════╝ ╚═╝╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  v1.0.0                    ║
     ║                                                                                ║
-    ║             🤖 AUTONOMOUS AGENT API v2.0 — Sui Testnet                         ║
+    ║             🤖 AUTONOMOUS AGENT API v2.0 — Mainnet Ready                       ║
     ║                                                                                ║
     ╠════════════════════════════════════════════════════════════════════════════════╣
     ║                                                                                ║
@@ -1117,8 +1113,18 @@ function startSystem() {
         // Broadcast initial status
         setTimeout(() => {
             broadcastLog('info', 'System initialization complete. Monitoring active channels.');
-            broadcastLog('success', 'Neural Matrix online. Waiting for operator commands.');
+            broadcastLog('success', 'Neural Matrix online. Monitoring Sui Mainnet protocol liquidity.');
         }, 2000);
+
+        // Periodic resource heartbeat to show activity in the dashboard
+        setInterval(() => {
+            const memoryUsage = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
+            const uptime = Math.round(process.uptime());
+            broadcastLog('system', `Pulse Check: Memory=${memoryUsage}MB | Uptime=${uptime}s`, {
+                module: 'Sentinel',
+                stats: { memory: memoryUsage, uptime }
+            });
+        }, 45000);
     });
 }
 

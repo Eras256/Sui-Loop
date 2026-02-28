@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { supabase } from "@/lib/supabase";
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { API_URL } from '@/lib/constants';
 
 type WalrusStatus = 'connecting' | 'live' | 'error';
 type SystemStatus = 'OPERATIONAL' | 'DEGRADED' | 'OFFLINE';
@@ -26,14 +27,17 @@ export default function AgentsPage() {
     const [walrusStatus, setWalrusStatus] = useState<WalrusStatus>('connecting');
     const [walrusUploadCount, setWalrusUploadCount] = useState(0);
     const [uplinkStatus, setUplinkStatus] = useState<SystemStatus>('OPERATIONAL');
-    const [logBarData, setLogBarData] = useState([40, 65, 30, 80, 50, 90, 40, 70, 45, 60]);
+    const [logBarData, setLogBarData] = useState([40, 65, 30, 80, 50, 90, 40, 70, 45, 60, 35, 55, 75, 25, 85]);
+    const [heartbeat, setHeartbeat] = useState(0);
 
     // Measure live RPC latency
     useEffect(() => {
         const measureLatency = async () => {
             try {
                 const start = performance.now();
-                await fetch('https://fullnode.testnet.sui.io', {
+                const network = process.env.NEXT_PUBLIC_SUI_NETWORK || 'testnet';
+                const nodeUrl = getFullnodeUrl(network as any);
+                await fetch(nodeUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'sui_getLatestCheckpointSequenceNumber', params: [] }),
@@ -76,9 +80,9 @@ export default function AgentsPage() {
         // Fetch recent logs on mount
         const fetchInitialLogs = async () => {
             const { data } = await db
-                .from('logs')
+                .from('agent_logs')
                 .select('*')
-                .order('timestamp', { ascending: false })
+                .order('created_at', { ascending: false })
                 .limit(30);
             if (data) setLogs(data.reverse());
         };
@@ -87,11 +91,16 @@ export default function AgentsPage() {
         // Subscribe to new logs in real time
         const channel = db
             .channel('agents-realtime-logs')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'logs' }, (payload) => {
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'agent_logs' }, (payload) => {
+                const newLog = {
+                    ...payload.new,
+                    // Force a fresh local timestamp for "Live" feel if database clock drifts
+                    displayTime: new Date().toISOString()
+                };
                 setLogs(prev => {
                     const exists = prev.some(l => l.id === payload.new.id);
                     if (exists) return prev;
-                    return [...prev, payload.new].slice(-100);
+                    return [...prev, newLog].slice(-100);
                 });
             })
             .subscribe();
@@ -101,16 +110,40 @@ export default function AgentsPage() {
         };
     }, []);
 
-    // Dynamic bar chart: update bars based on log volume
+    // Dynamic bar chart and systemic heartbeat
     useEffect(() => {
         const interval = setInterval(() => {
             setLogBarData(prev => {
-                const shifted = [...prev.slice(1), Math.floor(Math.random() * 80 + 20)];
+                const noise = Math.sin(Date.now() / 1000) * 20;
+                const shifted = [...prev.slice(1), Math.max(10, Math.min(100, Math.floor(Math.random() * 50 + 20 + noise)))];
                 return shifted;
             });
-        }, 2000);
+            setHeartbeat(prev => (prev + 1) % 100);
+        }, 800);
         return () => clearInterval(interval);
     }, []);
+
+    // Add a spike to the chart when a log arrives
+    useEffect(() => {
+        if (logs.length > 0) {
+            setLogBarData(prev => [...prev.slice(1), 90]);
+        }
+    }, [logs.length]);
+
+    // Simulated heartbeat if system is silent
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (logs.length === 0) {
+                setLogs([{
+                    id: `init-${Date.now()}`,
+                    level: 'system',
+                    message: '🛡️ SUI_WATCHDOG: Matrix scanning active. Waiting for on-chain signals...',
+                    timestamp: new Date().toISOString()
+                }]);
+            }
+        }, 15000);
+        return () => clearInterval(interval);
+    }, [logs.length]);
 
     // Auto-scroll to bottom of logs
     useEffect(() => {
@@ -148,8 +181,11 @@ export default function AgentsPage() {
     useEffect(() => {
         const fetchSignals = async () => {
             try {
-                const client = new SuiClient({ url: getFullnodeUrl('testnet') });
-                const PACKAGE_ID = "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
+                const network = process.env.NEXT_PUBLIC_SUI_NETWORK || 'testnet';
+                const client = new SuiClient({ url: getFullnodeUrl(network as any) });
+                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID;
+
+                if (!PACKAGE_ID) return;
 
                 const signalEvents = await client.queryEvents({
                     query: { MoveEventType: `${PACKAGE_ID}::agent_registry::SignalPublished` },
@@ -166,16 +202,17 @@ export default function AgentsPage() {
                     return {
                         id: ev.id.txDigest,
                         level: 'system',
-                        message: `${t('agents.logs.onChainPrefix')}${content}`,
-                        timestamp: Number(parsed.timestamp),
-                        isChain: true
+                        message: content,
+                        timestamp: Number(ev.timestampMs),
+                        isChain: true,
+                        displayTime: new Date(Number(ev.timestampMs)).toISOString()
                     };
                 });
 
                 setLogs(prev => {
                     const filteredPrev = prev.filter(l => !l.isChain);
                     const combined = [...filteredPrev, ...newSignals].sort((a, b) =>
-                        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+                        (a.timestamp || 0) - (b.timestamp || 0)
                     );
                     return combined.slice(-100);
                 });
@@ -194,10 +231,15 @@ export default function AgentsPage() {
             <Navbar />
 
             {/* Background Effects */}
-            <div className="fixed inset-0 z-0">
-                <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-neon-purple/10 to-transparent opacity-50" />
-                <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-neon-cyan/5 rounded-full blur-[120px]" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10" />
+            <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-neon-purple/20 to-transparent opacity-40" />
+                <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-neon-cyan/10 rounded-full blur-[120px]" />
+
+                {/* Matrix/Grid Effect */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,18,18,0)_1px,transparent_1px),linear-gradient(90deg,rgba(18,18,18,0)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"
+                    style={{ backgroundImage: 'linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)' }} />
+
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15]" />
             </div>
 
             <div className="relative z-10 container mx-auto px-4 pt-48 pb-20">
@@ -216,9 +258,13 @@ export default function AgentsPage() {
                     <motion.h1
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 tracking-tight"
+                        className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 tracking-tight flex items-center justify-center gap-4"
                     >
                         {t('agents.title')}
+                        <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-neon-cyan/10 border border-neon-cyan/20 rounded-lg">
+                            <div className="w-2 h-2 bg-neon-cyan rounded-full animate-ping" />
+                            <span className="text-xs text-neon-cyan font-mono uppercase tracking-widest">Live</span>
+                        </div>
                     </motion.h1>
                     <p className="text-gray-400 max-w-2xl mx-auto text-lg">
                         {t('agents.subtitle')}
@@ -278,19 +324,27 @@ export default function AgentsPage() {
                                 <Signal className="w-4 h-4 text-neon-purple" />
                                 {t('agents.deployedUnits.title')}
                             </h3>
-                            <div className="h-32 flex items-end justify-between gap-1 px-2">
+                            <div className="h-32 flex items-end justify-between gap-1 px-1">
                                 {logBarData.map((h, i) => (
-                                    <div key={i} className="w-full bg-white/10 rounded-t-sm relative overflow-hidden group">
+                                    <div key={i} className="flex-1 bg-white/[0.03] rounded-t-sm relative overflow-hidden group">
                                         <motion.div
+                                            initial={{ height: "5%" }}
                                             animate={{ height: `${h}%` }}
-                                            transition={{ duration: 0.6, ease: 'easeInOut' }}
-                                            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-neon-purple to-neon-cyan w-full opacity-50 group-hover:opacity-80 transition-opacity"
+                                            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                                            className={`absolute bottom-0 left-0 right-0 w-full transition-colors duration-300 ${h > 80 ? 'bg-gradient-to-t from-neon-cyan via-white to-transparent' :
+                                                h > 50 ? 'bg-gradient-to-t from-neon-purple via-neon-cyan to-transparent' :
+                                                    'bg-gradient-to-t from-neon-purple/40 to-transparent'
+                                                }`}
                                         />
+                                        {i === logBarData.length - 1 && (
+                                            <div className="absolute top-0 left-0 right-0 h-0.5 bg-neon-cyan animate-pulse" />
+                                        )}
                                     </div>
                                 ))}
                             </div>
-                            <div className="mt-2 text-xs text-center text-gray-500 font-mono">
-                                {t('agents.deployedUnits.rateLabel')}
+                            <div className="mt-3 flex justify-between items-center text-[10px] text-gray-500 font-mono px-1">
+                                <span>{t('agents.deployedUnits.rateLabel')}</span>
+                                <span className="text-neon-cyan animate-pulse">SYNC_ACTIVE_{heartbeat}%</span>
                             </div>
                         </div>
 
@@ -392,23 +446,41 @@ export default function AgentsPage() {
                                         {logs.length === 0 && (
                                             <div className="text-gray-600 italic">{t('agents.sdk.waitingSignal')}</div>
                                         )}
-                                        {logs.map((log, i) => (
-                                            <div key={i} className="break-all">
-                                                <span className="text-gray-600">[{new Date(log.timestamp).toLocaleTimeString()}]</span>{' '}
-                                                <span className={`${log.level === 'error' ? 'text-red-500' :
-                                                    log.level === 'warn' ? 'text-yellow-500' :
-                                                        log.level === 'success' ? 'text-green-400' :
-                                                            log.level === 'system' ? 'text-neon-cyan' :
-                                                                'text-blue-400'
-                                                    }`}>
-                                                    {log.level?.toUpperCase()}
-                                                </span>{' '}
-                                                <span className="text-gray-300">{log.message}</span>
-                                                {walrusStatus === 'live' && (
-                                                    <span className="ml-2 text-blue-500/40 text-[9px]">⬆ walrus</span>
-                                                )}
-                                            </div>
-                                        ))}
+                                        {logs.map((log, i) => {
+                                            // Handle various timestamp formats from Supabase (created_at), Agent (timestamp), or Chain (ev.timestampMs)
+                                            // Fallback to now() for "Live" experience if clock drift is too large
+                                            const timeValue = log.timestamp || log.created_at || log.displayTime || new Date().toISOString();
+                                            const time = new Date(timeValue).toLocaleTimeString([], {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                second: '2-digit',
+                                                hour12: true
+                                            });
+
+                                            const level = log.level?.toUpperCase();
+                                            const isChain = log.isChain;
+
+                                            return (
+                                                <div key={i} className={`break-all border-b border-white/[0.02] py-1.5 flex gap-3 text-[11px] items-start ${isChain ? 'bg-neon-cyan/5' : ''}`}>
+                                                    <span className="text-gray-600 shrink-0 font-mono w-[85px]">[{time}]</span>
+                                                    <span className={`shrink-0 font-bold w-[45px] text-center ${log.level === 'error' ? 'text-red-500' :
+                                                        log.level === 'warn' ? 'text-yellow-500' :
+                                                            log.level === 'success' ? 'text-green-400' :
+                                                                log.level === 'system' ? 'text-neon-cyan' :
+                                                                    'text-blue-400'
+                                                        }`}>
+                                                        {level}
+                                                    </span>
+                                                    <span className="text-gray-300 flex-grow min-w-0">
+                                                        {isChain && <span className="text-neon-cyan font-bold mr-1">{t('agents.logs.onChainPrefix')}</span>}
+                                                        {log.message}
+                                                    </span>
+                                                    {walrusStatus === 'live' && (
+                                                        <span className="shrink-0 text-blue-500/40 text-[9px] font-mono">⬆ walrus</span>
+                                                    )}
+                                                </div>
+                                            )
+                                        })}
                                         <div ref={logsEndRef} />
                                     </div>
                                 </div>

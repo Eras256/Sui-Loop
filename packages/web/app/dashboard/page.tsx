@@ -1211,10 +1211,10 @@ function DashboardContent() {
             setConfirmConfig(prev => ({
                 ...prev,
                 isOpen: true,
-                title: "Deposit to Vault",
+                title: t('dashboard.vault_modal.deposit.title').replace('{asset}', baseAsset),
                 description: (
                     <div className="space-y-4">
-                        <p className="text-xs text-gray-400">Transfer SUI from your wallet to the secure vault.</p>
+                        <p className="text-xs text-gray-400">{t('dashboard.vault_modal.deposit.description').replace('{asset}', baseAsset)}</p>
                         <div className="relative">
                             <input
                                 type="number"
@@ -1233,7 +1233,7 @@ function DashboardContent() {
                     </div>
                 ),
                 icon: <RefreshCw size={32} className="text-neon-cyan" />,
-                confirmText: "CONFIRM DEPOSIT",
+                confirmText: t('dashboard.vault_modal.deposit.confirmText'),
                 type: 'info',
                 onConfirm: () => {
                     setConfirmConfig(p => ({ ...p, isOpen: false }));
@@ -1250,13 +1250,13 @@ function DashboardContent() {
 
         // Network Check (Strict)
         if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
-            toast.error("Wrong Network Detected", {
-                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            toast.error(t('dashboard.toasts.vault.wrongNetwork'), {
+                description: t('dashboard.toasts.vault.wrongNetworkDesc')
             });
             return;
         }
 
-        const toastId = toast.loading(`Executing Deposit of ${amount} SUI...`);
+        const toastId = toast.loading(t('dashboard.toasts.vault.depositExecuting').replace('{amount}', amount).replace('{asset}', baseAsset));
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
@@ -1276,13 +1276,13 @@ function DashboardContent() {
                 });
                 if (coins.data.length === 0) {
                     toast.dismiss(toastId);
-                    toast.error(`No ${baseAsset} found in your wallet to deposit.`);
+                    toast.error(t('dashboard.toasts.vault.noBalance').replace('{asset}', baseAsset));
                     return;
                 }
                 const totalBalance = coins.data.reduce((acc, c) => acc + BigInt(c.balance), BigInt(0));
                 if (totalBalance < amountMist) {
                     toast.dismiss(toastId);
-                    toast.error(`Insufficient ${baseAsset} balance. Have: ${(Number(totalBalance) / decimals).toFixed(4)}, Need: ${amount}`);
+                    toast.error(t('dashboard.toasts.vault.insufficientBalance').replace('{asset}', baseAsset).replace('{have}', (Number(totalBalance) / decimals).toFixed(4)).replace('{need}', amount));
                     return;
                 }
                 const [primaryCoin, ...restCoins] = coins.data.map(c => tx.object(c.coinObjectId));
@@ -1300,8 +1300,8 @@ function DashboardContent() {
 
             const result = await signAndExecuteTransaction({ transaction: tx as any });
             toast.dismiss(toastId);
-            toast.success("Deposit Successful", {
-                description: `${amount} SUI moved to Vault.`,
+            toast.success(t('dashboard.toasts.vault.depositSuccess'), {
+                description: t('dashboard.toasts.vault.depositSuccessDesc').replace('{amount}', amount).replace('{asset}', baseAsset),
                 action: {
                     label: "View Tx",
                     onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
@@ -1310,7 +1310,7 @@ function DashboardContent() {
         } catch (e) {
             console.error(e);
             toast.dismiss(toastId);
-            toast.error("Deposit Failed");
+            toast.error(t('dashboard.toasts.vault.deployFailed').replace('{error}', ''));
         }
     };
 
@@ -1325,10 +1325,10 @@ function DashboardContent() {
             setConfirmConfig(prev => ({
                 ...prev,
                 isOpen: true,
-                title: "Withdraw from Vault",
+                title: t('dashboard.vault_modal.withdraw.title').replace('{asset}', baseAsset),
                 description: (
                     <div className="space-y-4">
-                        <p className="text-xs text-gray-400">Transfer SUI from the vault back to your wallet address.</p>
+                        <p className="text-xs text-gray-400">{t('dashboard.vault_modal.withdraw.description').replace('{asset}', baseAsset)}</p>
                         <div className="relative">
                             <input
                                 type="number"
@@ -1347,7 +1347,7 @@ function DashboardContent() {
                     </div>
                 ),
                 icon: <div className="rotate-180"><ChevronRight size={32} className="text-white" /></div>,
-                confirmText: "CONFIRM WITHDRAW",
+                confirmText: t('dashboard.vault_modal.withdraw.confirmText'),
                 type: 'info',
                 onConfirm: () => {
                     setConfirmConfig(p => ({ ...p, isOpen: false }));
@@ -1364,13 +1364,13 @@ function DashboardContent() {
 
         // Network Check (Strict)
         if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
-            toast.error("Wrong Network Detected", {
-                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            toast.error(t('dashboard.toasts.vault.wrongNetwork'), {
+                description: t('dashboard.toasts.vault.wrongNetworkDesc')
             });
             return;
         }
 
-        const toastId = toast.loading("Executing Withdrawal...");
+        const toastId = toast.loading(t('dashboard.toasts.vault.withdrawExecuting'));
         try {
             const tx = new Transaction();
             tx.setSender(account.address);
@@ -1388,8 +1388,8 @@ function DashboardContent() {
 
             const result = await signAndExecuteTransaction({ transaction: tx as any });
             toast.dismiss(toastId);
-            toast.success("Withdrawal Successful", {
-                description: `${amount} SUI returned to your wallet.`,
+            toast.success(t('dashboard.toasts.vault.withdrawSuccess'), {
+                description: t('dashboard.toasts.vault.withdrawSuccessDesc').replace('{amount}', amount).replace('{asset}', baseAsset),
                 action: {
                     label: "View Tx",
                     onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
@@ -1407,28 +1407,28 @@ function DashboardContent() {
 
         setConfirmConfig({
             isOpen: true,
-            title: "Initialize Secure Vault?",
+            title: t('dashboard.vault_modal.title'),
             description: (
                 <div className="space-y-3">
-                    <p className="text-xs text-gray-400">Deploying a non-custodial <span className="text-neon-cyan">{baseAsset} Vault</span> on-chain.</p>
+                    <p className="text-xs text-gray-400">{t('dashboard.vault_modal.description').replace('{asset}', baseAsset)}</p>
                     <div className="bg-neon-cyan/5 border border-neon-cyan/20 p-3 rounded-xl text-left">
                         <p className="text-[10px] text-gray-400 leading-relaxed font-mono">
-                            • Generates unique <span className="text-white">OwnerCap</span><br />
-                            • Enables automated agent trading<br />
-                            • Hot Potato security pattern active<br />
-                            • <span className="text-white">Only you can withdraw</span> via OwnerCap
+                            • {t('dashboard.vault_modal.bullet_1')}<br />
+                            • {t('dashboard.vault_modal.bullet_2')}<br />
+                            • {t('dashboard.vault_modal.bullet_3')}<br />
+                            • {t('dashboard.vault_modal.bullet_4')}
                         </p>
                     </div>
                     <div className="bg-amber-500/5 border border-amber-500/20 p-2.5 rounded-xl text-left">
                         <p className="text-[9px] text-amber-400/80 leading-relaxed font-mono">
-                            ⚠️ RISK: DeFi strategies carry financial risk. SuiLoop is software only — not a financial service. By confirming you accept our Terms of Service and Risk Disclosure.
+                            <span className="font-bold">{t('dashboard.vault_modal.risk_label')}</span> {t('dashboard.vault_modal.risk_text')}
                         </p>
                     </div>
-                    <p className="text-[9px] text-gray-500 italic">This transaction requires gas fees on Mainnet. Only use funds you can afford to lose.</p>
+                    <p className="text-[9px] text-gray-500 italic">{t('dashboard.vault_modal.gas_hint')}</p>
                 </div>
             ),
             icon: <Shield size={32} className="text-neon-cyan" />,
-            confirmText: "DEPLOY VAULT",
+            confirmText: t('dashboard.vault_modal.confirmText'),
             type: 'info',
             onConfirm: () => {
                 setConfirmConfig(prev => ({ ...prev, isOpen: false }));
@@ -1442,8 +1442,8 @@ function DashboardContent() {
 
         // Network Check (Strict)
         if (account.chains?.[0] && account.chains[0] !== 'sui:testnet') {
-            toast.error("Wrong Network Detected", {
-                description: "This dApp runs on Sui Testnet. Please switch your wallet network."
+            toast.error(t('dashboard.toasts.vault.wrongNetwork'), {
+                description: t('dashboard.toasts.vault.wrongNetworkDesc')
             });
             return;
         }
@@ -1460,7 +1460,7 @@ function DashboardContent() {
             arguments: []
         });
 
-        const toastId = toast.loading("Creating Secure Vault...");
+        const toastId = toast.loading(t('dashboard.toasts.vault.createExecuting'));
 
         try {
             const result = await signAndExecuteTransaction({ transaction: tx as any });
@@ -1504,8 +1504,8 @@ function DashboardContent() {
                 setVaultId((vaultObject as any).objectId);
                 setOwnerCapId((ownerCapObject as any).objectId);
 
-                toast.success("Secure Vault Deployed on-chain!", {
-                    description: `Vault ID: ${(vaultObject as any).objectId.slice(0, 6)}...`,
+                toast.success(t('dashboard.toasts.vault.createSuccess'), {
+                    description: t('dashboard.toasts.vault.createSuccessDesc').replace('{id}', (vaultObject as any).objectId.slice(0, 6)),
                     action: {
                         label: "View on Explorer",
                         onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, "_blank")
@@ -1539,21 +1539,21 @@ function DashboardContent() {
             // Old format without OwnerCap ID - allow force reset
             setConfirmConfig({
                 isOpen: true,
-                title: "Old Format Detected",
+                title: t('dashboard.vault_modal.legacy.title'),
                 description: (
                     <div className="space-y-3">
-                        <p className="text-xs text-gray-400">This vault uses an legacy version and requires a local cache reset.</p>
+                        <p className="text-xs text-gray-400">{t('dashboard.vault_modal.legacy.description')}</p>
                         <div className="bg-white/5 border border-white/10 p-3 rounded-xl text-left">
                             <p className="text-[10px] text-gray-500 font-mono leading-relaxed">
-                                • Disconnect local view<br />
-                                • Clean start protocol<br />
-                                • On-chain assets safe
+                                • {t('dashboard.vault_modal.legacy.bullet_1')}<br />
+                                • {t('dashboard.vault_modal.legacy.bullet_2')}<br />
+                                • {t('dashboard.vault_modal.legacy.bullet_3')}
                             </p>
                         </div>
                     </div>
                 ),
                 icon: <RefreshCw size={32} className="text-neon-cyan animate-spin-slow" />,
-                confirmText: "LOCAL RESET",
+                confirmText: t('dashboard.vault_modal.legacy.confirmText'),
                 type: 'info',
                 onConfirm: () => {
                     localStorage.removeItem(`sui-loop-vault-${baseAsset}-${account.address}`);
@@ -1569,31 +1569,31 @@ function DashboardContent() {
 
         setConfirmConfig({
             isOpen: true,
-            title: "Destroy Secure Vault?",
+            title: t('dashboard.vault_modal.destroy.title'),
             description: (
                 <div className="space-y-3">
-                    <p className="text-gray-400 text-xs">This action will execute a terminal cleanup protocol on your active vault.</p>
+                    <p className="text-gray-400 text-xs">{t('dashboard.vault_modal.destroy.description')}</p>
                     <div className="grid grid-cols-1 gap-1.5 text-left">
                         <div className="bg-red-500/5 border border-red-500/10 p-2 rounded-lg flex items-center gap-2.5">
                             <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                            <span className="text-[10px] font-mono text-red-200 uppercase">Destroy Vault On-Chain</span>
+                            <span className="text-[10px] font-mono text-red-200 uppercase">{t('dashboard.vault_modal.destroy.title')}</span>
                         </div>
                         <div className="bg-red-500/5 border border-red-500/10 p-2 rounded-lg flex items-center gap-2.5">
                             <div className="w-1.5 h-1.5 rounded-full bg-red-400 opacity-50" />
-                            <span className="text-[10px] font-mono text-gray-400 uppercase">Burn OwnerCap Registry</span>
+                            <span className="text-[10px] font-mono text-gray-400 uppercase">{t('dashboard.vault_modal.destroy.burnLabel')}</span>
                         </div>
                         <div className="bg-green-500/5 border border-green-500/10 p-2 rounded-lg flex items-center gap-2.5">
                             <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                            <span className="text-[10px] font-mono text-green-200 uppercase">Return SUI to Wallet</span>
+                            <span className="text-[10px] font-mono text-green-200 uppercase">{t('dashboard.vault_modal.destroy.returnLabel').replace('{asset}', baseAsset)}</span>
                         </div>
                     </div>
                     <p className="text-[9px] text-gray-500 italic uppercase tracking-tighter pt-1.5 border-t border-white/5">
-                        WARNING: Irreversible operation. Gas required.
+                        {t('dashboard.vault_modal.destroy.warning')}
                     </p>
                 </div>
             ),
             icon: <Trash2 size={32} className="text-red-500" />,
-            confirmText: "CONFIRM TERMINAL",
+            confirmText: t('dashboard.vault_modal.destroy.confirmText'),
             type: 'danger',
             onConfirm: async () => {
                 if (!requireAuth()) return;
@@ -1614,7 +1614,7 @@ function DashboardContent() {
             return;
         }
 
-        const toastId = toast.loading("Destroying Vault...");
+        const toastId = toast.loading(t('dashboard.toasts.vault.destroyExecuting'));
 
         try {
             const tx = new Transaction();
@@ -1638,8 +1638,8 @@ function DashboardContent() {
             toast.dismiss(toastId);
             localStorage.removeItem(`sui-loop-vault-${baseAsset}-${account.address}`);
             setVaultId(null);
-            toast.success("Vault Destroyed & Funds Recovered!", {
-                description: "Your vault has been destroyed on-chain.",
+            toast.success(t('dashboard.toasts.vault.destroySuccess'), {
+                description: t('dashboard.toasts.vault.destroySuccessDesc'),
                 action: {
                     label: "View Tx",
                     onClick: () => window.open(`https://suiscan.xyz/testnet/tx/${result.digest}`, '_blank')

@@ -7,13 +7,14 @@ import {
     ArrowLeft, Book, Code, Shield, Layers, Cpu, Database, Zap,
     GitBranch, FileCode, Rocket, CheckCircle, AlertTriangle,
     Terminal, Globe, Lock, TrendingUp, ChevronRight, ExternalLink,
-    Play, Settings, Users, User, Landmark, Workflow, Key, Lightbulb, HardDrive, FileCheck, BookOpen, FileJson
+    Play, Settings, Users, User, Landmark, Workflow, Key, Lightbulb, HardDrive, FileCheck, BookOpen, FileJson,
+    Monitor, Smartphone
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import ApiKeyManager from "@/components/docs/ApiKeyManager";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
-type TabId = 'overview' | 'architecture' | 'contracts' | 'agent' | 'frontend' | 'api' | 'security' | 'ideas' | 'builder';
+type TabId = 'overview' | 'architecture' | 'contracts' | 'agent' | 'frontend' | 'api' | 'mcp' | 'companion' | 'security' | 'ideas' | 'builder';
 
 const getTabs = (t: any) => [
     { id: 'overview' as TabId, label: t('docs.tabs.overview'), icon: Book },
@@ -24,6 +25,8 @@ const getTabs = (t: any) => [
     { id: 'builder' as TabId, label: t('docs.tabs.builder'), icon: Workflow },
     { id: 'frontend' as TabId, label: t('docs.tabs.frontend'), icon: Globe },
     { id: 'api' as TabId, label: t('docs.tabs.api'), icon: Terminal },
+    { id: 'mcp' as TabId, label: t('docs.tabs.mcp'), icon: Zap },
+    { id: 'companion' as TabId, label: t('docs.tabs.companion'), icon: Monitor },
     { id: 'security' as TabId, label: t('docs.tabs.security'), icon: Shield },
 ];
 
@@ -120,6 +123,8 @@ function DocsContent() {
                     {activeTab === 'builder' && <BuilderSection />}
                     {activeTab === 'frontend' && <FrontendSection />}
                     {activeTab === 'api' && <ApiSection />}
+                    {activeTab === 'mcp' && <McpSection />}
+                    {activeTab === 'companion' && <CompanionSection />}
                     {activeTab === 'security' && <SecuritySection />}
                 </div>
             </div>
@@ -151,7 +156,7 @@ function OverviewSection() {
             {/* Hero Stats */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 {[
-                    { label: t('docs.overview.stats.version'), value: 'v0.0.7', color: 'text-neon-cyan' },
+                    { label: t('docs.overview.stats.version'), value: 'v1.0.0', color: 'text-neon-cyan' },
                     { label: t('docs.overview.stats.tests'), value: '12/12 ✓', color: 'text-green-400' },
                     { label: t('docs.overview.stats.plugins'), value: '13+ Active', color: 'text-purple-400' },
                     { label: t('docs.overview.stats.fee'), value: '0.3%', color: 'text-amber-400' },
@@ -349,7 +354,7 @@ function OverviewSection() {
                     </table>
                 </div>
                 <div className="mt-4 text-sm text-gray-400">
-                    <strong>{t('docs.overview.verified.agentWallet')}:</strong> <code className="text-neon-cyan">0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0</code>
+                    <strong>{t('docs.overview.verified.agentWallet')}:</strong> <code className="text-neon-cyan">0x3375661d59379545d2e412a56890483d4d22c7027d91df6571c012276e175d29</code>
                 </div>
             </section>
         </div>
@@ -396,7 +401,7 @@ function ArchitectureSection() {
                                 <h4 className="text-xl font-bold text-white mb-2 underline decoration-neon-purple/30 underline-offset-4 decoration-2">Protocol Execution Layer (Move)</h4>
                                 <p className="text-gray-400 leading-relaxed">
                                     The "On-Chain Kernel". Written in <strong>Sui Move 2024</strong>. Enforces safety constraints via linear types.
-                                    Contains the <code>AtomicLoop</code> and <code>NeuralVault</code> modules. Ensures that any borrowed capital MUST return to the pool by the end of the transaction.
+                                    Contains the <code>AtomicLoop</code> and <code>Vault</code> modules. Ensures that any borrowed capital MUST return to the pool by the end of the transaction.
                                 </p>
                             </div>
                         </div>
@@ -468,8 +473,8 @@ function ContractsSection() {
                             {[
                                 { name: 'Pool<SUI, USDC>', type: 'Shared Object', desc: 'Stores the protocol liquidity and manages flash loan issuance.' },
                                 { name: 'AdminCap', type: 'Owned Object', desc: 'Grants administrative rights for fee adjustments and withdrawals.' },
-                                { name: 'Receipt', type: 'Hot Potato', desc: 'A linear type object that MUST be consumed by repaying the loan.' },
-                                { name: 'NeuralVault', type: 'Strategy Container', desc: 'Holds capital dedicated to a specific agentic strategy.' },
+                                { name: 'LoopReceipt', type: 'Hot Potato', desc: 'A linear type object that MUST be consumed by repaying the loan.' },
+                                { name: 'Vault', type: 'Strategy Container', desc: 'Holds capital dedicated to a specific agentic strategy.' },
                             ].map((obj) => (
                                 <div key={obj.name} className="p-3 bg-black/40 rounded-lg border border-white/5">
                                     <div className="flex justify-between items-center mb-1">
@@ -490,7 +495,7 @@ function ContractsSection() {
                         <div className="bg-black rounded-lg p-4 font-mono text-xs overflow-x-auto">
                             <pre className="text-neon-purple">
                                 {`// The "Hot Potato" Receipt
-public struct Receipt {
+public struct LoopReceipt {
     id: ID,
     amount: u64,
     fee: u64
@@ -501,7 +506,7 @@ public fun flash_loan(
     pool: &mut Pool, 
     amount: u64, 
     ctx: &mut TxContext
-): (Coin<SUI>, Receipt) {
+): (Coin<SUI>, LoopReceipt) {
     // ... logic
 }
 
@@ -509,7 +514,7 @@ public fun flash_loan(
 public fun repay(
     pool: &mut Pool, 
     payment: Coin<SUI>, 
-    receipt: Receipt
+    receipt: LoopReceipt
 ) {
     // ... MUST consume receipt
 }`}
@@ -691,25 +696,139 @@ function ApiSection() {
         <div className="space-y-12">
             <section>
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                    <Terminal className="text-neon-purple" />
+                    <Terminal className="text-neon-cyan" />
                     {t('docs.api.title')}
                 </h2>
                 <p className="text-gray-400 mb-8 leading-relaxed">
                     {t('docs.api.subtitle')}
                 </p>
 
-                <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 mb-8">
-                    <h3 className="text-xl font-bold text-white mb-4">{t('docs.api.auth.title')}</h3>
-                    <p className="text-gray-400 text-sm mb-6">
-                        {t('docs.api.auth.desc')}
+                <div className="grid md:grid-cols-2 gap-8 mb-8">
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <Lock className="text-neon-purple w-5 h-5" />
+                            {t('docs.api.auth.title')}
+                        </h3>
+                        <p className="text-gray-400 text-sm mb-6">
+                            {t('docs.api.auth.desc')}
+                        </p>
+                        <div className="bg-black rounded-lg p-4 font-mono text-sm border border-neon-purple/30">
+                            <span className="text-gray-500"># Example request</span><br />
+                            <span className="text-purple-400">curl</span> -H <span className="text-neon-cyan">"Authorization: Bearer loop_sk_..."</span> https://api.suiloop.fi/v1/agents
+                        </div>
+                    </div>
+
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <Code className="text-neon-cyan w-5 h-5" />
+                            {t('docs.api.sdk.title')}
+                        </h3>
+                        <p className="text-gray-400 text-sm mb-6">
+                            {t('docs.api.sdk.desc')}
+                        </p>
+                        <div className="bg-black rounded-lg p-4 font-mono text-xs border border-neon-cyan/30 text-neon-cyan">
+                            npm install @suiloop/sdk
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
+                    <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <Terminal className="text-amber-500 w-5 h-5" />
+                        {t('docs.api.cli.title')}
+                    </h3>
+                    <p className="text-gray-400 text-sm mb-4">
+                        {t('docs.api.cli.desc')}
                     </p>
-                    <div className="bg-black rounded-lg p-4 font-mono text-sm border border-neon-purple/30">
-                        <span className="text-gray-500"># Example request</span><br />
-                        <span className="text-purple-400">curl</span> -H <span className="text-neon-cyan">"Authorization: Bearer loop_sk_..."</span> https://api.suiloop.fi/v1/agents
+                    <div className="bg-black rounded-lg p-4 font-mono text-sm border border-amber-500/30 text-amber-500">
+                        {t('docs.api.cli.example')}
                     </div>
                 </div>
 
                 <ApiKeyManager />
+            </section>
+        </div>
+    );
+}
+
+function McpSection() {
+    const { t } = useLanguage();
+    return (
+        <div className="space-y-12">
+            <section>
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <Zap className="text-neon-cyan" />
+                    {t('docs.mcp.title')}
+                </h2>
+                <p className="text-gray-400 mb-8 leading-relaxed">
+                    {t('docs.mcp.subtitle')}
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-8 mb-8">
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                            <Settings className="text-neon-purple w-5 h-5" />
+                            {t('docs.mcp.tools.title')}
+                        </h3>
+                        <div className="space-y-3">
+                            {[
+                                'get_market_state', 'get_agent_health', 'start_loop', 'stop_loop', 'execute_strategy'
+                            ].map(tool => (
+                                <div key={tool} className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-neon-cyan" />
+                                    <code className="text-xs text-neon-cyan">{tool}</code>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-6">
+                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                            <Rocket className="text-amber-400 w-5 h-5" />
+                            {t('docs.mcp.install.title')}
+                        </h3>
+                        <div className="space-y-4">
+                            <div className="p-3 bg-white/5 rounded border border-white/10">
+                                <div className="text-xs font-bold mb-1">{t('docs.mcp.install.cursor')}</div>
+                                <div className="text-[10px] text-gray-500 font-mono">.cursor/mcp.json</div>
+                            </div>
+                            <div className="p-3 bg-white/5 rounded border border-white/10">
+                                <div className="text-xs font-bold mb-1">{t('docs.mcp.install.claude')}</div>
+                                <div className="text-[10px] text-gray-500 font-mono">claude_desktop_config.json</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+}
+
+function CompanionSection() {
+    const { t } = useLanguage();
+    return (
+        <div className="space-y-12">
+            <section>
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <Monitor className="text-neon-purple" />
+                    {t('docs.companion.title')}
+                </h2>
+                <p className="text-gray-400 mb-8 leading-relaxed">
+                    {t('docs.companion.subtitle')}
+                </p>
+
+                <div className="grid md:grid-cols-3 gap-6">
+                    {[
+                        { icon: Monitor, title: t('docs.companion.features.desktop') },
+                        { icon: Lock, title: t('docs.companion.features.mobile') },
+                        { icon: Terminal, title: t('docs.companion.features.push') },
+                    ].map((feature, i) => (
+                        <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center text-center group hover:bg-white/10 transition-colors">
+                            <feature.icon className="w-8 h-8 text-neon-cyan mb-4 group-hover:scale-110 transition-transform" />
+                            <h3 className="text-sm font-bold text-white">{feature.title}</h3>
+                        </div>
+                    ))}
+                </div>
             </section>
         </div>
     );
@@ -758,7 +877,7 @@ function SecuritySection() {
                 </h3>
                 <div className="space-y-4">
                     {[
-                        { label: ' линейный (Linear Type)', status: 'ENFORCED', desc: 'Receipt object cannot be dropped.' },
+                        { label: 'Hot Potato (Linear Type)', status: 'ENFORCED', desc: 'LoopReceipt object cannot be dropped.' },
                         { label: 'Solvency Check', status: 'VERIFIED', desc: 'Pool invariant k = x * y is maintained.' },
                         { label: 'Oracle Slippage', status: 'ACTIVE', desc: 'Max 0.5% deviation allowed.' },
                     ].map((item) => (

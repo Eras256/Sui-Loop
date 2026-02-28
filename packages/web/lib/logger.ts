@@ -14,7 +14,7 @@ export async function writeLog(
     if (!url || !key) return; // Silently skip if not configured
 
     try {
-        await fetch(`${url}/rest/v1/logs`, {
+        await fetch(`${url}/rest/v1/agent_logs`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,7 +25,8 @@ export async function writeLog(
             body: JSON.stringify({
                 message,
                 level,
-                agent_id: agentId ?? null,
+                strategy_id: agentId ?? null,
+                details: { source: 'frontend_logger' }
             }),
         });
     } catch (e) {

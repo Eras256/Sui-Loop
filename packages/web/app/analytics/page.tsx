@@ -151,7 +151,7 @@ export default function AnalyticsPage() {
                         <div className="flex items-center gap-3 mb-2">
                             <h1 className="text-4xl font-bold text-white tracking-tight">{t('analytics.title')}</h1>
                             <span className="px-2 py-0.5 bg-neon-cyan/10 text-neon-cyan text-[10px] font-mono rounded border border-neon-cyan/20">
-                                v0.0.7
+                                v1.0.0
                             </span>
                         </div>
                         <p className="text-gray-400 font-mono text-sm">

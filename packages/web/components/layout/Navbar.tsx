@@ -350,7 +350,7 @@ export default function Navbar() {
                                     className="w-full min-h-[48px] p-4 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-bold flex items-center justify-center gap-3 active:scale-[0.98]"
                                 >
                                     <Settings size={18} />
-                                    <span className="text-sm">Node & AI Settings</span>
+                                    <span className="text-sm">{t('nav.nodeSettings')}</span>
                                 </button>
                             </motion.div>
                         </motion.div>

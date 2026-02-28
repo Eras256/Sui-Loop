@@ -25,10 +25,9 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
         // Initial fetch of recent logs
         const fetchInitialLogs = async () => {
             try {
-                const { data, error } = await db
-                    .from('logs')
+                const { data, error } = await (db.from('agent_logs') as any)
                     .select('*')
-                    .order('timestamp', { ascending: false })
+                    .order('created_at', { ascending: false })
                     .limit(30);
 
                 if (data && !error) {
@@ -42,10 +41,10 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
 
         // Realtime subscription for new logs
         const channel = db
-            .channel('realtime-logs')
+            .channel('realtime-agent-logs')
             .on(
                 'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'logs' },
+                { event: 'INSERT', schema: 'public', table: 'agent_logs' },
                 (payload) => {
                     setLogs(prev => {
                         // Deduplicate: skip if same id already exists
@@ -130,7 +129,7 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
                             }}
                         >
                             <span className="text-gray-600 mr-2">
-                                [{new Date(log.timestamp).toLocaleTimeString()}]
+                                [{new Date(log.created_at || log.timestamp).toLocaleTimeString()}]
                             </span>
                             <span
                                 className={`font-bold mr-2 ${log.level === 'error' ? 'text-red-500' :

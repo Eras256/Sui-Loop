@@ -78,7 +78,7 @@ export default function Home() {
     // Simulation of Agent Thoughts
     useEffect(() => {
         const logs = [
-            "Initializing Neural Core v0.0.7...",
+            "Initializing Neural Core v1.0.0...",
             "Establishing Matrix Uplink via Sui RPC...",
             "Neural Registry Status: SYNCED",
             "Sentinel ELO: 1240 (Top 5% Tier)",
@@ -130,7 +130,7 @@ export default function Home() {
 
                     {/* Glass Terminal */}
                     <div className="glass-panel rounded-xl p-3 md:p-4 font-mono text-sm h-40 md:h-48 overflow-y-auto w-full max-w-lg border-l-4 border-neon-cyan bg-black/40 mx-auto lg:mx-0">
-                        <div className="text-xs text-gray-500 mb-2 border-b border-gray-800 pb-1">AGENT_KERNEL_v0.0.7 // LIVE FEED</div>
+                        <div className="text-xs text-gray-500 mb-2 border-b border-gray-800 pb-1">AGENT_KERNEL_v1.0.0 // LIVE FEED</div>
                         {agentLog.map((log, i) => (
                             <div key={i} className="text-neon-cyan/80 mb-1 text-xs md:text-sm">
                                 <span className="text-gray-600 mr-2">{">"}</span>

@@ -15,7 +15,8 @@
     "walletNotConnected": "WALLET NOT CONNECTED",
     "currentPage": "CURRENT PAGE",
     "matrixUplink": "MATRIX UPLINK",
-    "strategyBuilder": "STRATEGY BUILDER"
+    "strategyBuilder": "STRATEGY BUILDER",
+    "nodeSettings": "NODE & AI SETTINGS"
   },
   "footer": {
     "tagline": "The decentralized Neural Matrix for Sui. Autonomous agent orchestration with on-chain ELO reputation, DeepBook V3 flash vectors, and Walrus forensic logging.",
@@ -45,7 +46,7 @@
       "uplink": "MATRIX UPLINK ESTABLISHED",
       "kernel": "NEURAL KERNEL",
       "verified": "MOVE VERIFIED",
-      "mainnet": "MAINNET ACTIVE",
+      "mainnet": "MAINNET READY",
       "builtFor": "Built for Sui"
     },
     "statsLabels": {
@@ -153,7 +154,7 @@
     "companion": {
       "title": "Native Desktop Terminal",
       "desc": "Professional desktop environment. Native performance for high-frequency monitoring and direct process control.",
-      "available": "v0.0.7 Available",
+      "available": "v1.0.0 Available",
       "download": "Download Companion"
     },
     "marquee": {
@@ -277,7 +278,7 @@
       }
     },
     "builderHighlight": {
-      "badge": "NEW IN v0.0.7",
+      "badge": "NEW IN v1.0.0",
       "title": "VISUAL",
       "subtitle": "STRATEGY BUILDER",
       "desc": "Create custom trading strategies with our intuitive drag-and-drop editor. Connect triggers, conditions, and actions visually - no coding required.",
@@ -355,6 +356,66 @@
     "locked": "Locked",
     "agentAccessGranted": "AGENT ACCESS: GRANTED 🔓",
     "agentAccessRevoked": "AGENT ACCESS: REVOKED 🔒",
+    "vault_modal": {
+      "title": "Initialize Secure Vault?",
+      "description": "Deploying a non-custodial {asset} Vault on-chain.",
+      "bullet_1": "Generates unique OwnerCap",
+      "bullet_2": "Enables automated agent trading",
+      "bullet_3": "Hot Potato security pattern active",
+      "bullet_4": "Only you can withdraw via OwnerCap",
+      "risk_label": "RISK:",
+      "risk_text": "DeFi strategies carry financial risk. SuiLoop is software only — not a financial service. By confirming you accept our Terms of Service and Risk Disclosure.",
+      "gas_hint": "This transaction requires gas fees on Mainnet. Only use funds you can afford to lose.",
+      "confirmText": "DEPLOY VAULT",
+      "deposit": {
+        "title": "Deposit to {asset} Vault",
+        "description": "Transfer {asset} from your wallet to the secure vault.",
+        "confirmText": "CONFIRM DEPOSIT"
+      },
+      "withdraw": {
+        "title": "Withdraw from {asset} Vault",
+        "description": "Transfer {asset} from the vault back to your wallet address.",
+        "confirmText": "CONFIRM WITHDRAW"
+      },
+      "destroy": {
+        "title": "Destroy Secure Vault?",
+        "description": "This action will execute a terminal cleanup protocol on your active vault.",
+        "burnLabel": "Burn OwnerCap Registry",
+        "returnLabel": "Return {asset} to Wallet",
+        "warning": "WARNING: Irreversible operation. Gas required.",
+        "confirmText": "CONFIRM TERMINAL"
+      },
+      "legacy": {
+        "title": "Old Format Detected",
+        "description": "This vault uses an legacy version and requires a local cache reset.",
+        "bullet_1": "Disconnect local view",
+        "bullet_2": "Clean start protocol",
+        "bullet_3": "On-chain assets safe",
+        "confirmText": "LOCAL RESET"
+      }
+    },
+    "toasts": {
+      "vault": {
+        "depositExecuting": "Executing Deposit of {amount} {asset}...",
+        "depositSuccess": "Deposit Successful",
+        "depositSuccessDesc": "{amount} {asset} moved to Vault.",
+        "withdrawExecuting": "Executing Withdrawal...",
+        "withdrawSuccess": "Withdrawal Successful",
+        "withdrawSuccessDesc": "{amount} {asset} returned to your wallet.",
+        "createExecuting": "Creating Secure Vault...",
+        "createSuccess": "Secure Vault Deployed on-chain!",
+        "createSuccessDesc": "Vault ID: {id}",
+        "destroyExecuting": "Destroying Vault...",
+        "destroySuccess": "Vault Destroyed & Funds Recovered!",
+        "destroySuccessDesc": "Your vault has been destroyed on-chain.",
+        "wrongNetwork": "Wrong Network Detected",
+        "wrongNetworkDesc": "This dApp runs on Sui Testnet. Please switch your wallet network.",
+        "noBalance": "No {asset} found in your wallet to deposit.",
+        "insufficientBalance": "Insufficient {asset} balance. Have: {have}, Need: {need}",
+        "deployFailed": "Deployment Failed: {error}",
+        "destroyFailed": "Failed to destroy vault: {error}"
+      }
+    },
     "initializeVault": "+ INITIALIZE VAULT",
     "inject": "Inject",
     "extract": "Extract",
@@ -698,14 +759,6 @@
     "deploy": "INITIALIZE KERNEL",
     "history": "VERSION HISTORY",
     "searchNodes": "Search neural nodes...",
-    "nodeCategories": {
-      "ATOMIC ENGINE": "ATOMIC ENGINE",
-      "SIGNAL INPUTS": "SIGNAL INPUTS",
-      "AI INTELLIGENCE": "AI INTELLIGENCE",
-      "TRADING & SWAPS": "TRADING & SWAPS",
-      "SECURITY & VAULT": "SECURITY & VAULT",
-      "SOCIAL MESSAGING": "SOCIAL MESSAGING"
-    },
     "nodes": {
       "FLASH_LOAN": {
         "name": "FLASH LOAN",
@@ -1175,7 +1228,7 @@
   "agents": {
     "title": "OPERATIONS COMMAND CENTER",
     "subtitle": "Interface for deploying autonomous financial warheads. Generate credentials, monitor SUI & USDC field units, and inject logic directly into the SuiLoop Neural Matrix. All activity immortalized via Walrus forensic logging.",
-    "systemBadge": "SYSTEM ONLINE: v0.0.7 // ENCRYPTED",
+    "systemBadge": "SYSTEM ONLINE: v1.0.0 // ENCRYPTED",
     "tabs": {
       "logs": "LOGS",
       "sdk": "SDK"
@@ -1220,7 +1273,7 @@
     "sdk": {
       "python": "Python SDK",
       "nodejs": "Node.js SDK",
-      "ready": "v0.0.7 Ready",
+      "ready": "v1.0.0 Ready",
       "linkProtocol": "DIRECT LINK PROTOCOL",
       "neuralFeed": "LIVE NEURAL FEED",
       "waitingSignal": "Waiting for signal Uplink...",
@@ -1243,12 +1296,6 @@
       "sdkKeyHint": "Use the key above to authenticate. Showing {asset} vault integration example.",
       "onChainPrefix": "📡 ON-CHAIN: ",
       "encryptedRequested": "⚠️ ENCRYPTED LOG DUMP REQUESTED BY OPERATOR"
-    },
-    "toasts": {
-      "copied": "Copied!",
-      "decrypting": "Decrypting Black Box Neural Signatures...",
-      "downloadSuccess": "Secure Logs Downloaded (sui-loop-audit.json)",
-      "accessDenied": "Access Denied"
     },
     "apiKeyManager": {
       "title": "Agent Console",
@@ -1282,7 +1329,7 @@
     "subtitle": "Field Manual for Autonomous Financial Operations on the Sui Network.",
     "loading": "LOADING FIELD MANUAL...",
     "backLink": "Back to Protocol",
-    "version": "v0.0.7",
+    "version": "v1.0.0",
     "ghLink": "GitHub",
     "scanLink": "Suiscan",
     "tabs": {
@@ -1293,7 +1340,9 @@
       "agent": "AUTONOMOUS UNITS",
       "builder": "STRATEGY ARCHITECT",
       "frontend": "COMMAND INTERFACE",
-      "api": "AGENTS API",
+      "api": "API & SDK",
+      "mcp": "MCP SERVER",
+      "companion": "DESKTOP APP",
       "security": "DEFENSE PROTOCOLS"
     },
     "overview": {
@@ -1332,7 +1381,7 @@
         }
       },
       "features": {
-        "title": "Key Features (v0.0.7)",
+        "title": "Key Features (v1.0.0)",
         "items": {
           "builder": {
             "title": "Visual Strategy Builder",
@@ -1344,7 +1393,7 @@
           },
           "marketplace": {
             "title": "Strategy Marketplace",
-            "desc": "16+ pre-built strategies. SUI & USDC asset selector on each card."
+            "desc": "25+ pre-built strategies. SUI & USDC asset selector on each card."
           },
           "dashboard": {
             "title": "Dashboard Command Center",
@@ -1478,8 +1527,41 @@
       "title": "Agents API & CLI",
       "subtitle": "Control your fleet programmatically via our REST API and Command Line Interface.",
       "auth": {
-        "title": "API Authentication",
-        "desc": "All API requests require a Secret Key in the Authorization header. You can generate these keys in the Agents Console."
+        "title": "API & SDK Authentication",
+        "desc": "All API and SDK requests require a Secret Key in the Authorization header. You can generate these keys in the Agents Console."
+      },
+      "sdk": {
+        "title": "Official TypeScript SDK",
+        "desc": "Build directly on top of SuiLoop using our type-safe SDK.",
+        "install": "npm install @suiloop/sdk"
+      },
+      "cli": {
+        "title": "Command Line Interface",
+        "desc": "Control your agent from the terminal using natural language commands.",
+        "example": "pnpm cli \"Loop 1 SUI please\""
+      }
+    },
+    "mcp": {
+      "title": "Model Context Protocol (MCP)",
+      "subtitle": "Connect SuiLoop to Claude Desktop, Cursor, or any MCP-compatible AI.",
+      "tools": {
+        "title": "Available Tools",
+        "desc": "The MCP server exposes the agent's core capabilities to your IDE."
+      },
+      "install": {
+        "title": "Server Installation",
+        "cursor": "Connect to Cursor",
+        "claude": "Connect to Claude Desktop"
+      }
+    },
+    "companion": {
+      "title": "Native Desktop App",
+      "subtitle": "Cross-platform interface built with Tauri for low-latency fleet management.",
+      "features": {
+        "title": "Desktop Features",
+        "desktop": "Native App (macOS, Windows, Linux)",
+        "mobile": "Biometric Security & System Tray",
+        "push": "Real-time Terminal Monitoring"
       }
     },
     "security": {

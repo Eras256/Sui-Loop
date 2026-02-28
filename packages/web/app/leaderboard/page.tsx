@@ -19,6 +19,7 @@ type AgentProfile = {
     trades: number;
     winRate: number;
     volume: number;
+    volumeUsd: number;
     rank: number;
     lastTx?: string;
     lastSignal?: string;
@@ -100,6 +101,7 @@ export default function LeaderboardPage() {
                             trades: 0,
                             winRate: 0,
                             volume: 0,
+                            volumeUsd: 0,
                             rank: 0,
                         });
                     }
@@ -135,12 +137,22 @@ export default function LeaderboardPage() {
                     }
                 });
 
-                // Apply Loop Volumes
+                // Apply Loop Volumes (SUI & USDC)
                 execEvents.data.forEach((ev: any) => {
                     const parsed = ev.parsedJson;
                     if (parsed && registry.has(parsed.user)) {
                         const agent = registry.get(parsed.user)!;
-                        agent.volume += (Number(parsed.borrowed_amount) / 1000000000);
+                        const decimals = Number(parsed.asset_decimals) || 9;
+                        const amount = Number(parsed.borrowed_amount) / Math.pow(10, decimals);
+
+                        // Mock Price logic for ranking
+                        // SUI ~ $0.90, USDC = $1.00
+                        const isUsdc = decimals === 6;
+                        const price = isUsdc ? 1.0 : 0.90;
+
+                        agent.volume += amount;
+                        agent.volumeUsd += (amount * price);
+
                         if (!agent.lastTx) agent.lastTx = ev.id.txDigest;
                     }
                 });
@@ -176,7 +188,7 @@ export default function LeaderboardPage() {
                 });
 
                 const sortedAgents = Array.from(registry.values())
-                    .sort((a, b) => b.elo - a.elo)
+                    .sort((a, b) => b.elo - a.elo) // Rank by ELO (Reputation)
                     .map((agent, idx) => ({ ...agent, rank: idx + 1 }));
 
                 setAgents(sortedAgents);
@@ -268,7 +280,7 @@ export default function LeaderboardPage() {
                         <div className="flex gap-2">
                             <div className="flex flex-col items-center justify-center h-full px-6 py-3 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
                                 <span className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">{t('leaderboard.tvl.label')}</span>
-                                <span className="text-xl font-bold font-mono text-neon-cyan">${(agents.reduce((acc, a) => acc + a.volume, 0)).toFixed(1)} SUI</span>
+                                <span className="text-xl font-bold font-mono text-neon-cyan">${(agents.reduce((acc, a) => acc + a.volumeUsd, 0)).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                             </div>
                         </div>
                     </div>
@@ -566,13 +578,13 @@ export default function LeaderboardPage() {
                                             <td className="py-8 px-8 text-right">
                                                 <div className="flex flex-col items-end">
                                                     <span className="text-md font-black font-mono tracking-tight group-hover/row:text-white transition-colors">
-                                                        {agent.volume.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
-                                                        <span className="text-[10px] text-gray-500 ml-1">SUI</span>
+                                                        ${agent.volumeUsd.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                                                        <span className="text-[10px] text-gray-500 ml-1">USD</span>
                                                     </span>
                                                     <div className="h-1 w-24 bg-white/5 rounded-full mt-2 overflow-hidden">
                                                         <motion.div
                                                             initial={{ width: 0 }}
-                                                            animate={{ width: `${Math.min(100, (agent.volume / 100) * 100)}%` }}
+                                                            animate={{ width: `${Math.min(100, (agent.volumeUsd / 1000) * 100)}%` }} // Relative to 1k USD for bar
                                                             className="h-full bg-neon-cyan shadow-[0_0_10px_rgba(0,229,255,0.5)]"
                                                         />
                                                     </div>

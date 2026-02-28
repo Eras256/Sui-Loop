@@ -15,7 +15,8 @@
     "walletNotConnected": "BILLETERA NO CONECTADA",
     "currentPage": "PÁGINA ACTUAL",
     "matrixUplink": "ENLACE MATRICIAL",
-    "strategyBuilder": "CONSTRUCTOR DE ESTRATEGIAS"
+    "strategyBuilder": "CONSTRUCTOR DE ESTRATEGIAS",
+    "nodeSettings": "AJUSTES DE NODO E IA"
   },
   "footer": {
     "tagline": "La Matriz Neural descentralizada para Sui. Orquestación autónoma de agentes con reputación ELO on-chain, vectores flash de DeepBook V3 y registro forense en Walrus.",
@@ -45,7 +46,7 @@
       "uplink": "ENLACE MATRICIAL ESTABLECIDO",
       "kernel": "NÚCLEO NEURAL",
       "verified": "VERIFICADO POR MOVE",
-      "mainnet": "MAINNET ACTIVA",
+      "mainnet": "MAINNET LISTA",
       "builtFor": "Construido para Sui"
     },
     "statsLabels": {
@@ -153,7 +154,7 @@
     "companion": {
       "title": "Terminal de Escritorio Nativa",
       "desc": "Entorno de escritorio profesional. Rendimiento nativo para monitoreo de alta frecuencia y control directo de procesos.",
-      "available": "v0.0.7 Disponible",
+      "available": "v1.0.0 Disponible",
       "download": "Descargar Aplicación"
     },
     "marquee": {
@@ -277,7 +278,7 @@
       }
     },
     "builderHighlight": {
-      "badge": "NUEVO EN v0.0.7",
+      "badge": "NUEVO EN v1.0.0",
       "title": "CONSTRUCTOR DE",
       "subtitle": "ESTRATEGIAS VISUAL",
       "desc": "Crea estrategias de trading personalizadas con nuestro editor intuitivo. Conecta disparadores, condiciones y acciones visualmente - sin código.",
@@ -355,6 +356,66 @@
     "locked": "Bloqueado",
     "agentAccessGranted": "ACCESO DE AGENTE: CONCEDIDO 🔓",
     "agentAccessRevoked": "ACCESO DE AGENTE: REVOCADO 🔒",
+    "vault_modal": {
+      "title": "¿Inicializar Bóveda Segura?",
+      "description": "Desplegando una Bóveda de {asset} no-custodia en cadena.",
+      "bullet_1": "Genera una OwnerCap única",
+      "bullet_2": "Permite trading automatizado por agentes",
+      "bullet_3": "Patrón de seguridad Hot Potato activo",
+      "bullet_4": "Solo usted puede retirar vía OwnerCap",
+      "risk_label": "RIESGO:",
+      "risk_text": "Las estrategias DeFi conllevan riesgo financiero. SuiLoop es solo software — no es un servicio financiero. Al confirmar, acepta nuestros Términos de Servicio y Divulgación de Riesgos.",
+      "gas_hint": "Esta transacción requiere comisiones de gas en Mainnet. Solo use fondos que pueda permitirse perder.",
+      "confirmText": "DESPLEGAR BÓVEDA",
+      "deposit": {
+        "title": "Depositar en Bóveda de {asset}",
+        "description": "Transfiera {asset} desde su billetera a la bóveda segura.",
+        "confirmText": "CONFIRMAR DEPÓSITO"
+      },
+      "withdraw": {
+        "title": "Retirar de Bóveda de {asset}",
+        "description": "Transfiera {asset} desde la bóveda de regreso a su dirección de billetera.",
+        "confirmText": "CONFIRMAR RETIRO"
+      },
+      "destroy": {
+        "title": "¿Destruir Bóveda Segura?",
+        "description": "Esta acción ejecutará un protocolo de limpieza terminal en su bóveda activa.",
+        "burnLabel": "Quemar registro OwnerCap",
+        "returnLabel": "Devolver {asset} a la Billetera",
+        "warning": "ADVERTENCIA: Operación irreversible. Gas requerido.",
+        "confirmText": "CONFIRMAR TERMINAL"
+      },
+      "legacy": {
+        "title": "Formato Antiguo Detectado",
+        "description": "Esta bóveda usa una versión heredada y requiere un restablecimiento del caché local.",
+        "bullet_1": "Desconectar vista local",
+        "bullet_2": "Protocolo de inicio limpio",
+        "bullet_3": "Activos en cadena seguros",
+        "confirmText": "REINICIO LOCAL"
+      }
+    },
+    "toasts": {
+      "vault": {
+        "depositExecuting": "Ejecutando Depósito de {amount} {asset}...",
+        "depositSuccess": "Depósito Exitoso",
+        "depositSuccessDesc": "{amount} {asset} movidos a la Bóveda.",
+        "withdrawExecuting": "Ejecutando Retiro...",
+        "withdrawSuccess": "Retiro Exitoso",
+        "withdrawSuccessDesc": "{amount} {asset} devueltos a su billetera.",
+        "createExecuting": "Creando Bóveda Segura...",
+        "createSuccess": "¡Bóveda Segura Desplegada en cadena!",
+        "createSuccessDesc": "ID de Bóveda: {id}",
+        "destroyExecuting": "Destruyendo Bóveda...",
+        "destroySuccess": "¡Bóveda Destruida y Fondos Recuperados!",
+        "destroySuccessDesc": "Su bóveda ha sido destruida en cadena.",
+        "wrongNetwork": "Red Incorrecta Detectada",
+        "wrongNetworkDesc": "Esta dApp funciona en Sui Testnet. Por favor cambie la red de su billetera.",
+        "noBalance": "No se encontró {asset} en su billetera para depositar.",
+        "insufficientBalance": "Saldo de {asset} insuficiente. Tiene: {have}, Necesita: {need}",
+        "deployFailed": "Despliegue Fallido: {error}",
+        "destroyFailed": "Error al destruir la bóveda: {error}"
+      }
+    },
     "initializeVault": "+ INICIALIZAR BÓVEDA",
     "inject": "Inyectar",
     "extract": "Extraer",
@@ -698,14 +759,6 @@
     "deploy": "INICIALIZAR NÚCLEO",
     "history": "HISTORIAL DE VERSIONES",
     "searchNodes": "Buscar nodos neurales...",
-    "nodeCategories": {
-      "ATOMIC ENGINE": "MOTOR ATÓMICO",
-      "SIGNAL INPUTS": "ENTRADAS DE SEÑAL",
-      "AI INTELLIGENCE": "INTELIGENCIA IA",
-      "TRADING & SWAPS": "TRADING Y SWAPS",
-      "SECURITY & VAULT": "SEGURIDAD Y BÓVEDA",
-      "SOCIAL MESSAGING": "MENSAJERÍA SOCIAL"
-    },
     "nodes": {
       "FLASH_LOAN": {
         "name": "PRÉSTAMO_FLASH",
@@ -1175,7 +1228,7 @@
   "agents": {
     "title": "CENTRO DE COMANDO DE OPERACIONES",
     "subtitle": "Interfaz para desplegar ojivas financieras autónomas. Genere credenciales, monitoree unidades de campo SUI y USDC, e inyecte lógica directamente en la Matriz Neural de SuiLoop. Toda la actividad inmortalizada mediante el registro forense de Walrus.",
-    "systemBadge": "SISTEMA EN LÍNEA: v0.0.7 // ENCRIPTADO",
+    "systemBadge": "SISTEMA EN LÍNEA: v1.0.0 // ENCRIPTADO",
     "tabs": {
       "logs": "LOGS",
       "sdk": "SDK"
@@ -1220,7 +1273,7 @@
     "sdk": {
       "python": "Python SDK",
       "nodejs": "Node.js SDK",
-      "ready": "v0.0.7 Listo",
+      "ready": "v1.0.0 Listo",
       "linkProtocol": "PROTOCOLO DE ENLACE DIRECTO",
       "neuralFeed": "FEED NEURAL EN VIVO",
       "waitingSignal": "Esperando enlace de señal...",
@@ -1243,12 +1296,6 @@
       "sdkKeyHint": "Use la clave anterior para autenticarse. Mostrando ejemplo de integración de bóveda {asset}.",
       "onChainPrefix": "📡 EN CADENA: ",
       "encryptedRequested": "⚠️ VOLCADO DE LOGS ENCRIPTADOS SOLICITADO POR EL OPERADOR"
-    },
-    "toasts": {
-      "copied": "¡Copiado!",
-      "decrypting": "Desencriptando Firmas Neurales de Caja Negra...",
-      "downloadSuccess": "Logs Seguros Descargados (sui-loop-audit.json)",
-      "accessDenied": "Acceso Denegado"
     },
     "apiKeyManager": {
       "title": "Consola de Agentes",
@@ -1282,7 +1329,7 @@
     "subtitle": "Manual de Campo para Operaciones Financieras Autónomas en la Red Sui.",
     "loading": "CARGANDO MANUAL DE CAMPO...",
     "backLink": "Volver al Protocolo",
-    "version": "v0.0.7",
+    "version": "v1.0.0",
     "ghLink": "GitHub",
     "scanLink": "Suiscan",
     "tabs": {
@@ -1293,7 +1340,9 @@
       "agent": "UNIDADES AUTÓNOMAS",
       "builder": "ARQUITECTO DE ESTRATEGIAS",
       "frontend": "INTERFAZ DE MANDO",
-      "api": "API PARA AGENTES",
+      "api": "API & SDK",
+      "mcp": "SERVIDOR MCP",
+      "companion": "APP ESCRITORIO",
       "security": "PROTOCOLOS DE DEFENSA"
     },
     "overview": {
@@ -1332,7 +1381,7 @@
         }
       },
       "features": {
-        "title": "Características Clave (v0.0.7)",
+        "title": "Características Clave (v1.0.0)",
         "items": {
           "builder": {
             "title": "Constructor Visual de Estrategias",
@@ -1344,7 +1393,7 @@
           },
           "marketplace": {
             "title": "Mercado de Estrategias",
-            "desc": "Más de 16 estrategias pre-construidas. Selector de activos SUI y USDC en cada tarjeta."
+            "desc": "Más de 25 estrategias pre-construidas. Selector de activos SUI y USDC en cada tarjeta."
           },
           "dashboard": {
             "title": "Centro de Mando del Panel",
@@ -1478,8 +1527,41 @@
       "title": "API y CLI para Agentes",
       "subtitle": "Controla tu flota programáticamente a través de nuestra API REST e interfaz de línea de comandos.",
       "auth": {
-        "title": "Autenticación de API",
-        "desc": "Todas las solicitudes de API requieren una Secret Key en el encabezado de autorización. Puedes generar estas claves en la Consola de Agentes."
+        "title": "Autenticación de API y SDK",
+        "desc": "Todas las solicitudes de API y SDK requieren una Secret Key en el encabezado de autorización. Puedes generar estas claves en la Consola de Agentes."
+      },
+      "sdk": {
+        "title": "SDK Oficial de TypeScript",
+        "desc": "Construye directamente sobre SuiLoop utilizando nuestro SDK con seguridad de tipos.",
+        "install": "npm install @suiloop/sdk"
+      },
+      "cli": {
+        "title": "Interfaz de Línea de Comandos (CLI)",
+        "desc": "Controla tu agente desde la terminal utilizando comandos en lenguaje natural.",
+        "example": "pnpm cli \"Loop 1 SUI please\""
+      }
+    },
+    "mcp": {
+      "title": "Protocolo de Contexto de Modelo (MCP)",
+      "subtitle": "Conecta SuiLoop a Claude Desktop, Cursor o cualquier IA compatible con MCP.",
+      "tools": {
+        "title": "Herramientas Disponibles",
+        "desc": "El servidor MCP expone las capacidades centrales del agente a tu IDE."
+      },
+      "install": {
+        "title": "Instalación del Servidor",
+        "cursor": "Conectar a Cursor",
+        "claude": "Conectar a Claude Desktop"
+      }
+    },
+    "companion": {
+      "title": "App de Escritorio Nativa",
+      "subtitle": "Interfaz multiplataforma construida con Tauri para una gestión de flota de baja latencia.",
+      "features": {
+        "title": "Características de Escritorio",
+        "desktop": "App Nativa (macOS, Windows, Linux)",
+        "mobile": "Seguridad Biométrica y Bandeja de Sistema",
+        "push": "Monitoreo de Terminal en Tiempo Real"
       }
     },
     "security": {

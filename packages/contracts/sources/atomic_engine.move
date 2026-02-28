@@ -31,7 +31,8 @@ module suiloop::atomic_engine {
         repaid_amount: u64,
         profit: u64,
         user: address,
-        pool_id: address
+        pool_id: address,
+        asset_decimals: u8
     }
 
     public struct FlashLoanInitiated has copy, drop {
@@ -193,6 +194,7 @@ module suiloop::atomic_engine {
         pool: &mut MockPool<Base, Quote>,
         borrow_amount: u64,
         _min_profit: u64,
+        asset_decimals: u8,
         ctx: &mut TxContext
     ) {
         // 1. Verify Agent Permission
@@ -227,6 +229,16 @@ module suiloop::atomic_engine {
         } else {
             coin::destroy_zero(loan_coin);
         };
+
+        // 6. Emit Event for Leaderboard Tracking
+        event::emit(LoopExecuted {
+            borrowed_amount: borrow_amount,
+            repaid_amount: repay_amount,
+            profit: if (coin::value(&loan_coin) > borrow_amount) { coin::value(&loan_coin) - borrow_amount } else { 0 },
+            user: agent_cap.vault_id.to_address(), // Link to Vault for reputation
+            pool_id: object::uid_to_address(&pool.id),
+            asset_decimals
+        });
     }
 
     /// V1: Classic Wallet Execution (Legacy)
@@ -235,6 +247,7 @@ module suiloop::atomic_engine {
         user_funds: Coin<Base>, 
         borrow_amount: u64,
         min_profit: u64,
+        asset_decimals: u8,
         ctx: &mut TxContext
     ) {
         let sender = ctx.sender();
@@ -257,7 +270,8 @@ module suiloop::atomic_engine {
             repaid_amount: repay_amount,
             profit,
             user: sender,
-            pool_id: object::uid_to_address(&pool.id)
+            pool_id: object::uid_to_address(&pool.id),
+            asset_decimals
         });
 
         if (profit > 0) {

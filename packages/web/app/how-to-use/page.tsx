@@ -36,7 +36,7 @@ export default function HowToUsePage() {
                     <div className="text-center mb-20 section-lift">
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-neon-cyan/10 border border-neon-cyan/30 rounded-full text-neon-cyan text-xs font-mono mb-6">
                             <BookOpen size={14} />
-                            OPERATIONS MANUAL v0.0.7
+                            OPERATIONS MANUAL v1.0.0
                         </div>
                         <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6">
                             HOW TO <span className="text-gradient">OPERATE</span>

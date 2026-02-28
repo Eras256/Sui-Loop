@@ -225,7 +225,7 @@ export class GatewayService {
             return {
                 address,
                 balance: totalBalance,
-                hasGas: totalBalance > 50000000 // Min 0.05 SUI for safety
+                hasGas: totalBalance > 10000000 // Min 0.01 SUI for safety
             };
         } catch (error) {
             console.error('Wallet Check Failed:', error);

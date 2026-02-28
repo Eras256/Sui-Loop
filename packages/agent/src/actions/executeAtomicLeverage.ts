@@ -29,7 +29,7 @@ const scallopService = new ScallopService();
 const NETWORK = (process.env.SUI_NETWORK as 'testnet' | 'mainnet') || "testnet";
 const SUI_DECIMALS = 1_000_000_000;
 
-// Default Contract IDs (v0.0.7)
+// Default Contract IDs (v1.0.0)
 const DEFAULT_PACKAGE_ID = "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
 const DEFAULT_POOL_ID = "0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf";
 
@@ -141,8 +141,11 @@ export const executeAtomicLeverage: Action = {
             : (message.content as { text?: string })?.text || "";
         const amountSui = parseAmount(messageText);
         const asset = parseAsset(messageText);
+        const decimals = asset === "USDC" ? 6 : 9;
         const coinType = getCoinType(asset);
-        const borrowAmountMIST = Math.floor(amountSui * SUI_DECIMALS);
+        // Use 10^decimals for generic handling
+        const multiplier = Math.pow(10, decimals);
+        const borrowAmountMIST = Math.floor(amountSui * multiplier);
         const userFundsAmountMIST = Math.floor(borrowAmountMIST * 0.01); // 1% of borrow for fees
 
         // 2. Check Cetus (DEX Liquidity) - Demo Logic
@@ -262,6 +265,7 @@ export const executeAtomicLeverage: Action = {
                 userFundsCoin,
                 tx.pure.u64(borrowAmountMIST),
                 tx.pure.u64(0),
+                tx.pure.u8(decimals),
             ]
         });
 

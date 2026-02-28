@@ -153,7 +153,7 @@
     "companion": {
       "title": "原生桌面终端",
       "desc": "专业桌面环境。高频计算监控和直接进程控制的原生性能。",
-      "available": "v0.0.7 可用",
+      "available": "v1.0.0 可用",
       "download": "下载桌面客户端"
     },
     "marquee": {
@@ -277,7 +277,7 @@
       }
     },
     "builderHighlight": {
-      "badge": "v0.0.7 新功能",
+      "badge": "v1.0.0 新功能",
       "title": "视觉化",
       "subtitle": "策略构建器",
       "desc": "使用直观的拖放式编辑器创建自定义交易策略。视觉化连接触发器、条件和动作 - 无需编码。",
@@ -1175,7 +1175,7 @@
   "agents": {
     "title": "操縱指揮中心",
     "subtitle": "用於部署自主金融彈頭的界面。生成憑據，監視 SUI 和 USDC 現場單位，並直接將邏輯注入 SuiLoop 神經矩陣。所有活動都通過 Walrus 取證日誌永恆化。",
-    "systemBadge": "系統在線：v0.0.7 // 已加密",
+    "systemBadge": "系統在線：v1.0.0 // 已加密",
     "tabs": {
       "logs": "日誌",
       "sdk": "SDK"
@@ -1220,7 +1220,7 @@
     "sdk": {
       "python": "Python SDK",
       "nodejs": "Node.js SDK",
-      "ready": "v0.0.7 就緒",
+      "ready": "v1.0.0 就緒",
       "linkProtocol": "直接鏈接協議",
       "neuralFeed": "實時神經餵送",
       "waitingSignal": "等待信號上行...",
@@ -1282,7 +1282,7 @@
     "subtitle": "Sui 網絡上自主金融操作的現場手冊。",
     "loading": "正在加載現場手冊...",
     "backLink": "返回協議",
-    "version": "v0.0.7",
+    "version": "v1.0.0",
     "ghLink": "GitHub",
     "scanLink": "Suiscan",
     "tabs": {
@@ -1332,7 +1332,7 @@
         }
       },
       "features": {
-        "title": "核心特點 (v0.0.7)",
+        "title": "核心特點 (v1.0.0)",
         "items": {
           "builder": {
             "title": "視覺化策略構建器",
