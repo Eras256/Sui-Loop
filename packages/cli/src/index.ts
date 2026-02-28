@@ -16,7 +16,7 @@ const AGENT_URL = process.env.AGENT_URL || 'http://localhost:3001';
 program
     .name('suiloop')
     .description('SuiLoop CLI — Command Center for your Atomic DeFi Agent')
-    .version('0.0.8');
+    .version('1.0.0');
 
 // ============================================================================
 // AGENT MANAGEMENT (Create)
@@ -50,10 +50,26 @@ program
                 choices: ['TypeScript', 'Python']
             },
             {
+                type: 'list',
+                name: 'provider',
+                message: 'Select your LLM Neural Provider:',
+                choices: [
+                    { name: 'OpenAI (Default)', value: 'openai' },
+                    { name: 'xAI Grok', value: 'grok' },
+                    { name: 'Google Gemini', value: 'google' },
+                    { name: 'Minimax AI', value: 'minimax' },
+                    { name: 'Ollama (Local)', value: 'ollama' }
+                ]
+            },
+            {
                 type: 'input',
                 name: 'apiKey',
-                message: 'Paste your API Key:',
-                validate: (input) => input.startsWith('sk_') ? true : 'Invalid API Key format'
+                message: (answers: any) => answers.provider === 'ollama' ? 'Local URL (optional):' : `Paste your ${answers.provider.toUpperCase()} API Key:`,
+                default: (answers: any) => answers.provider === 'ollama' ? 'http://localhost:11434' : '',
+                validate: (input, answers: any) => {
+                    if (answers?.provider === 'ollama') return true;
+                    return input.length > 5 ? true : 'Invalid API Key format';
+                }
             }
         ]);
 
@@ -67,7 +83,12 @@ program
             await fs.copy(templateDir, targetDir);
 
             // Create .env
-            const envContent = `SUILOOP_API_KEY=${answers.apiKey}\n`;
+            const envContent = [
+                `SUILOOP_LLM_PROVIDER=${answers.provider}`,
+                answers.provider === 'ollama' ? `OLLAMA_HOST=${answers.apiKey}` : `SUILOOP_API_KEY=${answers.apiKey}`,
+                `AGENT_NAME=${answers.name}`,
+                `SUI_NETWORK=testnet`
+            ].join('\n');
             await fs.writeFile(path.join(targetDir, '.env'), envContent);
 
             // Update package.json name if TS

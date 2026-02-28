@@ -132,7 +132,7 @@ function App() {
                 <div className="flex items-center gap-2">
                     <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-cyan-400 rounded flex items-center justify-center font-bold text-xs">S</div>
                     <span className="font-bold text-sm tracking-tight">SuiLoop</span>
-                    <span className="text-[10px] text-white/30 font-mono">v0.0.8</span>
+                    <span className="text-[10px] text-white/30 font-mono">v1.0.0</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="text-xs font-mono text-cyan-400">${suiPrice}</span>

@@ -432,47 +432,50 @@ function StrategyBuilderInner() {
                 w-72 md:w-80 h-full bg-[#0F0F0F] border-r border-white/10 flex flex-col z-40
                 transition-transform duration-300 ease-in-out
             `}>
-                <div className="p-4 border-b border-white/10 space-y-3">
+                <div className="p-5 border-b border-white/10 space-y-4 bg-black/40">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase">{t('builder.lab')}</h2>
-                        <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono text-neon-cyan/50">v1.0.0</span>
-                            <button
-                                onClick={() => setSidebarOpen(false)}
-                                className="md:hidden p-1 hover:bg-white/5 rounded-lg text-gray-500 hover:text-white"
-                            >
-                                <X size={14} />
-                            </button>
+                        <div className="flex flex-col">
+                            <h2 className="text-[10px] font-black tracking-[0.3em] text-neon-cyan uppercase font-orbitron">{t('builder.lab')}</h2>
+                            <span className="text-[8px] font-mono text-gray-600 mt-1 uppercase tracking-widest">Neural Kernel Forge v1.0.7</span>
                         </div>
+                        <button
+                            onClick={() => setSidebarOpen(false)}
+                            className="md:hidden p-2 hover:bg-white/5 rounded-xl text-gray-500 hover:text-white transition-all border border-transparent hover:border-white/10"
+                        >
+                            <X size={16} />
+                        </button>
                     </div>
 
-                    {/* Asset Selector */}
-                    <div className="flex items-center justify-between bg-black/40 border border-white/10 rounded-xl p-1">
-                        <span className="text-[10px] text-gray-500 uppercase tracking-wider pl-2">{t('builder.vaultAsset')}</span>
-                        <div className="flex items-center gap-1">
+                    {/* Asset Selector - Enhanced Neon */}
+                    <div className="bg-[#050505] border border-white/5 rounded-xl p-1.5 shadow-inner">
+                        <div className="flex items-center justify-between mb-2 px-2 pt-1">
+                            <span className="text-[9px] text-gray-600 uppercase font-black tracking-widest">{t('builder.vaultAsset')}</span>
+                            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${selectedAsset === 'USDC' ? 'bg-neon-purple shadow-[0_0_8px_rgba(168,85,247,0.8)]' : 'bg-neon-cyan shadow-[0_0_8px_rgba(0,243,255,0.8)]'}`}></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-1.5">
                             <button
                                 onClick={() => setSelectedAsset('USDC')}
-                                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all ${selectedAsset === 'USDC' ? 'bg-neon-purple text-white shadow-[0_0_10px_rgba(168,85,247,0.4)]' : 'text-gray-500 hover:text-white'}`}
+                                className={`py-2 rounded-lg text-[10px] font-black tracking-widest transition-all border ${selectedAsset === 'USDC' ? 'bg-neon-purple/20 border-neon-purple/40 text-white shadow-[inset_0_0_10px_rgba(168,85,247,0.2)]' : 'bg-transparent border-transparent text-gray-500 hover:text-gray-300'}`}
                             >
                                 USDC
                             </button>
                             <button
                                 onClick={() => setSelectedAsset('SUI')}
-                                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all ${selectedAsset === 'SUI' ? 'bg-[#4ca2ff] text-white shadow-[0_0_10px_rgba(76,162,255,0.4)]' : 'text-gray-500 hover:text-white'}`}
+                                className={`py-2 rounded-lg text-[10px] font-black tracking-widest transition-all border ${selectedAsset === 'SUI' ? 'bg-neon-cyan/20 border-neon-cyan/40 text-white shadow-[inset_0_0_10px_rgba(0,243,255,0.2)]' : 'bg-transparent border-transparent text-gray-500 hover:text-gray-300'}`}
                             >
                                 SUI
                             </button>
                         </div>
                     </div>
 
-                    <div className="relative">
-                        <Search className="absolute left-3 top-2.5 text-gray-500" size={14} />
+                    <div className="relative group">
+                        <Search className="absolute left-3 top-2.5 text-gray-600 group-focus-within:text-neon-cyan transition-colors" size={14} />
                         <input
                             type="text"
                             placeholder={t('builder.searchPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-neon-cyan/50 transition-all font-mono"
+                            className="w-full bg-black/40 border border-white/5 rounded-xl pl-9 pr-3 py-2.5 text-[10px] text-white focus:outline-none focus:border-neon-cyan/30 focus:bg-black/60 transition-all font-mono placeholder:text-gray-700"
                         />
                     </div>
                 </div>
@@ -601,7 +604,7 @@ function StrategyBuilderInner() {
                         <button
                             onClick={() => handleSave(false)}
                             disabled={isSaving}
-                            className="bg-[#0F0F0F]/90 backdrop-blur-md border border-white/10 px-3 md:px-6 py-2.5 rounded-xl font-mono text-[11px] font-bold tracking-widest text-gray-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2 disabled:opacity-50"
+                            className="bg-[#050505]/90 backdrop-blur-xl border border-white/10 px-4 md:px-6 py-2.5 rounded-2xl font-orbitron text-[10px] font-black tracking-[0.1em] text-gray-400 hover:text-white hover:border-white/20 transition-all flex items-center gap-2 disabled:opacity-50 shadow-xl"
                         >
                             <Save size={14} />
                             <span className="hidden sm:inline">{t('builder.commitDraft')}</span>
@@ -609,11 +612,14 @@ function StrategyBuilderInner() {
                         <button
                             onClick={() => handleSave(true)}
                             disabled={isSaving}
-                            className="bg-neon-cyan px-4 md:px-8 py-2.5 rounded-xl font-mono text-[11px] font-black tracking-widest text-black hover:bg-cyan-400 shadow-[0_0_20px_rgba(0,243,255,0.3)] transition-all flex items-center gap-2 disabled:opacity-50"
+                            className="relative group/btn overflow-hidden bg-neon-cyan px-4 md:px-8 py-2.5 rounded-2xl font-orbitron text-[10px] font-black tracking-[0.2em] text-black transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 shadow-[0_4px_20px_rgba(0,243,255,0.4)]"
                         >
-                            <Play size={14} fill="currentColor" />
-                            <span className="hidden sm:inline">{t('builder.compileKernel')}</span>
-                            <span className="sm:hidden">{t('builder.run')}</span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-700 pointer-events-none" />
+                            <div className="flex items-center gap-2 relative z-10">
+                                <Play size={14} fill="currentColor" />
+                                <span className="hidden sm:inline">{t('builder.compileKernel')}</span>
+                                <span className="sm:hidden">{t('builder.run')}</span>
+                            </div>
                         </button>
                     </Panel>
 

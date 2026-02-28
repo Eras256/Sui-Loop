@@ -1,6 +1,6 @@
 {
     "name": "@suiloop/sdk",
-    "version": "0.0.8",
+    "version": "1.0.0",
     "description": "Official TypeScript SDK for the SuiLoop Autonomous Agent Protocol",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

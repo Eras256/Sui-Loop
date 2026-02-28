@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SuiLoop MCP Server v0.0.8
+ * SuiLoop MCP Server v1.0.0
  * ─────────────────────────────────────────────────────────────────
  * Model Context Protocol server that exposes SuiLoop agent capabilities
  * to any MCP-compatible AI client (Claude Desktop, Cursor, Continue, etc.)
@@ -297,7 +297,7 @@ function formatUptime(seconds: number): string {
 // ─── MCP Server ───────────────────────────────────────────────────────────────
 
 const server = new Server(
-    { name: 'suiloop-mcp', version: '0.0.8' },
+    { name: 'suiloop-mcp', version: '1.0.0' },
     { capabilities: { tools: {} } }
 );
 

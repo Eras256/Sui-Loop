@@ -1,6 +1,6 @@
 {
     "name": "@suiloop/mcp",
-    "version": "0.0.8",
+    "version": "1.0.0",
     "description": "MCP (Model Context Protocol) Server for SuiLoop — lets Claude and any AI assistant control your autonomous DeFi agent via natural language",
     "type": "module",
     "bin": {
