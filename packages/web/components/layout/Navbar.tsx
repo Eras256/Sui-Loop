@@ -101,9 +101,8 @@ export default function Navbar() {
                                 <img src="/logo_transparent.png" alt="SuiLoop Logo" className="w-full h-full object-contain object-center scale-[1.3] drop-shadow-[0_0_10px_rgba(189,0,255,0.4)]" />
                             </div>
                             {/* Logo text - Optimized visibility */}
-                            <div className="hidden sm:flex flex-col">
-                                <span className="font-bold text-white tracking-tighter leading-none text-[10px] xl:text-lg">
-
+                            <div className="hidden min-[400px]:flex flex-col">
+                                <span className="font-bold text-white tracking-tighter leading-none text-[10px] xl:text-lg uppercase">
                                     SUILOOP
                                 </span>
                                 <span className="hidden min-[1280px]:block text-[9px] text-gray-500 font-mono tracking-widest leading-none">
@@ -187,8 +186,8 @@ export default function Navbar() {
                         </button>
 
                         {/* Connect Button - Responsive scaling */}
-                        <div className="navbar-connect-btn scale-[0.85] origin-right">
-                            <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-4 xl:!px-5 !py-2 !rounded-full !text-[11px] xl:!text-xs !shadow-[0_0_20px_rgba(0,243,255,0.4)] !whitespace-nowrap" />
+                        <div className="navbar-connect-btn scale-[0.8] sm:scale-[0.85] xl:scale-100 origin-right shrink-0">
+                            <ConnectButton className="!bg-neon-cyan !text-black !font-bold !px-3 sm:!px-4 xl:!px-5 !py-2 !rounded-full !text-[10px] xl:!text-xs !shadow-[0_0_20px_rgba(0,243,255,0.4)] !whitespace-nowrap" />
                         </div>
 
                         {/* Mobile Menu Toggle - Visible on lg and below */}

@@ -64,21 +64,21 @@ export default function Footer() {
             {/* Protocol Status Banner */}
             <div className="border-b border-white/5 py-3 px-4">
                 <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-3 sm:gap-6 text-[9px] sm:text-[10px] font-mono whitespace-nowrap overflow-x-auto custom-scrollbar-hidden py-1">
+                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-6 text-[8px] sm:text-[10px] font-mono whitespace-nowrap overflow-x-auto scrollbar-hide py-1 pr-4">
                         <span className="flex items-center gap-1.5 text-green-400 shrink-0">
-                            <span className="relative flex h-1.5 w-1.5">
+                            <span className="relative flex h-1 w-1 sm:h-1.5 sm:w-1.5">
                                 <span className=" absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
+                                <span className="relative inline-flex rounded-full h-1 sm:h-1.5 w-1 sm:w-1.5 bg-green-500" />
                             </span>
                             {t('footer.status.uplink')}
                         </span>
-                        <span className="text-gray-600 shrink-0 uppercase tracking-tighter">{t('footer.status.kernel')} v1.0.0-Neural</span>
-                        <span className="hidden sm:flex items-center gap-1.5 text-blue-400">
-                            <Shield className="w-3 h-3" />
+                        <span className="text-gray-600 shrink-0 uppercase tracking-tighter">{t('footer.status.kernel')} v1.0.0-N</span>
+                        <span className="flex items-center gap-1.5 text-blue-400 shrink-0">
+                            <Shield className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                             {t('footer.status.verified')}
                         </span>
-                        <span className="hidden md:flex items-center gap-1.5 text-neon-cyan">
-                            <Activity className="w-3 h-3" />
+                        <span className="hidden sm:flex items-center gap-1.5 text-neon-cyan shrink-0">
+                            <Activity className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                             {t('footer.status.mainnet')}
                         </span>
                     </div>

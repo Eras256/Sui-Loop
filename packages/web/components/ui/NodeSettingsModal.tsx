@@ -11,7 +11,7 @@ interface NodeSettingsModalProps {
 
 export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModalProps) {
     const { t } = useLanguage();
-    const [provider, setProvider] = useState<'openai' | 'anthropic' | 'ollama'>('openai');
+    const [provider, setProvider] = useState<'openai' | 'anthropic' | 'ollama' | 'minimax' | 'google' | 'bedrock' | 'openrouter' | 'grok'>('openai');
     const [apiKey, setApiKey] = useState("");
     const [isLocalConnected, setIsLocalConnected] = useState(false);
     const [isTesting, setIsTesting] = useState(false);
@@ -180,30 +180,77 @@ export default function NodeSettingsModal({ isOpen, onClose }: NodeSettingsModal
                                     className="space-y-4 pt-2"
                                 >
                                     {/* Selector Cloud Type */}
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => setProvider('openai')}
-                                            className={`px-3 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-mono font-bold rounded flex-1 border transition-colors ${provider === 'openai' ? 'border-neon-cyan bg-neon-cyan/20 text-white' : 'border-white/10 bg-black text-gray-500 hover:text-white hover:bg-white/5'}`}
-                                        >
-                                            OPEN_AI_KEY
-                                        </button>
-                                        <button
-                                            onClick={() => setProvider('anthropic')}
-                                            className={`px-3 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-mono font-bold rounded flex-1 border transition-colors ${provider === 'anthropic' ? 'border-neon-cyan bg-neon-cyan/20 text-white' : 'border-white/10 bg-black text-gray-500 hover:text-white hover:bg-white/5'}`}
-                                        >
-                                            ANTHROPIC_KEY
-                                        </button>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                        {[
+                                            { id: 'openai', label: 'OPENAI' },
+                                            { id: 'anthropic', label: 'ANTHROPIC' },
+                                            { id: 'google', label: 'GEMINI' },
+                                            { id: 'minimax', label: 'MINIMAX' },
+                                            { id: 'grok', label: 'GROK' },
+                                            { id: 'bedrock', label: 'BEDROCK' },
+                                            { id: 'openrouter', label: 'OPENROUTER' }
+                                        ].map((p) => (
+                                            <button
+                                                key={p.id}
+                                                onClick={() => setProvider(p.id as any)}
+                                                className={`px-2 py-1.5 text-[9px] sm:text-[10px] font-mono font-bold rounded border transition-colors ${provider === p.id ? 'border-neon-cyan bg-neon-cyan/20 text-white' : 'border-white/10 bg-black text-gray-500 hover:text-white hover:bg-white/5'}`}
+                                            >
+                                                {p.label}_KEY
+                                            </button>
+                                        ))}
                                     </div>
-                                    <div className="relative">
-                                        <Key className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
-                                        <input
-                                            type="password"
-                                            value={apiKey}
-                                            onChange={(e) => setApiKey(e.target.value)}
-                                            placeholder={`sk-...${provider === 'openai' ? 'proj-XXXX' : 'ant-api-XXXX'}`}
-                                            className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-4 text-white text-xs sm:text-sm focus:outline-none focus:border-neon-cyan focus:bg-neon-cyan/5 transition-all placeholder:text-gray-600 font-mono shadow-inner"
-                                        />
-                                    </div>
+
+                                    {provider === 'bedrock' ? (
+                                        <div className="space-y-3">
+                                            <div className="relative">
+                                                <input
+                                                    type="text"
+                                                    value={localStorage.getItem("suiloop_bedrock_region") || ""}
+                                                    onChange={(e) => localStorage.setItem("suiloop_bedrock_region", e.target.value)}
+                                                    placeholder="AWS Region (e.g. us-east-1)"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-4 pr-4 text-white text-xs sm:text-sm focus:outline-none focus:border-neon-cyan transition-all font-mono"
+                                                />
+                                            </div>
+                                            <div className="relative">
+                                                <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                                <input
+                                                    type="password"
+                                                    value={localStorage.getItem("suiloop_bedrock_access_key") || ""}
+                                                    onChange={(e) => localStorage.setItem("suiloop_bedrock_access_key", e.target.value)}
+                                                    placeholder="AWS Access Key ID"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-white text-xs sm:text-sm focus:outline-none focus:border-neon-cyan transition-all font-mono"
+                                                />
+                                            </div>
+                                            <div className="relative">
+                                                <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                                <input
+                                                    type="password"
+                                                    value={localStorage.getItem("suiloop_bedrock_secret_key") || ""}
+                                                    onChange={(e) => localStorage.setItem("suiloop_bedrock_secret_key", e.target.value)}
+                                                    placeholder="AWS Secret Access Key"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-white text-xs sm:text-sm focus:outline-none focus:border-neon-cyan transition-all font-mono"
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="relative">
+                                            <Key className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
+                                            <input
+                                                type="password"
+                                                value={apiKey}
+                                                onChange={(e) => setApiKey(e.target.value)}
+                                                placeholder={
+                                                    provider === 'openai' ? 'sk-proj-XXXX' :
+                                                        provider === 'anthropic' ? 'ant-api-XXXX' :
+                                                            provider === 'google' ? 'gemini-api-XXXX' :
+                                                                provider === 'openrouter' ? 'or-sk-XXXX' :
+                                                                    provider === 'grok' ? 'xai-XXXX' :
+                                                                        'minimax-api-XXXX'
+                                                }
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-4 text-white text-xs sm:text-sm focus:outline-none focus:border-neon-cyan focus:bg-neon-cyan/5 transition-all placeholder:text-gray-600 font-mono shadow-inner"
+                                            />
+                                        </div>
+                                    )}
                                 </motion.div>
                             ) : (
                                 <motion.div

@@ -30,6 +30,7 @@ export type LLMProviderType =
     | 'bedrock'
     | 'ollama'
     | 'openrouter'
+    | 'grok'
     | 'synthetic'
     | 'custom';
 
@@ -441,9 +442,75 @@ class OllamaProvider extends BaseLLMProvider {
 }
 
 class GoogleProvider extends BaseLLMProvider {
-    async chat(request: ChatRequest): Promise<ChatResponse> { return { content: "Google Mock", model: "gemini", usage: { totalTokens: 0, promptTokens: 0, completionTokens: 0 } } as ChatResponse; }
+    protected getHeaders(): Record<string, string> {
+        return { 'Content-Type': 'application/json' };
+    }
+    async chat(request: ChatRequest): Promise<ChatResponse> {
+        // Google Gemini API (v1beta / v1)
+        const response = await this.client.post(
+            `https://generativelanguage.googleapis.com/v1beta/models/${request.model || this.config.model || 'gemini-1.5-pro'}:generateContent?key=${this.config.apiKey}`,
+            {
+                contents: request.messages.map(m => ({
+                    role: m.role === 'assistant' ? 'model' : 'user',
+                    parts: [{ text: m.content }]
+                })),
+                generationConfig: {
+                    maxOutputTokens: request.maxTokens || this.config.maxTokens || 4096,
+                    temperature: request.temperature ?? this.config.temperature ?? 0.7,
+                }
+            }
+        );
+
+        const data = response.data;
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+        return {
+            content: text,
+            model: request.model || this.config.model || 'gemini-1.5-pro',
+            usage: {
+                promptTokens: data.usageMetadata?.promptTokenCount || 0,
+                completionTokens: data.usageMetadata?.candidatesTokenCount || 0,
+                totalTokens: data.usageMetadata?.totalTokenCount || 0
+            }
+        };
+    }
+    async *streamChat(request: ChatRequest): AsyncGenerator<StreamChunk> {
+        yield { content: 'Google Streaming not fully implemented in this version.', done: true };
+    }
+    async getModels() { return ['gemini-1.5-pro', 'gemini-1.5-flash']; }
+}
+
+class GrokProvider extends BaseLLMProvider {
+    protected getHeaders(): Record<string, string> {
+        return {
+            'Authorization': `Bearer ${this.config.apiKey}`,
+            'Content-Type': 'application/json'
+        };
+    }
+    async chat(request: ChatRequest): Promise<ChatResponse> {
+        // Grok (xAI) has an OpenAI compatible API
+        const response = await this.client.post(
+            `https://api.x.ai/v1/chat/completions`,
+            {
+                model: request.model || this.config.model || 'grok-beta',
+                messages: request.messages,
+                max_tokens: request.maxTokens || this.config.maxTokens || 4096,
+                temperature: request.temperature ?? this.config.temperature ?? 0.7,
+            }
+        );
+        const data = response.data;
+        return {
+            content: data.choices[0].message?.content || '',
+            model: data.model,
+            usage: {
+                promptTokens: data.usage?.prompt_tokens || 0,
+                completionTokens: data.usage?.completion_tokens || 0,
+                totalTokens: data.usage?.total_tokens || 0
+            }
+        };
+    }
     async *streamChat(request: ChatRequest): AsyncGenerator<StreamChunk> { yield { content: '', done: true }; }
-    async getModels() { return ['gemini-pro']; }
+    async getModels() { return ['grok-beta', 'grok-vision-beta']; }
 }
 
 class OpenRouterProvider extends BaseLLMProvider {
@@ -493,6 +560,7 @@ export class LLMService extends EventEmitter {
             case 'ollama': provider = new OllamaProvider(config); break;
             case 'openrouter': provider = new OpenRouterProvider(config); break;
             case 'google': provider = new GoogleProvider(config); break;
+            case 'grok': provider = new GrokProvider(config); break;
             case 'synthetic': provider = new SyntheticProvider(config); break;
             default: provider = new OpenAIProvider(config);
         }

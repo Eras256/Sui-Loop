@@ -2,11 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Trophy, TrendingUp, Cpu, Activity, Medal, Star,
-    ExternalLink, Wallet, Zap, Shield, ChevronRight,
-    Search, Filter, ArrowUpRight, BarChart3
-} from 'lucide-react';
+import { Trophy, TrendingUp, Cpu, Activity, Medal, Star, ExternalLink, Wallet, Zap, Shield, ChevronRight, Search, Filter, ArrowUpRight, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import Navbar from '@/components/layout/Navbar';
@@ -249,19 +245,19 @@ export default function LeaderboardPage() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Header Section */}
-                <div className="flex flex-col lg:flex-row justify-between items-end gap-8 mb-16 pt-8">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-12 sm:mb-16 pt-4 sm:pt-8">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="space-y-4"
+                        className="space-y-3 sm:space-y-4"
                     >
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-[10px] font-mono tracking-widest uppercase">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase">
                             <Shield className="w-3 h-3" /> {t('leaderboard.hero.verified')}
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase font-orbitron italic">
-                            {t('leaderboard.hero.title1')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-white to-neon-purple">{t('leaderboard.hero.title2')}</span>
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase font-orbitron italic leading-[0.9]">
+                            {t('leaderboard.hero.title1')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-white to-neon-purple block sm:inline">{t('leaderboard.hero.title2')}</span>
                         </h1>
-                        <p className="text-gray-400 max-w-xl text-lg font-light leading-relaxed">
+                        <p className="text-gray-400 max-w-xl text-sm sm:text-lg font-light leading-relaxed">
                             {t('leaderboard.hero.subtitle')}
                         </p>
                     </motion.div>
@@ -295,10 +291,10 @@ export default function LeaderboardPage() {
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.1 }}
-                                className={`relative group p-8 rounded-[2.5rem] border backdrop-blur-xl transition-all hover:scale-[1.02] duration-500 overflow-hidden
-                                    ${idx === 0 ? 'bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent border-yellow-500/30 shadow-[0_0_50px_rgba(234,179,8,0.1)]' :
-                                        idx === 1 ? 'bg-gradient-to-br from-gray-400/20 via-gray-400/5 to-transparent border-gray-400/30' :
-                                            'bg-gradient-to-br from-amber-700/20 via-amber-700/5 to-transparent border-amber-700/30'}
+                                className={`relative group p-6 sm:p-8 rounded-3xl sm:rounded-[2.5rem] border backdrop-blur-xl transition-all hover:scale-[1.02] duration-500 overflow-hidden
+                                    ${idx === 0 ? 'bg-gradient-to-br from-yellow-500/20 via-yellow-500/5 to-transparent border-yellow-500/30 shadow-[0_0_50px_rgba(234,179,8,0.1)] order-first md:order-none' :
+                                        idx === 1 ? 'bg-gradient-to-br from-gray-400/20 via-gray-400/5 to-transparent border-gray-400/30 md:translate-y-4' :
+                                            'bg-gradient-to-br from-amber-700/20 via-amber-700/5 to-transparent border-amber-700/30 md:translate-y-8'}
                                 `}
                             >
                                 <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -325,13 +321,13 @@ export default function LeaderboardPage() {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="text-xs font-mono text-gray-500 uppercase tracking-tighter">
-                                                {agent.address.slice(0, 6)}...{agent.address.slice(-4)}
+                                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                                            <span className="text-[10px] font-mono text-gray-500 uppercase tracking-tighter break-all max-w-[200px]">
+                                                {agent.address}
                                             </span>
-                                            <Shield className="w-3 h-3 text-neon-cyan" />
+                                            <Shield className="w-3 h-3 text-neon-cyan shrink-0" />
                                         </div>
-                                        <h3 className="text-2xl font-black font-orbitron tracking-tighter truncate uppercase text-white">
+                                        <h3 className="text-lg sm:text-xl xl:text-2xl font-black font-orbitron tracking-tighter break-all uppercase text-white leading-tight">
                                             {agent.creator}
                                         </h3>
                                     </div>
@@ -349,14 +345,14 @@ export default function LeaderboardPage() {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <div className="flex items-center justify-between text-xs">
-                                        <span className="text-gray-500 font-mono">{t('leaderboard.podium.agentWallet')}</span>
+                                    <div className="flex flex-col gap-1 text-[10px] mt-2">
+                                        <span className="text-gray-500 font-mono uppercase tracking-tighter opacity-60">{t('leaderboard.podium.agentWallet')}</span>
                                         <a
                                             href={`https://suiscan.xyz/testnet/account/${agent.address}`}
                                             target="_blank"
-                                            className="text-neon-cyan hover:underline flex items-center gap-1 font-mono"
+                                            className="text-neon-cyan hover:underline flex items-start gap-1 font-mono break-all leading-relaxed"
                                         >
-                                            {agent.address.slice(0, 6)}...{agent.address.slice(-4)} <ExternalLink className="w-3 h-3" />
+                                            {agent.address} <ExternalLink className="w-3 h-3 mt-1 shrink-0" />
                                         </a>
                                     </div>
                                     {agent.lastSignal && (
@@ -402,21 +398,21 @@ export default function LeaderboardPage() {
                     <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
 
                     <div className="overflow-x-auto custom-scrollbar">
-                        <table className="w-full text-left border-collapse min-w-[1000px]">
+                        <table className="w-full text-left border-collapse min-w-[700px] lg:min-w-[1000px]">
                             <thead>
-                                <tr className="border-b border-white/5 text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono whitespace-nowrap">
-                                    <th className="py-8 px-8 font-semibold w-24">{t('leaderboard.table.headers.rank')}</th>
-                                    <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
+                                <tr className="border-b border-white/5 text-[9px] sm:text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono whitespace-nowrap">
+                                    <th className="py-6 sm:py-8 px-4 sm:px-8 font-semibold w-16 sm:w-24">{t('leaderboard.table.headers.rank')}</th>
+                                    <th className="py-6 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
                                         {t('leaderboard.table.headers.profile')} {sortConfig.key === 'creator' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
+                                    <th className="hidden sm:table-cell py-6 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
                                         {t('leaderboard.table.headers.performance')} {sortConfig.key === 'winRate' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="py-8 px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
+                                    <th className="py-6 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
                                         {t('leaderboard.table.headers.trust')} {sortConfig.key === 'elo' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="py-8 px-6 font-semibold">{t('leaderboard.table.headers.feed')}</th>
-                                    <th className="py-8 px-8 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
+                                    <th className="hidden lg:table-cell py-6 sm:py-8 px-4 sm:px-6 font-semibold">{t('leaderboard.table.headers.feed')}</th>
+                                    <th className="py-6 sm:py-8 px-4 sm:px-8 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
                                         {t('leaderboard.table.headers.volume')} {sortConfig.key === 'volume' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                 </tr>
@@ -508,7 +504,7 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Performance */}
-                                            <td className="py-8 px-6">
+                                            <td className="hidden sm:table-cell py-8 px-6">
                                                 <div className="flex items-center gap-4">
                                                     <div className="flex flex-col">
                                                         <span className="text-sm font-bold font-mono text-neon-cyan">{agent.winRate}%</span>
@@ -548,7 +544,7 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Neural Feed */}
-                                            <td className="py-8 px-6">
+                                            <td className="hidden lg:table-cell py-8 px-6">
                                                 <div className="flex flex-col gap-1 max-w-[200px]">
                                                     {agent.lastSignal ? (
                                                         <>
