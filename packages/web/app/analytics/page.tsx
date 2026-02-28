@@ -114,11 +114,56 @@ export default function AnalyticsPage() {
     // Load strategies & Scallop data
     useEffect(() => {
         if (account?.address) {
-            const saved = localStorage.getItem(`sui-loop-fleet-${account.address}`);
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                setActiveStrategies(parsed.filter((s: any) => s.status !== 'DRAFT'));
-            }
+            const loadFleet = async () => {
+                try {
+                    const { StrategyService } = await import("@/lib/strategyService");
+                    const fleet = await StrategyService.getStrategies(account.address);
+
+                    const localKey = `sui-loop-fleet-${account.address}`;
+                    const localRaw = localStorage.getItem(localKey);
+                    let merged = [...fleet];
+
+                    if (localRaw) {
+                        const local = JSON.parse(localRaw) as any[];
+                        const localMap = new Map();
+                        local.forEach(item => {
+                            if (item.id) localMap.set(item.id, item);
+                        });
+                        const distinctLocal = Array.from(localMap.values());
+                        const uniqueLocals = distinctLocal.filter((l: any) =>
+                            !fleet.some(dbS =>
+                                (dbS.strategy_id && dbS.strategy_id === l.id) ||
+                                (dbS.name === l.name)
+                            )
+                        );
+                        merged = [...merged, ...uniqueLocals];
+                    }
+
+                    if (merged.length > 0) {
+                        const finalMap = new Map();
+                        merged.forEach(item => {
+                            const isCustom = item.id?.startsWith('custom-') || item.strategy_id?.startsWith('custom-');
+                            const key = isCustom ? (item.name || item.id) : (item.id || item.name);
+                            if (key && !finalMap.has(key)) {
+                                finalMap.set(key, item);
+                            }
+                        });
+                        const finalDeduped = Array.from(finalMap.values());
+                        const activeOnly = finalDeduped.filter(s => s.status !== 'DRAFT');
+                        setActiveStrategies(activeOnly);
+                    } else {
+                        setActiveStrategies([]);
+                    }
+                } catch (e) {
+                    console.error("Supabase sync failed, using local", e);
+                    const saved = localStorage.getItem(`sui-loop-fleet-${account.address}`);
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        setActiveStrategies(parsed.filter((s: any) => s.status !== 'DRAFT'));
+                    }
+                }
+            };
+            loadFleet();
         } else {
             setActiveStrategies([]);
         }
