@@ -397,16 +397,16 @@ export default function LeaderboardPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="relative group lg:rounded-[3rem] overflow-hidden border border-white/10 bg-white/[0.02] backdrop-blur-3xl"
+                    className="relative group lg:rounded-[3rem] border border-white/10 bg-white/[0.02] backdrop-blur-3xl"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none rounded-[inherit]" />
 
                     <div className="overflow-x-auto custom-scrollbar -mx-4 sm:mx-0">
                         <table className="w-full text-left border-collapse min-w-[800px] md:min-w-full">
                             <thead>
                                 <tr className="border-b border-white/5 text-[9px] sm:text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono whitespace-nowrap">
-                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-semibold w-12 sm:w-24">{t('leaderboard.table.headers.rank')}</th>
-                                    <th className="py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-semibold w-12 sm:w-24 text-center">{t('leaderboard.table.headers.rank')}</th>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors min-w-[180px]" onClick={() => handleSort('creator')}>
                                         {t('leaderboard.table.headers.profile')} {sortConfig.key === 'creator' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                     <th className="hidden md:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
@@ -415,9 +415,9 @@ export default function LeaderboardPage() {
                                     <th className="py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
                                         {t('leaderboard.table.headers.trust')} {sortConfig.key === 'elo' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="hidden xl:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold">{t('leaderboard.table.headers.feed')}</th>
-                                    <th className="hidden sm:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold uppercase font-mono text-[9px] tracking-widest text-gray-500">{t('leaderboard.table.headers.audit')}</th>
-                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
+                                    <th className="hidden xl:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold min-w-[200px]">{t('leaderboard.table.headers.feed')}</th>
+                                    <th className="hidden sm:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold uppercase font-mono text-[9px] tracking-widest text-gray-500 min-w-[140px]">{t('leaderboard.table.headers.audit')}</th>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-12 font-semibold text-right cursor-pointer hover:text-white transition-colors w-32" onClick={() => handleSort('volume')}>
                                         {t('leaderboard.table.headers.volume')} {sortConfig.key === 'volume' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                 </tr>
@@ -580,27 +580,27 @@ export default function LeaderboardPage() {
                                                 <div className="flex flex-col gap-1.5">
                                                     {agent.trades > 0 ? (
                                                         <div className="flex items-center gap-2">
-                                                            <div className="p-1 px-2 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30 flex items-center gap-1.5 group/audit cursor-help transition-all hover:bg-neon-cyan/20">
-                                                                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-neon-cyan fill-current" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                                            <div className="px-3 py-1.5 rounded-full bg-neon-cyan/10 border border-neon-cyan/40 flex items-center gap-2 group/audit cursor-help transition-all hover:bg-neon-cyan/20 shadow-[0_0_15px_rgba(0,229,255,0.1)]">
+                                                                <svg viewBox="0 0 24 24" className="w-4 h-4 text-neon-cyan fill-current" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
                                                                 </svg>
-                                                                <span className="text-[10px] font-black text-neon-cyan uppercase tracking-tighter">Sealed</span>
+                                                                <span className="text-[10px] font-black text-neon-cyan uppercase tracking-widest">Sealed</span>
                                                             </div>
                                                         </div>
                                                     ) : (
                                                         <span className="text-[10px] text-gray-700 font-mono tracking-tighter opacity-40">Unsealed</span>
                                                     )}
                                                     {agent.trades > 0 && (
-                                                        <div className="flex items-center gap-1">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse" />
-                                                            <span className="text-[8px] text-gray-600 font-mono uppercase">Walrus Blackbox</span>
+                                                        <div className="flex items-center gap-1.5 ml-1">
+                                                            <div className="w-1 h-1 rounded-full bg-neon-cyan/60 animate-pulse" />
+                                                            <span className="text-[8px] text-gray-500 font-mono uppercase tracking-tighter">Walrus Blackbox</span>
                                                         </div>
                                                     )}
                                                 </div>
                                             </td>
 
                                             {/* Volume */}
-                                            <td className="py-6 sm:py-8 px-4 sm:px-8 text-right">
+                                            <td className="py-6 sm:py-8 px-4 sm:px-12 text-right">
                                                 <div className="flex flex-col items-end">
                                                     <span className="text-md font-black font-mono tracking-tight group-hover/row:text-white transition-colors">
                                                         ${agent.volumeUsd.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
