@@ -404,20 +404,20 @@ export default function LeaderboardPage() {
                     <div className="overflow-x-auto custom-scrollbar -mx-4 sm:mx-0">
                         <table className="w-full text-left border-collapse min-w-[800px] md:min-w-full">
                             <thead>
-                                <tr className="border-b border-white/5 text-[9px] sm:text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono whitespace-nowrap">
-                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-semibold w-12 sm:w-24 text-center">{t('leaderboard.table.headers.rank')}</th>
-                                    <th className="py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors min-w-[180px]" onClick={() => handleSort('creator')}>
+                                <tr className="border-b border-white/5 text-[9px] text-gray-500 tracking-[0.15em] uppercase font-mono whitespace-nowrap">
+                                    <th className="py-3 px-3 font-semibold w-12 text-center">{t('leaderboard.table.headers.rank')}</th>
+                                    <th className="py-3 px-3 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
                                         {t('leaderboard.table.headers.profile')} {sortConfig.key === 'creator' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="hidden md:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
+                                    <th className="hidden lg:table-cell py-3 px-3 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
                                         {t('leaderboard.table.headers.performance')} {sortConfig.key === 'winRate' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
+                                    <th className="py-3 px-3 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
                                         {t('leaderboard.table.headers.trust')} {sortConfig.key === 'elo' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="hidden xl:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold min-w-[200px]">{t('leaderboard.table.headers.feed')}</th>
-                                    <th className="hidden sm:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold uppercase font-mono text-[9px] tracking-widest text-gray-500 min-w-[140px]">{t('leaderboard.table.headers.audit')}</th>
-                                    <th className="py-4 sm:py-8 px-4 sm:px-12 font-semibold text-right cursor-pointer hover:text-white transition-colors w-32" onClick={() => handleSort('volume')}>
+                                    <th className="hidden 2xl:table-cell py-3 px-3 font-semibold">{t('leaderboard.table.headers.feed')}</th>
+                                    <th className="hidden md:table-cell py-3 px-3 font-semibold tracking-widest">{t('leaderboard.table.headers.audit')}</th>
+                                    <th className="py-3 px-3 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
                                         {t('leaderboard.table.headers.volume')} {sortConfig.key === 'volume' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                 </tr>
@@ -440,97 +440,76 @@ export default function LeaderboardPage() {
                                             className="group/row border-b border-white/5 hover:bg-white/[0.04] transition-all duration-300"
                                         >
                                             {/* Rank */}
-                                            <td className="py-6 sm:py-8 px-4 sm:px-8">
+                                            <td className="py-4 px-3">
                                                 <div className="flex flex-col items-center">
-                                                    <span className={`text-lg font-black font-orbitron ${agent.rank <= 3 ? 'text-neon-cyan' : 'text-gray-600'}`}>
+                                                    <span className={`text-sm font-black font-orbitron ${agent.rank <= 3 ? 'text-neon-cyan' : 'text-gray-600'}`}>
                                                         #{agent.rank.toString().padStart(2, '0')}
                                                     </span>
-                                                    {agent.trades > 50 && <Zap className="w-3 h-3 text-yellow-500 mt-1" />}
+                                                    {agent.trades > 50 && <Zap className="w-2.5 h-2.5 text-yellow-500 mt-0.5" />}
                                                 </div>
                                             </td>
 
                                             {/* Profile */}
-                                            <td className="py-6 sm:py-8 px-4 sm:px-6">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="relative">
-                                                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br border flex items-center justify-center p-0.5 transition-all group-hover/row:scale-110 duration-500
+                                            <td className="py-4 px-3">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="relative shrink-0">
+                                                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br border flex items-center justify-center p-0.5 transition-all group-hover/row:scale-110 duration-500
                                                             ${agent.rank === 1 ? 'from-yellow-400/50 to-transparent border-yellow-400/30' :
                                                                 agent.rank === 2 ? 'from-gray-300/50 to-transparent border-gray-300/30' :
                                                                     agent.rank === 3 ? 'from-amber-700/50 to-transparent border-amber-700/30' :
                                                                         'from-neon-cyan/20 to-transparent border-white/10'}
                                                         `}>
-                                                            <div className="w-full h-full rounded-[0.9rem] bg-[#0A0A0F] overflow-hidden flex items-center justify-center relative">
-                                                                <img
-                                                                    src={getAgentAvatar(agent.address)}
-                                                                    alt="Avatar"
-                                                                    className="w-full h-full object-cover scale-110"
-                                                                />
-                                                                {/* Overlay glow for top agents */}
-                                                                {agent.rank <= 3 && (
-                                                                    <div className={`absolute inset-0 opacity-20 bg-gradient-to-t from-current to-transparent
-                                                                        ${agent.rank === 1 ? 'text-yellow-400' : agent.rank === 2 ? 'text-gray-400' : 'text-amber-700'}
-                                                                    `} />
-                                                                )}
+                                                            <div className="w-full h-full rounded-lg bg-[#0A0A0F] overflow-hidden">
+                                                                <img src={getAgentAvatar(agent.address)} alt="Avatar" className="w-full h-full object-cover scale-110" />
                                                             </div>
                                                         </div>
-                                                        <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-[#020205] flex items-center justify-center shadow-lg
+                                                        <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border border-[#020205] flex items-center justify-center
                                                             ${agent.trades > 0 ? 'bg-green-500' : 'bg-gray-600'}
                                                         `}>
-                                                            {agent.rank <= 3 ? (
-                                                                <Star className="w-2.5 h-2.5 text-black fill-black" />
-                                                            ) : (
-                                                                <div className="w-1.5 h-1.5 rounded-full bg-white opacity-50" />
-                                                            )}
+                                                            {agent.rank <= 3 && <Star className="w-1.5 h-1.5 text-black fill-black" />}
                                                         </div>
                                                     </div>
-                                                    <div className="max-w-[150px] sm:max-w-[200px]">
-                                                        <div className="flex items-center gap-2 group/wallet">
-                                                            <span className={`text-md font-black font-orbitron tracking-tight transition-colors truncate
+                                                    <div className="min-w-0">
+                                                        <div className="flex items-center gap-1">
+                                                            <span className={`text-xs font-black font-orbitron tracking-tight transition-colors truncate max-w-[120px]
                                                                 ${agent.rank === 1 ? 'text-yellow-500' : 'group-hover/row:text-neon-cyan text-white'}
                                                             `}>
                                                                 {agent.creator.length > 15 ? `${agent.creator.slice(0, 6)}...${agent.creator.slice(-4)}` : agent.creator.toUpperCase()}
                                                             </span>
-                                                            <a
-                                                                href={`https://suiscan.xyz/testnet/account/${agent.address}`}
-                                                                target="_blank"
-                                                                className="opacity-0 group-hover/row:opacity-100 transition-opacity"
-                                                            >
-                                                                <ArrowUpRight className="w-3 h-3 text-gray-500 hover:text-white" />
+                                                            <a href={`https://suiscan.xyz/testnet/account/${agent.address}`} target="_blank" className="opacity-0 group-hover/row:opacity-100 transition-opacity shrink-0">
+                                                                <ArrowUpRight className="w-2.5 h-2.5 text-gray-500 hover:text-white" />
                                                             </a>
                                                         </div>
-                                                        <div className="flex items-center gap-1.5 mt-1">
-                                                            <Wallet className="w-3 h-3 text-gray-700" />
-                                                            <span className="text-[10px] text-gray-600 font-mono tracking-tighter">
-                                                                {agent.address.slice(0, 6)}...{agent.address.slice(-4)}
-                                                            </span>
+                                                        <div className="flex items-center gap-1 mt-0.5">
+                                                            <Wallet className="w-2.5 h-2.5 text-gray-700" />
+                                                            <span className="text-[9px] text-gray-600 font-mono">{agent.address.slice(0, 6)}...{agent.address.slice(-4)}</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
 
                                             {/* Performance */}
-                                            <td className="hidden md:table-cell py-6 sm:py-8 px-4 sm:px-6">
-                                                <div className="flex items-center gap-4">
+                                            <td className="hidden lg:table-cell py-4 px-3">
+                                                <div className="flex items-center gap-3">
                                                     <div className="flex flex-col">
-                                                        <span className="text-sm font-bold font-mono text-neon-cyan">{agent.winRate}%</span>
-                                                        <span className="text-[9px] text-gray-600 uppercase font-mono">{t('leaderboard.table.stats.winRate')}</span>
+                                                        <span className="text-xs font-bold font-mono text-neon-cyan">{agent.winRate}%</span>
+                                                        <span className="text-[8px] text-gray-600 uppercase font-mono">{t('leaderboard.table.stats.winRate')}</span>
                                                     </div>
-                                                    <div className="h-8 w-px bg-white/5" />
+                                                    <div className="h-6 w-px bg-white/5" />
                                                     <div className="flex flex-col">
-                                                        <span className="text-sm font-bold font-mono">{agent.trades}</span>
-                                                        <span className="text-[9px] text-gray-600 uppercase font-mono">{t('leaderboard.table.stats.trades')}</span>
+                                                        <span className="text-xs font-bold font-mono">{agent.trades}</span>
+                                                        <span className="text-[8px] text-gray-600 uppercase font-mono">{t('leaderboard.table.stats.trades')}</span>
                                                     </div>
                                                 </div>
                                             </td>
 
                                             {/* Trust Score */}
-                                            <td className="py-6 sm:py-8 px-4 sm:px-6">
-                                                <div className="flex flex-col gap-1.5">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="text-xl font-bold font-mono tracking-tighter">
-                                                            {agent.elo} <span className="text-[10px] text-gray-600 font-light ml-1">{t('leaderboard.table.stats.elo')}</span>
-                                                        </div>
-                                                        <TrendingUp className="w-4 h-4 text-green-500/50" />
+                                            <td className="py-4 px-3">
+                                                <div className="flex flex-col gap-1">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <span className="text-base font-bold font-mono tracking-tighter">{agent.elo}</span>
+                                                        <span className="text-[9px] text-gray-600 font-light">{t('leaderboard.table.stats.elo')}</span>
+                                                        <TrendingUp className="w-3 h-3 text-green-500/50" />
                                                     </div>
                                                     <div className="flex items-center">
                                                         {(() => {
@@ -539,7 +518,7 @@ export default function LeaderboardPage() {
                                                                     agent.elo >= 1200 ? { name: "Silver", color: "text-gray-300", bg: "bg-gray-500/10 border-gray-500/30" } :
                                                                         { name: "Bronze", color: "text-amber-700", bg: "bg-amber-700/10 border-amber-700/30" };
                                                             return (
-                                                                <span className={`text-[9px] px-2 py-0.5 rounded-full border ${tier.bg} ${tier.color} font-mono uppercase tracking-widest flex items-center gap-1 w-max`}>
+                                                                <span className={`text-[8px] px-1.5 py-0.5 rounded-full border ${tier.bg} ${tier.color} font-mono uppercase tracking-widest flex items-center gap-1 w-max`}>
                                                                     {tier.name}
                                                                 </span>
                                                             );
@@ -549,13 +528,13 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Neural Feed */}
-                                            <td className="hidden xl:table-cell py-6 sm:py-8 px-4 sm:px-6">
-                                                <div className="flex flex-col gap-1 max-w-[200px]">
+                                            <td className="hidden 2xl:table-cell py-4 px-3">
+                                                <div className="flex flex-col gap-1 max-w-[180px]">
                                                     {agent.lastSignal ? (
                                                         <>
                                                             <div className="flex items-center gap-1.5">
-                                                                <div className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse shadow-[0_0_8px_rgba(0,229,255,1)]" />
-                                                                <span className="text-[10px] text-neon-cyan font-mono truncate uppercase tracking-tighter">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse shadow-[0_0_6px_rgba(0,229,255,1)]" />
+                                                                <span className="text-[9px] text-neon-cyan font-mono truncate uppercase tracking-tighter">
                                                                     {agent.lastSignal}
                                                                 </span>
                                                             </div>
@@ -563,56 +542,47 @@ export default function LeaderboardPage() {
                                                                 <a
                                                                     href={`https://suiscan.xyz/testnet/tx/${agent.lastTx}`}
                                                                     target="_blank"
-                                                                    className="text-[9px] text-gray-600 font-mono hover:text-white transition-colors mt-0.5 flex items-center gap-1"
+                                                                    className="text-[8px] text-gray-600 font-mono hover:text-white transition-colors flex items-center gap-0.5"
                                                                 >
-                                                                    {t('leaderboard.table.stats.tx')} {agent.lastTx.slice(0, 10)}... <ArrowUpRight className="w-2.5 h-2.5" />
+                                                                    TX {agent.lastTx.slice(0, 8)}... <ArrowUpRight className="w-2 h-2" />
                                                                 </a>
                                                             )}
                                                         </>
                                                     ) : (
-                                                        <span className="text-[10px] font-mono text-gray-700">{t('leaderboard.table.stats.standby')}</span>
+                                                        <span className="text-[9px] font-mono text-gray-700">{t('leaderboard.table.stats.standby')}</span>
                                                     )}
                                                 </div>
                                             </td>
 
                                             {/* Walrus Audit */}
-                                            <td className="hidden sm:table-cell py-6 sm:py-8 px-4 sm:px-6">
-                                                <div className="flex flex-col gap-1.5">
+                                            <td className="hidden md:table-cell py-4 px-3">
+                                                <div className="flex flex-col gap-1">
                                                     {agent.trades > 0 ? (
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="px-3 py-1.5 rounded-full bg-neon-cyan/10 border border-neon-cyan/40 flex items-center gap-2 group/audit cursor-help transition-all hover:bg-neon-cyan/20 shadow-[0_0_15px_rgba(0,229,255,0.1)]">
-                                                                <svg viewBox="0 0 24 24" className="w-4 h-4 text-neon-cyan fill-current" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
-                                                                </svg>
-                                                                <span className="text-[10px] font-black text-neon-cyan uppercase tracking-widest">Sealed</span>
-                                                            </div>
+                                                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 w-max shadow-[0_0_10px_rgba(0,229,255,0.08)] hover:bg-neon-cyan/15 transition-all cursor-default">
+                                                            <svg viewBox="0 0 24 24" className="w-3 h-3 text-neon-cyan fill-current shrink-0">
+                                                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+                                                            </svg>
+                                                            <span className="text-[9px] font-black text-neon-cyan uppercase tracking-wider">Sealed</span>
                                                         </div>
                                                     ) : (
-                                                        <span className="text-[10px] text-gray-700 font-mono tracking-tighter opacity-40">Unsealed</span>
+                                                        <span className="text-[9px] text-gray-700 font-mono opacity-40">—</span>
                                                     )}
                                                     {agent.trades > 0 && (
-                                                        <div className="flex items-center gap-1.5 ml-1">
-                                                            <div className="w-1 h-1 rounded-full bg-neon-cyan/60 animate-pulse" />
-                                                            <span className="text-[8px] text-gray-500 font-mono uppercase tracking-tighter">Walrus Blackbox</span>
+                                                        <div className="flex items-center gap-1">
+                                                            <div className="w-1 h-1 rounded-full bg-neon-cyan/50 animate-pulse" />
+                                                            <span className="text-[7px] text-gray-600 font-mono uppercase">Walrus</span>
                                                         </div>
                                                     )}
                                                 </div>
                                             </td>
 
                                             {/* Volume */}
-                                            <td className="py-6 sm:py-8 px-4 sm:px-12 text-right">
+                                            <td className="py-4 px-3 text-right">
                                                 <div className="flex flex-col items-end">
-                                                    <span className="text-md font-black font-mono tracking-tight group-hover/row:text-white transition-colors">
+                                                    <span className="text-sm font-black font-mono tracking-tight group-hover/row:text-white transition-colors">
                                                         ${agent.volumeUsd.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-                                                        <span className="text-[10px] text-gray-500 ml-1">USD</span>
+                                                        <span className="text-[9px] text-gray-500 ml-1">USD</span>
                                                     </span>
-                                                    <div className="h-1 w-24 bg-white/5 rounded-full mt-2 overflow-hidden">
-                                                        <motion.div
-                                                            initial={{ width: 0 }}
-                                                            animate={{ width: `${Math.min(100, (agent.volumeUsd / 1000) * 100)}%` }} // Relative to 1k USD for bar
-                                                            className="h-full bg-neon-cyan shadow-[0_0_10px_rgba(0,229,255,0.5)]"
-                                                        />
-                                                    </div>
                                                 </div>
                                             </td>
                                         </motion.tr>
