@@ -15,7 +15,7 @@ const translations = {
       verified: { en: "verified on-chain performance", es: "rendimiento verificado en cadena", zh: "链上验证性能" },
       title1: { en: "Agent", es: "Agente", zh: "代理" },
       title2: { en: "Elite", es: "Élite", zh: "精英" },
-      subtitle: { 
+      subtitle: {
         en: "Real-time reputation ranking of autonomous agents operating on the SuiLoop Protocol. Metrics are verified via cryptographical proof on Sui Testnet.",
         es: "Clasificación de reputación en tiempo real de los agentes autónomos que operan en el Protocolo SuiLoop. Las métricas se verifican mediante pruebas criptográficas en la red de pruebas (Sui Testnet).",
         zh: "在 SuiLoop 协议上运行的自治代理的实时声誉排名。指标通过 Sui 测试网上的密码学证明进行验证。"
@@ -45,6 +45,7 @@ const translations = {
         performance: { en: "Performance", es: "Rendimiento", zh: "表现" },
         trust: { en: "Trust Score", es: "Puntuación de Confianza", zh: "信任评分" },
         feed: { en: "Neural Feed", es: "Feed Neuronal", zh: "神经反馈" },
+        audit: { en: "Audit Seal", es: "Sello Auditor", zh: "审计密封" },
         volume: { en: "Volume", es: "Volumen", zh: "成交量" }
       },
       stats: {
@@ -66,29 +67,29 @@ const translations = {
 
 function addTranslations(targetData, langCode) {
   if (!targetData.leaderboard) targetData.leaderboard = {};
-  
+
   for (const [section, sectionData] of Object.entries(translations.leaderboard)) {
     if (!targetData.leaderboard[section]) targetData.leaderboard[section] = {};
     for (const [key, val] of Object.entries(sectionData)) {
-        if(val && val[langCode]){
-            if (typeof val[langCode] === 'string') {
-                targetData.leaderboard[section][key] = val[langCode];
-            } else {
-                 if (!targetData.leaderboard[section][key]) targetData.leaderboard[section][key] = {};
-                 for(const [subKey, subVal] of Object.entries(val[langCode])) {
-                     targetData.leaderboard[section][key][subKey] = subVal;
-                 }
-            }
+      if (val && val[langCode]) {
+        if (typeof val[langCode] === 'string') {
+          targetData.leaderboard[section][key] = val[langCode];
+        } else {
+          if (!targetData.leaderboard[section][key]) targetData.leaderboard[section][key] = {};
+          for (const [subKey, subVal] of Object.entries(val[langCode])) {
+            targetData.leaderboard[section][key][subKey] = subVal;
+          }
         }
+      }
     }
   }
-  
+
   targetData.leaderboard.table = { headers: {}, stats: {} };
   for (const [key, val] of Object.entries(translations.leaderboard.table.headers)) {
-      targetData.leaderboard.table.headers[key] = val[langCode];
+    targetData.leaderboard.table.headers[key] = val[langCode];
   }
   for (const [key, val] of Object.entries(translations.leaderboard.table.stats)) {
-      targetData.leaderboard.table.stats[key] = val[langCode];
+    targetData.leaderboard.table.stats[key] = val[langCode];
   }
 }
 

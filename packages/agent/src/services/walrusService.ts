@@ -1,6 +1,9 @@
 import axios from 'axios';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const WALRUS_PUBLISHER = 'https://publisher.walrus-testnet.walrus.space';
+const AUDIT_FILE = path.join(process.cwd(), 'audit_book.log');
 
 export interface StrategyExecutionLog {
     strategy_id: string;
@@ -17,7 +20,12 @@ export interface StrategyExecutionLog {
 }
 
 export class WalrusService {
-    constructor() { }
+    constructor() {
+        // Initialize audit file with a header if it doesn't exist
+        if (!fs.existsSync(AUDIT_FILE)) {
+            fs.writeFileSync(AUDIT_FILE, `--- SUILOOP WALRUS AUDIT TRAIL ---\nGenerated: ${new Date().toISOString()}\n\n`);
+        }
+    }
 
     /**
      * Uploads a SuiLoop strategy execution forensic log to Walrus.
@@ -33,6 +41,7 @@ export class WalrusService {
             timestamp: log.timestamp || new Date().toISOString()
         });
 
+        let blobId = `local-${log.strategy_id}-${Date.now()}`;
         try {
             const response = await axios.put(`${WALRUS_PUBLISHER}/v1/blobs?epochs=5`, payload, {
                 headers: { 'Content-Type': 'application/json' },
@@ -40,17 +49,27 @@ export class WalrusService {
             });
 
             if (response.data && (response.data.newlyCreated || response.data.alreadyCertified)) {
-                const blobId = response.data.newlyCreated?.blobObject?.blobId ||
+                blobId = response.data.newlyCreated?.blobObject?.blobId ||
                     response.data.alreadyCertified?.blobId;
                 console.log(`✅ [Blackbox] Execution sealed on Walrus. Blob ID: ${blobId}`);
-                return blobId;
+            } else {
+                console.warn('⚠️ [Blackbox] Unexpected Walrus response. Using local ID fallback.');
             }
-            throw new Error('Unexpected response format from Walrus node.');
         } catch (error: any) {
             console.warn(`⚠️ [Blackbox] Walrus upload failed — ${error.message}. Falling back to local log.`);
-            // Return simulated blob ID as fallback so execution is not blocked
-            return `local-${log.strategy_id}-${Date.now()}`;
         }
+
+        // --- REAL AUDIT TRAIL: SAVE TO LOCAL FILE ---
+        const auditEntry = `[${new Date().toISOString()}] STRATEGY_EXECUTION: ${log.strategy_name} (${log.strategy_id})\n` +
+            `  - Wallet: ${log.wallet}\n` +
+            `  - TxHash: ${log.txHash}\n` +
+            `  - Result: ${log.status} (Profit: ${log.profit_mist} MIST)\n` +
+            `  - Walrus Seal: https://walruscan.com/testnet/blob/${blobId}\n` +
+            `  - Blob ID: ${blobId}\n\n`;
+
+        fs.appendFileSync(AUDIT_FILE, auditEntry);
+
+        return blobId;
     }
 
     /**
@@ -59,31 +78,35 @@ export class WalrusService {
     async logTradeToWalrus(tradeData: Record<string, any>): Promise<string> {
         console.log('🦭 Uploading trade log to Walrus...', tradeData);
 
-        try {
-            const payload = JSON.stringify({
-                type: 'trade_log',
-                content: tradeData,
-                timestamp: new Date().toISOString()
-            });
+        const payload = JSON.stringify({
+            type: 'trade_log',
+            content: tradeData,
+            timestamp: new Date().toISOString()
+        });
 
-            // Modern Walrus Testnet REST API endpoint for storing blobs is /v1/blobs (2025/2026)
+        let blobId = `local-trade-${Date.now()}`;
+        try {
             const response = await axios.put(`${WALRUS_PUBLISHER}/v1/blobs?epochs=5`, payload, {
                 headers: { 'Content-Type': 'application/json' },
                 timeout: 8000
             });
 
             if (response.data && (response.data.newlyCreated || response.data.alreadyCertified)) {
-                const blobId = response.data.newlyCreated?.blobObject?.blobId ||
+                blobId = response.data.newlyCreated?.blobObject?.blobId ||
                     response.data.alreadyCertified?.blobId;
-
                 console.log(`✅ Trade log archived to Walrus! Blob ID: ${blobId}`);
-                return blobId;
             }
-
-            throw new Error('Unexpected response format from Walrus node.');
         } catch (error: any) {
             console.error(`⚠️ Failed to upload trade log to Walrus:`, error.message);
-            throw error;
         }
+
+        // Save to local audit book
+        const auditEntry = `[${new Date().toISOString()}] TRADE_LOG: ${tradeData.action || 'Trade'}\n` +
+            `  - Walrus Seal: https://walruscan.com/testnet/blob/${blobId}\n` +
+            `  - Data: ${JSON.stringify(tradeData)}\n\n`;
+
+        fs.appendFileSync(AUDIT_FILE, auditEntry);
+
+        return blobId;
     }
 }

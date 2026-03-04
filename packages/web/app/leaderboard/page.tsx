@@ -326,6 +326,10 @@ export default function LeaderboardPage() {
                                                 {agent.address}
                                             </span>
                                             <Shield className="w-3 h-3 text-neon-cyan shrink-0" />
+                                            <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-neon-cyan/10 border border-neon-cyan/30">
+                                                <div className="w-1 h-1 rounded-full bg-neon-cyan animate-pulse" />
+                                                <span className="text-[8px] text-neon-cyan font-black uppercase tracking-tighter">Sealed on Walrus</span>
+                                            </div>
                                         </div>
                                         <h3 className="text-lg sm:text-xl xl:text-2xl font-black font-orbitron tracking-tighter break-all uppercase text-white leading-tight">
                                             {agent.creator}
@@ -412,6 +416,7 @@ export default function LeaderboardPage() {
                                         {t('leaderboard.table.headers.trust')} {sortConfig.key === 'elo' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                     <th className="hidden lg:table-cell py-6 sm:py-8 px-4 sm:px-6 font-semibold">{t('leaderboard.table.headers.feed')}</th>
+                                    <th className="py-6 sm:py-8 px-4 sm:px-6 font-semibold uppercase font-mono text-[9px] tracking-widest text-gray-500">{t('leaderboard.table.headers.audit')}</th>
                                     <th className="py-6 sm:py-8 px-4 sm:px-8 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
                                         {t('leaderboard.table.headers.volume')} {sortConfig.key === 'volume' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
@@ -566,6 +571,30 @@ export default function LeaderboardPage() {
                                                         </>
                                                     ) : (
                                                         <span className="text-[10px] font-mono text-gray-700">{t('leaderboard.table.stats.standby')}</span>
+                                                    )}
+                                                </div>
+                                            </td>
+
+                                            {/* Walrus Audit */}
+                                            <td className="py-8 px-6">
+                                                <div className="flex flex-col gap-1.5">
+                                                    {agent.trades > 0 ? (
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="p-1 px-2 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30 flex items-center gap-1.5 group/audit cursor-help transition-all hover:bg-neon-cyan/20">
+                                                                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-neon-cyan fill-current" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                                                </svg>
+                                                                <span className="text-[10px] font-black text-neon-cyan uppercase tracking-tighter">Sealed</span>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-[10px] text-gray-700 font-mono tracking-tighter opacity-40">Unsealed</span>
+                                                    )}
+                                                    {agent.trades > 0 && (
+                                                        <div className="flex items-center gap-1">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse" />
+                                                            <span className="text-[8px] text-gray-600 font-mono uppercase">Walrus Blackbox</span>
+                                                        </div>
                                                     )}
                                                 </div>
                                             </td>

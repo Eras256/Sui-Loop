@@ -1608,6 +1608,7 @@
         "performance": "Performance",
         "trust": "Trust Score",
         "feed": "Neural Feed",
+        "audit": "Audit Seal",
         "volume": "Volume"
       },
       "stats": {

@@ -2,7 +2,7 @@
 
 # Configuration
 SUI=/home/vaiosvaios/Sui-Loop/sui
-SENDER=0xc2998f09872dc9abc44ebd42ffefbd0d3a2efbd97d1872f2c1cc572a74a208de
+SENDER=0x066606066f3eeb33262854679ce6f5d4861f6f04f744f731b75d79731e3ce58f
 
 # Agent List
 AGENTS=(
@@ -23,7 +23,7 @@ AGENTS=(
   "0x7762bed5a0843042242d4adecaed0052eece5d3e9aa9f0b5e47a738f1c3fee19"
 )
 
-AMOUNT=60000000 # 0.06 SUI each to cover multiple cycles
+AMOUNT=133333333 # 0.133 SUI each
 
 echo "--- STARTING AGENT REFUELING (15 AGENTS) ---"
 

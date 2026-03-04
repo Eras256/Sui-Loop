@@ -1526,6 +1526,7 @@
         "performance": "表现",
         "trust": "信任评分",
         "feed": "神经反馈",
+        "audit": "审计密封",
         "volume": "成交量"
       },
       "stats": {

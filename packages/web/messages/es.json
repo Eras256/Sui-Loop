@@ -1608,6 +1608,7 @@
         "performance": "Rendimiento",
         "trust": "Puntuación de Confianza",
         "feed": "Feed Neuronal",
+        "audit": "Sello Auditor",
         "volume": "Volumen"
       },
       "stats": {
