@@ -401,23 +401,23 @@ export default function LeaderboardPage() {
                 >
                     <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
 
-                    <div className="overflow-x-auto custom-scrollbar">
-                        <table className="w-full text-left border-collapse min-w-[700px] lg:min-w-[1000px]">
+                    <div className="overflow-x-auto custom-scrollbar -mx-4 sm:mx-0">
+                        <table className="w-full text-left border-collapse min-w-[800px] md:min-w-full">
                             <thead>
                                 <tr className="border-b border-white/5 text-[9px] sm:text-[10px] text-gray-500 tracking-[0.2em] uppercase font-mono whitespace-nowrap">
-                                    <th className="py-6 sm:py-8 px-4 sm:px-8 font-semibold w-16 sm:w-24">{t('leaderboard.table.headers.rank')}</th>
-                                    <th className="py-6 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-semibold w-12 sm:w-24">{t('leaderboard.table.headers.rank')}</th>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('creator')}>
                                         {t('leaderboard.table.headers.profile')} {sortConfig.key === 'creator' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="hidden sm:table-cell py-6 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
+                                    <th className="hidden md:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('winRate')}>
                                         {t('leaderboard.table.headers.performance')} {sortConfig.key === 'winRate' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="py-6 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-6 font-semibold cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('elo')}>
                                         {t('leaderboard.table.headers.trust')} {sortConfig.key === 'elo' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
-                                    <th className="hidden lg:table-cell py-6 sm:py-8 px-4 sm:px-6 font-semibold">{t('leaderboard.table.headers.feed')}</th>
-                                    <th className="py-6 sm:py-8 px-4 sm:px-6 font-semibold uppercase font-mono text-[9px] tracking-widest text-gray-500">{t('leaderboard.table.headers.audit')}</th>
-                                    <th className="py-6 sm:py-8 px-4 sm:px-8 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
+                                    <th className="hidden xl:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold">{t('leaderboard.table.headers.feed')}</th>
+                                    <th className="hidden sm:table-cell py-4 sm:py-8 px-4 sm:px-6 font-semibold uppercase font-mono text-[9px] tracking-widest text-gray-500">{t('leaderboard.table.headers.audit')}</th>
+                                    <th className="py-4 sm:py-8 px-4 sm:px-8 font-semibold text-right cursor-pointer hover:text-white transition-colors" onClick={() => handleSort('volume')}>
                                         {t('leaderboard.table.headers.volume')} {sortConfig.key === 'volume' && (sortConfig.direction === 'desc' ? '↓' : '↑')}
                                     </th>
                                 </tr>
@@ -440,7 +440,7 @@ export default function LeaderboardPage() {
                                             className="group/row border-b border-white/5 hover:bg-white/[0.04] transition-all duration-300"
                                         >
                                             {/* Rank */}
-                                            <td className="py-8 px-8">
+                                            <td className="py-6 sm:py-8 px-4 sm:px-8">
                                                 <div className="flex flex-col items-center">
                                                     <span className={`text-lg font-black font-orbitron ${agent.rank <= 3 ? 'text-neon-cyan' : 'text-gray-600'}`}>
                                                         #{agent.rank.toString().padStart(2, '0')}
@@ -450,7 +450,7 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Profile */}
-                                            <td className="py-8 px-6">
+                                            <td className="py-6 sm:py-8 px-4 sm:px-6">
                                                 <div className="flex items-center gap-4">
                                                     <div className="relative">
                                                         <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br border flex items-center justify-center p-0.5 transition-all group-hover/row:scale-110 duration-500
@@ -509,7 +509,7 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Performance */}
-                                            <td className="hidden sm:table-cell py-8 px-6">
+                                            <td className="hidden md:table-cell py-6 sm:py-8 px-4 sm:px-6">
                                                 <div className="flex items-center gap-4">
                                                     <div className="flex flex-col">
                                                         <span className="text-sm font-bold font-mono text-neon-cyan">{agent.winRate}%</span>
@@ -524,7 +524,7 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Trust Score */}
-                                            <td className="py-8 px-6">
+                                            <td className="py-6 sm:py-8 px-4 sm:px-6">
                                                 <div className="flex flex-col gap-1.5">
                                                     <div className="flex items-center gap-3">
                                                         <div className="text-xl font-bold font-mono tracking-tighter">
@@ -549,7 +549,7 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Neural Feed */}
-                                            <td className="hidden lg:table-cell py-8 px-6">
+                                            <td className="hidden xl:table-cell py-6 sm:py-8 px-4 sm:px-6">
                                                 <div className="flex flex-col gap-1 max-w-[200px]">
                                                     {agent.lastSignal ? (
                                                         <>
@@ -576,7 +576,7 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Walrus Audit */}
-                                            <td className="py-8 px-6">
+                                            <td className="hidden sm:table-cell py-6 sm:py-8 px-4 sm:px-6">
                                                 <div className="flex flex-col gap-1.5">
                                                     {agent.trades > 0 ? (
                                                         <div className="flex items-center gap-2">
@@ -600,7 +600,7 @@ export default function LeaderboardPage() {
                                             </td>
 
                                             {/* Volume */}
-                                            <td className="py-8 px-8 text-right">
+                                            <td className="py-6 sm:py-8 px-4 sm:px-8 text-right">
                                                 <div className="flex flex-col items-end">
                                                     <span className="text-md font-black font-mono tracking-tight group-hover/row:text-white transition-colors">
                                                         ${agent.volumeUsd.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
