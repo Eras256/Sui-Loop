@@ -602,7 +602,36 @@
         "title": "9. Dispute Resolution, Governing Law & Class Action Waiver",
         "content": "Any dispute, controversy, or claim arising out of or relating to your use of the Protocol or these Terms shall be settled by binding, confidential arbitration, rather than in court. You explicitly waive your right to participate in any class action lawsuit or class-wide arbitration against SuiLoop, its operators, or contributors. These Terms shall be governed by and construed in accordance with the laws of the State of Mexico (Estado de México), Mexico, without regard to its conflict of law principles."
       }
-    ]
+    ],
+    "legalModal": {
+      "title": "CRITICAL: Risk Acknowledgment",
+      "subtitle": "Institutional Compliance Protocol",
+      "description": "Access to the Neural Swarm Engine requires cryptographic confirmation of our legal framework.",
+      "items": [
+        {
+          "label": "Non-Custodial",
+          "desc": "Software infrastructure, no custodial access to your funds."
+        },
+        {
+          "label": "AI Volatility",
+          "desc": "Agents can fail due to LLM non-determinism or API spikes."
+        },
+        {
+          "label": "Atomic Loss",
+          "desc": "Exposure to flash loans carries risk of 100% capital loss."
+        },
+        {
+          "label": "Jurisdiction",
+          "desc": "Governed by Estado de México (MX) laws. Class-action waiver."
+        }
+      ],
+      "footer": "Full documentation & terms available for review:",
+      "termsLink": "TERMS OF SERVICE",
+      "riskLink": "RISK DISCLOSURE",
+      "signButton": "SIGN & AUTHORIZE ACCESS",
+      "signing": "WAITING FOR WALLET...",
+      "securityFootnote": "Sui Testnet Cryptographic Confirmation"
+    }
   },
   "risk": {
     "title": "Extended Risk Disclosure",

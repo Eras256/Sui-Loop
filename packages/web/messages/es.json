@@ -602,7 +602,36 @@
         "title": "9. Resolución de Disputas, Ley Aplicable y Renuncia a Acciones Colectivas",
         "content": "Cualquier disputa, controversia o reclamo que surja de o esté relacionado con el uso del Protocolo o estos Términos se resolverá mediante arbitraje vinculante y confidencial, en lugar de en los tribunales. Usted renuncia explícitamente a su derecho de participar en cualquier demanda colectiva o arbitraje de clase contra SuiLoop, sus operadores o colaboradores. Estos Términos se regirán e interpretarán de acuerdo con las leyes del Estado de México, México, sin tener en cuenta sus principios de conflicto de leyes."
       }
-    ]
+    ],
+    "legalModal": {
+      "title": "CRÍTICO: Reconocimiento de Riesgos",
+      "subtitle": "Protocolo de Cumplimiento Institucional",
+      "description": "El acceso al motor Neural Swarm requiere la confirmación criptográfica de nuestro marco legal.",
+      "items": [
+        {
+          "label": "Sin Custodia",
+          "desc": "Infraestructura de software, sin acceso custodio a sus fondos."
+        },
+        {
+          "label": "Volatilidad de IA",
+          "desc": "Los agentes pueden fallar debido al no determinismo de los LLM o picos de API."
+        },
+        {
+          "label": "Pérdida Atómica",
+          "desc": "La exposición a préstamos flash conlleva riesgo de pérdida de capital del 100%."
+        },
+        {
+          "label": "Jurisdicción",
+          "desc": "Regido por las leyes del Estado de México (MX). Renuncia a acciones colectivas."
+        }
+      ],
+      "footer": "Documentación completa y términos disponibles:",
+      "termsLink": "TÉRMINOS DE SERVICIO",
+      "riskLink": "DIVULGACIÓN DE RIESGOS",
+      "signButton": "FIRMAR Y AUTORIZAR ACCESO",
+      "signing": "ESPERANDO WALLET...",
+      "securityFootnote": "Confirmación Criptográfica en Sui Testnet"
+    }
   },
   "risk": {
     "title": "Divulgación Extendida de Riesgos",

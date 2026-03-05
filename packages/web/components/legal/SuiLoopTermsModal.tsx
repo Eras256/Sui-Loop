@@ -5,9 +5,11 @@ import { useCurrentAccount, useSignPersonalMessage } from "@mysten/dapp-kit";
 import { supabase } from "@/lib/supabase";
 import { AlertTriangle, Shield, Check } from "lucide-react";
 import Link from "next/link";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function SuiLoopTermsModal() {
     const account = useCurrentAccount();
+    const { t, tRaw } = useLanguage();
     const { mutateAsync: signPersonalMessage } = useSignPersonalMessage();
     const [hasSigned, setHasSigned] = useState<boolean>(true); // Assume true until check
     const [isSigning, setIsSigning] = useState<boolean>(false);
@@ -69,6 +71,8 @@ export default function SuiLoopTermsModal() {
 
     if (!account || hasSigned) return null;
 
+    const items = tRaw("terms.legalModal.items") || [];
+
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-md px-4 py-6 overflow-y-auto">
             <div className="w-full max-w-xl border border-red-500/30 bg-[#050510] rounded-2xl p-6 md:p-10 shadow-[0_0_60px_rgba(239,68,68,0.15)] relative my-auto">
@@ -79,23 +83,18 @@ export default function SuiLoopTermsModal() {
                         <AlertTriangle className="w-7 h-7 text-red-500" />
                     </div>
                     <div>
-                        <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">CRITICAL: Risk Acknowledgment</h2>
-                        <p className="text-red-500/60 text-[10px] md:text-xs font-mono uppercase tracking-[0.2em] mt-1">Institutional Compliance Protocol</p>
+                        <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">{t("terms.legalModal.title")}</h2>
+                        <p className="text-red-500/60 text-[10px] md:text-xs font-mono uppercase tracking-[0.2em] mt-1">{t("terms.legalModal.subtitle")}</p>
                     </div>
                 </div>
 
                 <div className="space-y-5 mb-10">
                     <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-                        Access to the <span className="text-red-400 font-bold">Neural Swarm Engine</span> requires cryptographic confirmation of our legal framework.
+                        {t("terms.legalModal.description")}
                     </p>
 
                     <div className="bg-[#0A0A1A] border border-white/5 rounded-xl p-6 space-y-4 font-mono">
-                        {[
-                            { label: "Non-Custodial", desc: "Software infrastructure, no custodial access to your funds." },
-                            { label: "AI Volatility", desc: "Agents can fail due to LLM non-determinism or API spikes." },
-                            { label: "Atomic Loss", desc: "Exposure to flash loans carries risk of 100% capital loss." },
-                            { label: "Jurisdiction", desc: "Governed by Estado de México (MX) laws. Class-action waiver." }
-                        ].map((item, i) => (
+                        {items.map((item: any, i: number) => (
                             <div key={i} className="flex gap-4 group">
                                 <Shield className="w-4 h-4 text-red-500/50 shrink-0 mt-0.5 group-hover:text-red-500 transition-colors" />
                                 <p className="text-[11px] md:text-xs text-gray-400 leading-normal">
@@ -108,11 +107,11 @@ export default function SuiLoopTermsModal() {
 
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 p-4 bg-white/3 border border-white/10 rounded-xl text-center sm:text-left">
                     <p className="text-[10px] text-gray-500 font-mono uppercase tracking-widest leading-relaxed">
-                        Full documentation & terms available for review:
+                        {t("terms.legalModal.footer")}
                     </p>
                     <div className="flex gap-4">
-                        <Link href="/terms" className="text-[11px] font-bold text-neon-cyan hover:underline decoration-neon-cyan/30">TERMS OF SERVICE</Link>
-                        <Link href="/terms#risk" className="text-[11px] font-bold text-neon-cyan hover:underline decoration-neon-cyan/30">RISK DISCLOSURE</Link>
+                        <Link href="/terms" className="text-[11px] font-bold text-neon-cyan hover:underline decoration-neon-cyan/30">{t("terms.legalModal.termsLink")}</Link>
+                        <Link href="/terms#risk" className="text-[11px] font-bold text-neon-cyan hover:underline decoration-neon-cyan/30">{t("terms.legalModal.riskLink")}</Link>
                     </div>
                 </div>
 
@@ -126,19 +125,19 @@ export default function SuiLoopTermsModal() {
                     onClick={handleSignTerms}
                     disabled={isSigning}
                     className={`w-full relative overflow-hidden group py-5 rounded-2xl font-mono font-bold text-sm tracking-widest transition-all duration-500 ${isSigning
-                            ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                            : "bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] active:scale-[0.98]"
+                        ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        : "bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] active:scale-[0.98]"
                         }`}
                 >
                     {isSigning ? (
                         <span className="flex items-center justify-center gap-3">
                             <span className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                            WAITING FOR WALLET...
+                            {t("terms.legalModal.signing")}
                         </span>
                     ) : (
                         <span className="flex items-center justify-center gap-3">
                             <Shield className="w-5 h-5 group-hover:animate-pulse" />
-                            SIGN & AUTHORIZE ACCESS
+                            {t("terms.legalModal.signButton")}
                         </span>
                     )}
                 </button>
@@ -146,7 +145,7 @@ export default function SuiLoopTermsModal() {
                 <div className="mt-6 flex items-center justify-center gap-2 opacity-40">
                     <Check className="w-3 h-3 text-red-500" />
                     <p className="text-[9px] text-center text-gray-500 uppercase tracking-[0.3em] font-mono">
-                        Sui Testnet Cryptographic Confirmation
+                        {t("terms.legalModal.securityFootnote")}
                     </p>
                 </div>
             </div>
