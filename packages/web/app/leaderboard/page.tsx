@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import Navbar from '@/components/layout/Navbar';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { supabase } from '@/lib/supabase';
 
 type AgentProfile = {
     address: string;
@@ -54,150 +55,65 @@ export default function LeaderboardPage() {
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
+            if (!supabase) return;
             try {
-                const client = new SuiClient({ url: getFullnodeUrl('testnet') });
-                const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || "0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0";
+                const { data, error } = await supabase
+                    .from('suiloop_agents')
+                    .select('*')
+                    .order('elo', { ascending: false });
 
-                // Fetch AgentRegistered events
-                const regEvents = await client.queryEvents({
-                    query: { MoveEventType: `${PACKAGE_ID}::agent_registry::AgentRegistered` },
-                    limit: 100
-                }).catch(() => ({ data: [] }));
+                if (error) throw error;
 
-                // Fetch ReputationUpdated events
-                const upEvents = await client.queryEvents({
-                    query: { MoveEventType: `${PACKAGE_ID}::agent_registry::ReputationUpdated` },
-                    limit: 1000,
-                    order: 'descending'
-                }).catch(() => ({ data: [] }));
+                if (data) {
+                    const formattedAgents = data.map((agent: any, idx: number) => ({
+                        address: agent.wallet_address,
+                        creator: agent.creator || 'Unknown',
+                        elo: agent.elo,
+                        trades: agent.trades,
+                        winRate: agent.win_rate,
+                        volume: 0,
+                        volumeUsd: agent.volume_usd,
+                        rank: idx + 1,
+                        lastTx: agent.last_tx_hash,
+                        lastSignal: agent.last_signal
+                    }));
+                    setAgents(formattedAgents);
 
-                // Fetch real volume from LoopExecuted events
-                const execEvents = await client.queryEvents({
-                    query: { MoveEventType: `${PACKAGE_ID}::atomic_engine::LoopExecuted` },
-                    limit: 1000
-                }).catch(() => ({ data: [] }));
+                    // Extraer los ultimos signals para el global (Top 10 max)
+                    const latestGlobal = [...formattedAgents]
+                        .filter(a => a.lastSignal && a.lastSignal !== 'STANDBY')
+                        .map(a => ({
+                            agent: a.creator.length > 15 ? `${a.creator.slice(0, 6)}...` : a.creator.toUpperCase(),
+                            content: a.lastSignal as string,
+                            time: Date.now() // placeholder for latest time
+                        }))
+                        .slice(0, 10);
 
-                // Fetch SignalPublished events (The "Neural Feed")
-                const signalEvents = await client.queryEvents({
-                    query: { MoveEventType: `${PACKAGE_ID}::agent_registry::SignalPublished` },
-                    limit: 200,
-                    order: 'descending'
-                }).catch(() => ({ data: [] }));
-
-                // Compute exact state per agent
-                const registry = new Map<string, AgentProfile>();
-
-                regEvents.data.forEach((ev: any) => {
-                    const parsed = ev.parsedJson;
-                    if (parsed && typeof parsed.agent_id === 'string') {
-                        registry.set(parsed.agent_id, {
-                            address: parsed.agent_id,
-                            creator: parsed.owner || 'Unknown',
-                            elo: 1000,
-                            trades: 0,
-                            winRate: 0,
-                            volume: 0,
-                            volumeUsd: 0,
-                            rank: 0,
-                        });
-                    }
-                });
-
-                // Apply Reputation Updates & Track Last TX
-                const agentStats = new Map<string, { wins: number, total: number }>();
-
-                upEvents.data.forEach((ev: any) => {
-                    const parsed = ev.parsedJson;
-                    if (parsed && registry.has(parsed.agent_id)) {
-                        const agent = registry.get(parsed.agent_id)!;
-                        const stats = agentStats.get(parsed.agent_id) || { wins: 0, total: 0 };
-
-                        // Only set ELO if this is the newest update (since we use descending order, first one wins)
-                        if (agent.trades === 0) {
-                            agent.elo = Number(parsed.new_score);
-                            agent.lastTx = ev.id.txDigest;
-                        }
-
-                        agent.trades += 1;
-                        stats.total += 1;
-                        if (parsed.is_positive) stats.wins += 1;
-                        agentStats.set(parsed.agent_id, stats);
-                    }
-                });
-
-                // Compute Win Rates
-                agentStats.forEach((stats, id) => {
-                    if (registry.has(id)) {
-                        const agent = registry.get(id)!;
-                        agent.winRate = Number(((stats.wins / stats.total) * 100).toFixed(1));
-                    }
-                });
-
-                // Apply Loop Volumes (SUI & USDC)
-                execEvents.data.forEach((ev: any) => {
-                    const parsed = ev.parsedJson;
-                    if (parsed && registry.has(parsed.user)) {
-                        const agent = registry.get(parsed.user)!;
-                        const decimals = Number(parsed.asset_decimals) || 9;
-                        const amount = Number(parsed.borrowed_amount) / Math.pow(10, decimals);
-
-                        // Mock Price logic for ranking
-                        // SUI ~ $0.90, USDC = $1.00
-                        const isUsdc = decimals === 6;
-                        const price = isUsdc ? 1.0 : 0.90;
-
-                        agent.volume += amount;
-                        agent.volumeUsd += (amount * price);
-
-                        if (!agent.lastTx) agent.lastTx = ev.id.txDigest;
-                    }
-                });
-
-                // Apply Signals
-                const latestGlobal: any[] = [];
-                signalEvents.data.forEach((ev: any) => {
-                    const parsed = ev.parsedJson;
-                    if (parsed && registry.has(parsed.agent_id)) {
-                        const agent = registry.get(parsed.agent_id)!;
-                        let content = parsed.signal_data;
-                        if (Array.isArray(content)) {
-                            content = String.fromCharCode(...content);
-                        }
-
-                        // FILTER: Ignore legacy high-volume test signals (> 1.0 SUI)
-                        const isLegacyHighVol = /Sync: [1-9]\d+ SUI/.test(content);
-                        if (isLegacyHighVol) return;
-
-                        if (!agent.lastSignal) {
-                            agent.lastSignal = content;
-                            agent.signalTime = Number(parsed.timestamp);
-                            if (!agent.lastTx) agent.lastTx = ev.id.txDigest;
-                        }
-                        if (latestGlobal.length < 10) {
-                            latestGlobal.push({
-                                agent: agent.creator.length > 15 ? `${agent.creator.slice(0, 6)}...` : agent.creator.toUpperCase(),
-                                content,
-                                time: Number(parsed.timestamp)
-                            });
-                        }
-                    }
-                });
-
-                const sortedAgents = Array.from(registry.values())
-                    .sort((a, b) => b.elo - a.elo) // Rank by ELO (Reputation)
-                    .map((agent, idx) => ({ ...agent, rank: idx + 1 }));
-
-                setAgents(sortedAgents);
-                setGlobalSignals(latestGlobal);
-                setLoading(false);
+                    setGlobalSignals(latestGlobal);
+                    setLoading(false);
+                }
             } catch (err) {
-                console.error("Error fetching leaderboard", err);
+                console.error("Error fetching leaderboard from Supabase", err);
                 setLoading(false);
             }
         };
+
         fetchLeaderboard();
-        const interval = setInterval(fetchLeaderboard, 5000);
-        return () => clearInterval(interval);
+
+        // Realtime Subscription (Identica a Nirium)
+        if (supabase) {
+            const subscription = supabase
+                .channel('suiloop-leaderboard')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'suiloop_agents' }, payload => {
+                    console.log('🔄 Leaderboard Realtime Update:', payload);
+                    fetchLeaderboard(); // Re-fetch on any change to keep sorting aligned easily
+                })
+                .subscribe();
+
+            return () => {
+                supabase.removeChannel(subscription);
+            };
+        }
     }, []);
 
     const handleSort = (key: keyof AgentProfile) => {

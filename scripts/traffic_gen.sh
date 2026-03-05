@@ -70,6 +70,6 @@ while true; do
   $SUI client switch --address $MAIN_ADDR > /dev/null 2>&1
   $SUI client call --package $PACKAGE_ID --module agent_registry --function update_reputation --args $ADMIN_CAP $REGISTRY_ID $ADDR true $MIST_VOL --gas-budget 15000000 > /dev/null 2>&1
 
-  echo "Cycle Complete for $NAME. Waiting 30s..."
-  sleep 30
+  echo "Cycle Complete for $NAME. Waiting 8s..."
+  sleep 8
 done
