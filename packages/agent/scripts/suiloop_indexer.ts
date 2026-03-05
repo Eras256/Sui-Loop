@@ -65,7 +65,11 @@ async function runIndexer() {
             signalEvents.data.forEach(ev => {
                 const parsed = ev.parsedJson as any;
                 if (agentState[parsed.agent_id] && agentState[parsed.agent_id].last_signal === 'STANDBY') {
-                    agentState[parsed.agent_id].last_signal = parsed.content;
+                    try {
+                        agentState[parsed.agent_id].last_signal = Buffer.from(parsed.signal_data).toString('utf8');
+                    } catch {
+                        agentState[parsed.agent_id].last_signal = "Unknown Signal";
+                    }
                     agentState[parsed.agent_id].last_tx_hash = ev.id.txDigest;
                 }
             });
