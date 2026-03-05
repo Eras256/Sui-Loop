@@ -542,11 +542,67 @@
   },
   "terms": {
     "title": "Terms of Service",
-    "lastUpdated": "Last updated: February 25, 2026 · Effective upon use of the Protocol",
+    "lastUpdated": "Last updated: March 5, 2026 · Effective upon use of the Protocol",
     "warning": {
       "title": "High Risk Disclosure",
       "body": "DeFi strategies carry significant financial risk including total loss of deposited funds. SuiLoop is a software tool, not an investment service. You interact with blockchain smart contracts directly — no entity can reverse on-chain transactions. Only use funds you can afford to lose entirely."
-    }
+    },
+    "sections": [
+      {
+        "id": "nature",
+        "icon": "Code",
+        "title": "1. Nature of the Service — Software Tool Only",
+        "content": "SuiLoop (\"the Protocol,\" \"the Software,\" \"the Platform\") is an open-source software infrastructure project. It provides users with tools to interact autonomously with public blockchain networks (specifically the Sui Network).\n\nSuiLoop is NOT and does NOT operate as:\n• A financial institution, bank, broker-dealer, or investment adviser.\n• An Institution of Financial Technology (ITF) under Mexico's Ley para Regular las Instituciones de Tecnología Financiera (LRITF, 2018, as amended through November 14, 2025).\n• An Institution of Collective Financing (IFC / crowdfunding platform).\n• An Institution of Electronic Payment Funds (IFPE / digital wallet).\n• An exchange, custodian, or intermediary of virtual assets under any applicable law.\n• A regulated financial product or service provider in any jurisdiction.\n\nThe Protocol provides software interfaces that allow users to create and manage their own on-chain Vault objects on the Sui blockchain. No funds are held, managed, or controlled by SuiLoop or its operators at any time."
+      },
+      {
+        "id": "non-custodial",
+        "icon": "Lock",
+        "title": "2. Non-Custodial Architecture — No Custodial Access",
+        "content": "SuiLoop is architecturally non-custodial by design:\n\n• Private Keys: SuiLoop does not request, store, transmit, or have access to users' private keys or seed phrases at any point.\n• Funds: User funds are held exclusively in smart contract Vault objects on the Sui blockchain. These Vaults are owned and controlled solely by the user's wallet address (OwnerCap). SuiLoop operators cannot access, withdraw, freeze, or otherwise control these funds.\n• Agent Capabilities (AgentCap): Delegation of trading execution via AgentCap is limited exclusively to executing pre-defined, whitelisted smart contract functions. No AgentCap grants withdrawal rights, transfer rights, or custodial access to user funds.\n• Hot Potato Pattern: All flash loan operations are atomic. If a strategy does not complete profitably within a single Programmable Transaction Block (PTB), the entire transaction reverts automatically. No debt is created, no funds are lost.\n\nUsers remain sole custodians of their assets at all times."
+      },
+      {
+        "id": "risk",
+        "icon": "AlertTriangle",
+        "title": "3. Risk Disclosure — High Risk DeFi Activity",
+        "content": "IMPORTANT: Interacting with decentralized finance (DeFi) protocols involves significant financial risks. By using SuiLoop, you acknowledge and accept the following risks:\n\n• Smart Contract Risk: Despite formal verification via the Move Prover, smart contracts may contain unforeseen bugs or vulnerabilities.\n• Market Risk: Flash loan strategies depend on market conditions. Unprofitable market conditions will cause strategy transactions to revert.\n• Oracle Risk: Price data from Pyth Network and other oracles may be stale, manipulated, or incorrect.\n• Protocol Risk: Third-party DeFi protocols (Scallop, Cetus, Navi, DeepBook) used by SuiLoop strategies may be paused, exploited, or may change their interfaces without notice.\n\nPAST PERFORMANCE OF SIMULATED OR HISTORICAL STRATEGIES IS NOT INDICATIVE OF FUTURE RESULTS."
+      },
+      {
+        "id": "ai-risk",
+        "icon": "Code",
+        "title": "4. AI & LLM Volatility Risk (Algorithmic Hallucination)",
+        "content": "The Neural Swarm utilizes Large Language Models (LLMs, including but not limited to OpenAI and Ollama) to parse DeFi market data, execute Python/TypeScript skills, and construct Move Programmable Transaction Blocks (PTBs). AI models are highly experimental, non-deterministic, and prone to \"hallucinations,\" API rate limits, and latency spikes. SuiLoop does not guarantee the logical accuracy, timing, or success of any AI-generated signal or execution. Users explicitly accept the risk of algorithmic misfires or third-party AI provider outages."
+      },
+      {
+        "id": "yield-guarantee",
+        "icon": "AlertTriangle",
+        "title": "5. No Yield, APY, or Return Guarantees",
+        "content": "Any references to APY (Annual Percentage Yield), ROI, or historical profitability from third-party protocols (e.g., Scallop, Navi, DeepBook) displayed on the Protocol's interfaces are strictly for informational and retroactive analytical purposes. They do NOT represent a promise, forecast, or guarantee of future returns. SuiLoop is not a bank and does not capture public resources to generate fixed or variable yields."
+      },
+      {
+        "id": "compliance",
+        "icon": "Globe",
+        "title": "6. Regulatory Compliance & Jurisdictional Restrictions",
+        "content": "Mexico (Specific Disclosure): SuiLoop operates as a software tool provider. It does not perform activities regulated under the Ley Fintech (LRITF), Ley del Mercado de Valores, or Ley de Instituciones de Crédito. Users are responsible for independently assessing their obligations under the Ley Federal para la Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita (LFPIORPI).\n\nRestricted Persons: The Protocol is not available to persons or entities subject to sanctions by OFAC, the UN Security Council, or other applicable sanctions authorities.\n\nNo Financial Advice: Nothing contained in the SuiLoop Protocol, its documentation, or communications from its operators constitutes financial, investment, tax, or legal advice."
+      },
+      {
+        "id": "ip",
+        "icon": "FileText",
+        "title": "7. Intellectual Property & Open Source License",
+        "content": "The SuiLoop Protocol software is released under the MIT License. The source code is publicly available at https://github.com/Eras256/Sui-Loop.\n\nTHE SOFTWARE IS PROVIDED \"AS IS,\" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT."
+      },
+      {
+        "id": "liability",
+        "icon": "Shield",
+        "title": "8. Limitation of Liability",
+        "content": "To the maximum extent permitted by applicable law, SuiLoop, its operators, contributors, and affiliates shall not be liable for any loss of funds resulting from smart contract exploits, market conditions, user error, or third-party protocol failures. SuiLoop's total cumulative liability to any user shall not exceed the deployment fees paid by that user in the thirty (30) days immediately preceding the event."
+      },
+      {
+        "id": "dispute",
+        "icon": "Shield",
+        "title": "9. Dispute Resolution, Governing Law & Class Action Waiver",
+        "content": "Any dispute, controversy, or claim arising out of or relating to your use of the Protocol or these Terms shall be settled by binding, confidential arbitration, rather than in court. You explicitly waive your right to participate in any class action lawsuit or class-wide arbitration against SuiLoop, its operators, or contributors. These Terms shall be governed by and construed in accordance with the laws of the State of Mexico (Estado de México), Mexico, without regard to its conflict of law principles."
+      }
+    ]
   },
   "risk": {
     "title": "Extended Risk Disclosure",

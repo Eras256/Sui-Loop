@@ -542,11 +542,67 @@
   },
   "terms": {
     "title": "Términos de Servicio",
-    "lastUpdated": "Última actualización: 25 de febrero de 2026 · Vigente al usar el Protocolo",
+    "lastUpdated": "Última actualización: 5 de marzo de 2026 · Vigente al usar el Protocolo",
     "warning": {
       "title": "Divulgación de Alto Riesgo",
       "body": "Las estrategias DeFi conllevan un riesgo financiero significativo que incluye la pérdida total de los fondos depositados. SuiLoop es una herramienta de software, no un servicio de inversión. Interactúas directamente con contratos inteligentes blockchain — ninguna entidad puede revertir transacciones on-chain. Solo usa fondos que puedas permitirte perder totalmente."
-    }
+    },
+    "sections": [
+      {
+        "id": "nature",
+        "icon": "Code",
+        "title": "1. Naturaleza del Servicio — Solo Herramienta de Software",
+        "content": "SuiLoop (\"el Protocolo,\" \"el Software,\" \"la Plataforma\") es un proyecto de infraestructura de software de código abierto. Proporciona a los usuarios herramientas para interactuar de forma autónoma con redes blockchain públicas (específicamente la Red Sui).\n\nSuiLoop NO es y NO opera como:\n• Una institución financiera, banco, casa de bolsa o asesor de inversiones.\n• Una Institución de Tecnología Financiera (ITF) bajo la Ley para Regular las Instituciones de Tecnología Financiera de México (LRITF, 2018).\n• Una Institución de Financiamiento Colectivo (IFC / plataforma de crowdfunding).\n• Una Institución de Fondos de Pago Electrónico (IFPE / billetera digital).\n• Un exchange, custodio o intermediario de activos virtuales bajo cualquier ley aplicable.\n\nEl Protocolo proporciona interfaces de software que permiten a los usuarios crear y gestionar sus propios objetos Vault en la red Sui. SuiLoop no retiene ni controla fondos en ningún momento."
+      },
+      {
+        "id": "non-custodial",
+        "icon": "Lock",
+        "title": "2. Arquitectura Sin Custodia — Sin Acceso Custodio",
+        "content": "SuiLoop es arquitectónicamente sin custodia por diseño:\n\n• Claves Privadas: SuiLoop no solicita, almacena, transmite ni tiene acceso a las claves privadas o frases semilla de los usuarios en ningún punto.\n• Fondos: Los fondos de los usuarios se mantienen exclusivamente en objetos Vault de contratos inteligentes en la blockchain de Sui. Estos Vaults son propiedad y están controlados únicamente por la dirección de la billetera del usuario (OwnerCap).\n• Capacidades de Agente (AgentCap): La delegación de la ejecución de trading vía AgentCap se limita exclusivamente a funciones predefinidas de contratos inteligentes. Ningún AgentCap otorga derechos de retiro o acceso custodio a los fondos del usuario."
+      },
+      {
+        "id": "risk",
+        "icon": "AlertTriangle",
+        "title": "3. Divulgación de Riesgos — Actividad DeFi de Alto Riesgo",
+        "content": "IMPORTANTE: Interactuar con protocolos de finanzas descentralizadas (DeFi) implica riesgos financieros significativos. Al usar SuiLoop, usted reconoce y acepta los siguientes riesgos:\n\n• Riesgo de Contrato Inteligente: A pesar de la verificación formal, los contratos pueden contener errores imprevistos.\n• Riesgo de Mercado: Las estrategias de préstamos flash dependen de las condiciones del mercado. Condiciones desfavorables causarán que las transacciones se reviertan.\n• Riesgo de Oráculo: Los datos de precio de terceras partes pueden ser inexactos o estar manipulados.\n\nEL RENDIMIENTO PASADO DE LAS ESTRATEGIAS NO ES INDICATIVO DE RESULTADOS FUTUROS."
+      },
+      {
+        "id": "ai-risk",
+        "icon": "Code",
+        "title": "4. Riesgo de Volatilidad de IA y LLM (Alucinación Algorítmica)",
+        "content": "El Neural Swarm utiliza Modelos de Lenguaje Extensos (LLMs, incluyendo pero no limitado a OpenAI y Ollama) para analizar datos del mercado DeFi, ejecutar habilidades en Python/TypeScript y construir Bloques de Transacciones Programables (PTBs) de Move. Los modelos de IA son altamente experimentales, no deterministas y propensos a \"alucinaciones\", límites de velocidad de API y picos de latencia. SuiLoop no garantiza la precisión lógica, el tiempo o el éxito de cualquier señal o ejecución generada por IA. Los usuarios aceptan explícitamente el riesgo de fallos algorítmicos o interrupciones de proveedores de IA externos."
+      },
+      {
+        "id": "yield-guarantee",
+        "icon": "AlertTriangle",
+        "title": "5. Sin Garantías de Rendimiento, APY o Retorno",
+        "content": "Cualquier referencia a APY (Rendimiento Porcentual Anual), ROI o rentabilidad histórica de protocolos de terceros (ej. Scallop, Navi, DeepBook) mostrada en las interfaces del Protocolo es estrictamente para fines informativos y de análisis retroactivo. NO representan una promesa, pronóstico o garantía de rendimientos futuros. SuiLoop no es un banco y no capta recursos públicos para generar rendimientos fijos o variables."
+      },
+      {
+        "id": "compliance",
+        "icon": "Globe",
+        "title": "6. Cumplimiento Normativo y Restricciones Jurisdiccionales",
+        "content": "México (Divulgación Específica): SuiLoop opera como un proveedor de herramientas de software. No realiza actividades reguladas bajo la Ley Fintech (LRITF), la Ley del Mercado de Valores o la Ley de Instituciones de Crédito. Los usuarios son responsables de evaluar independientemente sus obligaciones bajo la LFPIORPI.\n\nPersonas Restringidas: El Protocolo no está disponible para personas o entidades sujetas a sanciones por la OFAC, el Consejo de Seguridad de la ONU u otras autoridades pertinentes."
+      },
+      {
+        "id": "ip",
+        "icon": "FileText",
+        "title": "7. Propiedad Intelectual y Licencia de Código Abierto",
+        "content": "El software del Protocolo SuiLoop se publica bajo la Licencia MIT. El código fuente está disponible públicamente en https://github.com/Eras256/Sui-Loop.\n\nEL SOFTWARE SE PROPORCIONA \"TAL CUAL\", SIN GARANTÍA DE NINGÚN TIPO."
+      },
+      {
+        "id": "liability",
+        "icon": "Shield",
+        "title": "8. Limitación de Responsabilidad",
+        "content": "En la medida máxima permitida por la ley aplicable, SuiLoop y sus colaboradores no serán responsables de ninguna pérdida de fondos resultante de fallos en contratos inteligentes, condiciones de mercado o errores del usuario. La responsabilidad total de SuiLoop no excederá las tarifas de despliegue pagadas por el usuario en los últimos treinta (30) días."
+      },
+      {
+        "id": "dispute",
+        "icon": "Shield",
+        "title": "9. Resolución de Disputas, Ley Aplicable y Renuncia a Acciones Colectivas",
+        "content": "Cualquier disputa, controversia o reclamo que surja de o esté relacionado con el uso del Protocolo o estos Términos se resolverá mediante arbitraje vinculante y confidencial, en lugar de en los tribunales. Usted renuncia explícitamente a su derecho de participar en cualquier demanda colectiva o arbitraje de clase contra SuiLoop, sus operadores o colaboradores. Estos Términos se regirán e interpretarán de acuerdo con las leyes del Estado de México, México, sin tener en cuenta sus principios de conflicto de leyes."
+      }
+    ]
   },
   "risk": {
     "title": "Divulgación Extendida de Riesgos",
