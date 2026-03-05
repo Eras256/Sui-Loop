@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import { useCurrentAccount, useSignPersonalMessage } from "@mysten/dapp-kit";
 import { supabase } from "@/lib/supabase";
-import { AlertTriangle, Shield, Check } from "lucide-react";
+import { AlertTriangle, Shield, Check, Languages } from "lucide-react";
 import Link from "next/link";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { useLanguage, LOCALE_LABELS, Locale } from "@/lib/i18n/LanguageContext";
 
 export default function SuiLoopTermsModal() {
     const account = useCurrentAccount();
-    const { t, tRaw } = useLanguage();
+    const { t, tRaw, locale, setLocale } = useLanguage();
     const { mutateAsync: signPersonalMessage } = useSignPersonalMessage();
     const [hasSigned, setHasSigned] = useState<boolean>(true); // Assume true until check
     const [isSigning, setIsSigning] = useState<boolean>(false);
@@ -78,7 +78,23 @@ export default function SuiLoopTermsModal() {
             <div className="w-full max-w-xl border border-red-500/30 bg-[#050510] rounded-2xl p-6 md:p-10 shadow-[0_0_60px_rgba(239,68,68,0.15)] relative my-auto">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-40" />
 
-                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-8 text-center sm:text-left">
+                {/* Language Selector inside Modal */}
+                <div className="absolute top-6 right-6 flex items-center gap-1 p-1 bg-white/5 border border-white/10 rounded-lg">
+                    {(Object.keys(LOCALE_LABELS) as Locale[]).map((loc) => (
+                        <button
+                            key={loc}
+                            onClick={() => setLocale(loc)}
+                            className={`px-2 py-1 text-[10px] font-mono font-bold transition-all rounded ${locale === loc
+                                    ? "bg-red-600 text-white shadow-lg"
+                                    : "text-gray-500 hover:text-white hover:bg-white/5"
+                                }`}
+                        >
+                            {loc.toUpperCase()}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-8 text-center sm:text-left mt-4 sm:mt-0">
                     <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center shrink-0 animate-pulse">
                         <AlertTriangle className="w-7 h-7 text-red-500" />
                     </div>
@@ -125,8 +141,8 @@ export default function SuiLoopTermsModal() {
                     onClick={handleSignTerms}
                     disabled={isSigning}
                     className={`w-full relative overflow-hidden group py-5 rounded-2xl font-mono font-bold text-sm tracking-widest transition-all duration-500 ${isSigning
-                        ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                        : "bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] active:scale-[0.98]"
+                            ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                            : "bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] active:scale-[0.98]"
                         }`}
                 >
                     {isSigning ? (
