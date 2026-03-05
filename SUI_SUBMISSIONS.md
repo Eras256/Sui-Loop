@@ -343,3 +343,54 @@ Commits:
 - **Suiscan**: https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0
 - **Live App (Vercel)**: https://sui-loop-web.vercel.app/
 - **Walrus**: Live blob uploads to `publisher.walrus-testnet.walrus.space/v1/blobs`
+# ═══════════════════════════════════════════
+# MARCH 2026 — WEEK 2-6 SUBMISSION
+# (Mar 2 – Mar 6) — FINAL HACKATHON PUSH
+# ═══════════════════════════════════════════
+
+## Primary GitHub Repository
+https://github.com/Eras256/Sui-Loop
+
+## GitHub Username (Author)
+Eras256
+
+## Execution Path
+- [x] Application / backend integration (SDK / RPC / Indexer)
+- [x] Tools / infrastructure / Safety (Circuit Breaker)
+
+## Work Completed This Week (Hackathon Finalizing)
+
+**1. Neural Swarm v2.0 Orchestrator — Institutional Identity**
+Launched a fleet of 20 named autonomous agents (Nexus, Titan, Specter, etc.) with dedicated Ed25519 keypairs. Implemented a dual-traffic generator generating ~110 TX/min on Sui Testnet. Agents execute alternating strategies: **Type A (On-chain Flash Loans)** and **Type B (On-chain Signal Publishing)** via the `agent_registry`.
+Commit: [e58e786](https://github.com/Eras256/Sui-Loop/commit/e58e786)
+
+**2. GAP-4 Industrial Safety: Circuit Breaker Mechanism**
+Implemented a robust **Circuit Breaker** in `autonomousLoop.ts`. The system automatically pauses all autonomous operations after 5 consecutive market scan failures. Upon triggering, it dispatches an `emergency.pause` webhook (HMAC-SHA256 signed) and emits a high-confidence emergency stop signal on-chain to prevent capital loss during network instability.
+Commit: [e58e786](https://github.com/Eras256/Sui-Loop/commit/e58e786)
+
+**3. Institutional ELO Leaderboard v2.0 (Data-Driven)**
+Completely rewrote the leaderboard (`/leaderboard`). Replaced all simulated data with 100% real-time Supabase records. Integrated `AGENT_ROSTER_MANIFEST` with address normalization to map hex wallets to institutional identities. Includes an animated Neural Feed ticker, ELO-based ranking, and immutable Walrus audit seals for every active agent.
+Commit: [e58e786](https://github.com/Eras256/Sui-Loop/commit/e58e786)
+
+**4. 100% Technical Documentation & Pitch Storytelling**
+Revamped the entire `README.md` with institutional storytelling and a full system architecture diagram. Updated `TECHNICAL_DOCUMENTATION.md` to v1.0, covering the Move Atomic Engine (Hot Potato), Neural Swarm, and Safety layers in detail for technical reviewers.
+Commits: [e58e786](https://github.com/Eras256/Sui-Loop/commit/e58e786) | [ab913f1](https://github.com/Eras256/Sui-Loop/commit/ab913f1)
+
+## Verifiable Technical Evidence
+
+1. **Integrated Neural Swarm + Circuit Breaker + Leaderboard v2.0**
+   https://github.com/Eras256/Sui-Loop/commit/e58e786
+
+2. **Technical Documentation v1.0 + Pitch Storytelling**
+   https://github.com/Eras256/Sui-Loop/commit/e58e786
+
+3. **Production Footer Fix (Testnet alignment)**
+   https://github.com/Eras256/Sui-Loop/commit/ab913f1
+
+## Deployment / Integration Proof
+- **Package**: `0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0` (Sui Testnet)
+- **Neural Swarm**: 20 agents active generating live on-chain signals.
+- **Circuit Breaker**: Live monitored on `/api/loop/status`.
+- **Live App (Vercel)**: https://sui-loop-ejkkotcb-vaiosxs-projects.vercel.app/
+- **Leaderboard**: https://sui-loop-ejkkotcb-vaiosxs-projects.vercel.app/leaderboard
+- **Walrus**: Tamper-proof logs archived to `walrus-testnet.walrus.space`.

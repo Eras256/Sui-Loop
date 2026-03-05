@@ -1,187 +1,376 @@
-# ♾️ SuiLoop Protocol v0.0.8
+# ♾️ SuiLoop Protocol — Autonomous DeFi Intelligence on Sui
 
-![Status](https://img.shields.io/badge/Status-Operational-00f3ff)
-![Version](https://img.shields.io/badge/Version-0.0.8-blue)
-![Network](https://img.shields.io/badge/Network-Sui_Testnet-blue)
-![Security](https://img.shields.io/badge/Security-Atomic_Hot_Potato-purple)
-![Audit](https://img.shields.io/badge/Audit_Trail-Walrus-orange)
-![Verification](https://img.shields.io/badge/Move_Prover-Verified-green)
-![License](https://img.shields.io/badge/License-MIT-white)
+<div align="center">
 
-**SuiLoop** is an **Institutional-Grade Autonomous AI Agent Protocol** native to the **Sui Network**. It orchestrates financial agents capable of executing atomic DeFi strategies — flash loans, arbitrage, and yield farming — with mathematical safety guarantees enforced by **Sui Move Smart Contracts**.
+![Status](https://img.shields.io/badge/Status-Operational-00f3ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-1.0.0-blueviolet?style=for-the-badge)
+![Network](https://img.shields.io/badge/Network-Sui_Testnet-4DA2FF?style=for-the-badge&logo=sui)
+![Security](https://img.shields.io/badge/Hot_Potato_Pattern-Verified-00ff88?style=for-the-badge)
+![Agents](https://img.shields.io/badge/Neural_Swarm-20_Agents-ff6b6b?style=for-the-badge)
+![Walrus](https://img.shields.io/badge/Audit-Walrus_Sealed-orange?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-white?style=for-the-badge)
 
-🔗 **Live Deployment:** [https://sui-loop-web.vercel.app](https://sui-loop-web.vercel.app)
-📦 **Desktop App:** [GitHub Releases](https://github.com/Eras256/Sui-Loop/releases)
-📚 **Documentation:** [In-App Docs](https://sui-loop-web.vercel.app/docs)
+**The first institutional-grade Autonomous AI Agent Protocol natively built on Sui.**
 
----
+[🌐 Live App](https://sui-loop-ejkkotcb-vaiosxs-projects.vercel.app) · [📦 Contract](https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0) · [📚 Docs](https://sui-loop-ejkkotcb-vaiosxs-projects.vercel.app/docs) · [🏆 Leaderboard](https://sui-loop-ejkkotcb-vaiosxs-projects.vercel.app/leaderboard)
 
-## 💰 Business Model & Value Capture
-
-SuiLoop captures value through a structured fee model designed to incentivize the autonomous economy:
-
-1.  **Agent Deployment (Activation Fee)**:
-    *   **Initial Phase**: A promotional fee of **0.1 SUI** per agent deployed on the network.
-    *   **Future Transition**: Transitioning to a fee of **100 MXN (equivalent in SUI)** per deployment to support high-performance LLM compute (OpenAI o1) and persistent backend infrastructure.
-
-2.  **Marketplace Intelligence (P2P Signal Fee)**:
-    *   SuiLoop serves as a decentralized hub for financial intelligence where agents can broadcast "Alpha Signals."
-    *   A **1% protocol fee** is applied to every successful P2P signal sale within the ecosystem.
-
-3.  **Tiered Subscriptions (B2C/B2B)**:
-    *   **Retail**: Pro-tier access for premium agent logic, higher rate limits, and priority inclusion in the Walrus audit trail.
-    *   **Institutional**: Enterprise API access with specialized vault monitoring and guaranteed uptime SLAs.
+</div>
 
 ---
 
-## 🚀 Latest Milestones & Live Status
+## 🧠 The Story
 
-As of **v0.0.8**, the SuiLoop ecosystem has reached **Full Autonomous Maturity** with robust security and analytics tracking:
+> *"The problem with DeFi is that humans are the bottleneck."*
 
-- **🔒 Advanced Security & Wallet Sync:** Full compatibility with user-rejected transactions across all wallets (Suiet, Sui Wallet, etc) providing seamless non-intrusive UI fallbacks `(CN:-4005)`.
-- **📊 Persisted Analytics:** Real-time synchronization of Active Strategies directly from the **Supabase Database**, decoupling the dashboard from local storage to ensure exact continuity across multi-device user sessions (`feat: analytics`).
-- **🏙️ The Autonomous City:** A verified fleet of **15+ autonomous agents** (TITAN, ELIZA, WHALE, KRAKEN, etc.) is live and operating 24/7.
-- **🧠 Neural Uplink Marketplace:** Real-time discovery of on-chain signals. The marketplace now features a **Live Neural Feed** that syncs every 15s with autonomous agent activity.
-- **🔓 Seamless Onboarding (Guest Mode):** View institutional-grade analytics and fleet status without connecting a wallet. Frictionless discovery of the "Neural Matrix."
-- **📜 Verified SDK & CLI:** TypeScript, Python, and CLI tools are 100% verified to execute the full "Golden Flow" on Sui Testnet.
-- **🦭 Walrus Blackbox Live:** Immutable decentralized logging to **Sui Walrus** is operational, archiving agent "thoughts" every 5 minutes.
-- **💻 Desktop Companion v0.2.3:** Native high-performance terminal for macOS, Windows, and Linux is live. Includes real-time process monitoring and direct kernel control via Tauri 2.0.
+In traditional finance, institutions have armies of quants, traders, and risk managers working 24/7. In DeFi, the individual is left alone — staring at charts, missing millisecond arbitrage windows, and manually approving every transaction.
+
+**SuiLoop changes this.**
+
+We built an autonomous financial intelligence layer — a **Neural Swarm** of 20 named AI agents that operate non-stop on the Sui blockchain. Each agent has a name, a role, a specialty, and a survival instinct. They scan markets, detect flash loan opportunities, publish on-chain signals, and execute atomic strategies — all without human intervention.
+
+But we didn't stop at automation. We made it **safe**. Every flash loan is enforced at the bytecode level by Sui Move's **Hot Potato pattern** — borrowed capital _must_ be repaid in the same Programmable Transaction Block or the entire transaction reverts. No collateral at risk. No bad debt. Mathematical certainty.
+
+And every decision, every signal, every execution — **sealed immutably on Sui Walrus** as a tamper-proof forensic audit trail.
+
+This is not a chatbot that talks about DeFi. This is a protocol that _does_ DeFi.
 
 ---
 
-## 🏛️ Architecture Overview
+## 🏛️ System Architecture
 
-SuiLoop is a **pnpm monorepo** containing multiple packages that work together as a unified DeFi operating system:
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SuiLoop Protocol — Full Stack                       │
+└─────────────────────────────────────────────────────────────────────────────┘
 
-```text
-Sui-Loop/
-├── packages/
-│   ├── contracts/      # Sui Move Smart Contracts (Atomic Engine)
-│   ├── agent/          # Autonomous AI Backend (Node.js/TypeScript)
-│   ├── web/            # Command Center Frontend (Next.js 15)
-│   ├── sdk/            # TypeScript SDK (@suiloop/sdk)
-│   ├── sdk-python/     # Python SDK (suiloop)
-│   ├── cli/            # CLI Tool (@suiloop/cli)
-│   ├── desktop/        # Native Desktop App (Tauri 2 / Rust)
-│   └── mcp/            # Machine Context Protocol server integrations
+  ┌──────────────────────────────┐     ┌──────────────────────────────────────┐
+  │   LAYER 0: SUI BLOCKCHAIN    │     │   LAYER 1: NEURAL SWARM DAEMON       │
+  │  ────────────────────────    │     │  ─────────────────────────────────   │
+  │                              │     │                                      │
+  │  ┌─────────────────────┐     │     │  ┌────────────────────────────────┐  │
+  │  │   atomic_engine.move│     │     │  │  suiloop_neural_swarm.ts       │  │
+  │  │  ─────────────────  │     │     │  │  ──────────────────────────    │  │
+  │  │  • borrow_flash_loan│◄────┼─────┼──│  20 Named Agents (Keypairs)    │  │
+  │  │  • repay_flash_loan │     │     │  │  Nexus, Titan, Phantom, ...    │  │
+  │  │  • execute_loop     │     │     │  │                                │  │
+  │  │  • LoopReceipt (HP) │     │     │  │  ┌──────────┐ ┌─────────────┐ │  │
+  │  └─────────────────────┘     │     │  │  │Flash Loan│ │Signal Pub.  │ │  │
+  │                              │     │  │  │ Executor │ │(on-chain)   │ │  │
+  │  ┌─────────────────────┐     │     │  │  └──────────┘ └─────────────┘ │  │
+  │  │ agent_registry.move │     │     │  └────────────────────────────────┘  │
+  │  │  ─────────────────  │◄────┼─────┤                                      │
+  │  │  • register_agent   │     │     │  ┌────────────────────────────────┐  │
+  │  │  • publish_signal   │     │     │  │  autonomousLoop.ts             │  │
+  │  │  • SignalPublished   │     │     │  │  ──────────────────────────    │  │
+  │  └─────────────────────┘     │     │  │  • Pyth Oracle (SUI/USD)       │  │
+  │                              │     │  │  • Scallop APY Monitor         │  │
+  │  ┌─────────────────────┐     │     │  │  • Navi USDC Feed              │  │
+  │  │  mock_pool.move      │     │     │  │  • DeepBook Liquidity          │  │
+  │  │  (SUI/SUI testnet)  │     │     │  │  • Circuit Breaker (GAP-4)     │  │
+  │  └─────────────────────┘     │     │  └────────────────────────────────┘  │
+  │                              │     │                                      │
+  │  ┌─────────────────────┐     │     │  ┌────────────────────────────────┐  │
+  │  │  agent_vault.move   │     │     │  │  server.ts (Express API)       │  │
+  │  │  (Non-custodial)    │     │     │  │  ──────────────────────────    │  │
+  │  └─────────────────────┘     │     │  │  • JWT + API Key Auth          │  │
+  └──────────────────────────────┘     │  │  • WebSocket /ws/signals       │  │
+                                       │  │  • Webhook (HMAC-SHA256)       │  │
+  ┌──────────────────────────────┐     │  │  • /api/loop/start|stop|resume │  │
+  │   LAYER 3: PERSISTENCE       │     │  └────────────────────────────────┘  │
+  │  ────────────────────────    │     │                                      │
+  │                              │     │  ┌────────────────────────────────┐  │
+  │  ┌─────────────────────┐     │     │  │  skillManager.ts               │  │
+  │  │   Supabase          │◄────┼─────┼──│  10 Live Skills:               │  │
+  │  │   suiloop_agents    │     │     │  │  • flash-loan-executor v2.1    │  │
+  │  │   agent_logs        │     │     │  │  • price-oracle v1.5           │  │
+  │  │   strategies        │     │     │  │  • whale-tracker v1.2          │  │
+  │  └─────────────────────┘     │     │  │  • knowledge-graph v1.0        │  │
+  │                              │     │  │  • social-sentiment v1.0       │  │
+  │  ┌─────────────────────┐     │     │  │  • telegram-alerts-pro v3.0    │  │
+  │  │   Walrus Storage    │     │     │  │  • web-scouter v1.0            │  │
+  │  │   (every 5 min)     │◄────┼─────┼──│  • whale-tracker v1.2          │  │
+  │  │   Immutable blobs   │     │     │  └────────────────────────────────┘  │
+  │  └─────────────────────┘     │     └──────────────────────────────────────┘
+  └──────────────────────────────┘
+                                       ┌──────────────────────────────────────┐
+  ┌──────────────────────────────┐     │   LAYER 2: COMMAND CENTER (Web)      │
+  │   EXTERNAL ORACLES           │     │  ─────────────────────────────────   │
+  │  ────────────────────────    │     │                                      │
+  │  • Pyth Network (SUI/USD)    │     │  Next.js 15 + React 19              │
+  │  • Scallop Indexer API       │─────┼──► Dashboard, Leaderboard, Builder  │
+  │  • Sui RPC (gas, state)      │     │  • Agent Roster (20 named agents)    │
+  │  • DeepBook CLOB V3          │     │  • Real-time Supabase feed           │
+  └──────────────────────────────┘     │  • WebSocket Neural Feed             │
+                                       │  • i18n (EN/ES/ZH)                  │
+                                       └──────────────────────────────────────┘
 ```
 
 ---
 
 ## ⚡ Core Components
 
-### 1. The Atomic Engine — Smart Contracts (`packages/contracts`)
-Built in **Sui Move**, the on-chain layer enforces trustless execution:
+### 1. 🔐 Atomic Engine — Smart Contracts (`packages/contracts`)
 
-- **Non-Custodial Vaults** — Users deposit SUI or USDC into `Vault<Asset>` objects on-chain. The agent **cannot withdraw funds**; it can only execute whitelisted trading functions.
-- **Hot Potato Flash Loans** — The `LoopReceipt` struct has no `drop` ability, guaranteeing that borrowed capital **must** be repaid within the same Programmable Transaction Block (PTB) or the entire transaction reverts. Zero-collateral, zero-risk of debt.
-- **DeFi Protocol Interfaces** — Modular interfaces for **Scallop** (Lending), **Cetus** (DEX), **Navi** (USDC Lending), and **DeepBook** (CLOB).
+Built in **Sui Move**, the on-chain layer provides mathematical safety guarantees:
+
+#### `atomic_engine.move` — Flash Loan Core
+```move
+// Hot Potato Pattern — No `drop` ability = must repay or revert
+public struct LoopReceipt {
+    pool_id: ID,
+    amount_borrowed: u64,
+    fee_due: u64,
+}
+
+public fun borrow_flash_loan<Base, Quote>(pool, amount, ctx) -> (Coin<Base>, LoopReceipt)
+public fun repay_flash_loan<Base, Quote>(pool, coin, receipt)  // destroys receipt
+```
+
+- **Zero collateral risk** — The `LoopReceipt` hot potato cannot be dropped. If repayment doesn't happen in the same PTB, the entire transaction reverts atomically.
+- **30 bps protocol fee** — Automatically enforced on every flash loan.
+- **Programmable Transaction Blocks** — Full composability with DeepBook, Scallop, Cetus, Navi in a single atomic bundle.
+
+#### `agent_registry.move` — On-Chain Agent Identity
+```move
+public fun register_agent(registry, wallet, metadata, ctx) -> AgentCap
+public fun publish_signal(registry, agent_cap, signal_data, ctx)  // emits SignalPublished event
+```
+
+- Agents publish signals **on-chain** — verifiable, timestamped, immutable.
+- `SignalPublished` events are indexable by any client in real-time.
+
+#### `agent_vault.move` — Non-Custodial Vaults
+```move
+// Agent CANNOT withdraw. Only execute whitelisted functions.
+public struct Vault<phantom Asset> has key { balance: Balance<Asset> }
+```
 
 #### On-Chain Deployment (Testnet)
 | Contract | Address |
 |---|---|
-| Atomic Engine Package | `0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0` |
-| Agent Registry | `0xcbb6d114644b9573c76c1eee3f94ad4b8874273e7691f5c46d24add925b47e30` |
-| MockPool (SUI/SUI) | `0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf` |
+| **Atomic Engine Package** | [`0x9451...dcb0`](https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0) |
+| **Agent Registry Object** | [`0xcbb6...e30`](https://suiscan.xyz/testnet/object/0xcbb6d114644b9573c76c1eee3f94ad4b8874273e7691f5c46d24add925b47e30) |
+| **MockPool (SUI/SUI)** | [`0x888e...5bf`](https://suiscan.xyz/testnet/object/0x888e1a08836d1a3749fa7b0e9c6a44517d2d95548aae2a42d713b73e1f9255bf) |
 
 ---
 
-### 2. The Neural Matrix — Agent Backend (`packages/agent`)
-A comprehensive **Node.js/TypeScript** runtime powering autonomous intelligence. With a real-time asynchronous market scanner (cron + interval) that pings the Sui RPC for prices, gas, liquidity, and lending APYs. 
+### 2. 🤖 Neural Swarm — 20 Named Agents
 
-**Core Integrations:**
-- Full plugin architecture (SkillManager) with sandboxed action execution.
-- Webhook dispatch system with HMAC-SHA256 payload signing.
-- Decentralized audit trail uploading execution logs to **Sui Walrus**.
-- **Multi-LLM providers**: Support for OpenAI (GPT-4o) and local execution via Ollama.
+The Swarm Orchestrator (`scripts/suiloop_neural_swarm.ts`) manages a fleet of 20 autonomous agents, each with a unique identity, role, and specialization:
+
+| Agent | Role | Specialty | Traffic Type |
+|---|---|---|---|
+| **Nexus** | Swarm Commander | Flash Loan Execution | Dual |
+| **Phantom** | Market Scanner | Price Arbitrage | Signal |
+| **Cipher** | Signal Publisher | On-chain Telemetry | Signal |
+| **Apex** | Arbitrage Hunter | Cross-pool Spreads | Flash Loan |
+| **Vault** | Liquidity Guardian | Capital Preservation | Flash Loan |
+| **Nova** | Opportunity Explorer | New Pool Discovery | Dual |
+| **Specter** | Shadow Executor | MEV Protection | Flash Loan |
+| **Chronos** | Temporal Strategist | Gas Timing Optimization | Signal |
+| **Atlas** | Capital Coordinator | Multi-vault Management | Dual |
+| **Matrix** | Data Analyst | Market State Analysis | Signal |
+| **Titan** | Heavy Executor | Large Volume Loans | Flash Loan |
+| **Oracle** | Price Feed Monitor | Pyth Network Signals | Signal |
+| **Forge** | PTB Architect | Transaction Construction | Flash Loan |
+| **Helios** | Yield Hunter | APY Optimization | Dual |
+| **Vortex** | Liquidity Rotator | Pool Rotation Strategy | Flash Loan |
+| **Zenith** | Risk Validator | LLM-assisted Validation | Signal |
+| **Flux** | Adaptive Executor | Dynamic Strategy Switch | Dual |
+| **Pulse** | Health Monitor | Protocol Health Checks | Signal |
+| **Shadow** | Stealth Operator | Low-latency Execution | Flash Loan |
+| **Aegis** | Security Validator | Hot Potato Integrity | Dual |
+
+**Swarm Stats (Live):**
+- ~110 TX/min across the fleet
+- 8s tick cadence
+- Dual traffic: Flash Loans (on-chain) + Signals (agent_registry)
+- ELO-based leaderboard updated in real-time via Supabase
 
 ---
 
-### 3. The Command Center — Frontend (`packages/web`)
-A hyper-advanced **Next.js 15** application with React 19, Tailwind CSS, Framer Motion, and Three.js. Includes full internationalization (English, Spanish, Chinese).
+### 3. 🛡️ Circuit Breaker — Industrial Safety (`autonomousLoop.ts`)
 
-#### Key Frontend Features
-- **Glass & Neon Cyberpunk** aesthetic — Obsidian backgrounds, neon cyan blending.
-- **Wallet Integration** — `@mysten/dapp-kit` with extensive error handling.
-- **Supabase Persistence** — Strategy data and application state saved reliably.
-- **Visual Strategy Builder** — Node-based strategy construction with ReactFlow.
-- **Portfolio Analytics** — Real-time performance metrics pulled directly from the Supabase infrastructure.
+A critical safety mechanism protecting capital during blockchain failures:
+
+```typescript
+// Triggers after ERROR_THRESHOLD (5) consecutive scan failures
+function triggerCircuitBreaker() {
+    isPaused = true;
+    // Fires emergency.pause webhook to all subscribers
+    // Emits strategy_trigger EMERGENCY_STOP signal on-chain
+    // Logs critical alert to Walrus for forensic audit
+}
+
+// Manual controls via REST API
+POST /api/loop/pause   // Emergency stop
+POST /api/loop/resume  // Resume after intervention
+GET  /api/loop/status  // { isRunning, isPaused, consecutiveErrors }
+```
 
 ---
 
-### 4. SDKs — TypeScript & Python (`packages/sdk`, `packages/sdk-python`)
+### 4. 🧬 Agent Backend (`packages/agent`)
 
-Both SDKs provide **100% feature parity** for third-party developers building on SuiLoop:
+A comprehensive **Node.js/TypeScript** runtime — 24 services, 10 live skills:
 
-#### TypeScript (`@suiloop/sdk` v0.0.8)
+#### Core Services
+| Service | Description |
+|---|---|
+| `autonomousLoop.ts` | Market scanner: Pyth, Scallop, Navi, DeepBook |
+| `loopHub.ts` | Central strategy orchestrator (LoopHub Marketplace) |
+| `llmService.ts` | Multi-LLM: OpenAI GPT-4o-mini + Ollama local |
+| `skillManager.ts` | Sandboxed skill execution engine |
+| `subscriptionService.ts` | WebSocket signal broadcaster + Walrus archiver |
+| `webhookService.ts` | HMAC-SHA256 signed webhook delivery |
+| `memoryService.ts` | Persistent agent memory and context |
+| `schedulerService.ts` | Cron-based deep market analysis |
+| `agentRegistryService.ts` | On-chain signal publishing via agent_registry |
+| `walrusService.ts` | Decentralized log archival (every 5 min) |
+
+#### Live Skills (Plugins)
+| Skill | Version | Capability |
+|---|---|---|
+| Flash Loan Executor | v2.1.0 | Atomic PTB flash loan construction |
+| Multi-Source Price Oracle | v1.5.0 | Pyth + Scallop + Navi price feeds |
+| Whale Tracker | v1.2.0 | Large transaction monitoring |
+| Knowledge Graph | v1.0.0 | Contextual DeFi protocol knowledge |
+| Social Sentiment | v1.0.0 | Market sentiment analysis |
+| Telegram Alerts Pro | v3.0.0 | Real-time alert dispatch |
+| Web Scouter | v1.0.0 | Protocol health & analytics scouting |
+
+#### API Endpoints
+```
+GET  /health                    Heartbeat + uptime
+POST /api/auth/keys             Generate API key (JWT)
+POST /api/execute               Execute strategy (auth required)
+POST /api/execute-demo          Public demo (no auth)
+POST /api/loop/start            Start autonomous market scanner
+POST /api/loop/stop             Stop scanner
+POST /api/loop/pause            Emergency pause (Circuit Breaker)
+POST /api/loop/resume           Resume after pause
+GET  /api/loop/status           { isRunning, isPaused, consecutiveErrors }
+GET  /api/market                Live market state (price, gas, APY)
+POST /api/webhooks              Register webhook (HMAC-SHA256)
+POST /api/subscriptions         Subscribe to signal feed
+WS   /ws/signals                Real-time signal stream
+```
+
+---
+
+### 5. 🖥️ Command Center — Frontend (`packages/web`)
+
+**Next.js 15** + React 19 + Framer Motion + Three.js — Institutional cyberpunk aesthetic.
+
+#### Pages & Features
+| Page | Description |
+|---|---|
+| `/` | Landing — Protocol pitch + live stats |
+| `/dashboard` | Real-time agent control center + wallet integration |
+| `/leaderboard` | Live ELO leaderboard — 20 named agents, Supabase-fed |
+| `/strategies/builder` | ReactFlow visual strategy builder |
+| `/marketplace` | Neural signal marketplace (buy/sell alpha) |
+| `/agents` | Agent fleet monitor |
+| `/plugins` | Skill/plugin discovery + install |
+| `/docs` | Full protocol documentation |
+
+**Key Technical Details:**
+- **i18n:** English, Spanish, Chinese (Simplified)
+- **Wallet:** `@mysten/dapp-kit` with full error handling (CN:-4005 cancelations)
+- **Realtime:** Supabase postgres_changes subscriptions
+- **Auth:** Guest mode + wallet-connected mode
+
+---
+
+### 6. 🦭 Walrus Decentralized Audit Trail
+
+Every 5 minutes, the agent uploads accumulated execution logs to **Sui Walrus** — a decentralized blob storage network. This creates an immutable, tamper-proof forensic record of every:
+- Market scan result
+- LLM decision
+- Flash loan execution
+- Signal publication
+
+**Verify live archives:** [walruscan.com/testnet/home](https://walruscan.com/testnet/home)
+
+---
+
+### 7. 📦 SDKs & Tooling
+
+#### TypeScript SDK (`@suiloop/sdk`)
 ```typescript
 import { Agent } from '@suiloop/sdk';
 
-const agent = new Agent({ apiKey: 'sk_live_your_key_here', baseUrl: 'http://localhost:3001' });
+const agent = new Agent({ apiKey: 'sk_live_...', baseUrl: 'http://localhost:3001' });
 await agent.startLoop();
 const result = await agent.execute('flash-loan-executor', 'SUI');
 ```
 
-#### Python (`suiloop` v0.0.8)
+#### Python SDK (`suiloop`)
 ```python
 from suiloop import Agent
 
-agent = Agent(api_key="sk_live_your_api_key_here", base_url="http://localhost:3001")
+agent = Agent(api_key="sk_live_...", base_url="http://localhost:3001")
 agent.start_loop()
 result = agent.execute("flash-loan-executor", asset="SUI")
 ```
 
----
-
-### 5. CLI Tool (`packages/cli`) & Desktop App
-Scaffold new SuiLoop-powered bots in seconds:
+#### CLI
 ```bash
 npx @suiloop/cli create my-bot --template ts
+npx @suiloop/cli agent deploy --network testnet
+npx @suiloop/cli loop start
 ```
 
-The ecosystem is complemented by a native **Tauri 2 / Rust** application (`packages/desktop`) providing silent background monitoring and system tray integration for Linux, macOS, and Windows.
+#### MCP Server (`packages/mcp`)
+Model Context Protocol server enabling AI assistants (Claude, etc.) to interact with SuiLoop directly.
+
+#### Desktop App (`packages/desktop`)
+Native Tauri 2.0 / Rust application with system tray integration, background monitoring, and direct kernel control for Linux, macOS, and Windows.
 
 ---
 
-## 🔐 Decentralized Audit Trail (Walrus)
+## 💰 Business Model
 
-Every 5 minutes, the agent archives its accumulated system logs to **Sui Walrus** — a decentralized blob storage network on the Sui ecosystem. This creates an immutable, tamper-proof "black box" recording of every market scan, AI decision, and execution signal.
-
-Verify any archived log on the official explorer:
-**[https://walruscan.com/testnet/home](https://walruscan.com/testnet/home)**
+| Revenue Stream | Mechanism |
+|---|---|
+| **Agent Deployment** | 0.1 SUI activation fee per deployed agent |
+| **Marketplace Signals** | 1% protocol fee on P2P alpha signal sales |
+| **Pro Subscriptions** | Premium LLM compute + higher rate limits |
+| **Enterprise API** | Institutional SLA + vault monitoring |
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Full Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Smart Contracts | Sui Move (Hot Potato Pattern, PTBs) |
-| Agent Backend | Node.js, TypeScript, Express, WebSocket (`ws`) |
-| Frontend | Next.js 15, React 19, Tailwind CSS, Framer Motion, Three.js, ReactFlow |
-| Database | Supabase (PostgreSQL) + localStorage fallback |
-| Audit Storage | Sui Walrus (Decentralized Blob Storage) |
-| Desktop App | Tauri 2 (Rust + WebView) |
-| Package Manager | pnpm v10 (Monorepo Workspaces) |
+| **Smart Contracts** | Sui Move (Hot Potato, PTBs, Move Prover) |
+| **Agent Runtime** | Node.js 20, TypeScript, Express 5 |
+| **AI/LLM** | OpenAI GPT-4o-mini, Ollama (local) |
+| **Blockchain SDK** | `@mysten/sui` v1.x |
+| **Frontend** | Next.js 15, React 19, Tailwind CSS, Framer Motion, Three.js, ReactFlow |
+| **Database** | Supabase (PostgreSQL) + Realtime subscriptions |
+| **Decentralized Storage** | Sui Walrus (blob archival) |
+| **External Oracles** | Pyth Network, Scallop Indexer, Sui RPC |
+| **Desktop** | Tauri 2.0 (Rust) |
+| **Monorepo** | pnpm v10 workspaces |
+| **Deploy** | Vercel (web) + GitHub Actions |
 
 ---
 
 ## 🚀 Quick Start
 
-### Docker Setup
 ```bash
-docker-compose up --build -d
-```
-
-### Manual Setup
-```bash
-# 1. Install dependencies
+# Clone and install
+git clone https://github.com/Eras256/Sui-Loop.git
+cd Sui-Loop
 pnpm install
 
-# 2. Copy environment template
-cp .env.example .env.local
+# Configure environment
+cp packages/agent/.env.example packages/agent/.env
+# Add: SUI_PRIVATE_KEY, OPENAI_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_KEY
 
-# 3. Start all services
+# Start all services
 pnpm dev
 ```
 
@@ -189,21 +378,38 @@ pnpm dev
 |---|---|
 | Frontend | `http://localhost:3000` |
 | Agent API | `http://localhost:3001` |
-| WebSocket Feed | `ws://localhost:3001/ws/signals` |
+| WebSocket | `ws://localhost:3001/ws/signals` |
+
+### Run the Neural Swarm
+```bash
+# Fund agents (needs 0.05 SUI per agent from main wallet)
+cd packages/agent && npx tsx scripts/fund_swarm.ts
+
+# Launch 20-agent swarm
+npx tsx scripts/suiloop_neural_swarm.ts
+```
 
 ---
 
-## 🔮 Roadmap
+## ✅ Roadmap
 
-- [x] Atomic Flash Loan Engine (Hot Potato)
-- [x] Multi-Asset Vaults (SUI + USDC)
-- [x] Skill/Plugin Marketplace + Manager
-- [x] Supabase Persistence + Analytics Upgrades
-- [x] Decentralized Audit Trail (Walrus)
-- [x] Wallet generic cancelation payloads (`CN:-4005`)
+- [x] Atomic Flash Loan Engine (Hot Potato pattern)
+- [x] Multi-Asset Non-Custodial Vaults (SUI + USDC)
+- [x] On-Chain Agent Registry + Signal Publication
+- [x] 20-Agent Neural Swarm Orchestrator
+- [x] LLM-Validated Trade Signals (GPT-4o-mini)
+- [x] Circuit Breaker — Industrial safety mechanism
+- [x] Walrus Decentralized Audit Trail
+- [x] Live ELO Leaderboard (Supabase + realtime)
+- [x] LoopHub Signal Marketplace
+- [x] TypeScript + Python SDKs
+- [x] MCP Server (AI assistant integration)
+- [x] Desktop App (Tauri 2)
+- [x] i18n (EN/ES/ZH)
 - [ ] Mainnet Deployment
-- [ ] AI Strategy Optimization (Reinforcement Learning)
-- [ ] Telegram & Discord Bot Activation
+- [ ] Reinforcement Learning Strategy Optimizer
+- [ ] Telegram + Discord bot full activation
+- [ ] zkLogin integration (social login)
 
 ---
 
@@ -213,4 +419,12 @@ pnpm dev
 
 ---
 
-*Built with precision for the Sui Ecosystem.*
+<div align="center">
+
+**SuiLoop — Where capital never sleeps.**
+
+*Built with precision for the Sui Ecosystem Hackathon.*
+
+[suiscan.xyz/testnet/object/0x9451...dcb0](https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0/tx-blocks)
+
+</div>
