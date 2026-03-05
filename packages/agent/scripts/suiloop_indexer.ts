@@ -83,6 +83,7 @@ async function runIndexer() {
                         agent.elo = Number(parsed.new_score);
                     }
                     agent.win_rate = Number(((agent.wins / agent.trades) * 100).toFixed(1));
+                    agent.volume_usd += Number(parsed.volume || 0) / 1000000;
                     agent.last_activity = new Date().toISOString();
                 }
             });
