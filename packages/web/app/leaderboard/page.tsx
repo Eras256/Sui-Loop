@@ -111,7 +111,7 @@ export default function LeaderboardPage() {
                 .subscribe();
 
             return () => {
-                supabase.removeChannel(subscription);
+                supabase?.removeChannel(subscription);
             };
         }
     }, []);
