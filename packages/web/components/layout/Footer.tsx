@@ -22,7 +22,7 @@ const INTEL_LINK_KEYS = [
     { key: "footer.links.risk", href: "/risk-disclosure" },
     {
         key: "footer.links.source",
-        href: "https://suiscan.xyz/mainnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0",
+        href: "https://suiscan.xyz/testnet/object/0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0",
         external: true,
     },
 ];
