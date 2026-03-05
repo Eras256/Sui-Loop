@@ -90,6 +90,32 @@ export interface Database {
                     created_at?: string
                 }
             }
+            user_signatures: {
+                Row: {
+                    id: string
+                    wallet_address: string
+                    signature_hash: string
+                    message_signed: string
+                    network: string
+                    accepted_at: string
+                }
+                Insert: {
+                    id?: string
+                    wallet_address: string
+                    signature_hash: string
+                    message_signed: string
+                    network?: string
+                    accepted_at?: string
+                }
+                Update: {
+                    id?: string
+                    wallet_address?: string
+                    signature_hash?: string
+                    message_signed?: string
+                    network?: string
+                    accepted_at?: string
+                }
+            }
         }
     }
 }

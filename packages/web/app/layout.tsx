@@ -6,6 +6,7 @@ import "@mysten/dapp-kit/dist/index.css";
 import { Providers } from "./providers";
 import Footer from "@/components/layout/Footer";
 import LegalBanner from "@/components/legal/LegalBanner";
+import SuiLoopTermsModal from "@/components/legal/SuiLoopTermsModal";
 import ToasterWrapper from "@/components/layout/ToasterWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -39,6 +40,7 @@ export default function RootLayout({
                     {children}
                     <Footer />
                     <LegalBanner />
+                    <SuiLoopTermsModal />
                     <Toaster position="bottom-right" theme="dark" />
                     <ToasterWrapper />
                 </Providers>

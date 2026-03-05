@@ -42,6 +42,7 @@ import {
     getRateLimitStats,
     clearAllRateLimits
 } from './middleware/rateLimit.js';
+import { legalVerifyMiddleware } from './middleware/legalVerify.js';
 
 // Services
 import {
@@ -559,7 +560,7 @@ app.post('/api/execute-demo', standardRateLimiter, async (req: Request, res: Res
 /**
  * Execute Strategy (Protected)
  */
-app.post('/api/execute', authMiddleware, standardRateLimiter, requirePermission('execute'), async (req: AuthenticatedRequest, res: Response) => {
+app.post('/api/execute', authMiddleware, legalVerifyMiddleware, standardRateLimiter, requirePermission('execute'), async (req: AuthenticatedRequest, res: Response) => {
     const { strategy, params } = req.body;
 
     console.log(`\n🚀 [${req.user?.userId}] Execution request: ${strategy}`);
@@ -898,7 +899,7 @@ app.get('/api/loop/status', authMiddleware, (req: AuthenticatedRequest, res: Res
 /**
  * Start Autonomous Loop
  */
-app.post('/api/loop/start', authMiddleware, strictRateLimiter, requirePermission('execute'), (req: AuthenticatedRequest, res: Response) => {
+app.post('/api/loop/start', authMiddleware, legalVerifyMiddleware, strictRateLimiter, requirePermission('execute'), (req: AuthenticatedRequest, res: Response) => {
     const { config } = req.body;
     const started = startAutonomousLoop(config);
 
@@ -979,7 +980,7 @@ app.put('/api/loop/config', authMiddleware, requirePermission('execute'), (req: 
 /**
  * Trigger Manual Scan
  */
-app.post('/api/loop/scan', authMiddleware, standardRateLimiter, requirePermission('execute'), async (req: AuthenticatedRequest, res: Response) => {
+app.post('/api/loop/scan', authMiddleware, legalVerifyMiddleware, standardRateLimiter, requirePermission('execute'), async (req: AuthenticatedRequest, res: Response) => {
     const result = await triggerManualScan();
     res.json({ ...result });
 });
