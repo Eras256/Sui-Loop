@@ -23,7 +23,7 @@ AGENTS=(
   "0x7762bed5a0843042242d4adecaed0052eece5d3e9aa9f0b5e47a738f1c3fee19"
 )
 
-AMOUNT=133333333 # 0.133 SUI each
+AMOUNT=66666666 # ~ 0.066 SUI each, total 1 SUI among 15 agents
 
 echo "--- STARTING AGENT REFUELING (15 AGENTS) ---"
 
@@ -34,7 +34,7 @@ COMMAND="$SUI client ptb"
 for ADDR in "${AGENTS[@]}"; do
   COMMAND="$COMMAND --split-coins gas \[$AMOUNT\] --assign c$ADDR --transfer-objects \[c$ADDR\] @$ADDR"
 done
-COMMAND="$COMMAND --gas-budget 50000000"
+COMMAND="$COMMAND --gas-coin @0x7ecaa2e6246619ba46d8ff70b7a28cfc52351ad646bfab1a7c5c8abe7b72949e --gas-budget 50000000"
 
 echo "Executing PTB for mass distribution..."
 eval $COMMAND
