@@ -27,7 +27,8 @@ export type WebhookEvent =
     | 'strategy.activated'
     | 'strategy.deactivated'
     | 'market.alert'
-    | 'health.warning';
+    | 'health.warning'
+    | 'emergency.pause';
 
 interface WebhookPayload {
     event: WebhookEvent;

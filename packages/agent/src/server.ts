@@ -8,10 +8,10 @@
  * - Autonomous Market Loop
  */
 
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
-import * as dotenv from 'dotenv';
 import { supabase } from './services/supabaseService.js';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
@@ -75,9 +75,15 @@ import {
 // Feature Routes (OpenClaw-inspired)
 import featureRoutes from './routes/featuresRoutes.js';
 
+// SuiLoop Pay Protocol (Sui-native x402 equivalent)
+import {
+    suiPayMiddleware,
+    getPaymentInstructions
+} from './middleware/suiPayProtocol.js';
+
 import { Database } from './types/database.types';
 
-dotenv.config();
+// Environment loaded at top of file via 'dotenv/config'
 
 // Initialize Supabase Client
 // Supabase client is now imported from supabaseService.js
@@ -232,6 +238,33 @@ app.get('/health', (req: Request, res: Response) => {
 /**
  * Server Info
  */
+// ═══════════════════════════════════════════════════════════════════════════
+// SUILOOP PAY PROTOCOL (Sui-native x402 equivalent)
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * SuiLoop Pay Protocol — Instructions endpoint
+ * Returns how to pay for API access using Sui PTBs or AgentCap NFT.
+ * Superior to x402: atomic payment + verification in one round-trip.
+ */
+app.get('/api/pay/instructions', lenientRateLimiter, (req: Request, res: Response) => {
+    res.json(getPaymentInstructions());
+});
+
+/**
+ * SuiLoop Pay Protocol — Verify payment endpoint
+ * Clients can pre-verify their payment tx before attaching it to a real request.
+ */
+app.post('/api/pay/verify', lenientRateLimiter, async (req: Request, res: Response) => {
+    const { txDigest, walletAddress } = req.body;
+    if (!txDigest || !walletAddress) {
+        return res.status(400).json({ error: 'txDigest and walletAddress required' });
+    }
+    const { verifyOnChainPayment } = await import('./middleware/suiPayProtocol.js');
+    const result = await verifyOnChainPayment({ txDigest, walletAddress });
+    res.json(result);
+});
+
 app.get('/api/info', lenientRateLimiter, (req: Request, res: Response) => {
     res.json({
         name: 'SuiLoop Autonomous Agent',
@@ -241,7 +274,8 @@ app.get('/api/info', lenientRateLimiter, (req: Request, res: Response) => {
             'rate_limiting',
             'webhooks',
             'websocket_subscriptions',
-            'autonomous_loop'
+            'autonomous_loop',
+            'suipay_protocol'   // Sui-native x402 equivalent
         ],
         endpoints: {
             public: ['/health', '/api/info'],
@@ -883,6 +917,31 @@ app.post('/api/loop/stop', authMiddleware, requirePermission('execute'), (req: A
     res.json({
         success: stopped,
         message: stopped ? 'Autonomous loop stopped' : 'Loop not running'
+    });
+});
+
+/**
+ * Pause Autonomous Loop (Emergency)
+ */
+import { resumeAutonomousLoop } from './services/autonomousLoop.js';
+app.post('/api/loop/pause', authMiddleware, requirePermission('execute'), (req: AuthenticatedRequest, res: Response) => {
+    // Re-use stop logic or add specific pause logic if different
+    // For now, we use the circuit breaker's trigger logic if we want it to be distinct,
+    // but a manual pause is basically a 'stop' that preserves config.
+    // However, our stopAutonomousLoop already preserves config.
+    // Let's add a proper manual pause.
+    const stopped = stopAutonomousLoop();
+    res.json({ success: stopped, message: 'Emergency pause activated' });
+});
+
+/**
+ * Resume Autonomous Loop
+ */
+app.post('/api/loop/resume', authMiddleware, requirePermission('execute'), (req: AuthenticatedRequest, res: Response) => {
+    const resumed = resumeAutonomousLoop();
+    res.json({
+        success: resumed,
+        message: resumed ? 'Autonomous loop resumed' : 'Loop not paused or not running'
     });
 });
 

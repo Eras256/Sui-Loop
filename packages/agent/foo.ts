@@ -1,0 +1,1 @@
+import 'dotenv/config'; import { createClient } from '@supabase/supabase-js'; createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY).from('suiloop_agents').select('id,volume_usd,last_signal,trades').limit(5).then(console.log);

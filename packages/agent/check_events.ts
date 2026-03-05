@@ -1,0 +1,1 @@
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client'; const client = new SuiClient({ url: getFullnodeUrl('testnet') }); client.queryEvents({ query: { MoveEventType: '0x945163568d75adf1cb3c1f7d1a197e4a903fd6ba3f807a4421cfa9f563f0dcb0::agent_registry::SignalPublished' }, limit: 1, order: 'descending' }).then(r => console.log(r.data[0].parsedJson)).catch(console.error);

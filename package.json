@@ -19,5 +19,8 @@
   ],
   "author": "SuiLoop Team",
   "license": "MIT",
-  "description": "Atomic Intelligence Protocol for Sui - Flash Loans + AI Agents"
+  "description": "Atomic Intelligence Protocol for Sui - Flash Loans + AI Agents",
+  "devDependencies": {
+    "@types/node": "^25.3.3"
+  }
 }

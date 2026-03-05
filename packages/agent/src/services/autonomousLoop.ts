@@ -28,8 +28,11 @@ interface OpportunityConfig {
 
 // Agent state
 let isRunning = false;
+let isPaused = false;
 let scanInterval: NodeJS.Timeout | null = null;
 let cronJob: cron.ScheduledTask | null = null;
+let consecutiveErrors = 0;
+const ERROR_THRESHOLD = 5;
 let marketState: MarketState = {
     suiPrice: 2.50,
     gasPrice: 1000,
@@ -80,7 +83,15 @@ export function startAutonomousLoop(customConfig?: Partial<OpportunityConfig>): 
 
     // Start periodic scanning (every 10 seconds)
     scanInterval = setInterval(() => {
-        scanMarket();
+        if (!isPaused) {
+            scanMarket().catch(err => {
+                console.error('❌ Autonomous Scan Error:', err);
+                consecutiveErrors++;
+                if (consecutiveErrors >= ERROR_THRESHOLD) {
+                    triggerCircuitBreaker();
+                }
+            });
+        }
     }, 10000);
 
     // Also run cron job for deeper analysis (every minute)
@@ -105,24 +116,16 @@ export function startAutonomousLoop(customConfig?: Partial<OpportunityConfig>): 
  * Stop the autonomous loop
  */
 export function stopAutonomousLoop(): boolean {
-    if (!isRunning) {
-        console.log('⚠️ Autonomous loop not running');
-        return false;
-    }
+    if (!isRunning) return false;
 
-    if (scanInterval) {
-        clearInterval(scanInterval);
-        scanInterval = null;
-    }
-
-    if (cronJob) {
-        cronJob.stop();
-        cronJob = null;
-    }
+    if (scanInterval) clearInterval(scanInterval);
+    if (cronJob) cronJob.stop();
 
     isRunning = false;
+    isPaused = false;
+    consecutiveErrors = 0;
 
-    console.log('🛑 Autonomous loop stopped');
+    console.log('🛑 [Circuit Breaker] Autonomous Agent Loop STOPPED manually.');
 
     triggerWebhooks('strategy.deactivated', {
         agent: 'autonomous-loop',
@@ -133,16 +136,64 @@ export function stopAutonomousLoop(): boolean {
 }
 
 /**
- * Get loop status
+ * Handle Circuit Breaker Trigger
+ */
+function triggerCircuitBreaker() {
+    isPaused = true;
+    console.error(`
+🚨🚨🚨 [CIRCUIT BREAKER TRIGGERED] 🚨🚨🚨
+Reason: ${consecutiveErrors} consecutive market scan failures.
+Action: PAUSING ALL AUTONOMOUS OPERATIONS.
+Manual intervention required to resume.
+    `);
+
+    triggerWebhooks('emergency.pause', {
+        reason: 'Consecutive scan failures',
+        threshold: ERROR_THRESHOLD,
+        consecutiveErrors
+    });
+
+    emitSignal('strategy_trigger', 'SYSTEM', {
+        confidence: 100,
+        timeToLive: 0,
+        details: { action: 'EMERGENCY_STOP', reason: 'consecutive_errors', count: consecutiveErrors }
+    });
+}
+
+/**
+ * Resume from Pause
+ */
+export function resumeAutonomousLoop(): boolean {
+    if (!isRunning) return false;
+    if (!isPaused) return false;
+
+    isPaused = false;
+    consecutiveErrors = 0;
+    console.log('✅ [Circuit Breaker] Operations RESUMED manually.');
+
+    triggerWebhooks('strategy.activated', {
+        agent: 'autonomous-loop',
+        action: 'resume'
+    });
+
+    return true;
+}
+
+/**
+ * Get accurate status including pause and errors
  */
 export function getLoopStatus(): {
     isRunning: boolean;
+    isPaused: boolean;
+    consecutiveErrors: number;
     config: OpportunityConfig;
     marketState: MarketState;
     uptime: number;
 } {
     return {
         isRunning,
+        isPaused,
+        consecutiveErrors,
         config,
         marketState,
         uptime: isRunning ? Date.now() - marketState.lastUpdate.getTime() : 0

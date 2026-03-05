@@ -169,3 +169,41 @@ create policy "Users can manage skill installs" on skill_installs
 -- Chat integrations for user
 create policy "Users can manage chat integrations" on chat_integrations
   for all using (true);
+
+-- ============================================================================
+-- SUILOOP AGENTS (Neural Swarm Leaderboard)
+-- Populated by suiloop_neural_swarm.ts and suiloop_indexer.ts
+-- ============================================================================
+
+create table if not exists suiloop_agents (
+  id              text primary key,           -- wallet_address (0x...)
+  agent_name      text default 'Unknown',     -- "Nexus", "Phantom", "Cipher"...
+  agent_role      text default 'Agent',       -- "Swarm Commander", etc.
+  agent_specialty text default 'General',     -- "Flash Loan Execution", etc.
+  wallet_address  text not null,
+  total_txs       integer default 0,
+  flash_loan_txs  integer default 0,          -- TYPE A: Flash Loan executions
+  signal_txs      integer default 0,          -- TYPE B: Signal publications
+  volume_usd      numeric(20,2) default 0,
+  elo             integer default 1000,
+  win_rate        numeric(5,1) default 0,
+  last_tx_hash    text,
+  last_activity   timestamptz,
+  created_at      timestamptz default now()
+);
+
+-- Migration: Add identity columns if table already exists
+alter table suiloop_agents
+  add column if not exists agent_name      text default 'Unknown',
+  add column if not exists agent_role      text default 'Agent',
+  add column if not exists agent_specialty text default 'General',
+  add column if not exists flash_loan_txs  integer default 0,
+  add column if not exists signal_txs      integer default 0;
+
+-- RLS: open read for leaderboard (public), write via service key only
+alter table suiloop_agents enable row level security;
+create policy "Leaderboard is public" on suiloop_agents
+  for select using (true);
+
+-- Enable Realtime for live leaderboard updates
+alter publication supabase_realtime add table suiloop_agents;
