@@ -40,8 +40,7 @@ async function isSupabaseReachable(): Promise<boolean> {
     if (!supabase) { _supabaseReachable = false; return false; }
     try {
         // Lightweight probe – just a HEAD request to the REST endpoint
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        if (!url) { _supabaseReachable = false; return false; }
+        const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://qzocuuldfqklicaakdhj.supabase.co";
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), 4000);
         const res = await fetch(`${url}/rest/v1/`, { method: 'HEAD', signal: ctrl.signal });

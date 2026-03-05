@@ -9,9 +9,8 @@ export async function writeLog(
     level: 'info' | 'warn' | 'error' | 'success' | 'system' = 'info',
     agentId?: string
 ) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) return; // Silently skip if not configured
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://qzocuuldfqklicaakdhj.supabase.co";
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6b2N1dWxkZnFrbGljYWFrZGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxNDc5ODgsImV4cCI6MjA4NTcyMzk4OH0.X_WzBp8-QLi6Ozwy6SoYY894D4Wf14mx0JiErAgNIB4";
 
     try {
         await fetch(`${url}/rest/v1/agent_logs`, {
