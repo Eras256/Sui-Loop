@@ -48,7 +48,7 @@ function DocsContent() {
     }, [searchParams]);
 
     return (
-        <main className="min-h-screen bg-black text-white font-sans selection:bg-neon-cyan/30">
+        <main className="min-h-screen bg-[#030014] text-white font-sans selection:bg-neon-cyan/30">
             <Navbar />
 
             <div className="fixed inset-0 z-0">

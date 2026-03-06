@@ -77,9 +77,13 @@ export default function SuiLoopTermsModal() {
     const items = tRaw("terms.legalModal.items") || [];
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-md px-4 py-6 overflow-y-auto">
-            <div className="w-full max-w-xl border border-red-500/30 bg-[#050510] rounded-2xl p-6 md:p-10 shadow-[0_0_60px_rgba(239,68,68,0.15)] relative my-auto">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-40" />
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-xl px-4 py-6 overflow-y-auto">
+            <div className="w-full max-w-xl border border-white/10 bg-[#050510]/80 glass-panel rounded-3xl p-6 md:p-10 shadow-[0_32px_64px_rgba(0,0,0,0.5)] relative my-auto overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
+
+                {/* Internal Glow */}
+                <div className="absolute -top-24 -left-24 w-48 h-48 bg-red-500/10 blur-[60px] rounded-full opacity-50"></div>
+                <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-neon-cyan/5 blur-[60px] rounded-full opacity-50"></div>
 
                 {/* Language Selector inside Modal */}
                 <div className="absolute top-6 right-6 flex items-center gap-1 p-1 bg-white/5 border border-white/10 rounded-lg">

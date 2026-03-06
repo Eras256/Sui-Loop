@@ -19,6 +19,7 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import Navbar from "@/components/layout/Navbar";
+import { PremiumAtmosphere } from "@/components/layout/PremiumAtmosphere";
 import {
     Plus, Play, Save, Box, Activity, Zap, ArrowRight, Trash2,
     Settings, Search, ZoomIn, ZoomOut, Undo, Redo,
@@ -738,18 +739,19 @@ function StrategyBuilderInner() {
 export default function StrategyBuilderPro() {
     const { t } = useLanguage();
     return (
-        <main className="h-screen w-screen bg-[#0A0A0A] text-white flex flex-col font-sans selection:bg-neon-cyan/30 overflow-hidden">
+        <main className="h-screen w-screen bg-[#030014] text-white flex flex-col font-sans selection:bg-neon-cyan/30 overflow-hidden relative">
+            <PremiumAtmosphere />
             <Navbar />
 
             {/* Mobile banner for touch hint */}
-            <div className="md:hidden flex items-center gap-2 bg-neon-cyan/5 border-b border-neon-cyan/10 px-4 py-2 text-[11px] text-neon-cyan/70 font-mono shrink-0">
+            <div className="md:hidden flex items-center gap-2 bg-neon-cyan/5 border-b border-neon-cyan/10 px-4 py-2 text-[11px] text-neon-cyan/70 font-mono shrink-0 z-10">
                 <MousePointer2 size={12} />
                 {t('builder.mobileHint')}
             </div>
 
             <div className="h-[64px] md:h-[90px] w-full shrink-0"></div>
 
-            <div className="flex-1 flex overflow-hidden border-t border-white/5 bg-[radial-gradient(circle_at_top,rgba(0,243,255,0.05),transparent_40%)]">
+            <div className="flex-1 flex overflow-hidden border-t border-white/5 bg-transparent relative z-10">
                 <ReactFlowProvider>
                     <StrategyBuilderInner />
                 </ReactFlowProvider>

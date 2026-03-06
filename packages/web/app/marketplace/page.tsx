@@ -1,12 +1,8 @@
 "use client";
 
 import Navbar from "@/components/layout/Navbar";
-import {
-    Download, Star, Search, Filter, TrendingUp, Sparkles,
-    CheckCircle, Package, ExternalLink, ChevronRight, Zap,
-    Code2, Bell, BarChart3, Database, Link2, Settings, Play, UserPlus,
-    Activity, Wifi, Cpu, RefreshCcw
-} from "lucide-react";
+import { PremiumAtmosphere } from "@/components/layout/PremiumAtmosphere";
+import { Download, Star, Search, Filter, TrendingUp, Sparkles, CheckCircle, Package, ExternalLink, ChevronRight, Zap, Code2, Bell, BarChart3, Database, Link2, Settings, Play, UserPlus, Activity, Wifi, Cpu, RefreshCcw, ArrowRight, ShieldCheck, History, RefreshCw, X, Check, AlertCircle, Trash2, LayoutGrid, List, SlidersHorizontal, ArrowUpRight, Clock, Lock, Info, Share2, MessageSquare, Twitter, Fingerprint, ShoppingBag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -488,12 +484,11 @@ export default function MarketplacePage() {
 
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        <main className="min-h-screen relative overflow-hidden flex flex-col pt-36 pb-20 bg-[#030014]">
+            <PremiumAtmosphere />
             <Navbar />
 
-            {/* Hero Section */}
-            <section className="relative pt-36 pb-12 px-4 sm:px-6 lg:px-8">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.1),transparent_70%)]" />
+            <section className="relative pt-36 pb-12 px-4 sm:px-6 lg:px-8 z-10">
 
                 <div className="max-w-7xl mx-auto relative z-10">
                     <motion.div

@@ -57,33 +57,39 @@ export default function Footer() {
     const { t } = useLanguage();
 
     return (
-        <footer className="w-full relative z-10 border-t border-white/5 bg-[#030303]">
+        <footer className="w-full relative z-10 border-t border-white/5 bg-gradient-to-b from-[#030303] to-[#010101] overflow-hidden">
             {/* Glow accent top */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-cyan/30 to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-cyan/40 to-transparent" />
+
+            {/* Local Atmosphere */}
+            <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] bg-neon-cyan/5 blur-[120px] rounded-full"></div>
+            <div className="absolute top-[20%] right-[-10%] w-[30%] h-[30%] bg-neon-purple/5 blur-[100px] rounded-full"></div>
 
             {/* Protocol Status Banner */}
-            <div className="border-b border-white/5 py-3 px-4">
-                <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-6 text-[8px] sm:text-[10px] font-mono whitespace-nowrap overflow-x-auto scrollbar-hide py-1 pr-4">
-                        <span className="flex items-center gap-1.5 text-green-400 shrink-0">
-                            <span className="relative flex h-1 w-1 sm:h-1.5 sm:w-1.5">
-                                <span className=" absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                                <span className="relative inline-flex rounded-full h-1 sm:h-1.5 w-1 sm:w-1.5 bg-green-500" />
+            <div className="border-b border-white/5 py-4 px-4 bg-white/[0.01]">
+                <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-8 text-[9px] sm:text-[11px] font-bold font-mono tracking-tight whitespace-nowrap overflow-x-auto scrollbar-hide py-1">
+                        <span className="flex items-center gap-2 text-neon-cyan shrink-0 transition-opacity hover:opacity-80">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan" />
                             </span>
                             {t('footer.status.uplink')}
                         </span>
-                        <span className="text-gray-600 shrink-0 uppercase tracking-tighter">{t('footer.status.kernel')} v1.0.0-N</span>
-                        <span className="flex items-center gap-1.5 text-blue-400 shrink-0">
-                            <Shield className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                        <span className="text-gray-500 shrink-0 uppercase tracking-widest">{t('footer.status.kernel')} v1.0.0-N</span>
+                        <div className="w-[1px] h-3 bg-white/10 hidden lg:block"></div>
+                        <span className="flex items-center gap-2 text-blue-400 shrink-0">
+                            <Shield className="w-3.5 h-3.5" />
                             {t('footer.status.verified')}
                         </span>
-                        <span className="hidden sm:flex items-center gap-1.5 text-neon-cyan shrink-0">
-                            <Activity className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                        <div className="w-[1px] h-3 bg-white/10 hidden lg:block"></div>
+                        <span className="hidden sm:flex items-center gap-2 text-neon-purple/80 shrink-0">
+                            <Activity className="w-3.5 h-3.5" />
                             {t('footer.status.mainnet')}
                         </span>
                     </div>
-                    <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono text-gray-500 shrink-0">
-                        <Zap className="w-3 h-3 text-yellow-500" />
+                    <div className="flex items-center gap-2 text-[10px] font-mono text-gray-500 shrink-0 bg-white/5 px-3 py-1 rounded-full border border-white/5">
+                        <Zap className="w-3.5 h-3.5 text-yellow-500" />
                         {t('footer.status.builtFor')}
                     </div>
                 </div>

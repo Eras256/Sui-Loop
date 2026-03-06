@@ -9,6 +9,8 @@ import LegalBanner from "@/components/legal/LegalBanner";
 import SuiLoopTermsModal from "@/components/legal/SuiLoopTermsModal";
 import ToasterWrapper from "@/components/layout/ToasterWrapper";
 
+import { PremiumAtmosphere } from "@/components/layout/PremiumAtmosphere";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -32,11 +34,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${inter.className} bg-[#030014] text-white min-h-screen selection:bg-neon-cyan/30`}>
                 <Providers>
-                    {/* Neural Grid Background Overlay */}
-                    <div className="fixed inset-0 z-[-1] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-                    <div className="fixed inset-0 z-[-2] bg-gradient-radial from-indigo-900/20 to-black"></div>
-                    <div className="bg-noise" />
-
+                    <PremiumAtmosphere />
                     {children}
                     <Footer />
                     <LegalBanner />

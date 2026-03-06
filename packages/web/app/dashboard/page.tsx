@@ -1,6 +1,7 @@
 'use client';
 
 import Navbar from "@/components/layout/Navbar";
+import { PremiumAtmosphere } from "@/components/layout/PremiumAtmosphere";
 
 import { Suspense, useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -1734,7 +1735,8 @@ function DashboardContent() {
 
     return (
         <>
-            <div className="min-h-screen pt-36 pb-32 px-4 md:px-8 relative overflow-hidden">
+            <div className="min-h-screen pt-36 pb-32 px-4 md:px-8 relative overflow-hidden bg-[#030014]">
+                <PremiumAtmosphere />
                 <Navbar />
 
                 {/* Legal Disclaimer Strip */}
@@ -2557,14 +2559,7 @@ function DashboardContent() {
                         </div>
                     </div>
                 </div>
-
-                {/* Background Elements */}
-                <div className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none">
-                    <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-neon-purple/20 rounded-full blur-[120px]"></div>
-                    <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-neon-cyan/10 rounded-full blur-[120px]"></div>
-                </div>
-
-            </div >
+            </div>
 
             <PublishStrategyModal
                 isOpen={publishConfig.isOpen}
@@ -2591,5 +2586,5 @@ export default function Dashboard() {
                 <DashboardContent />
             </Suspense>
         </main>
-    )
+    );
 }

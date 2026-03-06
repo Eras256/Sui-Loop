@@ -7,7 +7,9 @@
   --foreground: #ffffff;
   --neon-cyan: #00f3ff;
   --neon-purple: #bd00ff;
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --vibrant-cyan: #2debe8;
+  --vibrant-purple: #ff00ff;
+  --glass-border: rgba(255, 255, 255, 0.08);
   --glass-bg: rgba(255, 255, 255, 0.03);
 }
 
@@ -39,17 +41,69 @@ body {
 
   0%,
   100% {
-    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2), 0 0 5px rgba(0, 243, 255, 0.1);
   }
 
   50% {
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.5), 0 0 10px rgba(0, 243, 255, 0.2);
   }
 }
 
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(45deg);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(45deg);
+    opacity: 0.4;
+  }
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
 
 .animate-glow {
   animation: pulse-glow 3s infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.bg-scan-line {
+  background: linear-gradient(to bottom, transparent, rgba(0, 243, 255, 0.05) 50%, transparent);
+  background-size: 100% 4px;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(to right, #00f3ff, #2debe8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(to right, #bd00ff, #ff00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .bg-noise {

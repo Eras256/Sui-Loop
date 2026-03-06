@@ -126,17 +126,6 @@ export default function Home() {
 
     return (
         <main className="min-h-screen flex flex-col relative overflow-x-hidden bg-[#030014] selection:bg-neon-cyan selection:text-black">
-            {/* --- PREMIUM ATMOSPHERE: LIGHT POINTS & BLURS --- */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-neon-cyan/10 blur-[120px] rounded-full"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-neon-purple/10 blur-[120px] rounded-full"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-blue-500/5 blur-[150px] rounded-full"></div>
-
-                {/* Floating Light Spears */}
-                <div className="absolute top-1/4 right-[20%] w-[1px] h-[300px] bg-gradient-to-b from-transparent via-neon-cyan/20 to-transparent rotate-45 animate-pulse"></div>
-                <div className="absolute bottom-1/4 left-[20%] w-[1px] h-[300px] bg-gradient-to-b from-transparent via-neon-purple/20 to-transparent -rotate-45 animate-pulse"></div>
-            </div>
-
             {/* Navbar */}
             <Navbar />
 

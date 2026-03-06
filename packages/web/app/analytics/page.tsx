@@ -180,7 +180,7 @@ export default function AnalyticsPage() {
     const usdcStrategies = activeStrategies.filter(s => s.asset === 'USDC').length;
 
     return (
-        <main className="min-h-screen pt-36 px-4 pb-0 relative overflow-hidden flex flex-col">
+        <main className="min-h-screen pt-36 px-4 pb-0 relative overflow-hidden flex flex-col bg-[#030014]">
             <Navbar />
 
             {/* Background */}

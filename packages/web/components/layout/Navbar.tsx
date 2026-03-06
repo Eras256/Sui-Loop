@@ -87,11 +87,17 @@ export default function Navbar() {
  rounded-2xl sm:rounded-full 
  px-4 xl:px-8 py-2 xl:py-3
  flex items-center justify-between 
- shadow-[0_4px_30px_rgba(0,0,0,0.1)]
+ shadow-[0_8px_32px_rgba(0,0,0,0.5)]
+ backdrop-blur-xl
  
- ${scrolled ? "bg-black/60" : "bg-black/40"}
+ ${scrolled ? "bg-black/60 border-neon-cyan/20" : "bg-black/30 border-white/10"}
+ transition-all duration-500
  `}
                 >
+                    {/* Top Glow Line (Only when scrolled) */}
+                    {scrolled && (
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-neon-cyan/50 to-transparent"></div>
+                    )}
                     {/* Left side: Logo + Badge */}
                     <div className="flex items-center gap-4 xl:gap-8 min-w-0 shrink-0">
                         {/* Logo Section - Responsive */}

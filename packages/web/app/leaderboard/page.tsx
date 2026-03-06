@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, TrendingUp, Cpu, Activity, Medal, Star, ExternalLink, Wallet, Zap, Shield, ChevronRight, Search, Filter, ArrowUpRight, BarChart3 } from 'lucide-react';
+import { Trophy, TrendingUp, Cpu, Activity, Medal, Star, ExternalLink, Wallet, Zap, Shield, ChevronRight, Search, Filter, ArrowUpRight, BarChart3, Crown, Target, ArrowUpDown, ChevronUp, ChevronDown, Globe } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
+import { PremiumAtmosphere } from "@/components/layout/PremiumAtmosphere";
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { supabase } from '@/lib/supabase';
 
@@ -187,16 +188,10 @@ export default function LeaderboardPage() {
     };
 
     return (
-        <main className="min-h-screen bg-[#020205] text-white pt-24 pb-20 relative overflow-hidden">
+        <main className="min-h-screen relative overflow-hidden flex flex-col pt-36 pb-20 bg-[#030014]">
+            <PremiumAtmosphere />
             <Navbar />
 
-            {/* Ambient Background */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-0 left-1/4 w-[1000px] h-[600px] bg-neon-cyan/5 rounded-full blur-[160px] animate-pulse" />
-                <div className="absolute bottom-0 right-1/4 w-[800px] h-[500px] bg-neon-purple/5 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '2s' }} />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50 contrast-150" />
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_20%,transparent_100%)] opacity-30" />
-            </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 

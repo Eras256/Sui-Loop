@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 export default function ManifestoPage() {
     return (
-        <main className="min-h-screen bg-black text-white selection:bg-neon-cyan/30">
+        <main className="min-h-screen bg-[#030014] text-white selection:bg-neon-cyan/30">
             <Navbar />
 
             <div className="max-w-4xl mx-auto px-6 pt-40 pb-24 relative overflow-hidden">

@@ -21,7 +21,7 @@ import Link from "next/link";
 
 export default function HowToUsePage() {
     return (
-        <main className="min-h-screen bg-black text-white font-sans selection:bg-neon-cyan/30">
+        <main className="min-h-screen bg-[#030014] text-white font-sans selection:bg-neon-cyan/30">
             <Navbar />
 
             {/* Background Effects */}

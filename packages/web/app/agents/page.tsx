@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Navbar from "@/components/layout/Navbar";
 import ApiKeyManager from "@/components/docs/ApiKeyManager";
-import { Terminal, Activity, Signal, Shield, Radio, Code, Zap, Copy, Database, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { PremiumAtmosphere } from "@/components/layout/PremiumAtmosphere";
+import { Terminal, Activity, Signal, Shield, Radio, Code, Zap, Copy, Database, CheckCircle, AlertCircle, Loader, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { supabase } from "@/lib/supabase";
@@ -227,20 +228,9 @@ export default function AgentsPage() {
     }, []);
 
     return (
-        <main className="min-h-screen bg-black text-white selection:bg-neon-cyan/30 overflow-hidden relative">
+        <main className="min-h-screen bg-[#030014] text-white selection:bg-neon-cyan/30 relative overflow-hidden">
+            <PremiumAtmosphere />
             <Navbar />
-
-            {/* Background Effects */}
-            <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-neon-purple/20 to-transparent opacity-40" />
-                <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-neon-cyan/10 rounded-full blur-[120px]" />
-
-                {/* Matrix/Grid Effect */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,18,18,0)_1px,transparent_1px),linear-gradient(90deg,rgba(18,18,18,0)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"
-                    style={{ backgroundImage: 'linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)' }} />
-
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15]" />
-            </div>
 
             <div className="relative z-10 container mx-auto px-4 pt-48 pb-20">
 

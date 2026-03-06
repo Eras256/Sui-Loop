@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/layout/Navbar";
+import { PremiumAtmosphere } from "@/components/layout/PremiumAtmosphere";
 import { Copy, ArrowRight, Zap, TrendingUp, ShieldAlert, Cpu } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -278,13 +279,8 @@ export default function StrategiesPage() {
     };
 
     return (
-        <main className="min-h-screen relative overflow-x-hidden flex flex-col pt-36 pb-20">
-            {/* Background elements */}
-            <div className="fixed inset-0 z-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-purple/20 rounded-full blur-[120px] opacity-50"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-neon-cyan/10 rounded-full blur-[120px] opacity-50"></div>
-            </div>
-
+        <main className="min-h-screen relative overflow-hidden flex flex-col pt-36 pb-20 bg-[#030014] text-white selection:bg-neon-cyan/30">
+            <PremiumAtmosphere />
             <Navbar />
 
             <div className="max-w-7xl mx-auto px-6 w-full relative z-10">

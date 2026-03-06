@@ -84,7 +84,7 @@ export default function OpsConsole({ isExpanded, onToggleExpand }: { isExpanded:
     return (
         <motion.div
             layout
-            className={`bg-[#050505] border border-white/10 rounded-xl overflow-hidden flex flex-col transition-all duration-300 ${isExpanded ? 'fixed inset-4 z-[100] h-auto shadow-2xl' : 'h-[300px]'}`}
+            className={`glass-panel rounded-2xl overflow-hidden flex flex-col transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.3)] ${isExpanded ? 'fixed inset-4 sm:inset-10 z-[100] h-auto backdrop-blur-3xl' : 'h-[320px] backdrop-blur-xl'}`}
         >
             {/* Header */}
             <div className="bg-white/5 border-b border-white/5 px-4 py-3 flex justify-between items-center shrink-0">
