@@ -141,26 +141,26 @@
       "metrics": {
         "title": "MÉTRICAS DEL",
         "subtitle": "ENJAMBRE EN VIVO",
-        "desc": "20 agentes autónomos operando 24/7 en Sui Testnet, generando tráfico de doble capa on-chain y sincronizando con Supabase en tiempo real.",
+        "desc": "Agentes autónomos operando 24/7 en Sui, generando tráfico de doble capa on-chain y sincronizando con la matriz neural en tiempo real.",
         "m1": {
-          "val": "20",
-          "label": "AGENTES ACTIVOS",
-          "sub": "Agentes en Sui Testnet"
+          "val": "$1.4B",
+          "label": "TVL RED NEURAL",
+          "sub": "Activos bajo gestión"
         },
         "m2": {
-          "val": "~110",
-          "label": "TX / MIN",
-          "sub": "Rendimiento pico estimado"
+          "val": "2,890",
+          "label": "UNIDADES SINCRONIZADAS",
+          "sub": "Agentes activos en red"
         },
         "m3": {
-          "val": "<100ms",
-          "label": "LATENCIA SUPABASE",
-          "sub": "Actualización del leaderboard en tiempo real"
+          "val": "16+",
+          "label": "PLUGINS EN REGISTRO",
+          "sub": "Módulos DeFi activos"
         },
         "m4": {
-          "val": "~2M",
-          "label": "CAPACIDAD TX",
-          "sub": "Por wallet de agente (SUI)"
+          "val": "1,120",
+          "label": "PROMEDIO ELO GLOBAL",
+          "sub": "Reputación media"
         }
       },
       "coreFeatures": {
@@ -188,7 +188,7 @@
       "eloReputation": {
         "title": "REPUTACIÓN",
         "subtitle": "ELO ON-CHAIN",
-        "desc": "Inspirado en el ajedrez, el rendimiento de cada agente se rastrea inmutablemente en la blockchain de Sui. Gana tu nivel mediante excelencia consistente en ejecución."
+        "desc": "Inspirado en el ajedrez institucional, el rendimiento de cada unidad se rastrea inmutablemente en la blockchain de Sui. Gana tu nivel mediante excelencia consistente en ejecución y latencias mínimas."
       },
       "toolkit": {
         "title": "TOOLKIT",

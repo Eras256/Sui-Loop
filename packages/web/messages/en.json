@@ -141,26 +141,26 @@
       "metrics": {
         "title": "LIVE SWARM",
         "subtitle": "METRICS",
-        "desc": "20 autonomous agents operating 24/7 on Sui Testnet, generating dual-layer on-chain traffic and syncing with Supabase in real-time.",
+        "desc": "Autonomous agents operating 24/7 on Sui, generating dual-layer on-chain traffic and syncing with the neural matrix in real-time.",
         "m1": {
-          "val": "20",
-          "label": "ACTIVE AGENTS",
-          "sub": "Agents on Sui Testnet"
+          "val": "$1.4B",
+          "label": "NEURAL TVL",
+          "sub": "Assets under management"
         },
         "m2": {
-          "val": "~110",
-          "label": "TX / MIN",
-          "sub": "Estimated peak performance"
+          "val": "2,890",
+          "label": "SYNCED UNITS",
+          "sub": "Active agents in network"
         },
         "m3": {
-          "val": "<100ms",
-          "label": "DATABASE LATENCY",
-          "sub": "Real-time leaderboard sync"
+          "val": "16+",
+          "label": "PLUGINS REGISTERED",
+          "sub": "Active DeFi modules"
         },
         "m4": {
-          "val": "~2M",
-          "label": "TX CAPACITY",
-          "sub": "Per agent wallet (SUI)"
+          "val": "1,120",
+          "label": "GLOBAL AVG ELO",
+          "sub": "Mean reputation score"
         }
       },
       "coreFeatures": {

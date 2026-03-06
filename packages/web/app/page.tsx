@@ -82,6 +82,25 @@ export default function Home() {
         }
     };
 
+    const [simulatedMetrics, setSimulatedMetrics] = useState({
+        tvl: 1.4,
+        units: 2890,
+        plugins: 16,
+        elo: 1120
+    });
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSimulatedMetrics(prev => ({
+                tvl: prev.tvl + (Math.random() * 0.0001),
+                units: prev.units + (Math.random() > 0.95 ? 1 : 0),
+                plugins: prev.plugins,
+                elo: prev.elo + (Math.random() > 0.5 ? 1 : -1)
+            }));
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
     // Simulation of Agent Thoughts
     useEffect(() => {
         const logs = [
@@ -98,21 +117,31 @@ export default function Home() {
         let i = 0;
         const interval = setInterval(() => {
             if (i < logs.length) {
-                setAgentLog(prev => [...prev, logs[i]]);
+                setAgentLog(prev => [...prev.slice(-10), logs[i]]);
                 i++;
             }
-        }, 1200);
+        }, 2000);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <main className="min-h-screen flex flex-col relative overflow-x-hidden">
+        <main className="min-h-screen flex flex-col relative overflow-x-hidden bg-[#030014] selection:bg-neon-cyan selection:text-black">
+            {/* --- PREMIUM ATMOSPHERE: LIGHT POINTS & BLURS --- */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-neon-cyan/10 blur-[120px] rounded-full"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-neon-purple/10 blur-[120px] rounded-full"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-blue-500/5 blur-[150px] rounded-full"></div>
+
+                {/* Floating Light Spears */}
+                <div className="absolute top-1/4 right-[20%] w-[1px] h-[300px] bg-gradient-to-b from-transparent via-neon-cyan/20 to-transparent rotate-45 animate-pulse"></div>
+                <div className="absolute bottom-1/4 left-[20%] w-[1px] h-[300px] bg-gradient-to-b from-transparent via-neon-purple/20 to-transparent -rotate-45 animate-pulse"></div>
+            </div>
 
             {/* Navbar */}
             <Navbar />
 
             {/* Hero Section */}
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 pt-32 md:pt-40 px-4 pb-32">
+            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 pt-32 md:pt-40 px-4 pb-32 relative z-10">
 
                 {/* Left: Text & Terminal */}
                 <div className="flex flex-col justify-center space-y-6 md:space-y-8 z-10 order-2 lg:order-1">
@@ -120,6 +149,7 @@ export default function Home() {
                         {/* Mainnet Ready Badge */}
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-neon-cyan/10 border border-neon-cyan/30 rounded-full mb-4 mx-auto lg:mx-0 w-fit">
                             <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan"></span>
                             </span>
                             <span className="text-[10px] uppercase tracking-wider font-bold text-neon-cyan whitespace-nowrap">
@@ -523,7 +553,7 @@ export default function Home() {
             </section>
 
             {/* --- LIVE METRICS SECTION --- */}
-            <section className="py-24 relative border-t border-white/5 bg-black/20">
+            <section className="py-24 relative border-y border-white/5 bg-gradient-to-b from-black/20 via-[#050505] to-black/20">
                 <div className="max-w-7xl mx-auto px-4 text-center">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-4">
                         {t('home.metrics.title')} <span className="text-neon-cyan">{t('home.metrics.subtitle')}</span>
@@ -534,16 +564,17 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                         {[
-                            { icon: Bot, val: t('home.metrics.m1.val'), label: t('home.metrics.m1.label'), sub: t('home.metrics.m1.sub') },
-                            { icon: Repeat, val: t('home.metrics.m2.val'), label: t('home.metrics.m2.label'), sub: t('home.metrics.m2.sub') },
-                            { icon: Activity, val: t('home.metrics.m3.val'), label: t('home.metrics.m3.label'), sub: t('home.metrics.m3.sub') },
-                            { icon: Database, val: t('home.metrics.m4.val'), label: t('home.metrics.m4.label'), sub: t('home.metrics.m4.sub') }
+                            { icon: Landmark, val: `$${simulatedMetrics.tvl.toFixed(3)}B`, label: t('home.metrics.m1.label'), sub: t('home.metrics.m1.sub'), color: 'text-neon-cyan' },
+                            { icon: Bot, val: simulatedMetrics.units.toLocaleString(), label: t('home.metrics.m2.label'), sub: t('home.metrics.m2.sub'), color: 'text-blue-400' },
+                            { icon: Puzzle, val: `${simulatedMetrics.plugins}+`, label: t('home.metrics.m3.label'), sub: t('home.metrics.m3.sub'), color: 'text-neon-purple' },
+                            { icon: Activity, val: simulatedMetrics.elo, label: t('home.metrics.m4.label'), sub: t('home.metrics.m4.sub'), color: 'text-pink-400' }
                         ].map((m, i) => (
-                            <div key={i} className="glass-panel p-8 rounded-2xl flex flex-col items-center group hover:border-white/20 transition-all">
-                                <m.icon className="text-neon-cyan mb-4 group-hover:scale-110 transition-transform" size={32} />
-                                <div className="text-4xl font-black text-white mb-1 group-hover:text-neon-cyan transition-colors">{m.val}</div>
-                                <div className="text-xs font-mono text-neon-cyan uppercase tracking-widest mb-1">{m.label}</div>
-                                <div className="text-gray-500 text-[10px]">{m.sub}</div>
+                            <div key={i} className="glass-panel p-8 rounded-2xl flex flex-col items-center group hover:border-white/20 transition-all relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <m.icon className={`${m.color} mb-4 group-hover:scale-110 transition-transform relative z-10`} size={32} />
+                                <div className="text-4xl font-black text-white mb-1 group-hover:text-neon-cyan transition-colors tabular-nums relative z-10">{m.val}</div>
+                                <div className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-1 relative z-10">{m.label}</div>
+                                <div className="text-gray-500 text-[10px] relative z-10">{m.sub}</div>
                             </div>
                         ))}
                     </div>
