@@ -556,18 +556,18 @@ export default function Home() {
             <section className="py-24 relative border-y border-white/5 bg-gradient-to-b from-black/20 via-[#050505] to-black/20">
                 <div className="max-w-7xl mx-auto px-4 text-center">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-4">
-                        {t('home.metrics.title')} <span className="text-neon-cyan">{t('home.metrics.subtitle')}</span>
+                        {t('home.sections.metrics.title')} <span className="text-neon-cyan">{t('home.sections.metrics.subtitle')}</span>
                     </h2>
                     <p className="text-gray-400 max-w-2xl mx-auto mb-16">
-                        {t('home.metrics.desc')}
+                        {t('home.sections.metrics.desc')}
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                         {[
-                            { icon: Landmark, val: `$${simulatedMetrics.tvl.toFixed(3)}B`, label: t('home.metrics.m1.label'), sub: t('home.metrics.m1.sub'), color: 'text-neon-cyan' },
-                            { icon: Bot, val: simulatedMetrics.units.toLocaleString(), label: t('home.metrics.m2.label'), sub: t('home.metrics.m2.sub'), color: 'text-blue-400' },
-                            { icon: Puzzle, val: `${simulatedMetrics.plugins}+`, label: t('home.metrics.m3.label'), sub: t('home.metrics.m3.sub'), color: 'text-neon-purple' },
-                            { icon: Activity, val: simulatedMetrics.elo, label: t('home.metrics.m4.label'), sub: t('home.metrics.m4.sub'), color: 'text-pink-400' }
+                            { icon: Landmark, val: `$${simulatedMetrics.tvl.toFixed(3)}B`, label: t('home.sections.metrics.m1.label'), sub: t('home.sections.metrics.m1.sub'), color: 'text-neon-cyan' },
+                            { icon: Bot, val: simulatedMetrics.units.toLocaleString(), label: t('home.sections.metrics.m2.label'), sub: t('home.sections.metrics.m2.sub'), color: 'text-blue-400' },
+                            { icon: Puzzle, val: `${simulatedMetrics.plugins}+`, label: t('home.sections.metrics.m3.label'), sub: t('home.sections.metrics.m3.sub'), color: 'text-neon-purple' },
+                            { icon: Activity, val: simulatedMetrics.elo, label: t('home.sections.metrics.m4.label'), sub: t('home.sections.metrics.m4.sub'), color: 'text-pink-400' }
                         ].map((m, i) => (
                             <div key={i} className="glass-panel p-8 rounded-2xl flex flex-col items-center group hover:border-white/20 transition-all relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -586,11 +586,11 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                         {[
-                            { icon: Puzzle, title: t('home.coreFeatures.f1.title'), desc: t('home.coreFeatures.f1.desc') },
-                            { icon: Brain, title: t('home.coreFeatures.f2.title'), desc: t('home.coreFeatures.f2.desc') },
-                            { icon: Trophy, title: t('home.coreFeatures.f3.title'), desc: t('home.coreFeatures.f3.desc') },
-                            { icon: LineChart, title: t('home.coreFeatures.f4.title'), desc: t('home.coreFeatures.f4.desc') },
-                            { icon: Cpu, title: t('home.coreFeatures.f5.title'), desc: t('home.coreFeatures.f5.desc') }
+                            { icon: Puzzle, title: t('home.sections.coreFeatures.f1.title'), desc: t('home.sections.coreFeatures.f1.desc') },
+                            { icon: Brain, title: t('home.sections.coreFeatures.f2.title'), desc: t('home.sections.coreFeatures.f2.desc') },
+                            { icon: Trophy, title: t('home.sections.coreFeatures.f3.title'), desc: t('home.sections.coreFeatures.f3.desc') },
+                            { icon: LineChart, title: t('home.sections.coreFeatures.f4.title'), desc: t('home.sections.coreFeatures.f4.desc') },
+                            { icon: Cpu, title: t('home.sections.coreFeatures.f5.title'), desc: t('home.sections.coreFeatures.f5.desc') }
                         ].map((f, i) => (
                             <div key={i} className="glass-panel p-6 rounded-2xl border border-white/5 hover:border-neon-cyan/30 transition-all group">
                                 <div className="w-12 h-12 rounded-xl bg-neon-cyan/10 flex items-center justify-center mb-6 group-hover:bg-neon-cyan/20 transition-colors">
@@ -642,38 +642,41 @@ export default function Home() {
             </section>
 
             {/* --- ELO REPUTATION SECTION --- */}
-            <section className="py-24 relative overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div className="order-2 lg:order-1">
-                        <h2 className="text-3xl md:text-6xl font-black tracking-tighter mb-6">
-                            {t('home.eloReputation.title')} <span className="text-neon-cyan">{t('home.eloReputation.subtitle')}</span>
-                        </h2>
-                        <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                            {t('home.eloReputation.desc')}
-                        </p>
-                        <div className="p-6 rounded-2xl bg-gradient-to-r from-neon-cyan/10 to-transparent border-l-4 border-neon-cyan">
-                            <div className="text-neon-cyan font-mono text-sm mb-2 uppercase tracking-widest leading-none">Matrix Tier Status</div>
-                            <div className="text-2xl font-black italic">ELO {'>'} 2800: ELITE OPERATOR</div>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 order-1 lg:order-2">
-                        {[
-                            { id: 'Nx', name: 'Nexus', role: 'Swarm Commander', color: 'text-purple-400' },
-                            { id: 'Ti', name: 'Titan', role: 'Flash Loan Lead', color: 'text-blue-400' },
-                            { id: 'Ph', name: 'Phantom', role: 'Stealth Executor', color: 'text-neon-cyan' },
-                            { id: 'Cy', name: 'Cipher', role: 'Price Oracle', color: 'text-green-400' },
-                            { id: 'Sp', name: 'Specter', role: 'Alpha Scout', color: 'text-pink-400' },
-                            { id: 'Kr', name: 'Kraken', role: 'Liquidator', color: 'text-red-400' }
-                        ].map((agent, i) => (
-                            <div key={i} className="glass-panel p-4 rounded-xl flex flex-col items-center text-center group hover:border-white/20 transition-all hover:-translate-y-1">
-                                <div className={`w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3 font-black ${agent.color} border border-white/5 group-hover:bg-white/10 transition-colors`}>
-                                    {agent.id}
-                                </div>
-                                <div className="text-sm font-black">{agent.name}</div>
-                                <div className="text-[10px] text-gray-500 uppercase tracking-tighter leading-none">{agent.role}</div>
+            <section className="py-24 relative border-y border-white/5 bg-black/40">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div className="space-y-6">
+                            <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white">
+                                {t('home.sections.eloReputation.title')} <br />
+                                <span className="text-neon-cyan">{t('home.sections.eloReputation.subtitle')}</span>
+                            </h2>
+                            <p className="text-gray-400 text-lg leading-relaxed">
+                                {t('home.sections.eloReputation.desc')}
+                            </p>
+                            <div className="p-6 rounded-2xl bg-gradient-to-r from-neon-cyan/10 to-transparent border-l-4 border-neon-cyan">
+                                <div className="text-neon-cyan font-mono text-sm mb-2 uppercase tracking-widest leading-none">Matrix Tier Status</div>
+                                <div className="text-2xl font-black italic">ELO {'>'} 2800: ELITE OPERATOR</div>
                             </div>
-                        ))}
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 order-1 lg:order-2">
+                            {[
+                                { id: 'Nx', name: 'Nexus', role: 'Swarm Commander', color: 'text-purple-400' },
+                                { id: 'Ti', name: 'Titan', role: 'Flash Loan Lead', color: 'text-blue-400' },
+                                { id: 'Ph', name: 'Phantom', role: 'Stealth Executor', color: 'text-neon-cyan' },
+                                { id: 'Cy', name: 'Cipher', role: 'Price Oracle', color: 'text-green-400' },
+                                { id: 'Sp', name: 'Specter', role: 'Alpha Scout', color: 'text-pink-400' },
+                                { id: 'Kr', name: 'Kraken', role: 'Liquidator', color: 'text-red-400' }
+                            ].map((agent, i) => (
+                                <div key={i} className="glass-panel p-4 rounded-xl flex flex-col items-center text-center group hover:border-white/20 transition-all hover:-translate-y-1">
+                                    <div className={`w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3 font-black ${agent.color} border border-white/5 group-hover:bg-white/10 transition-colors`}>
+                                        {agent.id}
+                                    </div>
+                                    <div className="text-sm font-black">{agent.name}</div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-tighter leading-none">{agent.role}</div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -764,26 +767,28 @@ export default function Home() {
             </section>
 
             {/* --- UNIVERSAL TOOLKIT --- */}
-            <section className="py-24 bg-black/40 border-y border-white/5">
+            <section className="py-24 relative bg-black/60">
                 <div className="max-w-7xl mx-auto px-4 text-center">
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-4">
-                        {t('home.toolkit.title')} <span className="text-neon-purple">{t('home.toolkit.subtitle')}</span>
+                    <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-4">
+                        {t('home.sections.toolkit.title')} <span className="text-neon-purple">{t('home.sections.toolkit.subtitle')}</span>
                     </h2>
-                    <p className="text-gray-400 mb-16">{t('home.toolkit.desc')}</p>
+                    <p className="text-gray-400 max-w-2xl mx-auto mb-16">
+                        {t('home.sections.toolkit.desc')}
+                    </p>
 
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                         {[
-                            { icon: Code, label: t('home.toolkit.sdk_py') },
-                            { icon: Layers, label: t('home.toolkit.sdk_ts') },
-                            { icon: TerminalIcon, label: t('home.toolkit.cli') },
-                            { icon: Workflow, label: t('home.toolkit.mcp') },
-                            { icon: Smartphone, label: t('home.toolkit.app') }
-                        ].map((item, i) => (
+                            { icon: Code, label: t('home.sections.toolkit.sdk_py') },
+                            { icon: Layers, label: t('home.sections.toolkit.sdk_ts') },
+                            { icon: TerminalIcon, label: t('home.sections.toolkit.cli') },
+                            { icon: Share2, label: t('home.sections.toolkit.mcp') },
+                            { icon: Smartphone, label: t('home.sections.toolkit.app') }
+                        ].map((tool, i) => (
                             <div key={i} className="glass-panel p-6 rounded-2xl flex flex-col items-center group hover:border-neon-purple/30 transition-all">
                                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-4 group-hover:bg-neon-purple/20 transition-colors">
-                                    <item.icon className="text-gray-400 group-hover:text-neon-purple transition-colors" size={24} />
+                                    <tool.icon className="text-gray-400 group-hover:text-neon-purple transition-colors" size={24} />
                                 </div>
-                                <div className="text-xs font-black tracking-tighter uppercase">{item.label}</div>
+                                <div className="text-xs font-black tracking-tighter uppercase">{tool.label}</div>
                                 <div className="text-[9px] text-gray-600 mt-1 uppercase font-mono">Institutional Tier</div>
                             </div>
                         ))}
@@ -796,29 +801,27 @@ export default function Home() {
                 {/* Background Decor */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full -z-10 animate-pulse"></div>
 
-                <div className="max-w-7xl mx-auto px-4 text-center">
-                    <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-6 leading-none">
-                        {t('home.deployCta.title')} <br />
-                        <span className="text-gradient">{t('home.deployCta.subtitle')}</span>
+                <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.85]">
+                        {t('home.sections.deployCta.title')} <br />
+                        <span className="text-gradient-purple">{t('home.sections.deployCta.subtitle')}</span>
                     </h2>
-                    <p className="text-gray-400 max-w-2xl mx-auto mb-16 text-lg">
-                        {t('home.deployCta.desc')}
+                    <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-16">
+                        {t('home.sections.deployCta.desc')}
                     </p>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
                         {[
-                            { icon: LinkIcon, title: t('home.deployCta.c1.title'), desc: t('home.deployCta.c1.desc'), badge: 'No code required' },
-                            { icon: Bot, title: t('home.deployCta.c2.title'), desc: t('home.deployCta.c2.desc'), badge: 'Builder / SDK / CLI' },
-                            { icon: Lightbulb, title: t('home.deployCta.c3.title'), desc: t('home.deployCta.c3.desc'), badge: 'Earn SUI' }
-                        ].map((c, i) => (
+                            { title: t('home.sections.deployCta.c1.title'), desc: t('home.sections.deployCta.c1.desc') },
+                            { title: t('home.sections.deployCta.c2.title'), desc: t('home.sections.deployCta.c2.desc') },
+                            { title: t('home.sections.deployCta.c3.title'), desc: t('home.sections.deployCta.c3.desc') }
+                        ].map((card, i) => (
                             <div key={i} className="glass-panel p-8 rounded-3xl text-left border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden">
                                 <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                                    <c.icon size={120} />
+                                    <Bot size={120} />
                                 </div>
-                                <c.icon className="text-neon-cyan mb-6" size={40} />
-                                <div className="inline-block px-2 py-0.5 rounded-md bg-white/5 text-[9px] font-mono text-gray-500 uppercase mb-4">{c.badge}</div>
-                                <h3 className="text-2xl font-black mb-4 tracking-tighter uppercase">{c.title}</h3>
-                                <p className="text-gray-400 text-sm leading-relaxed">{c.desc}</p>
+                                <h3 className="text-2xl font-black mb-4 tracking-tighter uppercase">{card.title}</h3>
+                                <p className="text-gray-400 text-sm leading-relaxed">{card.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -828,7 +831,7 @@ export default function Home() {
                             href="/dashboard"
                             className="inline-flex items-center gap-2 bg-white text-black font-black px-12 py-4 rounded-full text-xl hover:bg-neon-cyan transition-all transform hover:scale-105"
                         >
-                            {t('home.interface.human.cta')}
+                            {t('home.sections.interface.human.cta')}
                             <ArrowRight size={24} />
                         </Link>
                     </div>
@@ -850,6 +853,6 @@ export default function Home() {
                     ))}
                 </div>
             </section>
-        </main>
+        </main >
     );
 }
