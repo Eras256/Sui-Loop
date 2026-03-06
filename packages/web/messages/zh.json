@@ -256,24 +256,24 @@
       }
     },
     "loop": {
-      "title": "核心",
-      "subtitle": "闭环 (LOOP)",
-      "p": "自主代理如何执行原子套利",
+      "title": "如何",
+      "subtitle": "运作",
+      "p": "通过四个机构级步骤启动您的自主代理集群。",
       "s1": {
-        "title": "观察",
-        "desc": "代理扫描 Scallop APY、Navi 协议流动性和 Cetus 池的价格偏差。"
+        "title": "连接钱包",
+        "desc": "关联您的 Sui 钱包（Mysten、OKX、Surf）。 您的密钥，您的资本——始终是非托管的。"
       },
       "s2": {
-        "title": "计算",
-        "desc": "计算最佳贷款额和跨协议的预期价差利润。"
+        "title": "创建代理逻辑",
+        "desc": "使用我们的可视化构建器、SDK、CLI 或 MCP 服务器，在几秒钟内生成链上身份和策略参数。"
       },
       "s3": {
-        "title": "构建",
-        "desc": "使用 Navi/Scallop 闪电贷和 DeepBook V3 路径构建 PTB。"
+        "title": "连接 LLM 矩阵",
+        "desc": "引入您最喜欢的 LLM（OpenAI、Gemini）或使用本地模型，实现对决策逻辑的完全主权控制。"
       },
       "s4": {
-        "title": "执行",
-        "desc": "提交至区块链。捕获利润或原子化安全回滚。"
+        "title": "让集群执行",
+        "desc": "您的代理将加入神经网络，24/7 全天候在 Sui 上执行交易，并自动提高其 ELO 排行榜排名。"
       }
     },
     "builderHighlight": {

@@ -529,22 +529,30 @@ export default function Home() {
                         <p className="text-gray-400 mt-4 text-lg">{t('home.loop.p')}</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative items-start">
+                        {/* Connecting Line (Desktop) */}
+                        <div className="hidden md:block absolute top-10 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-neon-cyan/0 via-neon-cyan/30 to-neon-cyan/0 -z-0"></div>
+
                         {[
                             { step: "01", title: t('home.loop.s1.title'), desc: t('home.loop.s1.desc') },
                             { step: "02", title: t('home.loop.s2.title'), desc: t('home.loop.s2.desc') },
                             { step: "03", title: t('home.loop.s3.title'), desc: t('home.loop.s3.desc') },
                             { step: "04", title: t('home.loop.s4.title'), desc: t('home.loop.s4.desc') }
                         ].map((s, i) => (
-                            <div key={i} className="relative z-10 flex flex-col items-center text-center">
-
-                                <div className="text-6xl md:text-8xl font-black text-white/5 mb-4 select-none">
-                                    {s.step}</div>
-                                <div className="w-4 h-4 rounded-full bg-neon-cyan mb-6">
+                            <div key={i} className="group relative z-10 flex flex-col items-center text-center">
+                                {/* Box Step */}
+                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl border border-white/10 bg-[#050505] flex items-center justify-center mb-8 relative transition-all duration-500 group-hover:border-neon-cyan/50 group-hover:shadow-[0_0_40px_rgba(0,243,255,0.15)] group-hover:-translate-y-2">
+                                    <span className="text-neon-cyan font-black text-xl md:text-2xl font-mono">{s.step}</span>
+                                    {/* Inner Shine */}
+                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent opacity-50"></div>
                                 </div>
-                                <h3 className="text-xl font-bold mb-3">{s.title}</h3>
-                                <p className="text-gray-400 text-sm max-w-[200px]">{s.desc}</p>
-                                {i < 3 && <div className="hidden md:block absolute top-[110px] left-1/2 w-full h-[2px] bg-gradient-to-r from-neon-cyan/30 to-transparent -z-10 translate-x-1/2"></div>}
+
+                                <h3 className="text-xl md:text-2xl font-black mb-3 tracking-tighter uppercase group-hover:text-neon-cyan transition-colors">
+                                    {s.title}
+                                </h3>
+                                <p className="text-gray-400 text-sm leading-relaxed max-w-[240px]">
+                                    {s.desc}
+                                </p>
                             </div>
                         ))}
                     </div>

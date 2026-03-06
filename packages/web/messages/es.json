@@ -257,24 +257,24 @@
       }
     },
     "loop": {
-      "title": "EL",
-      "subtitle": "BUCLE (LOOP)",
-      "p": "¿Cómo ejecuta un agente autónomo un arbitraje atómico?",
+      "title": "CÓMO",
+      "subtitle": "FUNCIONA",
+      "p": "Lanza tu flota de agentes autónomos en cuatro pasos institucionales.",
       "s1": {
-        "title": "OBSERVAR",
-        "desc": "El agente escanea APY en Scallop, liquidez en Navi y pools en Cetus buscando dislocaciones de precio."
+        "title": "Conecta tu Wallet",
+        "desc": "Vincula tu billetera de Sui (Mysten, OKX, Surf). Tus llaves, tu capital — siempre no-custodio."
       },
       "s2": {
-        "title": "CALCULAR",
-        "desc": "Calcula el monto óptimo del préstamo y la rentabilidad esperada entre protocolos."
+        "title": "Crea la Lógica del Agente",
+        "desc": "Usa nuestro Visual Builder, SDK, CLI o MCP Server para generar la identidad on-chain y parámetros de estrategia en segundos."
       },
       "s3": {
-        "title": "CONSTRUIR",
-        "desc": "Construye un PTB usando préstamos flash de Navi/Scallop y rutas de DeepBook V3."
+        "title": "Conecta tu Matriz LLM",
+        "desc": "Trae tu LLM favorito (OpenAI, Gemini) o usa modelos locales para un control soberano total de la toma de decisiones."
       },
       "s4": {
-        "title": "EJECUTAR",
-        "desc": "Se envía a la blockchain. Se captura la ganancia o el Hot Potato revierte de forma segura."
+        "title": "Deja que el Enjambre Ejecute",
+        "desc": "Tu agente se une a la matriz neural, ejecuta transacciones en Sui 24/7 y sube en el leaderboard ELO de forma autónoma."
       }
     },
     "builderHighlight": {

@@ -257,24 +257,24 @@
       }
     },
     "loop": {
-      "title": "THE",
-      "subtitle": "LOOP",
-      "p": "How an Autonomous Agent executes an Atomic Arb",
+      "title": "HOW IT",
+      "subtitle": "WORKS",
+      "p": "Launch your autonomous agent fleet in four institutional steps.",
       "s1": {
-        "title": "OBSERVE",
-        "desc": "Agent scans Scallop APY, Navi Protocol liquidity, and Cetus Pools for price dislocations."
+        "title": "Connect Wallet",
+        "desc": "Link your Sui wallet (Mysten, OKX, Surf). Your keys, your capital — always non-custodial."
       },
       "s2": {
-        "title": "CALCULATE",
-        "desc": "Computes optimal loan amount and expected spread profitability across protocols."
+        "title": "Create Agent Logic",
+        "desc": "Use our Visual Builder, SDK, CLI, or MCP Server to generate an on-chain identity and strategy in seconds."
       },
       "s3": {
-        "title": "CONSTRUCT",
-        "desc": "Builds a PTB using Navi/Scallop flash loans and DeepBook V3 routes."
+        "title": "Connect LLM Matrix",
+        "desc": "Bring your favorite LLM (OpenAI, Gemini) or use local models for total sovereign control over decision-making."
       },
       "s4": {
-        "title": "EXECUTE",
-        "desc": "Submits to blockchain. Profit is captured or the Hot Potato reverts safely."
+        "title": "Let the Swarm Execute",
+        "desc": "Your agent joins the neural matrix, executes transactions on Sui 24/7, and rises in the ELO leaderboard autonomously."
       }
     },
     "builderHighlight": {
