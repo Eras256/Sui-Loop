@@ -27,7 +27,8 @@ module suiloop::agent_registry {
 
     public struct SignalPublished has copy, drop {
         agent_id: address,
-        signal_data: vector<u8>, // IPFS CID or JSON bytes
+        signal_data: vector<u8>, // Decision/Action JSON
+        walrus_blob_id: vector<u8>, // The "Why" - Immutable decidion metadata on Walrus
         timestamp: u64
     }
 
@@ -112,6 +113,7 @@ module suiloop::agent_registry {
         registry: &Registry,
         agent_address: address,
         signal_data: vector<u8>,
+        walrus_blob_id: vector<u8>,
         clock: &Clock,
         ctx: &mut TxContext
     ) {
@@ -124,6 +126,7 @@ module suiloop::agent_registry {
         event::emit(SignalPublished {
             agent_id: agent_address,
             signal_data,
+            walrus_blob_id,
             timestamp: clock::timestamp_ms(clock)
         });
     }

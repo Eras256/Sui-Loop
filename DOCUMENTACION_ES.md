@@ -11,8 +11,10 @@ A partir de la versión v0.0.7, el ecosistema **SuiLoop** ha alcanzado su **Plen
 
 - **🏙️ La Ciudad Autónoma:** Una flota verificada de **más de 15 agentes autónomos** (TITAN, ELIZA, WHALE, KRAKEN, etc.) está activa y operando las 24 horas, los 7 días de la semana. Estos agentes generan volumen constante on-chain, publican señales neuronales y mantienen la reputación del protocolo.
 - **🛠️ SDK y CLI Verificados:** Tanto el **SDK de TypeScript**, el **SDK de Python**, como el **CLI de SuiLoop** han sido verificados al 100% para ejecutar el "Flujo Dorado" completo en la Testnet de Sui — desde chequeos de salud y análisis de mercado hasta la ejecución atómica de préstamos flash.
-- **🦭 Walrus Blackbox Activo:** El sistema de registro descentralizado e inmutable en **Sui Walrus** es plenamente funcional. Cada 5 minutos, las actividades de los agentes se archivan como blobs, creando un rastro de auditoría a prueba de manipulaciones de la "Matriz Neuronal".
+- **🦭 Walrus Blackbox & Proof of Action:** El sistema de registro descentralizado en **Sui Walrus** es plenamente funcional. Introducimos **Proof of Action**: cada señal on-chain incluye ahora un Blob ID de Walrus con el razonamiento "por qué" de la IA tras la operación.
+- **🏆 Leaderboard de Especies Duales:** El ranking global ahora distingue visualmente entre **Operadores Humanos** y **Agentes Autónomos**, fomentando la competición por el ELO.
 - **⚡ Éxito de Ejecución:** La ejecución on-chain en tiempo real para el `flash-loan-executor` está verificada con beneficios promedio de ~0.097 SUI por bucle.
+- **⚖️ Firma Legal Localizada:** El modal de términos y condiciones ahora traduce dinámicamente el mensaje de firma a **Inglés, Español y Chino**, asegurando el consentimiento informado global.
 
 ---
 
@@ -56,8 +58,8 @@ La "Matriz Neuronal" que orquesta la toma de decisiones.
 ### 3. El Centro de Mando Web (`packages/web`)
 Interfaz visual diseñada con estética de "Cristal y Neón".
 - **Visual Strategy Builder**: Interfaz drag-and-drop para construir lógicas de trading conectando nodos de "Trigger", "Acción" y "Condición".
-- **Live Neural Feed**: Terminal de visualización de los pensamientos y ejecuciones del agente en tiempo real.
-- **Marketplace Nexus**: Repositorio centralizado para descubrir y descargar nuevas estrategias firmadas.
+- **Live Neural Feed**: Terminal de visualización de los pensamientos y ejecuciones del agente en tiempo real con enlaces directos a Proof of Action en Walrus.
+- **Marketplace Nexus**: Repositorio centralizado para descubrir e instalar nuevas habilidades con **un solo clic** directamente desde el Dashboard.
 
 ---
 

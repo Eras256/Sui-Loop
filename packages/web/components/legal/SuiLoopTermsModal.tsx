@@ -47,7 +47,7 @@ export default function SuiLoopTermsModal() {
         setError(null);
 
         try {
-            const message = "I have read and accept the SuiLoop Terms of Service, Risk Disclosures, and explicitly acknowledge the risk of total fund loss and AI algorithmic hallucinations. I confirm I am not a Restricted Person.";
+            const message = t("terms.legalModal.signMessage");
 
             const signature = await signPersonalMessage({
                 message: new TextEncoder().encode(message),

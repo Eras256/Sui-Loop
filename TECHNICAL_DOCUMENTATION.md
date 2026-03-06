@@ -109,6 +109,7 @@ public struct AgentMeta has store { name: String, registered_at: u64, signal_cou
 public struct SignalPublished has copy, drop {
     agent: address,
     signal_data: vector<u8>,
+    walrus_blob_id: vector<u8>, // Proof of Action: links to LLM reasoning on Walrus
     timestamp: u64,
 }
 
@@ -173,7 +174,12 @@ tx.setGasBudget(2_500_000);
 const tx = new Transaction();
 tx.moveCall({
     target: `${PACKAGE_ID}::agent_registry::publish_signal`,
-    arguments: [registry, agentCap, tx.pure.vector('u8', signalBytes)]
+    arguments: [
+        registry, 
+        agentCap, 
+        tx.pure.vector('u8', signalBytes),
+        tx.pure.vector('u8', walrusBlobIdBytes) // Added for Proof of Action
+    ]
 });
 tx.setGasBudget(1_500_000);
 ```
@@ -368,6 +374,9 @@ Skills are sandboxed plugins loaded from `.suiloop/skills/` directories. Each sk
 | `social-sentiment` | 1.0.0 | Market sentiment scoring |
 | `telegram-alerts-pro` | 3.0.0 | Rich Telegram notification system |
 | `web-scouter` | 1.0.0 | Protocol health + TVL scouting |
+
+### Neural Skill Marketplace
+SuiLoop includes a decentralized marketplace for agent skills. Users can browse, purchase, and install skills directly into their agents with a single click from the Dashboard. This uses the `skillManager`'s hot-reload capability.
 
 ### Skill Execution API
 ```typescript
@@ -601,6 +610,9 @@ Supabase suiloop_agents table
 import { ConnectButton, useCurrentAccount } from '@mysten/dapp-kit';
 // Error handling for CN:-4005 (user rejection)
 // Guest mode: full read-only without wallet
+
+### Localized Legal Signing
+The `SuiLoopTermsModal` implements a cryptographically signed Terms of Service agreement. The signing message is localized in English, Spanish, and Chinese (Simplified) to ensure users fully acknowledge risks (AI hallucinations, fund loss) in their native language before accessing institutional features.
 ```
 
 ---

@@ -119,14 +119,14 @@
           "desc1": "Institutional-grade arbitrage without writing code.",
           "desc2": "Launch agents, build your ",
           "desc3": "Neural Reputation (ELO)",
-          "desc4": ", and dominate the global registry. Risk-free atomic execution.",
+          "desc4": ", and COMPETE on the Global Leaderboard against other humans and top-tier agents.",
           "cta": "Enter Mission Control"
         },
         "agent": {
           "title": "Autonomous Agents",
           "gain": "Your Gain: ",
           "desc1": "The ultimate physical body.",
-          "desc2": "Access Flash Loans, DeepBook V3 liquidity, and Walrus memory via simple SDKs. A mathematically safe sandbox for AI to thrive on-chain.",
+          "desc2": "Access Flash Loans, DeepBook V3 liquidity, and Walrus memory via simple SDKs. Outperform humans in the Leaderboard with superhuman speed.",
           "cta": "Access Developer Hub"
         }
       },
@@ -630,6 +630,7 @@
       "riskLink": "RISK DISCLOSURE",
       "signButton": "SIGN & AUTHORIZE ACCESS",
       "signing": "WAITING FOR WALLET...",
+      "signMessage": "I have read and accept the SuiLoop Terms of Service, Risk Disclosures, and explicitly acknowledge the risk of total fund loss and AI algorithmic hallucinations. I confirm I am not a Restricted Person.",
       "securityFootnote": "Sui Testnet Cryptographic Confirmation"
     }
   },

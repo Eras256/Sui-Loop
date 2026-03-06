@@ -602,6 +602,17 @@ function DashboardContent() {
         }
     }, [account]);
 
+    // Auto-open detail modal if strategy param is present
+    useEffect(() => {
+        const stratId = searchParams?.get('strategy');
+        if (stratId && activeStrategies.length > 0 && !selectedStrategy) {
+            const found = activeStrategies.find(s => s.id === stratId || (s.strategy_id && s.strategy_id === stratId));
+            if (found) {
+                setSelectedStrategy(found);
+            }
+        }
+    }, [searchParams, activeStrategies, selectedStrategy]);
+
     // Persist activeStrategies to LocalStorage whenever they change (after initial load)
     useEffect(() => {
         if (!isInitialized || !account?.address) return;
@@ -2047,10 +2058,17 @@ function DashboardContent() {
                                 </div>
 
                                 {/* Actions Footer */}
-                                <div className="p-6 border-t border-white/5 bg-black/20 flex gap-3">
+                                <div className="p-6 border-t border-white/5 bg-black/20 flex flex-wrap gap-3">
+                                    <Link
+                                        href={`/marketplace?agentId=${selectedStrategy.id || selectedStrategy.strategy_id}`}
+                                        className="flex-1 min-w-[140px] px-4 py-3 rounded-xl font-bold text-xs bg-neon-cyan/10 hover:bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/20 transition-colors flex items-center justify-center gap-2 group"
+                                    >
+                                        <Zap size={14} className="group-hover:animate-pulse" />
+                                        {t('nav.marketplace')}
+                                    </Link>
                                     <button
                                         onClick={() => setSelectedStrategy(null)}
-                                        className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-white/5 hover:bg-white/10 text-gray-300 transition-colors border border-white/5"
+                                        className="flex-1 min-w-[140px] px-4 py-3 rounded-xl font-bold text-xs bg-white/5 hover:bg-white/10 text-gray-300 transition-colors border border-white/5 uppercase"
                                     >
                                         {t('dashboard.closeView')}
                                     </button>
@@ -2059,7 +2077,7 @@ function DashboardContent() {
                                             stopStrategy(selectedStrategy.id);
                                             setSelectedStrategy(null);
                                         }}
-                                        className="flex-1 px-4 py-3 rounded-xl font-bold text-xs bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 transition-colors flex items-center justify-center gap-2 group"
+                                        className="w-full px-4 py-3 rounded-xl font-bold text-xs bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 transition-colors flex items-center justify-center gap-2 group"
                                     >
                                         <Trash2 size={14} className="group-hover:scale-110 transition-transform" />
                                         {t('dashboard.terminateAgent')}

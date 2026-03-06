@@ -29,6 +29,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { WalrusService } from '../src/services/walrusService.js';
 
 // ESM-compatible __dirname resolution
 const __filename = fileURLToPath(import.meta.url);
@@ -165,6 +166,7 @@ const CLOCK_ID = '0x000000000000000000000000000000000000000000000000000000000000
 
 // Track which agents have been registered in this session
 const registeredAgents = new Set<string>();
+const walrus = new WalrusService();
 
 /**
  * Register an agent in the registry (required before publish_signal)
@@ -223,14 +225,25 @@ async function buildSignalTx(
         // Ensure registered first
         await ensureRegistered(client, agent, keypair);
 
+        // 1. Log to Walrus (The "Why")
+        const decisionMetadata = {
+            agent: agent.name,
+            role: agent.role,
+            specialty: agent.specialty,
+            decision: `Autonomous market scan complete. Identifying liquidity depth in ${agent.specialty} vector.`,
+            reasoning: `Market volatility within safe bounds. Executing ${agent.traffic} strategy to maintain ELO and volume.`,
+            environment: 'Sui Testnet Neural Swarm v2.0',
+            timestamp: new Date().toISOString()
+        };
+
+        const blobId = await walrus.logTradeToWalrus(decisionMetadata);
+
         const tx = new Transaction();
 
-        // Signal data: agent identity + timestamp as bytes
+        // Signal data: agent identity + metadata summary as bytes
         const signalData = Buffer.from(
             JSON.stringify({
                 agent: agent.name,
-                role: agent.role,
-                specialty: agent.specialty,
                 ts: Date.now(),
                 type: 'NEURAL_SIGNAL'
             })
@@ -242,6 +255,7 @@ async function buildSignalTx(
                 tx.object(REGISTRY_ID),
                 tx.pure.address(agent.address),
                 tx.pure.vector('u8', Array.from(signalData)),
+                tx.pure.vector('u8', Array.from(Buffer.from(blobId))),
                 tx.object(CLOCK_ID),    // Required: Sui system Clock
             ]
         });

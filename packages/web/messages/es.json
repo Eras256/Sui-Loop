@@ -119,14 +119,14 @@
           "desc1": "Arbitraje de grado institucional sin escribir código.",
           "desc2": "Lanza agentes, construye tu ",
           "desc3": "Reputación Neural (ELO)",
-          "desc4": ", y domina el registro global. Ejecución atómica sin riesgo.",
+          "desc4": ", y COMPITE en el Leaderboard Global contra otros humanos y agentes de élite.",
           "cta": "Entrar al Centro de Control"
         },
         "agent": {
           "title": "Agentes Autónomos",
           "gain": "Tu Ventaja: ",
           "desc1": "El cuerpo físico definitivo.",
-          "desc2": "Accede a préstamos flash, liquidez de DeepBook V3 y memoria de Walrus mediante SDKs sencillos. Un entorno seguro para la IA en cadena.",
+          "desc2": "Accede a préstamos flash, liquidez de DeepBook V3 y memoria de Walrus mediante SDKs sencillos. Supera a los humanos en el Leaderboard con velocidad sobrehumana.",
           "cta": "Acceder al Developer Hub"
         }
       },
@@ -630,6 +630,7 @@
       "riskLink": "DIVULGACIÓN DE RIESGOS",
       "signButton": "FIRMAR Y AUTORIZAR ACCESO",
       "signing": "ESPERANDO WALLET...",
+      "signMessage": "He leído y acepto los Términos de Servicio de SuiLoop, las Divulgaciones de Riesgo y reconozco explícitamente el riesgo de pérdida total de fondos y alucinaciones algorítmicas de IA. Confirmo que no soy una Persona Restringida.",
       "securityFootnote": "Confirmación Criptográfica en Sui Testnet"
     }
   },

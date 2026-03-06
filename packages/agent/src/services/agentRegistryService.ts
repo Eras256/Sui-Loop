@@ -63,7 +63,7 @@ export const agentRegistryService = {
     /**
      * Publish a signal to the on-chain agent network
      */
-    publishSignalOnChain: async (signalData: string) => {
+    publishSignalOnChain: async (signalData: string, walrusBlobId: string = "") => {
         try {
             const privateKeyHex = process.env.AGENT_PRIVATE_KEY;
             if (!privateKeyHex || PACKAGE_ID === '0x_YOUR_PACKAGE_ID') {
@@ -74,12 +74,13 @@ export const agentRegistryService = {
             const keypair = Ed25519Keypair.fromSecretKey(privateKeyHex);
             const agentAddress = keypair.toSuiAddress();
 
-            broadcastLog('info', `Publishing signal to network: ${signalData}`, { module: 'Registry' });
+            broadcastLog('info', `Publishing signal to network: ${signalData} [Proof of Action: ${walrusBlobId || 'N/A'}]`, { module: 'Registry' });
 
             const tx = new Transaction();
 
-            // Convert string to bytes
+            // Convert strings to bytes
             const signalBytes = new TextEncoder().encode(signalData);
+            const blobIdBytes = new TextEncoder().encode(walrusBlobId);
 
             tx.moveCall({
                 target: `${PACKAGE_ID}::agent_registry::publish_signal`,
@@ -87,6 +88,7 @@ export const agentRegistryService = {
                     tx.object(REGISTRY_ID),
                     tx.pure.address(agentAddress),
                     tx.pure.vector('u8', Array.from(signalBytes)),
+                    tx.pure.vector('u8', Array.from(blobIdBytes)),
                     tx.object('0x6') // Clock object
                 ]
             });

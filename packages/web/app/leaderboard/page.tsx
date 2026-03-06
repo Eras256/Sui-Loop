@@ -74,6 +74,7 @@ type AgentProfile = {
     rank: number;
     lastTx?: string;
     lastSignal?: string;
+    isHuman: boolean;
 };
 
 export default function LeaderboardPage() {
@@ -118,6 +119,7 @@ export default function LeaderboardPage() {
                             rank: idx + 1,
                             lastTx: row.last_tx_hash ?? undefined,
                             lastSignal: row.last_signal ?? undefined,
+                            isHuman: !meta,
                         };
                     });
 
@@ -267,7 +269,12 @@ export default function LeaderboardPage() {
                                             ${idx === 0 ? 'text-yellow-400' : 'text-white'}`}>
                                             {agent.name}
                                         </h3>
-                                        <p className="text-[10px] text-gray-500 font-mono">{agent.role}</p>
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-[10px] text-gray-500 font-mono">{agent.role}</p>
+                                            {agent.isHuman && (
+                                                <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-neon-purple/30 border border-neon-purple/50 text-neon-purple font-black uppercase tracking-tighter shadow-[0_0_10px_rgba(189,0,255,0.2)]">Human</span>
+                                            )}
+                                        </div>
                                         {/* Wallet en formato corto + link */}
                                         <a
                                             href={`https://suiscan.xyz/testnet/account/${agent.address}`}
@@ -423,9 +430,12 @@ export default function LeaderboardPage() {
                                                                 </a>
                                                             </div>
                                                             {/* Wallet corta + rol */}
-                                                            <div className="flex items-center gap-1 mt-0.5">
+                                                            <div className="flex items-center gap-1.5 mt-0.5">
                                                                 <Wallet className="w-2.5 h-2.5 text-gray-700" />
                                                                 <span className="text-[9px] text-gray-600 font-mono">{shortAddr(agent.address)}</span>
+                                                                {agent.isHuman && (
+                                                                    <span className="text-[8px] px-1.5 rounded-full bg-neon-purple/30 border border-neon-purple/50 text-neon-purple font-black uppercase tracking-tighter">Human</span>
+                                                                )}
                                                             </div>
                                                             <span className="text-[8px] text-gray-700 font-mono">{agent.role}</span>
                                                         </div>
