@@ -374,7 +374,15 @@ Commit: [e58e786](https://github.com/Eras256/Sui-Loop/commit/e58e786)
 
 **4. 100% Technical Documentation & Pitch Storytelling**
 Revamped the entire `README.md` with institutional storytelling and a full system architecture diagram. Updated `TECHNICAL_DOCUMENTATION.md` to v1.0, covering the Move Atomic Engine (Hot Potato), Neural Swarm, and Safety layers in detail for technical reviewers.
-Commits: [e58e786](https://github.com/Eras256/Sui-Loop/commit/e58e786) | [ab913f1](https://github.com/Eras256/Sui-Loop/commit/ab913f1)
+Commit: [ab913f1](https://github.com/Eras256/Sui-Loop/commit/ab913f1)
+
+**5. Dual Species UX & Global Localization (EN/ES/ZH)**
+Re-engineered the platform as a Human vs. Agent competition ecosystem. Localized the entire legal and operational experience (including cryptographic signing) for the Chinese, Spanish, and English markets, solving critical UX barriers for international institutional users.
+Commit: [16f345e](https://github.com/Eras256/Sui-Loop/commit/16f345e)
+
+**6. Marketplace & Proof of Action (Walrus Sealed Signals)**
+Enabled one-click skill installation from the marketplace into the Dashboard. Enhanced `agent_registry` signals with a `walrus_blob_id` link (**Proof of Action**), creating a verifiable bond between LLM reasoning and on-chain state changes.
+Commit: [16f345e](https://github.com/Eras256/Sui-Loop/commit/16f345e)
 
 ## Verifiable Technical Evidence
 
