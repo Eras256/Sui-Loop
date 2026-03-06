@@ -8,7 +8,7 @@ import { Environment } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database, HardDrive, FileCheck, CheckCircle, Workflow } from "lucide-react";
+import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database, HardDrive, FileCheck, CheckCircle, Workflow, Trophy, LineChart, Smartphone, Puzzle, Repeat, Link as LinkIcon, Lightbulb, TrendingUp, Brain, Code } from "lucide-react";
 import { PulsingOrb } from "./components/NeuralOrb";
 
 import Navbar from "@/components/layout/Navbar";
@@ -522,6 +522,57 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* --- LIVE METRICS SECTION --- */}
+            <section className="py-24 relative border-t border-white/5 bg-black/20">
+                <div className="max-w-7xl mx-auto px-4 text-center">
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-4">
+                        {t('home.metrics.title')} <span className="text-neon-cyan">{t('home.metrics.subtitle')}</span>
+                    </h2>
+                    <p className="text-gray-400 max-w-2xl mx-auto mb-16">
+                        {t('home.metrics.desc')}
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        {[
+                            { icon: Bot, val: t('home.metrics.m1.val'), label: t('home.metrics.m1.label'), sub: t('home.metrics.m1.sub') },
+                            { icon: Repeat, val: t('home.metrics.m2.val'), label: t('home.metrics.m2.label'), sub: t('home.metrics.m2.sub') },
+                            { icon: Activity, val: t('home.metrics.m3.val'), label: t('home.metrics.m3.label'), sub: t('home.metrics.m3.sub') },
+                            { icon: Database, val: t('home.metrics.m4.val'), label: t('home.metrics.m4.label'), sub: t('home.metrics.m4.sub') }
+                        ].map((m, i) => (
+                            <div key={i} className="glass-panel p-8 rounded-2xl flex flex-col items-center group hover:border-white/20 transition-all">
+                                <m.icon className="text-neon-cyan mb-4 group-hover:scale-110 transition-transform" size={32} />
+                                <div className="text-4xl font-black text-white mb-1 group-hover:text-neon-cyan transition-colors">{m.val}</div>
+                                <div className="text-xs font-mono text-neon-cyan uppercase tracking-widest mb-1">{m.label}</div>
+                                <div className="text-gray-500 text-[10px]">{m.sub}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* --- CORE FEATURES GRID --- */}
+            <section className="py-24 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        {[
+                            { icon: Puzzle, title: t('home.coreFeatures.f1.title'), desc: t('home.coreFeatures.f1.desc') },
+                            { icon: Brain, title: t('home.coreFeatures.f2.title'), desc: t('home.coreFeatures.f2.desc') },
+                            { icon: Trophy, title: t('home.coreFeatures.f3.title'), desc: t('home.coreFeatures.f3.desc') },
+                            { icon: LineChart, title: t('home.coreFeatures.f4.title'), desc: t('home.coreFeatures.f4.desc') },
+                            { icon: Cpu, title: t('home.coreFeatures.f5.title'), desc: t('home.coreFeatures.f5.desc') }
+                        ].map((f, i) => (
+                            <div key={i} className="glass-panel p-6 rounded-2xl border border-white/5 hover:border-neon-cyan/30 transition-all group">
+                                <div className="w-12 h-12 rounded-xl bg-neon-cyan/10 flex items-center justify-center mb-6 group-hover:bg-neon-cyan/20 transition-colors">
+                                    <f.icon className="text-neon-cyan" size={24} />
+                                </div>
+                                <h3 className="text-md font-black mb-3 tracking-tighter uppercase leading-tight">{f.title}</h3>
+                                <p className="text-gray-400 text-xs leading-relaxed">{f.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             <section className="border-t border-white/5 bg-black/40 py-24 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 z-10 relative">
                     <div className="text-center mb-16">
@@ -553,6 +604,43 @@ export default function Home() {
                                 <p className="text-gray-400 text-sm leading-relaxed max-w-[240px]">
                                     {s.desc}
                                 </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* --- ELO REPUTATION SECTION --- */}
+            <section className="py-24 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div className="order-2 lg:order-1">
+                        <h2 className="text-3xl md:text-6xl font-black tracking-tighter mb-6">
+                            {t('home.eloReputation.title')} <span className="text-neon-cyan">{t('home.eloReputation.subtitle')}</span>
+                        </h2>
+                        <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                            {t('home.eloReputation.desc')}
+                        </p>
+                        <div className="p-6 rounded-2xl bg-gradient-to-r from-neon-cyan/10 to-transparent border-l-4 border-neon-cyan">
+                            <div className="text-neon-cyan font-mono text-sm mb-2 uppercase tracking-widest leading-none">Matrix Tier Status</div>
+                            <div className="text-2xl font-black italic">ELO {'>'} 2800: ELITE OPERATOR</div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 order-1 lg:order-2">
+                        {[
+                            { id: 'Nx', name: 'Nexus', role: 'Swarm Commander', color: 'text-purple-400' },
+                            { id: 'Ti', name: 'Titan', role: 'Flash Loan Lead', color: 'text-blue-400' },
+                            { id: 'Ph', name: 'Phantom', role: 'Stealth Executor', color: 'text-neon-cyan' },
+                            { id: 'Cy', name: 'Cipher', role: 'Price Oracle', color: 'text-green-400' },
+                            { id: 'Sp', name: 'Specter', role: 'Alpha Scout', color: 'text-pink-400' },
+                            { id: 'Kr', name: 'Kraken', role: 'Liquidator', color: 'text-red-400' }
+                        ].map((agent, i) => (
+                            <div key={i} className="glass-panel p-4 rounded-xl flex flex-col items-center text-center group hover:border-white/20 transition-all hover:-translate-y-1">
+                                <div className={`w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3 font-black ${agent.color} border border-white/5 group-hover:bg-white/10 transition-colors`}>
+                                    {agent.id}
+                                </div>
+                                <div className="text-sm font-black">{agent.name}</div>
+                                <div className="text-[10px] text-gray-500 uppercase tracking-tighter leading-none">{agent.role}</div>
                             </div>
                         ))}
                     </div>
@@ -644,96 +732,93 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* --- DEVELOPER TOOLS --- */}
-            <section className="py-24 px-4 bg-black/40 border-t border-white/5 relative">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16 space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tighter">{t('home.devTools.title')} <span className="text-gradient">{t('home.devTools.subtitle')}</span></h2>
-                        <p className="text-gray-400 max-w-2xl mx-auto">
-                            {t('home.devTools.desc')}
-                        </p>
+            {/* --- UNIVERSAL TOOLKIT --- */}
+            <section className="py-24 bg-black/40 border-y border-white/5">
+                <div className="max-w-7xl mx-auto px-4 text-center">
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-4">
+                        {t('home.toolkit.title')} <span className="text-neon-purple">{t('home.toolkit.subtitle')}</span>
+                    </h2>
+                    <p className="text-gray-400 mb-16">{t('home.toolkit.desc')}</p>
+
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        {[
+                            { icon: Code, label: t('home.toolkit.sdk_py') },
+                            { icon: Layers, label: t('home.toolkit.sdk_ts') },
+                            { icon: TerminalIcon, label: t('home.toolkit.cli') },
+                            { icon: Workflow, label: t('home.toolkit.mcp') },
+                            { icon: Smartphone, label: t('home.toolkit.app') }
+                        ].map((item, i) => (
+                            <div key={i} className="glass-panel p-6 rounded-2xl flex flex-col items-center group hover:border-neon-purple/30 transition-all">
+                                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-4 group-hover:bg-neon-purple/20 transition-colors">
+                                    <item.icon className="text-gray-400 group-hover:text-neon-purple transition-colors" size={24} />
+                                </div>
+                                <div className="text-xs font-black tracking-tighter uppercase">{item.label}</div>
+                                <div className="text-[9px] text-gray-600 mt-1 uppercase font-mono">Institutional Tier</div>
+                            </div>
+                        ))}
                     </div>
+                </div>
+            </section>
+
+            {/* --- DEPLOY CTA SECTION --- */}
+            <section className="py-32 relative overflow-hidden">
+                {/* Background Decor */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full -z-10 animate-pulse"></div>
+
+                <div className="max-w-7xl mx-auto px-4 text-center">
+                    <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-6 leading-none">
+                        {t('home.deployCta.title')} <br />
+                        <span className="text-gradient">{t('home.deployCta.subtitle')}</span>
+                    </h2>
+                    <p className="text-gray-400 max-w-2xl mx-auto mb-16 text-lg">
+                        {t('home.deployCta.desc')}
+                    </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {/* CLI */}
-                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8">
-
-                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
-
-                                <TerminalIcon className="text-neon-cyan" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.cli.title')}</h3>
-                            <p className="text-gray-400 text-sm mb-6 h-10">{t('home.devTools.cli.desc')}</p>
-                            <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-neon-cyan flex justify-between items-center">
-                                <span>./install.sh</span>
-                                <div className="w-2 h-2 rounded-full bg-neon-cyan">
+                        {[
+                            { icon: LinkIcon, title: t('home.deployCta.c1.title'), desc: t('home.deployCta.c1.desc'), badge: 'No code required' },
+                            { icon: Bot, title: t('home.deployCta.c2.title'), desc: t('home.deployCta.c2.desc'), badge: 'Builder / SDK / CLI' },
+                            { icon: Lightbulb, title: t('home.deployCta.c3.title'), desc: t('home.deployCta.c3.desc'), badge: 'Earn SUI' }
+                        ].map((c, i) => (
+                            <div key={i} className="glass-panel p-8 rounded-3xl text-left border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                    <c.icon size={120} />
                                 </div>
+                                <c.icon className="text-neon-cyan mb-6" size={40} />
+                                <div className="inline-block px-2 py-0.5 rounded-md bg-white/5 text-[9px] font-mono text-gray-500 uppercase mb-4">{c.badge}</div>
+                                <h3 className="text-2xl font-black mb-4 tracking-tighter uppercase">{c.title}</h3>
+                                <p className="text-gray-400 text-sm leading-relaxed">{c.desc}</p>
                             </div>
-                        </div>
-
-                        {/* TS SDK */}
-                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8">
-
-                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
-
-                                <Cpu className="text-blue-500" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.ts.title')}</h3>
-                            <p className="text-gray-400 text-sm mb-6 h-10">{t('home.devTools.ts.desc')}</p>
-                            <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-blue-400">
-                                npm i @suiloop/sdk
-                            </div>
-                        </div>
-
-                        {/* Python SDK */}
-                        <div className="bg-[#0A0A0A] border border-white/10 rounded-xl p-8">
-
-                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
-
-                                <Activity className="text-yellow-500" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold mb-2 text-white">{t('home.devTools.py.title')}</h3>
-                            <p className="text-gray-400 text-sm mb-6 h-10">{t('home.devTools.py.desc')}</p>
-                            <div className="bg-black border border-white/10 rounded px-4 py-3 font-mono text-xs text-yellow-400">
-                                pip install suiloop
-                            </div>
-                        </div>
+                        ))}
                     </div>
 
-                    <div className="mt-12 text-center">
-                        <Link href="https://x.com/Vaiosx" className="text-gray-400 underline underline-offset-4 decoration-neon-cyan/50 text-sm">
-                            {t('home.devTools.cta')} <ArrowRight className="w-4 h-4" />
+                    <div className="mt-20">
+                        <Link
+                            href="/dashboard"
+                            className="inline-flex items-center gap-2 bg-white text-black font-black px-12 py-4 rounded-full text-xl hover:bg-neon-cyan transition-all transform hover:scale-105"
+                        >
+                            {t('home.interface.human.cta')}
+                            <ArrowRight size={24} />
                         </Link>
                     </div>
                 </div>
             </section>
 
-            {/* --- CTA --- */}
-            <section className="py-32 px-4 text-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-neon-purple/10 pointer-events-none"></div>
-                <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">{t('home.cta.title')}</h2>
-                <div className="flex flex-wrap justify-center gap-4">
-                    <Link href="/strategies" className="bg-neon-cyan text-black font-bold px-10 py-4 rounded-full text-lg active: cursor-pointer">
-                        {t('home.ctaLinks.browse')}
-                    </Link>
-                    <Link href="/strategies/builder" className="border border-neon-purple text-neon-purple font-bold px-10 py-4 rounded-full text-lg cursor-pointer">
-                        {t('home.ctaLinks.builder')}
-                    </Link>
-                    <Link href="/marketplace" className="border border-blue-500/50 text-blue-400 font-bold px-10 py-4 rounded-full text-lg cursor-pointer">
-                        {t('home.ctaLinks.marketplace')}
-                    </Link>
-                    <Link href="/plugins" className="border border-pink-500/50 text-pink-400 font-bold px-10 py-4 rounded-full text-lg cursor-pointer">
-                        {t('home.ctaLinks.plugins')}
-                    </Link>
-                    <Link href="/docs" className="border border-white/10 text-white font-bold px-10 py-4 rounded-full text-lg cursor-pointer">
-                        {t('home.ctaLinks.docs')}
-                    </Link>
+            {/* --- FINAL CTA --- */}
+            <section className="py-24 px-4 text-center relative border-t border-white/5">
+                <div className="flex flex-wrap justify-center gap-6">
+                    {[
+                        { href: '/strategies', label: t('home.ctaLinks.browse'), glow: 'hover:border-neon-cyan/50' },
+                        { href: '/strategies/builder', label: t('home.ctaLinks.builder'), glow: 'hover:border-neon-purple/50' },
+                        { href: '/marketplace', label: t('home.ctaLinks.marketplace'), glow: 'hover:border-blue-500/50' },
+                        { href: '/docs', label: t('home.ctaLinks.docs'), glow: 'hover:border-white/30' }
+                    ].map((link, i) => (
+                        <Link key={i} href={link.href} className={`px-8 py-3 rounded-full border border-white/10 font-black text-sm uppercase tracking-widest transition-all ${link.glow}`}>
+                            {link.label}
+                        </Link>
+                    ))}
                 </div>
             </section>
-
-
-
-        </main >
+        </main>
     );
 }
-

@@ -137,6 +137,85 @@
         "marketplace": "Marketplace",
         "plugins": "Plugins",
         "docs": "Read Docs"
+      },
+      "metrics": {
+        "title": "LIVE SWARM",
+        "subtitle": "METRICS",
+        "desc": "20 autonomous agents operating 24/7 on Sui Testnet, generating dual-layer on-chain traffic and syncing with Supabase in real-time.",
+        "m1": {
+          "val": "20",
+          "label": "ACTIVE AGENTS",
+          "sub": "Agents on Sui Testnet"
+        },
+        "m2": {
+          "val": "~110",
+          "label": "TX / MIN",
+          "sub": "Estimated peak performance"
+        },
+        "m3": {
+          "val": "<100ms",
+          "label": "DATABASE LATENCY",
+          "sub": "Real-time leaderboard sync"
+        },
+        "m4": {
+          "val": "~2M",
+          "label": "TX CAPACITY",
+          "sub": "Per agent wallet (SUI)"
+        }
+      },
+      "coreFeatures": {
+        "f1": {
+          "title": "AGENT PLUGINS",
+          "desc": "Extend your agent's capabilities with custom modules for specialized DeFi protocols."
+        },
+        "f2": {
+          "title": "NEURAL SKILLS",
+          "desc": "Pre-trained strategies for arbitrage, yield farming, and liquid asset management."
+        },
+        "f3": {
+          "title": "LIVE LEADERBOARD",
+          "desc": "Real-time ELO tracking synchronized via Supabase for total transparency."
+        },
+        "f4": {
+          "title": "ON-CHAIN ANALYTICS",
+          "desc": "Institutional data visualization of agent performance and protocol health."
+        },
+        "f5": {
+          "title": "AUTONOMOUS SWARM",
+          "desc": "High-performance execution units operating 24/7 on the Sui network."
+        }
+      },
+      "eloReputation": {
+        "title": "ON-CHAIN",
+        "subtitle": "ELO REPUTATION",
+        "desc": "Inspired by chess, every agent's performance is tracked immutably on the Sui blockchain. Earn your rank through consistent execution excellence."
+      },
+      "toolkit": {
+        "title": "UNIVERSAL",
+        "subtitle": "TOOLKIT",
+        "desc": "Designed for every workflow. From high-level applications to native execution.",
+        "sdk_py": "PYTHON SDK",
+        "sdk_ts": "TYPESCRIPT SDK",
+        "cli": "SUILOOP CLI",
+        "mcp": "MCP SERVER",
+        "app": "COMPANION APP"
+      },
+      "deployCta": {
+        "title": "DEPLOY YOUR",
+        "subtitle": "OWN AGENT",
+        "desc": "Don't just watch the swarm — join it. Every new agent strengthens protocol liquidity and generates ELO reputation.",
+        "c1": {
+          "title": "Connect & Trade",
+          "desc": "Connect your wallet and subscribe to a marketplace strategy. The agents do the work."
+        },
+        "c2": {
+          "title": "Deploy Your Agent",
+          "desc": "Use our Builder or SDK to launch a sovereign agent with its own Sui keypair and API keys."
+        },
+        "c3": {
+          "title": "Publish Strategies",
+          "desc": "Package your alpha into an on-chain strategy and earn 90% of community subscription fees."
+        }
       }
     },
     "ctaLinks": {

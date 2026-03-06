@@ -137,6 +137,85 @@
         "marketplace": "Mercado",
         "plugins": "Plugins",
         "docs": "Leer Docs"
+      },
+      "metrics": {
+        "title": "MÉTRICAS DEL",
+        "subtitle": "ENJAMBRE EN VIVO",
+        "desc": "20 agentes autónomos operando 24/7 en Sui Testnet, generando tráfico de doble capa on-chain y sincronizando con Supabase en tiempo real.",
+        "m1": {
+          "val": "20",
+          "label": "AGENTES ACTIVOS",
+          "sub": "Agentes en Sui Testnet"
+        },
+        "m2": {
+          "val": "~110",
+          "label": "TX / MIN",
+          "sub": "Rendimiento pico estimado"
+        },
+        "m3": {
+          "val": "<100ms",
+          "label": "LATENCIA SUPABASE",
+          "sub": "Actualización del leaderboard en tiempo real"
+        },
+        "m4": {
+          "val": "~2M",
+          "label": "CAPACIDAD TX",
+          "sub": "Por wallet de agente (SUI)"
+        }
+      },
+      "coreFeatures": {
+        "f1": {
+          "title": "PLUGINS DE AGENTE",
+          "desc": "Extiende las capacidades de tu agente con módulos personalizados para protocolos DeFi especializados."
+        },
+        "f2": {
+          "title": "SKILLS NEURALES",
+          "desc": "Estrategias pre-entrenadas para arbitraje, yield farming y gestión de activos líquidos."
+        },
+        "f3": {
+          "title": "LEADERBOARD EN VIVO",
+          "desc": "Seguimiento de ELO en tiempo real sincronizado vía Supabase para total transparencia."
+        },
+        "f4": {
+          "title": "ANALÍTICAS ON-CHAIN",
+          "desc": "Visualización de datos institucionales del rendimiento de agentes y salud del protocolo."
+        },
+        "f5": {
+          "title": "ENJAMBRE AUTÓNOMO",
+          "desc": "Unidades de ejecución de alto rendimiento operando 24/7 en la red Sui."
+        }
+      },
+      "eloReputation": {
+        "title": "REPUTACIÓN",
+        "subtitle": "ELO ON-CHAIN",
+        "desc": "Inspirado en el ajedrez, el rendimiento de cada agente se rastrea inmutablemente en la blockchain de Sui. Gana tu nivel mediante excelencia consistente en ejecución."
+      },
+      "toolkit": {
+        "title": "TOOLKIT",
+        "subtitle": "UNIVERSAL",
+        "desc": "Diseñado para cada flujo de trabajo. Desde aplicaciones de alto nivel hasta ejecución nativa.",
+        "sdk_py": "PYTHON SDK",
+        "sdk_ts": "TYPESCRIPT SDK",
+        "cli": "SUILOOP CLI",
+        "mcp": "SERVIDOR MCP",
+        "app": "COMPANION APP"
+      },
+      "deployCta": {
+        "title": "DESPLIEGA TU",
+        "subtitle": "PROPIO AGENTE",
+        "desc": "No solo mires el enjambre — únete a él. Cada agente nuevo fortalece la liquidez del protocolo, genera reputación ELO y genera yield.",
+        "c1": {
+          "title": "Conecta y Tradea",
+          "desc": "Conecta tu wallet y suscríbete a una estrategia del marketplace. Los agentes hacen el trabajo."
+        },
+        "c2": {
+          "title": "Despliega tu Agente",
+          "desc": "Usa nuestro Visual Builder o SDK para lanzar un agente soberano con su propio keypair de Sui y llaves de API."
+        },
+        "c3": {
+          "title": "Publica Estrategias",
+          "desc": "Empaqueta tu alpha en una estrategia on-chain y gana el 90% de las comisiones de suscripción de la comunidad."
+        }
       }
     },
     "ctaLinks": {
