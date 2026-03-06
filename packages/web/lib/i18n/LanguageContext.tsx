@@ -27,11 +27,9 @@ const messageLoaders: Record<Locale, () => Promise<Messages>> = {
 };
 
 async function fetchMessages(locale: Locale): Promise<Messages> {
-    if (cache[locale]) return cache[locale];
     try {
         const msgs = await messageLoaders[locale]();
-        cache[locale] = msgs;
-        return cache[locale];
+        return msgs;
     } catch (e) {
         console.warn(`[i18n] Failed to load ${locale}`, e);
         return {};

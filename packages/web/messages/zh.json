@@ -544,7 +544,7 @@
     ],
     "legalModal": {
       "title": "重要提示：风险确认",
-      "subtitle": "机构合规协议",
+      "subtitle": "机构合规协议 ",
       "description": "访问 Neural Swarm 引擎需要对我们的法律框架进行加密确认。",
       "items": [
         {

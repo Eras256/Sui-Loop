@@ -19,9 +19,10 @@ export default function SuiLoopTermsModal() {
         if (!account?.address || !supabase) return;
 
         const checkSignature = async () => {
+            if (!supabase) return;
             try {
-                const { data, error } = await supabase
-                    .from("user_signatures" as any)
+                const { data, error } = await (supabase as any)
+                    .from("user_signatures")
                     .select("signature_hash")
                     .eq("wallet_address", account.address)
                     .eq("network", "sui:testnet")
@@ -52,7 +53,9 @@ export default function SuiLoopTermsModal() {
                 message: new TextEncoder().encode(message),
             });
 
-            const { error: insertError } = await supabase.from("user_signatures" as any).insert({
+            if (!supabase) throw new Error("Supabase client not initialized");
+
+            const { error: insertError } = await (supabase as any).from("user_signatures").insert({
                 wallet_address: account.address,
                 signature_hash: signature.signature,
                 message_signed: message,
@@ -85,8 +88,8 @@ export default function SuiLoopTermsModal() {
                             key={loc}
                             onClick={() => setLocale(loc)}
                             className={`px-2 py-1 text-[10px] font-mono font-bold transition-all rounded ${locale === loc
-                                    ? "bg-red-600 text-white shadow-lg"
-                                    : "text-gray-500 hover:text-white hover:bg-white/5"
+                                ? "bg-red-600 text-white shadow-lg"
+                                : "text-gray-500 hover:text-white hover:bg-white/5"
                                 }`}
                         >
                             {loc.toUpperCase()}
@@ -141,8 +144,8 @@ export default function SuiLoopTermsModal() {
                     onClick={handleSignTerms}
                     disabled={isSigning}
                     className={`w-full relative overflow-hidden group py-5 rounded-2xl font-mono font-bold text-sm tracking-widest transition-all duration-500 ${isSigning
-                            ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                            : "bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] active:scale-[0.98]"
+                        ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        : "bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] active:scale-[0.98]"
                         }`}
                 >
                     {isSigning ? (
