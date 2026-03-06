@@ -8,7 +8,7 @@ import { Environment } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database, HardDrive, FileCheck, CheckCircle, Workflow, Trophy, LineChart, Smartphone, Puzzle, Repeat, Link as LinkIcon, Lightbulb, TrendingUp, Brain, Code } from "lucide-react";
+import { Zap, Shield, Cpu, Layers, Terminal as TerminalIcon, Globe, Github, MessageSquare, Activity, ArrowRight, Bot, User, Copy, ChevronRight, Download, Landmark, BookOpen, Database, HardDrive, FileCheck, CheckCircle, Workflow, Trophy, LineChart, Smartphone, Puzzle, Repeat, Link as LinkIcon, Lightbulb, TrendingUp, Brain, Code, Share2 } from "lucide-react";
 import { PulsingOrb } from "./components/NeuralOrb";
 
 import Navbar from "@/components/layout/Navbar";
