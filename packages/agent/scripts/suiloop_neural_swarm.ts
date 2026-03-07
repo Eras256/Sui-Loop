@@ -30,6 +30,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { WalrusService } from '../src/services/walrusService.js';
+import { initializeLLMService } from '../src/services/llmService.js';
 
 // ESM-compatible __dirname resolution
 const __filename = fileURLToPath(import.meta.url);
@@ -50,13 +51,35 @@ const REGISTRY_ID = process.env.SUI_REGISTRY_ID ||
 
 const POOL_ID = process.env.SUI_POOL_ID || '';
 
-const SUPABASE_URL = process.env.SUPABASE_URL ||
-    'https://qzocuuldfqklicaakdhj.supabase.co';
-const SUPABASE_KEY = (process.env.SUPABASE_SERVICE_KEY ||
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6b2N1dWxkZnFrbGljYWFrZGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxNDc5ODgsImV4cCI6MjA4NTcyMzk4OH0.X_WzBp8-QLi6Ozwy6SoYY894D4Wf14mx0JiErAgNIB4').replace(/"/g, '');
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://qzocuuldfqklicaakdhj.supabase.co';
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6b2N1dWxkZnFrbGljYWFrZGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxNDc5ODgsImV4cCI6MjA4NTcyMzk4OH0.X_WzBp8-QLi6Ozwy6SoYY894D4Wf14mx0JiErAgNIB4';
 
 const TICK_MS = 8_000;        // 8s per swarm tick (same as Nirium)
 const SUI_PRICE_USD = 3.5;   // Testnet display price
+
+const llm = initializeLLMService({
+    provider: 'openai',
+    apiKey: process.env.OPENAI_API_KEY,
+    model: 'gpt-4o'
+});
+
+async function getNeuralDecision(agent: SwarmAgent): Promise<{ decision: string, reasoning: string }> {
+    try {
+        const response = await llm.chat({
+            messages: [{ role: 'user', content: `Eres el agente IA DeFi '${agent.name}'. Especialidad: ${agent.specialty}. Tipo tráfico: ${agent.traffic}. Retorna JSON válido {"decision": "1 oración corta decidiendo qué harás hoy", "reasoning": "1 oración corta de por qué lo haces según tu especialidad"}` }]
+        });
+
+        let content = response.content.trim();
+        if (content.startsWith('```json')) content = content.replace(/```json/g, '').replace(/```/g, '');
+        return JSON.parse(content);
+    } catch (e) {
+        return {
+            decision: `Autonomous market scan complete. Identifying liquidity depth in ${agent.specialty} vector.`,
+            reasoning: `Market volatility within safe bounds. Executing ${agent.traffic} strategy to maintain ELO and volume.`
+        };
+    }
+}
+
 
 // ============================================================================
 // NAMED AGENTS — The SuiLoop Swarm
@@ -130,7 +153,8 @@ function buildSwarm(): SwarmAgent[] {
     console.log(`🔍 Looking for key files in: ${PROJECT_ROOT}`);
     const keyFiles = fs.readdirSync(PROJECT_ROOT)
         .filter(f => f.endsWith('.key') && f.startsWith('0x'))
-        .sort();
+        .sort()
+        .slice(0, 15); // Changed to 15 agents
     console.log(`   Found ${keyFiles.length} key files`);
 
     const swarm: SwarmAgent[] = [];
@@ -226,12 +250,13 @@ async function buildSignalTx(
         await ensureRegistered(client, agent, keypair);
 
         // 1. Log to Walrus (The "Why")
+        const aiDecision = await getNeuralDecision(agent);
         const decisionMetadata = {
             agent: agent.name,
             role: agent.role,
             specialty: agent.specialty,
-            decision: `Autonomous market scan complete. Identifying liquidity depth in ${agent.specialty} vector.`,
-            reasoning: `Market volatility within safe bounds. Executing ${agent.traffic} strategy to maintain ELO and volume.`,
+            decision: aiDecision.decision,
+            reasoning: aiDecision.reasoning,
             environment: 'Sui Testnet Neural Swarm v2.0',
             timestamp: new Date().toISOString()
         };
@@ -245,7 +270,9 @@ async function buildSignalTx(
             JSON.stringify({
                 agent: agent.name,
                 ts: Date.now(),
-                type: 'NEURAL_SIGNAL'
+                type: 'NEURAL_SIGNAL',
+                decision: aiDecision.decision,
+                reasoning: aiDecision.reasoning
             })
         );
 

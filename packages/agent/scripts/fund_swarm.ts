@@ -23,9 +23,9 @@ const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
 const MAIN_PRIVKEY = process.env.SUI_PRIVATE_KEY ||
     'suiprivkey1qz84s4m4s0kvgd9e6wafg0tjt6jk5mf0uyyuqvfgr56qxhx4p5upz884pdj';
 
-// Amount per agent: 0.05 SUI = 50_000_000 MIST
-// 20 agents × 0.05 = 1.0 SUI total
-const AMOUNT_PER_AGENT = 50_000_000n; // MIST
+// Amount per agent: 0.066... SUI = 66_666_666 MIST
+// 15 agents * 0.0666 = ~1.0 SUI total
+const AMOUNT_PER_AGENT = 66_666_666n; // MIST
 
 async function main() {
     const client = new SuiClient({ url: getFullnodeUrl('testnet') });
@@ -56,11 +56,11 @@ async function main() {
         process.exit(1);
     }
 
-    // Get swarm agent addresses (first 20 .key files)
+    // Get swarm agent addresses (first 15 .key files)
     const keyFiles = fs.readdirSync(PROJECT_ROOT)
         .filter(f => f.endsWith('.key') && f.startsWith('0x'))
         .sort()
-        .slice(0, 20);
+        .slice(0, 15);
 
     const agentAddresses = keyFiles.map(f => f.replace('.key', ''));
 

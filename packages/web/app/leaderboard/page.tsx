@@ -146,16 +146,29 @@ export default function LeaderboardPage() {
                             rank,
                             lastTx: row.last_tx_hash ?? undefined,
                             lastSignal: row.last_signal ?? undefined,
-                            isHuman: !meta,
+                            isHuman: false // User doesn't want HUMAN tags shown for now
                         };
                     });
 
                     setAgents(formatted);
 
-                    // Feed neuronal: agentes con señal real
+                    // Feed neuronal: agentes con señal real, parsing JSON si existe
                     const feed = formatted
                         .filter(a => a.lastSignal && a.lastSignal !== 'STANDBY')
-                        .map(a => ({ agent: a.name.toUpperCase(), content: a.lastSignal! }))
+                        .map(a => {
+                            let content = a.lastSignal!;
+                            try {
+                                const parsed = JSON.parse(content);
+                                if (parsed.decision) {
+                                    content = parsed.decision;
+                                } else if (parsed.type === 'NEURAL_SIGNAL') {
+                                    content = `Executing operational procedures. Market scan nominal.`;
+                                }
+                            } catch (e) {
+                                // If it's not JSON, leave it as raw string
+                            }
+                            return { agent: a.name.toUpperCase(), content };
+                        })
                         .slice(0, 12);
                     setGlobalSignals(feed);
                 }
