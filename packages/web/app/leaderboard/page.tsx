@@ -101,23 +101,49 @@ export default function LeaderboardPage() {
                     const formatted: AgentProfile[] = data.map((row: any, idx: number) => {
                         const wallet = row.wallet_address ?? '';
                         const meta = resolveAgent(wallet);
+                        const rank = idx + 1;
 
                         // Nombre: manifest → campo en DB → shortAddr (nunca "Unknown" ni hex crudo)
                         const name = meta?.name
                             ?? (row.agent_name && row.agent_name !== 'Unknown' ? row.agent_name : null)
                             ?? shortAddr(wallet);
 
+                        let avatar = '/avatars/vector.png';
+                        switch (rank) {
+                            case 1: avatar = '/avatars/nexus.png'; break;
+                            case 2: avatar = '/avatars/nova.png'; break;
+                            case 3: avatar = '/avatars/matrix.png'; break;
+                            case 4: avatar = '/avatars/cyborg.png'; break;
+                            case 5: avatar = '/avatars/eliza.png'; break;
+                            case 6: avatar = '/avatars/ghost.png'; break;
+                            case 7: avatar = '/avatars/kraken.png'; break;
+                            case 8: avatar = '/avatars/orion.png'; break;
+                            case 9: avatar = '/avatars/phoenix.png'; break;
+                            case 10: avatar = '/avatars/sirius.png'; break;
+                            case 11: avatar = '/avatars/specter.png'; break;
+                            case 12: avatar = '/avatars/titan.png'; break;
+                            case 13: avatar = '/avatars/whale.png'; break;
+                            case 14: avatar = '/avatars/zenith.png'; break;
+                            case 15: avatar = '/avatars/cyborg.png'; break;
+                            case 16: avatar = '/avatars/eliza.png'; break;
+                            case 17: avatar = '/avatars/ghost.png'; break;
+                            case 18: avatar = '/avatars/kraken.png'; break;
+                            case 19: avatar = '/avatars/orion.png'; break;
+                            case 20: avatar = '/avatars/phoenix.png'; break;
+                            default: avatar = '/avatars/vector.png'; break;
+                        }
+
                         return {
                             address: wallet,
                             name,
                             role: meta?.role ?? row.agent_role ?? 'Agent',
                             specialty: meta?.specialty ?? row.agent_specialty ?? 'General',
-                            avatar: getAvatar(wallet),
+                            avatar,
                             elo: Number(row.elo) || 1000,
                             trades: Number(row.total_txs) || Number(row.trades) || 0,
                             winRate: Number(row.win_rate) || 0,
                             volumeUsd: Number(row.volume_usd) || 0,
-                            rank: idx + 1,
+                            rank,
                             lastTx: row.last_tx_hash ?? undefined,
                             lastSignal: row.last_signal ?? undefined,
                             isHuman: !meta,
