@@ -257,7 +257,8 @@ WS   /ws/signals                Real-time signal stream
 
 ### 5. 🖥️ Command Center — Frontend (`packages/web`)
 
-**Next.js 15** + React 19 + Framer Motion + Three.js — Institutional cyberpunk aesthetic.
+**Next.js 15** + React 19 + Framer Motion + Three.js — Institutional cybersecurity aesthetic.
+Features a **State of the Art Premium UI**: Deep dark void background (`#030014`), intricate **Glassmorphism** panels (`glass-panel`), animated neon cyan and purple accents, and a photorealistic 3D `NeuralOrb` component.
 
 #### Pages & Features
 | Page | Description |

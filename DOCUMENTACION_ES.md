@@ -1,147 +1,107 @@
-# ♾️ Análisis Técnico de SuiLoop
+# ♾️ SuiLoop Protocol — Inteligencia DeFi Autónoma en Sui
 
-## 📄 Resumen General
-**SuiLoop** es un protocolo de agentes autónomos de grado institucional nativo de la red Sui, diseñado para orquestar estrategias DeFi atómicas con garantías de seguridad matemática excepcionales. Utilizando el patrón **"Hot Potato"** de Sui Move, el sistema permite la ejecución de bucles financieros complejos —como préstamos flash y arbitraje multitoken— que son matemáticamente incapaces de generar deuda persistente, ya que la transacción se revierte por completo si no se cumple el reembolso con beneficios en el mismo bloque atómico. La arquitectura es modular y robusta, compuesta por una **Matriz Neuronal** descentralizada (Backend en Node.js) que gestiona la inteligencia y telemetría, un **Centro de Mando** visual premium (Frontend en Next.js 15) para el control operativo, y un motor de ejecución on-chain verificado formalmente, integrando además capacidades de vanguardia como comandos de voz multimodales, almacenamiento inmutable de auditoría en **Sui Walrus** y un constructor visual de estrategias "drag-and-drop".
+<div align="center">
 
----
+![Status](https://img.shields.io/badge/Status-Operational-00f3ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-1.0.0-blueviolet?style=for-the-badge)
+![Network](https://img.shields.io/badge/Network-Sui_Testnet-4DA2FF?style=for-the-badge&logo=sui)
+![Security](https://img.shields.io/badge/Hot_Potato_Pattern-Verified-00ff88?style=for-the-badge)
+![Agents](https://img.shields.io/badge/Neural_Swarm-20_Agents-ff6b6b?style=for-the-badge)
+![Walrus](https://img.shields.io/badge/Audit-Walrus_Sealed-orange?style=for-the-badge)
 
-## 🚀 Hitos Recientes y Estado Operativo
+**El primer protocolo de Agentes Autónomos de Inteligencia Artificial (IA) de grado institucional construido nativamente sobre la blockchain de Sui.**
 
-A partir de la versión v0.0.7, el ecosistema **SuiLoop** ha alcanzado su **Plena Madurez Autónoma**:
-
-- **🏙️ La Ciudad Autónoma:** Una flota verificada de **más de 15 agentes autónomos** (TITAN, ELIZA, WHALE, KRAKEN, etc.) está activa y operando las 24 horas, los 7 días de la semana. Estos agentes generan volumen constante on-chain, publican señales neuronales y mantienen la reputación del protocolo.
-- **🛠️ SDK y CLI Verificados:** Tanto el **SDK de TypeScript**, el **SDK de Python**, como el **CLI de SuiLoop** han sido verificados al 100% para ejecutar el "Flujo Dorado" completo en la Testnet de Sui — desde chequeos de salud y análisis de mercado hasta la ejecución atómica de préstamos flash.
-- **🦭 Walrus Blackbox & Proof of Action:** El sistema de registro descentralizado en **Sui Walrus** es plenamente funcional. Introducimos **Proof of Action**: cada señal on-chain incluye ahora un Blob ID de Walrus con el razonamiento "por qué" de la IA tras la operación.
-- **🏆 Leaderboard de Especies Duales:** El ranking global ahora distingue visualmente entre **Operadores Humanos** y **Agentes Autónomos**, fomentando la competición por el ELO.
-- **⚡ Éxito de Ejecución:** La ejecución on-chain en tiempo real para el `flash-loan-executor` está verificada con beneficios promedio de ~0.097 SUI por bucle.
-- **⚖️ Firma Legal Localizada:** El modal de términos y condiciones ahora traduce dinámicamente el mensaje de firma a **Inglés, Español y Chino**, asegurando el consentimiento informado global.
+</div>
 
 ---
 
-## 🏗️ Infraestructura de Agentes y Ecosistema
+## 🧠 La Visión General
 
-SuiLoop no es solo un bot; es un ecosistema completo para el ciclo de vida de agentes autónomos.
+SuiLoop elimina el cuello de botella humano en las finanzas descentralizadas (DeFi). Es una capa de **Inteligencia Financiera Autónoma** impulsada por un enjambre neuronal ("Neural Swarm") de 20 agentes IA con nombre, rol y especialidad que operan 24/7 en la red Sui. Escanean los mercados, arbitran, emiten señales on-chain y ejecutan estrategias atómicas sin intervención humana. 
 
-### 1. Gestión vía CLI (`@suiloop/cli`)
-La herramienta de línea de comandos es el punto de entrada para desarrolladores y administradores de sistemas:
-- **`suiloop create`**: Genera el andamiaje para un nuevo agente con plantillas pre-configuradas.
-- **`suiloop doctor`**: Realiza diagnósticos profundos de la salud del sistema (latencia de RPC, saldo de gas, conectividad con LLMs).
-- **`suiloop health`**: Monitoreo rápido del estado operativo y carga de CPU/RAM del agente en tiempo real.
-
-### 2. SDKs Multi-lenguaje (`@suiloop/sdk` & `suiloop-python`)
-Para integrar el poder de SuiLoop en aplicaciones externas o plataformas de trading cuantitativo:
-- **TypeScript SDK**: Tipado fuerte para integraciones web y aplicaciones descentralizadas (dApps).
-- **Python SDK**: Diseñado para científicos de datos y analistas que requieren procesamiento asíncrono y análisis de mercado complejo.
-
-### 3. Capas de Despliegue (Deployment)
-El sistema soporta múltiples vectores de ejecución:
-- **Docker Containment**: Aislamiento total para máxima seguridad en entornos de producción.
-- **Cloud Native (Railway/Fly.io)**: Soporte nativo para operaciones 24/7 con persistencia de trabajos programados (Cron Jobs).
-- **Desktop Enclave (Tauri)**: Aplicación nativa que permite que el agente corra discretamente en la bandeja del sistema (System Tray), minimizando el uso de recursos.
+Todo este ecosistema está respaldado por el patrón **Hot Potato de Sui Move** que hace imposible crear deuda irrecuperable en los "Flash Loans" (préstamos relámpago), garantizando un **Riesgo Colateral Cero**. Adicionalmente, las decisiones de la IA quedan inmutables gracias a la red de almacenamiento descentralizado **Sui Walrus (Proof of Action)**.
 
 ---
 
-## 📂 Análisis de Componentes (100% Core)
+## 🏛️ Ecosistema Modular Completo (Full Stack)
 
-### 1. Smart Contracts (`packages/contracts`)
-El corazón de la seguridad atómica del protocolo.
-- **`sources/atomic_engine.move`**: Implementa el struct `LoopReceipt` sin habilidades. Este "Hot Potato" garantiza que los fondos prestados sean devueltos mediante la función `repay_flash_loan` en la misma transacción PTB.
+El protocolo abarca 8 paquetes (packages) exhaustivos integrados en un monorepo administrado con `pnpm` workspaces:
 
-### 2. El Backend del Agente (`packages/agent`)
-La "Matriz Neuronal" que orquesta la toma de decisiones.
-- **`src/server.ts`**: Gestiona la API, autenticación JWT/API Key y el protocolo de "Awakening" para configuración automática de secretos.
-- **`src/services/llmService.ts`**: Cerebro multicanal con failover entre OpenAI, Anthropic y AWS Bedrock.
-- **`src/services/skillManager.ts`**: Motor de capacidades dinámicas; permite instalar "habilidades" (skills) en caliente sin tiempo de inactividad.
-- **`src/services/subscriptionService.ts`**: Telemetría de alta frecuencia que transmite señales y logs vía WebSockets.
-- **`src/services/walrusService.ts`**: Empaqueta logs de auditoría y los sube de forma inmutable a la red descentralizada de Sui Walrus.
+### 1. 🔐 Contratos Inteligentes On-Chain (`packages/contracts`)
+Implementados en **Sui Move**, garantizan seguridad atómica a nivel de bytecode:
+- **`atomic_engine.move`**: Usa el patrón *Hot Potato* (`LoopReceipt`). Si un Préstamo Relámpago (Flash Loan) no se paga dentro de la misma *Programmable Transaction Block* (PTB), el bloque entero revierte. Absoluta garantía matemática contra pérdidas.
+- **`agent_registry.move`**: Identidad On-Chain de los agentes. Publican "señales" que son archivadas permanentemente on-chain.
+- **`agent_vault.move`**: Bóvedas No-Custodias (`Vault<T>`). Los agentes NUNCA tienen acceso a la clave privada del usuario, se basan en Capacidades Delegadas (`AgentCap`).
 
-### 3. El Centro de Mando Web (`packages/web`)
-Interfaz visual diseñada con estética de "Cristal y Neón".
-- **Visual Strategy Builder**: Interfaz drag-and-drop para construir lógicas de trading conectando nodos de "Trigger", "Acción" y "Condición".
-- **Live Neural Feed**: Terminal de visualización de los pensamientos y ejecuciones del agente en tiempo real con enlaces directos a Proof of Action en Walrus.
-- **Marketplace Nexus**: Repositorio centralizado para descubrir e instalar nuevas habilidades con **un solo clic** directamente desde el Dashboard.
+### 2. 🤖 Matriz Neuronal / Backend (`packages/agent`)
+El cerebro (Node.js 20, TS, Express 5) que orquesta las estrategias:
+- **Enjambre de 20 Agentes**: Agentes como Nexus (Comandante), Phantom (Escáner de Arbitraje), Cipher (Oráculo de Precios), entre otros.
+- **Circuit Breaker**: Mecanismo de seguridad industrial que pausa operaciones automáticamente si detecta fallos en la blockchain y manda avisos mediante Webhooks y eventos on-chain.
+- **Microservicios**: Gestor de LLM multicanal (GPT-4o-mini + Ollama local), subida inmutable a **Sui Walrus** cada 5 minutos, despachador de Webhooks (HMAC-SHA256) y telemetría por WebSockets.
 
----
+### 3. 🖥️ Centro de Mando Web (`packages/web`)
+Interfaz de vanguardia construida en **Next.js 15, React 19, Tailwind CSS, Framer Motion y Three.js**.
+- **Estética "State of the Art" Premium**: Tema oscuro profundo ("Dark Void" `#030014`) infundido con efectos **Glassmorphism**, neones cian y púrpuras, texturas granuladas sutiles y el componente 3D fotorrealista `NeuralOrb` flotante.
+- **Multilingüe (i18n)**: Soporte completo en Inglés, Español y Chino Simplificado.
+- **Visual Strategy Builder**: Interfaz innovadora tipo Drag-and-Drop (ReactFlow) para conectar nodos lógicos y armar bots visualmente.
+- **Leaderboard Dual**: ELO en vivo con base de datos **Supabase**, enfrentando humanos vs. agentes.
 
-## ⚡ Estrategias y Operaciones
+### 4. 🧰 CLI - Interfaz de Línea de Comandos (`packages/cli`)
+Herramienta NodeJS que brinda control total a los operadores del sistema para arrancar el enjambre de agentes, generar plantillas en TS/Py e interactuar nativamente con la matriz (`suiloop agent deploy`, `suiloop loop start`).
 
-1. **Ciclo de Estrategia**: Un agente puede ser cargado con múltiples "Habilidades" (Skills). Por ejemplo, un agente puede tener la habilidad de "Escaneo de Arbitraje" que monitorea en tiempo real las tasas de **Navi Protocol** y Scallop junto con la de "Notificación por Telegram".
-2. **Ejecución Autónoma**: Una vez configurado con una expresión Cron, el agente "despierta" en intervalos precisos, escanea el mercado (Cetus, DeepBook, Navi) y ejecuta la PTB on-chain solo si se cumplen las condiciones de beneficio mínimo.
-3. **Auditoría Forense**: Cada acción queda registrada localmente y se ancla a Sui Walrus cada 5 minutos, garantizando transparencia absoluta para clientes institucionales.
+### 5. 📦 SDK de TypeScript (`packages/sdk`)
+SDK tipado y publicado para integrar de forma agnóstica la API de SuiLoop en aplicaciones web y dApps ajenas, ideal para B2B.
 
----
+### 6. 🐍 SDK de Python (`packages/sdk-python`)
+Librería completa de Python `suiloop` orientada a Quants y Científicos de Datos para facilitar automatizaciones matemáticas, machine learning y modelos de riesgo que consuman las APIs del la red.
 
-## �️ Arquitectura de Seguridad Híbrida (V2: Zero Risk)
+### 7. �� Servidor MCP (`packages/mcp`)
+Acrónimo de *Model Context Protocol*. Permite que Asistentes Inteligentes externos de LLMs o IDEs como Claude se conecten e interactúen de forma estandarizada y directa con las capacidades de SuiLoop.
 
-SuiLoop adopta un enfoque defensivo en profundidad, integrando lo mejor de la seguridad basada en capacidades (Talos Protocol) con la seguridad atómica (Sui Move).
-
-### 1. Bóvedas No-Custodios (`Vault<T>`)
-A diferencia de los bots tradicionales que requieren acceso directo a las claves privadas, SuiLoop V2 introduce el concepto de **Smart Object Vaults**.
-- El usuario deposita fondos en un objeto `Vault` propiedad de su propia cuenta.
-- **Seguridad**: El agente de IA **NUNCA** tiene acceso a la clave privada del usuario ni capacidad de retiro (`withdraw`).
-
-### 2. Capacidades de Agente (`AgentCap`)
-El usuario delega permisos específicos al agente mediante un objeto `AgentCap`.
-- **Principio**: "El agente no puede robarme".
-- Esta capacidad permite al agente invocar funciones de trading (`execute_strategy`), pero el contrato inteligente bloquea cualquier intento de transferir activos fuera de la bóveda a una dirección no autorizada.
-
-### 3. Sinergia Atómica (Hot Potato)
-Combinamos la seguridad de acceso con la seguridad de ejecución.
-- **Principio**: "El agente no puede perder dinero (Deuda)".
-- Incluso si el agente intenta una estrategia fallida, el patrón Hot Potato (`LoopReceipt`) garantiza que la transacción se revierta si no hay solvencia suficiente para pagar el préstamo flash al final del bloque.
-
-**Resultado: Riesgo Cero Absoluto.** El agente está matemáticamente restringido para (1) no robar fondos y (2) no ejecutar operaciones perdedoras que generen deuda.
+### 8. 💻 Aplicación de Escritorio (`packages/desktop`)
+Desarrollada en **Tauri 2.0 (Rust)**, una app nativa hiper-ligera multiplataforma (Windows/macOS/Linux) que corre discretamente de fondo (system tray alert), y da manejo seguro y nativo de las alertas del oráculo, billetera local y comandos de consola del agente.
 
 ---
 
-## ⚖️ Aviso Legal y Cumplimiento
+## 🦭 Auditoría Descentralizada con Sui Walrus (Proof of Action)
 
-**SuiLoop es un proveedor de tecnología**, no una institución financiera.
-- No proporcionamos **Asesoría Financiera** ni realizamos **Captación de Fondos** bajo las leyes Fintech aplicables (ej. Ley Fintech México).
-- El software es una herramienta de ejecución no-custodia; los usuarios mantienen el control total de sus activos en todo momento a través de sus propias claves privadas y bóvedas en la red Sui.
-
----
-
-## 💰 Modelo de Negocio y Captura de Valor
-
-SuiLoop captura valor a través de una estructura de comisiones diseñada para incentivar el crecimiento de la economía de agentes:
-
-1.  **Activación de Agentes (Deployment Fee)**:
-    *   **Actual**: Tarifa promocional de **0.1 SUI** por cada agente desplegado (Costo de activación de la Matriz Neuronal).
-    *   **Próximamente**: La tarifa se ajustará a un equivalente de **100 MXN en SUI** por agente desplegado, para cubrir la infraestructura de cómputo y acceso a LLMs de alto rendimiento (OpenAI o1).
-
-2.  **Ecosistema de Señales (P2P Signals)**:
-    *   SuiLoop permite a los agentes vender "Señales de Alpha" a otros usuarios en tiempo real.
-    *   Se aplica una **comisión del 1%** sobre cada señal vendida en el marketplace P2P.
-
-3.  **Suscripciones y API (B2B/B2C)**:
-    *   **B2C**: Suscripciones Pro-tier para acceder a modelos Premium y plantillas de lógicas avanzadas.
-    *   **B2B**: Acceso vía API con SLA de grado empresarial para despliegues de grado industrial y vaults personalizados.
+SuiLoop innova implementando la **Prueba de Acción (PoA)**:
+Cada decisión que un Agente IA toma (por ejemplo, realizar un flash loan porque el spread entre Cetus y DeepBook v3 era ventajoso) genera un registro de memoria contextual procesado por un LLM.
+- **Paso 1**: La bitácora se comprime en un Blob.
+- **Paso 2**: El servicio se inyecta en el objeto inteligente del registro del agente.
+- **Paso 3**: Se archiva en la Testnet del almacenamiento descentralizado de gran volumen **Sui Walrus**. Esto permite un rastro 100% inmutable, descentralizado y auditable forensemente por institucionales.
 
 ---
 
-## �🛠️ Guía de Uso (HOW TO USE)
+## 🛠️ Guía Rápida de Implementación
 
-1. **Instalación**: Ejecuta `./install.sh` para configurar el monorepo y las dependencias vía `pnpm`.
-2. **Inicialización**: Ejecuta `pnpm dev`. El sistema detectará si faltan credenciales (`OPENAI_API_KEY`, `SUI_PRIVATE_KEY`) e iniciará un asistente de configuración en `http://localhost:3001`.
-3. **Despliegue de Estrategias**: Desde el Marketplace (`/marketplace`), selecciona una habilidad (ej. "Flash Loan Executor") e instálala. El agente la cargará en caliente.
-4. **Ejecución**: En el panel de control, pulsa "RUN" para disparar un bloque de transacciones programables (PTB) a la red Sui.
-5. **Auditoría**: Observa el flujo de logs en tiempo real. Cada 5 minutos, los logs se archivan automáticamente en **Sui Walrus**.
-
----
-
-## 📘 Documentación Técnica para Desarrolladores
-
-### Patrón Hot Potato
-SuiLoop garantiza la seguridad mediante:
-```move
-public struct LoopReceipt { flash_loan_amount: u64, pool_id: ID }
+**1. Clonar e Instalar Setup (Monorepo pnpm)**
+```bash
+git clone https://github.com/Eras256/Sui-Loop.git
+cd Sui-Loop
+pnpm install
 ```
-Este objeto DEBE ser destruido en `repay_flash_loan`, de lo contrario, la transacción no puede finalizar debido a las reglas de tipado lineal de Move.
 
-### Integración de LLM
-El `LLMService` utiliza un patrón de **Resiliencia Multicanal**:
-- **Primario**: OpenAI (GPT-4o).
-- **Secundario**: Anthropic (Claude 3.5 Sonnet).
-- **Infraestructura**: AWS Bedrock.
-Esto asegura que el agente nunca quede "ciego" ante fallos de APIs externas.
+**2. Variables de Entorno y Base de Datos**
+Asegúrate de copiar el entorno en `packages/agent` (`SUI_PRIVATE_KEY`, `OPENAI_API_KEY`, accesos de `SUPABASE`).
+
+**3. Iniciar Servicios de Desarrollo Locales**
+```bash
+pnpm dev
+# Frontend -> http://localhost:3000
+# Backend API -> http://localhost:3001
+# Desktop -> Tauri local build
+```
+
+**4. Orquestar el Enjambre Neuronal**
+```bash
+cd packages/agent 
+npx tsx scripts/fund_swarm.ts           # Fondear carretas secundarias
+npx tsx scripts/suiloop_neural_swarm.ts # Arrancar los 20 Agentes IA
+```
+
+---
+
+## ⚖️ Aviso Legal y Riesgos
+**SuiLoop** es proveedor tecnológico de código abierto para las testnets, no ofrece asesoría financiera ni de inversión. Las bóvedas (vaults) permanecen en absoluto control no-custodio (non-custodial) del titular de la billetera (wallet) original. Utilizar bajo propio riesgo.
+
